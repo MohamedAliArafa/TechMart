@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1029867004210",
+    "firebase_url": "https://techmartproject.firebaseio.com",
+    "project_id": "techmartproject",
+    "storage_bucket": "techmartproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1029867004210:android:1e674a4a17b88a76",
+        "android_client_info": {
+          "package_name": "com.a700apps.techmart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1029867004210-nbn4h3h54okbg1umc9cr8nlcakaocoab.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.a700apps.techmart",
+            "certificate_hash": "b0681ff71c166bf2f0c7e21a35bef0c24c0873da"
+          }
+        },
+        {
+          "client_id": "1029867004210-c267ka9jfodi0eqgcn8jn5aietp3ueqg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAd9uUHfj_NmBM2s-Vl18ts-q1nXLc7SYI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1029867004210-c267ka9jfodi0eqgcn8jn5aietp3ueqg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

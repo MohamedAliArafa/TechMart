@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/event_details_header_image_height">
+
+
+        <ImageView
+            android:id="@+id/iv_slider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/event_details_header_image_height"
+            android:orientation="vertical"
+            android:scaleType="fitXY" />
+
+        <LinearLayout
+            android:id="@+id/lin_image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/event_details_header_image_height"
+            android:alpha=".7"
+            android:background="@color/background_color"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_event_card_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="@dimen/timeline_margin"
+            android:paddingBottom="@dimen/events_text_container_bottom_padding"
+            android:paddingLeft="@dimen/events_text_container_padding"
+            android:paddingRight="@dimen/events_text_container_padding"
+            android:paddingTop="@dimen/events_text_container_padding">
+
+            <TextView
+                android:id="@+id/tv_events"
+                style="@style/ParallaxTextStyle"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/events_title_margin"
+                android:layout_weight="60"
+                android:ellipsize="end"
+                android:maxLines="@integer/events_max_lines"
+                android:text="Event"
+                android:textSize="@dimen/main_dark_text" />
+
+            <LinearLayout
+                android:id="@+id/ll_events_title_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_events"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="100">
+
+                <TextView
+                    android:id="@+id/tv_events_title"
+                    style="@style/ParallaxTextStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/events_title_margin"
+                    android:layout_weight="60"
+                    android:ellipsize="end"
+
+                    android:maxLines="@integer/events_max_lines"
+                    android:text="@string/description"
+                    android:textSize="@dimen/time_text" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_events_time_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_below="@+id/ll_events_title_container"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="100">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="0dp"
+                    android:layout_height="20dp"
+                    android:layout_weight="10"
+                    android:visibility="invisible"
+                    app:srcCompat="@drawable/ic_calender" />
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    style="@style/ParallaxTextStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/events_title_margin"
+                    android:layout_weight="50"
+                    android:ellipsize="end"
+                    android:maxLines="@integer/events_max_lines"
+                    android:text="june 12 2017|Time:10:00 am on wards"
+                    android:textSize="10sp"
+                    android:visibility="invisible"
+
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lin_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ll_events_time_container"
+                android:layout_marginTop="@dimen/general_margin"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="100">
+
+                <Button
+                    android:id="@+id/button7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:background="@drawable/linearlayout_background"
+                    android:text="Going"
+                    android:visibility="invisible"
+                    android:textColor="@color/button_light_text"
+                    android:textSize="@dimen/time_text"
+
+                    />
+
+                <Button
+                    android:id="@+id/button8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="@dimen/general_margin"
+                    android:background="@drawable/linearlayout_background"
+                    android:text="Invite"
+                    android:textColor="@color/button_light_text"
+                    android:visibility="invisible" />
+
+
+                <ImageView
+                    android:id="@+id/imageView23"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
+                    android:visibility="invisible"
+                    app:srcCompat="@drawable/image" />
+
+                <TextView
+                    android:id="@+id/tv_attendee"
+                    android:layout_width="50dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/transperant_bg"
+                    android:gravity="center"
+                    android:textColor="@color/button_light_text"
+                    android:textSize="@dimen/time_text"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/ratring_pic" />
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

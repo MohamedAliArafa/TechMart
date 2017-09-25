@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_timeline"
+        android:title="@string/home"
+        android:icon="@drawable/ic_timeline"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_my_group"
+        android:title="@string/my_group"
+
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_new_group"
+        android:icon="@drawable/ic_group"
+        android:title="@string/new_group"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_message"
+        android:icon="@drawable/ic_message"
+        android:title="@string/messages"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_schedule"
+        android:icon="@drawable/ic_schedule"
+        android:title="@string/schedule"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_setting"
+        android:icon="@drawable/ic_setting"
+        android:title="@string/setting"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_logout"
+        android:icon="@drawable/ic_logout"
+        android:title="@string/logout"
+        app:showAsAction="always" />
+</menu>

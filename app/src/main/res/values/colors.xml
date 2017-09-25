@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--OOH views colors-->
+    <color name="foreground_color">#e53935</color>
+    <color name="background_color">#212121</color>
+    <color name="toolbar_color">#e5e5e5</color>
+    <color name="icon_color">#bcbcbc</color>
+    <color name="card_color">#ffffff</color>
+    <color name="toolbar_animation_color">#2c2c2c</color>
+    <!--new one provided by Abo Solyman for toolbar in animation-->
+    <color name="overview_list_divider">#FF2A2A2A</color>
+
+    <!--OOH text colors-->
+    <color name="toolbar_text">#3f3f3f</color>
+    <color name="card_title_text">#000000</color>
+    <color name="time_text">#b8b8b8</color>
+    <color name="main_dark_text">#212121</color>
+    <color name="main_light_text">#ffffff</color>
+    <color name="icon_text">#bcbcbc</color>
+    <color name="edit_text_field_text">#bcbcbc</color>
+    <color name="button_dark_text">#000000</color>
+    <color name="button_light_text">#ffffff</color>
+    <color name="Parallax_text">#ffffff</color>
+    <color name="toolbar_hint_text">#777777</color>
+    <!--new one provided by Abo Solyman-->
+
+
+    <!--<color name="button_text">#ffffff</color>
+    <color name="title_text">#bcbcbc</color>-->
+
+    <!--Main Colors-->
+    <color name="primary_color">#5aabe6</color>
+    <color name="primary_dark_color">#1f70ab</color>
+    <color name="ascent_color">#22fa</color>
+
+    <!--Text Colors-->
+    <color name="text_color">#fff</color>
+    <color name="dark_text_color">#000</color>
+
+    <color name="grey">#f0f3f5</color>
+    <color name="dark_grey">#777777</color>
+    <color name="gry_border">#cccccc</color>
+    <color name="about_row_grey">#d9d8d8</color>
+
+    <color name="transparent">#00FFFFFF</color>
+
+    <!--About Colors-->
+    <color name="system_bar_background_color">#FFBDBDBD</color>
+
+    <color name="about_toolbar_background_color">#FFFAFAFA</color>
+    <color name="about_toolbar_title_text_color">#FF212121</color>
+
+    <color name="about_section_title_background_color">#FF2C2C2C</color>
+    <color name="about_section_title_text_color">#FFFFFFFF</color>
+
+    <color name="about_section_images_background_color">#FF080808</color>
+
+    <color name="about_section_body_text_color">#FFF0F0F0</color>
+    <color name="about_section_body_background_color">#212121</color>
+    <color name="darkDimm">#DD000000</color>
+
+
+    <!--Testing colores for checking dynamic coloring-->
+    <color name="test_foreground_color">#FFFF00</color>
+    <color name="test_background_color">#FF8000</color>
+    <color name="test_toolbar_color">#9F81F7</color>
+    <color name="test_icon_color">#9AFE2E</color>
+    <color name="test_card_color">#00FFFF</color>
+
+    <color name="logo_color">#f4f4f6</color>
+
+    <color name="facebook_background_color">#295ab3</color>
+    <color name="google_plus_background_color">#e53935</color>
+    <color name="linkedin_background_color">#2984b3</color>
+    <color name="office_background_color">#eb3d01</color>
+
+    <color name="black">#000</color>
+    <color name="search_box_medical_unit">#f5f5f5</color>
+    <color name="color20Black">#20000000</color>
+    <color name="color80Black">#80000000</color>
+
+    <color name="colorLinkBlue">#0000FF</color>
+    <color name="blackGreenColor">#117874</color>
+
+
+    <color name="gray_join_dialog">#464646</color>
+    <color name="red_join_dialog">#a93a46</color>
+    <color name="blue_join_dialog">#117874</color>
+
+    <color name="trans_white">#7dffffff</color>
+
+</resources>
+
+

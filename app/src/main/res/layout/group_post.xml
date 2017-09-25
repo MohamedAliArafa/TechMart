@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginBottom="@dimen/activity_feeds_card_margin"
+        android:layout_marginLeft="@dimen/activity_feeds_card_margin"
+        android:layout_marginRight="@dimen/activity_feeds_card_margin"
+        android:layout_marginTop="@dimen/activity_feeds_card_margin"
+        android:padding="@dimen/activity_feeds_card_padding">
+
+
+        <RelativeLayout
+            android:id="@+id/rl_post_card_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/card_color">
+
+            <!--Body-->
+            <TextView
+                android:id="@+id/tv_post_text"
+                style="@style/MainDarkTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_feeds_body_text_padding"
+                android:gravity="center|left"
+                android:hint="Write Heading for your time line "
+                android:padding="4dp"
+                android:paddingLeft="@dimen/activity_feeds_body_text_padding"
+                android:paddingRight="@dimen/activity_feeds_body_text_padding"
+                android:textColorLink="@color/black" />
+
+            <FrameLayout
+                android:id="@+id/rl_image_container"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_below="@+id/tv_post_text">
+
+                <TextView
+                    android:id="@+id/iv_post_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:background="@color/logo_color"
+                    android:hint="short description about the post"
+
+                    android:padding="8dp"
+                    android:scaleType="centerCrop" />
+
+            </FrameLayout>
+
+
+            <!--footer-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rl_image_container"
+                android:layout_marginBottom="@dimen/activity_feeds_footer_margin"
+                android:layout_marginTop="@dimen/activity_feeds_footer_margin"
+                android:orientation="horizontal"
+                android:weightSum="100">
+
+                <LinearLayout
+                    android:id="@+id/ll_like_container"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="90"
+                    android:gravity="left|center">
+
+                    <ImageView
+                        android:id="@+id/iv_upload_image"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="@dimen/general_margin"
+                        android:src="@drawable/ic_upload_image" />
+
+                    <TextView
+                        android:id="@+id/tv_upload_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:text="Upload Multimedia"
+                        android:textColor="@color/blackGreenColor" />
+
+                </LinearLayout>
+
+
+                <View
+                    android:layout_width="@dimen/activity_feeds_comment_like_seperator_width"
+                    android:layout_height="@dimen/activity_feeds_comment_like_seperator_height"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/icon_color" />
+
+                <LinearLayout
+                    android:id="@+id/ll_comment_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+
+                    android:background="@color/blackGreenColor"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/iv_comment_icon"
+                        style="@style/FooterIcon"
+                        android:src="@drawable/ic_post_as" />
+
+                    <TextView
+                        android:id="@+id/tv_comment_text"
+                        style="@style/FooterText"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginRight="6dp"
+                        android:text="post As" />
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:paddingRight="2dp"
+                        android:src="@android:drawable/arrow_down_float" />
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+
+</LinearLayout>

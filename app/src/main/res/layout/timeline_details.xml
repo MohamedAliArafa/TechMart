@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/event_details_header_image_height">
+
+        <ImageView
+            android:id="@+id/iv_slider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/event_details_header_image_height"
+            android:background="@color/dark_grey"
+            android:orientation="vertical"
+            android:scaleType="fitXY" />
+
+
+        <RelativeLayout
+            android:id="@+id/rl_event_card_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="@dimen/timeline_margin"
+            android:paddingBottom="@dimen/events_text_container_bottom_padding"
+            android:paddingLeft="@dimen/events_text_container_padding"
+            android:paddingRight="@dimen/events_text_container_padding"
+            android:paddingTop="@dimen/events_text_container_padding">
+
+            <TextView
+                android:id="@+id/tv_events"
+                style="@style/ParallaxTextStyle"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/events_title_margin"
+                android:layout_weight="60"
+                android:ellipsize="end"
+                android:maxLines="@integer/events_max_lines"
+                android:text="Event"
+                android:textSize="@dimen/main_dark_text" />
+
+            <LinearLayout
+                android:id="@+id/ll_events_title_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_events"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="100">
+
+                <TextView
+                    android:id="@+id/tv_events_title"
+                    style="@style/ParallaxTextStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/events_title_margin"
+                    android:layout_weight="60"
+                    android:ellipsize="end"
+
+                    android:maxLines="@integer/events_max_lines"
+                    android:text="@string/description"
+                    android:textSize="@dimen/time_text" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_events_time_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_below="@+id/ll_events_title_container"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="100">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="0dp"
+                    android:layout_height="20dp"
+                    android:layout_weight="10"
+                    android:visibility="invisible"
+                    app:srcCompat="@drawable/ic_calender" />
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    style="@style/ParallaxTextStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/events_title_margin"
+                    android:layout_weight="50"
+                    android:ellipsize="end"
+                    android:maxLines="@integer/events_max_lines"
+                    android:text="june 12 2017|Time:10:00 am on wards"
+                    android:textSize="10sp"
+                    android:visibility="invisible"
+
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lin_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ll_events_time_container"
+                android:layout_marginTop="@dimen/general_margin"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="100">
+
+                <Button
+                    android:id="@+id/btn_go"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:background="@drawable/linearlayout_background"
+                    android:text="Going"
+                    android:textColor="@color/button_light_text"
+                    android:textSize="@dimen/time_text"
+                    android:visibility="gone"
+
+                    />
+
+                <Button
+                    android:id="@+id/button8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="@dimen/general_margin"
+                    android:background="@drawable/linearlayout_background"
+                    android:text="Invite"
+                    android:textColor="@color/button_light_text"
+                    android:visibility="invisible" />
+
+
+                <ImageView
+                    android:id="@+id/imageView23"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
+                    android:visibility="invisible"
+                    app:srcCompat="@drawable/image" />
+
+                <TextView
+                    android:id="@+id/imageView25"
+                    android:layout_width="50dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/transperant_bg"
+                    android:gravity="center"
+                    android:textColor="@color/button_light_text"
+                    android:textSize="@dimen/time_text"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/ratring_pic" />
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/general_margin"
+            android:layout_marginRight="@dimen/general_margin"
+            android:layout_marginTop="@dimen/general_margin"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                app:srcCompat="@drawable/ic_back" />
+
+            <EditText
+                android:id="@+id/textView41"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="@string/search_name"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/time_text"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/new_message"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_stat_ic_user" />
+
+            <ImageView
+                android:id="@+id/new_profile"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_stat_ic_notification" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:id="@+id/lin_category"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/fragment_container"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+
+        <TextView
+            android:id="@+id/tv_event_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:background="@color/blue_join_dialog"
+            android:gravity="center"
+            android:text="Double women establish"
+            android:textColor="@color/button_light_text" />
+
+        <TextView
+            android:id="@+id/tv_"
+            android:layout_width="4dp"
+            android:layout_height="wrap_content"
+            android:background="@color/red_join_dialog"
+            android:gravity="center"
+            android:textColor="@color/button_light_text" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_events_desc"
+        style="@style/ParallaxTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="210dp"
+        android:layout_below="@+id/lin_category"
+        android:layout_marginBottom="@dimen/events_title_margin"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:alpha=".3"
+        android:ellipsize="end"
+        android:maxLines="@integer/events_max_lines"
+        android:textColor="@color/background_color"
+        android:textSize="@dimen/main_dark_text" />
+
+
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_above="@+id/container_event"
+
+        android:background="@color/about_row_grey"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_like"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginLeft="@dimen/general_margin"
+                android:layout_marginRight="@dimen/general_margin"
+                app:srcCompat="@drawable/ic_like"
+                tools:layout_editor_absoluteX="106dp"
+                tools:layout_editor_absoluteY="106dp" />
+
+            <TextView
+                android:id="@+id/tv_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:alpha=".5"
+                android:text="like"
+                android:textColor="@color/blackGreenColor"
+                android:textSize="14sp"
+                tools:layout_editor_absoluteX="144dp"
+                tools:layout_editor_absoluteY="112dp" />
+
+            <ImageView
+                android:id="@+id/iv_comment"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="6dp"
+                app:srcCompat="@drawable/ic_comment"
+                tools:layout_editor_absoluteX="224dp"
+                tools:layout_editor_absoluteY="106dp" />
+
+            <TextView
+                android:id="@+id/tv_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha=".5"
+                android:text="comment"
+                android:textColor="@color/blackGreenColor"
+                android:textSize="14sp"
+                tools:layout_editor_absoluteX="256dp"
+                tools:layout_editor_absoluteY="112dp" />
+
+            <ImageView
+                android:id="@+id/iv_share"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="@dimen/general_margin"
+                app:srcCompat="@drawable/ic_share"
+                tools:layout_editor_absoluteX="303dp"
+                tools:layout_editor_absoluteY="106dp" />
+
+            <TextView
+                android:id="@+id/tv_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha=".5"
+                android:text="share"
+                android:textColor="@color/blackGreenColor"
+                android:textSize="14sp"
+
+                tools:layout_editor_absoluteX="335dp"
+                tools:layout_editor_absoluteY="112dp" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/container_event"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_above="@+id/next_con"
+        android:background="@color/about_row_grey"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_events_desc"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Event Details"
+                android:textColor="@color/blackGreenColor" />
+
+            <TextView
+                android:id="@+id/tv_tie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha=".3"
+                android:gravity="center"
+                android:text=" Opening:the Rad Trads"
+                android:textColor="@color/background_color"
+                android:textSize="@dimen/time_text" />
+
+            <TextView
+                android:id="@+id/tv_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha=".3"
+                android:gravity="center"
+                android:text="Time: 10am-4pm"
+                android:textColor="@color/background_color"
+                android:textSize="@dimen/time_text" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_calender"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginLeft="@dimen/general_margin"
+                android:layout_marginRight="@dimen/general_margin"
+                app:srcCompat="@drawable/ic_addcalender"
+                tools:layout_editor_absoluteX="106dp"
+                tools:layout_editor_absoluteY="106dp" />
+
+            <TextView
+                android:id="@+id/tv_calender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha=".5"
+                android:text="Add to calender"
+                android:textColor="@color/blackGreenColor"
+                android:textSize="10sp"
+                tools:layout_editor_absoluteX="144dp"
+                tools:layout_editor_absoluteY="112dp" />
+
+            <ImageView
+                android:id="@+id/iv_invite"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginLeft="@dimen/general_margin"
+                android:layout_marginRight="@dimen/general_margin"
+                app:srcCompat="@drawable/ic_innvet"
+                tools:layout_editor_absoluteX="224dp"
+                tools:layout_editor_absoluteY="106dp" />
+
+            <TextView
+                android:id="@+id/textView53"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha=".5"
+                android:text="Going"
+                android:textColor="@color/blackGreenColor"
+                tools:layout_editor_absoluteX="256dp"
+                tools:layout_editor_absoluteY="112dp" />
+
+            <ImageView
+                android:id="@+id/iv_share_event"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginLeft="@dimen/general_margin"
+                android:layout_marginRight="@dimen/general_margin"
+                app:srcCompat="@drawable/ic_share"
+                tools:layout_editor_absoluteX="303dp"
+                tools:layout_editor_absoluteY="106dp" />
+
+            <TextView
+                android:id="@+id/tv_share_event"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha=".5"
+                android:text="share"
+                android:textColor="@color/blackGreenColor"
+                android:textSize="10sp"
+
+                tools:layout_editor_absoluteX="335dp"
+                tools:layout_editor_absoluteY="112dp" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/next_con"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/general_margin"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:drawableLeft="@drawable/ic_back_arrow"
+            android:drawablePadding="@dimen/about_end_padding"
+            android:gravity="center"
+            android:text="Go Back"
+            android:textColor="@color/blackGreenColor"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/next"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginLeft="150dp"
+            android:layout_marginRight="60dp"
+            android:drawablePadding="@dimen/about_end_padding"
+            android:drawableRight="@drawable/ic_next_arrow"
+            android:gravity="center"
+            android:text="Next"
+            android:textColor="@color/blackGreenColor"
+            android:textSize="14sp"
+            tools:layout_editor_absoluteX="335dp"
+            tools:layout_editor_absoluteY="112dp" />
+
+    </LinearLayout>
+
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/avi"
+        style="@style/AVLoadingIndicatorView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        app:indicatorColor="@color/red_join_dialog"
+        app:indicatorName="BallSpinFadeLoaderIndicator" />
+
+</RelativeLayout>

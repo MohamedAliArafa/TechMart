@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_reversed"
+
+    >
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView10"
+            android:layout_width="0dp"
+            android:layout_height="250dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/image_slider" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/general_margin"
+            android:orientation="horizontal"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                app:srcCompat="@drawable/ic_side_menu_logo" />
+
+            <EditText
+                android:id="@+id/textView41"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="@string/search_name"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/time_text"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/new_message"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_stat_ic_user" />
+
+            <ImageView
+                android:id="@+id/new_profile"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_stat_ic_notification" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Events"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView10"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.424" />
+
+        <TextView
+            android:id="@+id/textView47"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="@string/description"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="6dp"
+            tools:layout_editor_absoluteY="157dp" />
+
+
+        <TextView
+            android:id="@+id/textView48"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="june 12 2017|Time:10:00 am on wards"
+            android:textColor="@color/button_light_text"
+            android:textSize="@dimen/time_text"
+            tools:layout_editor_absoluteX="38dp"
+            tools:layout_editor_absoluteY="195dp" />
+
+        <ImageView
+            android:id="@+id/imageView9"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/ic_calender"
+            tools:layout_editor_absoluteX="4dp"
+            tools:layout_editor_absoluteY="190dp" />
+
+        <ImageView
+            android:id="@+id/imageView23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/image"
+            tools:layout_editor_absoluteX="225dp"
+            tools:layout_editor_absoluteY="201dp" />
+
+        <ImageView
+            android:id="@+id/imageView25"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:srcCompat="@drawable/ratring_pic"
+            tools:layout_editor_absoluteX="318dp"
+            tools:layout_editor_absoluteY="190dp" />
+
+        <Button
+            android:id="@+id/button7"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:background="@drawable/linearlayout_background"
+            android:text="Going"
+            android:textColor="@color/button_light_text"
+
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="229dp" />
+
+        <Button
+            android:id="@+id/button8"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:background="@drawable/linearlayout_background"
+            android:text="Invite"
+            android:textColor="@color/button_light_text"
+            tools:layout_editor_absoluteX="120dp"
+            tools:layout_editor_absoluteY="229dp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="250dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageView10"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</ScrollView>

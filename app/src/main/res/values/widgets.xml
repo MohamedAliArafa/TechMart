@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <!--Text Styles -->
+
+    <style name="ToolbarTextStyle">
+        <item name="android:textSize">@dimen/toolbar_text</item>
+        <item name="android:textColor">@color/toolbar_text</item>
+    </style>
+
+    <style name="MainDarkTextStyle">
+        <item name="android:textSize">@dimen/main_dark_text</item>
+        <item name="android:textColor">@color/main_dark_text</item>
+    </style>
+
+    <style name="MainBGTextStyle">
+        <item name="android:textSize">@dimen/main_dark_text</item>
+        <item name="android:textColor">@color/button_dark_text</item>
+    </style>
+
+    <style name="MainLightTextStyle">
+        <item name="android:textSize">@dimen/main_light_text</item>
+        <item name="android:textColor">@color/main_light_text</item>
+    </style>
+
+    <style name="TimeTextStyle">
+        <item name="android:textSize">@dimen/time_text</item>
+        <item name="android:textColor">@color/time_text</item>
+    </style>
+
+    <style name="TimeTextStyleTrainingProgram">
+        <item name="android:textSize">@dimen/time_text</item>
+        <item name="android:textColor">@color/main_light_text</item>
+    </style>
+
+
+    <style name="IconTextStyle">
+        <item name="android:textSize">@dimen/icon_text</item>
+        <item name="android:textColor">@color/icon_text</item>
+    </style>
+
+    <style name="CardTitleTextStyle">
+        <item name="android:textSize">@dimen/card_title_text</item>
+        <item name="android:textColor">@color/card_title_text</item>
+    </style>
+
+
+    <style name="ButtonDarkTextStyle">
+        <item name="android:textSize">@dimen/button_dark_text</item>
+        <item name="android:textColor">@color/button_dark_text</item>
+    </style>
+
+    <style name="ButtonFGTextStyle">
+        <item name="android:textSize">@dimen/button_dark_text</item>
+        <item name="android:textColor">@color/button_light_text</item>
+    </style>
+    <style name="ButtonBGTextStyle">
+        <item name="android:textSize">@dimen/button_dark_text</item>
+        <item name="android:textColor">@color/button_light_text</item>
+    </style>
+
+    <style name="ButtonLightTextStyle">
+        <item name="android:textSize">@dimen/button_light_text</item>
+        <item name="android:textColor">@color/button_dark_text</item>
+    </style>
+
+    <style name="EditTextFieldTextStyle">
+        <item name="android:textSize">@dimen/edit_text_field_text</item>
+        <item name="android:textColor">@color/edit_text_field_text</item>
+    </style>
+
+    <style name="EditTextRegisterTextStyle">
+        <item name="android:textSize">@dimen/edit_text_field_text</item>
+        <item name="android:textColor">@color/button_light_text</item>
+    </style>
+
+    <style name="ParallaxTextStyle">
+        <item name="android:textSize">@dimen/Parallax_text</item>
+        <item name="android:textColor">@color/Parallax_text</item>
+    </style>
+
+    <!-- Put All Widgets styles here instead of styles -->
+    <style name="widgetProgressPaginationView" parent="@style/Base.Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dimProgressPaginationHeight</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:indeterminate">true</item>
+    </style>
+
+    <!--Avatar Style-->
+    <item name="iv_avatar" type="id" />
+
+    <style name="Avatar">
+        <item name="android:layout_width">@dimen/avatar_dimension</item>
+        <item name="android:layout_height">@dimen/avatar_dimension</item>
+        <item name="android:id">@id/iv_avatar</item>
+    </style>
+
+    <style name="Dialog_theme" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="product_parallax" />
+
+    <style name="product_parallax.ToolbarTitleStyle">
+        <item name="android:layout_height">100dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:textColor">@color/foreground_color</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="About" />
+
+    <style name="About.ToolbarTitleStyle">
+        <item name="android:textColor">@color/about_toolbar_title_text_color</item>
+        <item name="android:textSize">@dimen/about_toolbar_text_size</item>
+        <item name="android:layout_marginStart">@dimen/about_toolbar_text_start_margin</item>
+        <item name="android:paddingBottom">@dimen/about_toolbar_text_bottom_padding</item>
+        <item name="android:paddingTop">@dimen/about_toolbar_text_top_padding</item>
+    </style>
+
+    <style name="About.TitleTextStyle">
+        <item name="android:singleLine">true</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/about_section_title_height</item>
+        <item name="android:background">@color/about_section_title_background_color</item>
+        <item name="android:textColor">@color/about_section_title_text_color</item>
+        <item name="android:textSize">@dimen/about_section_title_text_size</item>
+        <item name="android:paddingStart">@dimen/about_start_padding</item>
+        <item name="android:paddingBottom">@dimen/about_section_title_bottom_padding</item>
+        <item name="android:paddingTop">@dimen/about_section_title_top_padding</item>
+        <item name="android:paddingEnd">@dimen/about_end_padding</item>
+    </style>
+
+    <style name="About.EnrichedTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/background_color</item>
+        <item name="android:textColor">@color/about_section_body_text_color</item>
+        <item name="android:textSize">@dimen/about_section_body_text_size</item>
+        <item name="android:paddingStart">@dimen/about_start_padding</item>
+        <item name="android:paddingEnd">@dimen/about_end_padding</item>
+        <item name="android:paddingBottom">@dimen/about_section_body_bottom_padding</item>
+        <item name="android:paddingTop">@dimen/about_section_body_top_padding</item>
+    </style>
+
+
+    <!--View profile-->
+    <style name="ViewProfileTab" parent="@android:style/TextAppearance.Widget.TabWidget">
+        <item name="android:textSize">@dimen/button_dark_text</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <!--Edit profile-->
+    <style name="EditSocialImage">
+        <item name="android:layout_width">@dimen/edit_profile_social_image_dimension</item>
+        <item name="android:layout_height">@dimen/edit_profile_social_image_dimension</item>
+        <item name="android:layout_marginRight">@dimen/edit_profile_social_image_margin</item>
+    </style>
+
+    <style name="EditSocialContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="EditSocialText" parent="ButtonLightTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">@dimen/edit_profile_social_title_margin</item>
+    </style>
+
+    <!--<style name="EditProfileItemTitle" parent="TitleTextStyle">-->
+    <!--<item name="android:layout_width">match_parent</item>-->
+    <!--<item name="android:layout_height">wrap_content</item>-->
+    <!--<item name="android:layout_marginTop">8dp</item>-->
+    <!--</style>-->
+
+    <style name="EditProfileAnimatedItem" parent="EditTextFieldTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="colorAccent">@color/foreground_color</item>
+    </style>
+
+
+    <style name="EditProfileAnimatedItemContainer2" parent="EditTextFieldTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+
+        <item name="colorControlActivated">@color/foreground_color</item>
+        <item name="colorControlHighlight">@color/foreground_color</item>
+
+        <item name="android:textColor">@color/main_dark_text</item>
+        <item name="android:textColorHint">@color/edit_text_field_text</item>
+    </style>
+
+
+    <style name="EditProfileItemSepatator">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/change_password_seperator_height</item>
+        <item name="android:background">@android:color/black</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:layout_marginLeft">3dp</item>
+    </style>
+
+    <style name="menuItemSepatator">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/change_password_seperator_height</item>
+        <item name="android:background">@android:color/white</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:layout_marginLeft">3dp</item>
+    </style>
+
+    <style name="temSepatator">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/change_password_seperator_height</item>
+        <item name="android:background">@android:color/darker_gray</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:layout_marginLeft">3dp</item>
+    </style>
+
+
+    <!--<style name="SearchTheme" parent="AppTheme">-->
+        <!--<item name="homeAsUpIndicator">@drawable/ic_uparrow</item>-->
+    <!--</style>-->
+
+    <!--Profile info tab-->
+    <style name="UserInfoText" parent="ButtonDarkTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="UserInfoTile" parent="TimeTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/profile_info_title_margin</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="UserInfoHeaderBody">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@color/card_color</item>
+        <item name="android:padding">@dimen/profile_info_header_body_padding</item>
+    </style>
+
+    <style name="UserInfoFooter">
+        <item name="android:layout_width">@dimen/profile_info_social_item_with</item>
+        <item name="android:layout_height">@dimen/profile_info_social_item_height</item>
+    </style>
+
+    <!--change password-->
+    <style name="ChangePasswordSeperator">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/change_password_seperator_height</item>
+        <item name="android:layout_marginTop">@dimen/change_password_seperator_margin_top</item>
+        <item name="android:background">@color/icon_color</item>
+    </style>
+
+    <style name="ChangePasswordEditText" parent="EditTextFieldTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:password">true</item>
+    </style>
+
+    <!--<style name="ChangePasswordIcons">-->
+        <!--<item name="android:layout_width">wrap_content</item>-->
+        <!--<item name="android:layout_height">wrap_content</item>-->
+        <!--<item name="android:src">@drawable/ic_visibility</item>-->
+        <!--<item name="android:layout_centerVertical">true</item>-->
+        <!--<item name="android:layout_alignParentRight">true</item>-->
+    <!--</style>-->
+
+    <style name="ChangePasswordTextContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+
+    <!--Product details-->
+    <style name="TextAppearance.MyApp.Title.Collapsed" parent="android:TextAppearance">
+        <item name="android:textSize">@dimen/product_details_parallax_small_title</item>
+        <item name="android:textColor">@color/main_light_text</item>
+    </style>
+
+    <style name="TextAppearance.MyApp.Title.Expanded" parent="android:TextAppearance">
+        <item name="android:textSize">@dimen/Parallax_text</item>
+        <item name="android:textColor">@color/Parallax_text</item>
+        <item name="android:maxLines">2</item>
+    </style>
+
+
+    <!--Activity Feeds-->
+    <style name="ActivityFeedsMenu">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="FooterItemContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_weight">50</item>
+    </style>
+
+    <style name="FooterIcon">
+        <item name="android:layout_width">18dp</item>
+        <item name="android:layout_height">18dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
+    <style name="FooterText" parent="IconTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!--Multiple images testing style-->
+    <style name="MIP_theme" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!--<style name="AboutAppRow" parent="ButtonDarkTextStyle">-->
+        <!--<item name="android:layout_width">match_parent</item>-->
+        <!--<item name="android:layout_height">@dimen/height_about_title</item>-->
+        <!--<item name="android:paddingLeft">12dp</item>-->
+        <!--<item name="android:drawablePadding">12dp</item>-->
+        <!--<item name="android:background">@drawable/about_row_background</item>-->
+        <!--<item name="android:layout_gravity">center_horizontal</item>-->
+        <!--<item name="android:gravity">center_vertical</item>-->
+        <!--<item name="android:layout_marginLeft">12dp</item>-->
+        <!--<item name="android:layout_marginRight">12dp</item>-->
+        <!--<item name="android:maxLines">1</item>-->
+
+    <!--</style>-->
+
+    <style name="NavDrawerList">
+        <item name="android:divider">@color/button_light_text</item>
+        <item name="android:dividerHeight">1dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">start</item>
+        <item name="android:fadingEdgeLength">0dp</item>
+        <item name="android:choiceMode">singleChoice</item>
+        <item name="android:layout_width">@dimen/navigation_drawer_width</item>
+        <item name="android:fadingEdge">none</item>
+        <item name="android:scrollingCache">false</item>
+        <item name="android:scrollbars">none</item>
+        <item name="android:cacheColorHint">@color/transparent</item>
+    </style>
+
+    <!--Medical Netwrok Filter-->
+    <style name="EditTextFieldTextStyleFilterMedicalNetwrok" parent="ButtonDarkTextStyle">
+        <item name="android:gravity">left</item>
+        <!--<item name="android:paddingLeft">10dp</item>-->
+        <!--<item name="android:background">@drawable/white_rounded_background_with_grey_border</item>-->
+        <item name="android:layout_gravity">center_horizontal</item>
+        <!--<item name="android:layout_marginTop">@dimen/margin_top_text_field_filter_medical_network</item>-->
+    </style>
+    <item type="id" name="glide_tag" />
+    <dimen name="navigation_drawer_width">280dp</dimen>
+</resources>

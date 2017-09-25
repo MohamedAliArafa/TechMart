@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.a700apps.techmart">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    ACCESS_FINE_LOCATION
+
+    <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="@string/google_maps_key" />
+    <meta-data
+        android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/icon_app_1024"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".ui.screens.category.CategoryActivity"></activity>
+        <activity
+            android:name=".ui.screens.splash.SplashActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.screens.login.LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.screens.register.RegisterActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.screens.home.HomeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.screens.listgroup.GroubListActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".utils.MapDialogActivity"
+            android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".ui.screens.comment.CommentActivity" />
+        <activity android:name=".utils.ImageDetailsActivity"
+            android:theme="@style/Theme.AppCompat.Translucent"/>
+        <activity android:name=".ui.screens.timelinedetails.DetailsGroupActivity" />
+        <activity android:name=".ui.screens.meetingone.MeetingonetooneActivity" />
+        <activity android:name=".ui.screens.profile.MemberProfile"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".ui.screens.userlikes.UserLikesActivity" />
+        <activity android:name=".ui.screens.creatEvent.CreatEventActivity" />
+        <activity android:name=".ui.screens.creatpost.PostActivity" />
+        <activity android:name=".ui.screens.grouptimeline.GroupTimeLineActivity" />
+        <activity android:name=".ui.screens.grouptimeline.GroupsTimLineActivity" />
+        <activity
+            android:name=".ui.screens.mygroup.MyGroubListActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".ui.screens.profile.EditProfileActivity"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".ui.screens.notification.NotificationActivity" />
+        <activity android:name=".ui.screens.message.MessagesActivity" />
+        <activity android:name=".ui.screens.meeting.MeetingActivity" />
+        <activity android:name=".ui.screens.groupmemberdetails.GroupActivity" />
+        <activity android:name=".ui.screens.timelinedetails.DetailsActivity" />
+        <activity android:name=".ui.screens.newchat.NewChatActivity" />
+        <activity
+            android:name=".ui.screens.message.ChatActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="c53c218c5dceacfa1e45200db0daead105ffa00b" />
+
+        <!-- Services. -->
+        <service
+            android:name=".service.firebase.FirebaseIDService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".ui.MapsActivity"
+            android:label="@string/title_activity_maps"></activity>
+    </application>
+
+</manifest>

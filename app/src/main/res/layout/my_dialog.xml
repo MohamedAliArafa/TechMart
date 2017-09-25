@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/button_light_text"
+    android:id="@+id/rel_contain"
+    >
+
+    <TextView
+        android:id="@+id/tv_public"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/red_join_dialog"
+        android:text="Public"
+        android:textColor="@color/button_light_text"
+        android:gravity="center"
+        />
+    <View
+        android:id="@+id/seperator"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/tv_public"
+        android:background="#c0c0c0"/>
+
+    <TextView
+        android:id="@+id/tv_group"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/seperator"
+        android:textColor="@color/button_light_text"
+
+        android:background="@color/blackGreenColor"
+        android:text="Group"
+        android:gravity="center"
+        />
+
+</RelativeLayout>

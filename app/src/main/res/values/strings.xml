@@ -1,0 +1,107 @@
+<resources>
+    <string name="app_name">TechMart</string>
+
+    <string name="invalid_password">The password should contains numbers and letters, its length should exceed 8 characters.</string>
+    <string name="invalid_email">Invalid E-mail.</string>
+    <string name="empty_mail_field">Empty field</string>
+    <string name="no_internet_connection">Kindly check the internet connection.</string>
+    <string name="not_supported_image">Please select Format: jpg,tiff.</string>
+    <string name="not_image">Please select image</string>
+    <string name="select_title">Please enter Title</string>
+    <string name="select_Post">Please enter Description</string>
+    <string name="select_location">Please Select  Location</string>
+    <string name="select_date">Please Select  Date</string>
+    <string name="large_image">Please select image less than 1MB in size.</string>
+    <string name="no_image">Please select an attach image.</string>
+    <string name="mobile_number">MOBILE NUMBER</string>
+    <string name="hint_mobile">Enter your mobile number</string>
+    <string name="email">EMAIL</string>
+    <string name="hint_email">Your email goes here</string>
+    <string name="passord">PASSWORD</string>
+    <string name="upload_pic">UPLOAD YOUR PROFILE</string>
+    <string name="hint_pic">Format: jpg,tiff, less than 1MB</string>
+    <string name="attach">ATTACHED</string>
+    <string name="register">GET REGISTERED</string>
+    <string name="home">Timeline</string>
+    <string name="my_group">My Group</string>
+    <string name="new_group">Join New Group</string>
+    <string name="messages">Messages</string>
+    <string name="schedule">Schedule</string>
+    <string name="setting">Settings</string>
+    <string name="logout">Logout</string>
+    <string name="menu_name">Abdul Rahman</string>
+
+    <string-array name="nav_drawer_titles">
+        <item>Timeline</item>
+        <item>My Group</item>
+        <item>Join New Group</item>
+        <item>Messages</item>
+        <item>Schedule</item>
+        <item>Settings</item>
+        <item>Logout</item>
+    </string-array>
+    <string name="drawer_opened_desc">Drawer is Opened</string>
+    <string name="drawer_closed_desc">Drawer is Closed</string>
+    <string name="preference_setting">Preference Settings</string>
+    <string name="change">Change</string>
+    <string name="notification">Notification</string>
+    <string name="change_pass">Change Password</string>
+    <string name="new_pass">New Password</string>
+    <string name="repeat_pass">Repeat New Password</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="login_id">LOGIN ID</string>
+    <string name="enter_id">Enter your email</string>
+    <string name="forget">Forget your Password ?</string>
+
+    <string name="country_council">Country Council</string>
+    <string name="business_associates">Business Associates</string>
+    <string name="groups">Groups</string>
+    <string name="copyright">Copyright c 2017 |</string>
+    <string name="department">Department of Economic Development Dubai</string>
+    <string name="select_your_category">Select Your Category</string>
+    <string name="next">Next</string>
+    <string name="view_details">View Details</string>
+    <string name="member">Member</string>
+
+    <color name="colorPrimary">#3f51b5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <string name="prev"><![CDATA[< Prev]]></string>
+    <string name="next_btn"><![CDATA[Next >]]></string>
+    <string name="search_name">Enter your full name</string>
+    <string name="description">A line break that is inserted manually, and preserved when re-flowing</string>
+    <string name="action_settings">Setting</string>
+    <string name="group_description">A line break that is inserted manually, and preserved when re-flowing, may still be distinct from a paragraph break, although this is typically  Many published books use a device to separate certain paragraphs further when there is a change of scene or time</string>
+    <string name="group_description2">Emirate enviroment group  06 April - 08 April 2017  common English usage misconception  The crafting of clear</string>
+    <string name="name_length_not_valid">Please enter valid name</string>
+    <string name="invalid_mobile_number">Please enter valid mobile number</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="singn_in">SIGN IN</string>
+    <string name="company">Company Name</string>
+    <string name="hint_company">enter your company name</string>
+    <string name="company_position">Position</string>
+    <string name="hint_position">enter your company position</string>
+    <string name="company_length_not_valid">Please enter valid name</string>
+    <string name="position_length_not_valid">Please enter valid position</string>
+    <string name="enter_password">Enter your password</string>
+    <string name="posts">Posts</string>
+    <string name="event">Events</string>
+    <string name="group_member">Group Member</string>
+    <string name="group">Groups </string>
+    <string name="share_via">TechMart Link</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="follow">Follow</string>
+    <string name="unfollow">UnFollow</string>
+    <string name="disconnect">DisConnect</string>
+    <string name="connect">Connect</string>
+    <string name="thanks_you">Thanks for reaching out.\n Our team will be happy support you</string>
+    <string name="call">Call</string>
+    <string name="message">Message</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="check_internet">Kindly check the internet connection.</string>
+
+</resources>

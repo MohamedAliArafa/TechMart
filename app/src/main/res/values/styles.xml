@@ -1,0 +1,101 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorPrimaryDark">@color/system_bar_background_color</item>
+        <item name="colorAccent">#22fa</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="Theme.AppCompat.Translucent" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:textColorHint">@color/background_color</item>
+    </style>
+
+    <style name="NotificationDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/background_color</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="AppTheme.Login">
+        <item name="colorPrimaryDark">@color/background_color</item>
+    </style>
+
+    <style name="PopupMenuStyle" parent="@style/Base.Widget.AppCompat.ProgressBar">
+        <item name="android:popupBackground">@color/ascent_color</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:visibility">gone</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:indeterminate">true</item>
+        <item name="android:padding">@dimen/inner_spacing</item>
+        <item name="android:progress">20</item>
+    </style>
+
+    <bool name="default_circle_indicator_centered">true</bool>
+    <color name="default_circle_indicator_fill_color">#FFFFFFFF</color>
+    <color name="default_circle_indicator_page_color">#FFFFFFFF</color>
+    <integer name="default_circle_indicator_orientation">0</integer>
+    <dimen name="default_circle_indicator_radius">4dp</dimen>
+    <bool name="default_circle_indicator_snap">false</bool>
+    <color name="default_circle_indicator_stroke_color">#FFDDDDDD</color>
+    <dimen name="default_circle_indicator_stroke_width">1dp</dimen>
+
+
+    <style name="fragment_text">
+        <item name="android:textColor">#ffacacac</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+
+    <style name="TextAppearance.ExpandedTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">24sp</item>
+        <item name="android:maxLines">2</item>
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+
+    <!--this style use to show the likes of the post ........................ -->
+    <style name="AppTheme.CustomDialog" parent="Theme.AppCompat.Dialog">
+        <item name="windowFixedWidthMajor">80%</item>
+        <item name="windowFixedWidthMinor">80%</item>
+        <item name="windowFixedHeightMinor">65%</item>
+        <item name="windowFixedHeightMajor">65%</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="GreetingCard" />
+
+    <style name="GreetingCard.Title">
+        <item name="android:textSize">@dimen/greeting_card_text</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="DialogTheme">
+        <item name="android:windowEnterAnimation">@anim/slide_left</item>
+        <item name="android:windowExitAnimation">@anim/slide_right</item>
+    </style>
+
+    <style name="Theme.Transparent" parent="android:Theme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <!-- Personal Events -->
+</resources>

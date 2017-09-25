@@ -1,0 +1,499 @@
+<resources>
+
+
+    <!--OOH mobile text sizes-->
+    <dimen name="toolbar_text">20sp</dimen>
+    <dimen name="card_title_text">14sp</dimen>
+    <dimen name="time_text">10sp</dimen>
+    <dimen name="main_dark_text">14sp</dimen>
+    <dimen name="main_light_text">14sp</dimen>
+    <dimen name="icon_text">12sp</dimen>
+    <dimen name="edit_text_field_text">14sp</dimen>
+    <dimen name="button_dark_text">14sp</dimen>
+    <dimen name="button_light_text">14sp</dimen>
+    <dimen name="Parallax_text">20sp</dimen>
+    <dimen name="birthday_text_size">29sp</dimen>
+    <dimen name="sign_up_text_size">12sp</dimen>
+    <dimen name="greeting_card_text">12sp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="inner_spacing">8dp</dimen>
+
+    <dimen name="dimProgressPaginationHeight">20dp</dimen>
+
+    <!-- Avatar Dimensions-->
+    <dimen name="avatar_dimension">60dp</dimen>
+
+
+    <!-- Avatar Dimensions-->
+    <dimen name="avatar_dimension_contact">80dp</dimen>
+    <!-- **** About Activity **** -->
+    <!--Toolbar-->
+    <dimen name="about_toolbar_text_size">20sp</dimen>
+    <dimen name="about_start_padding">18dp</dimen>
+    <dimen name="about_end_padding">18dp</dimen>
+
+
+    <dimen name="about_toolbar_text_start_margin">36dp</dimen>
+    <dimen name="about_toolbar_text_top_padding">14dp</dimen>
+    <dimen name="about_toolbar_text_bottom_padding">14dp</dimen>
+    <!--Section Title-->
+    <dimen name="about_section_title_text_size">16sp</dimen>
+
+    <dimen name="about_section_title_height">48dp</dimen>
+    <dimen name="about_section_title_top_padding">12dp</dimen>
+    <dimen name="about_section_title_bottom_padding">12dp</dimen>
+    <!--Section Body-->
+    <dimen name="about_section_body_text_size">14sp</dimen>
+
+    <dimen name="about_section_body_top_padding">19dp</dimen>
+    <dimen name="about_section_body_bottom_padding">17dp</dimen>
+    <!-- Section Images -->
+    <dimen name="about_section_image_height">210dp</dimen>
+    <dimen name="about_image_slider_indicator_margin_bottom">18dp</dimen>
+    <dimen name="about_image_slider_indicator_height">10dp</dimen>
+    <!--Parallax-->
+    <dimen name="flexible_space_height">204dp</dimen>
+
+    <!--Login Dimensions-->
+    <dimen name="login_logo_height">156dp</dimen>
+    <dimen name="login_logo_width">341dp</dimen>
+    <dimen name="login_email_edit_text_height">50dp</dimen>
+    <dimen name="login_email_edit_text_width">330dp</dimen>
+    <dimen name="login_email_edit_text_bottom_margin">10dp</dimen>
+    <dimen name="login_edit_text_background_radius">4dp</dimen>
+    <dimen name="login_password_edit_text_bottom_margin">20dp</dimen>
+    <dimen name="login_button_bottom_margin">23dp</dimen>
+    <dimen name="login_text_height">30dp</dimen>
+    <dimen name="login_reset_password_bottom_margin">18dp</dimen>
+    <dimen name="login_sign_up_height">50dp</dimen>
+    <dimen name="login_social_network_button_height">56dp</dimen>
+    <dimen name="login_social_network_button_width">56dp</dimen>
+    <dimen name="login_social_network_margin">6dp</dimen>
+    <dimen name="login_edit_text_padding">8dp</dimen>
+    <dimen name="login_edit_text_text_size">14dp</dimen>
+    <dimen name="margin_left_login">14dp</dimen>
+    <dimen name="margin_right_login">14dp</dimen>
+
+    <dimen name="top_margin_external_social_layout">65dp</dimen>
+    <dimen name="left_margin_external_social_button">165dp</dimen>
+    <dimen name="external_social_button_padding">8dp</dimen>
+
+    <dimen name="external_social_horizontal_margin">25dp</dimen>
+    <dimen name="external_social_image_dimension">38dp</dimen>
+    <dimen name="external_social_image_start_margin">35dp</dimen>
+    <dimen name="external_social_text_start_padding">120dp</dimen>
+    <dimen name="external_social_button_height">65dp</dimen>
+    <!-- Forget Password-->
+    <dimen name="forget_password_linear_container_width">306dp</dimen>
+    <dimen name="forget_password_reset_title_margin_left">14dp</dimen>
+    <dimen name="forget_password_reset_title_margin_top">18dp</dimen>
+    <dimen name="forget_password_reset_describe_margin_left">14dp</dimen>
+    <dimen name="forget_password_reset_describe_margin_top">10dp</dimen>
+    <dimen name="forget_password_reset_edit_text_margin_top">26dp</dimen>
+    <dimen name="forget_password_reset_edit_text_margin_left">14dp</dimen>
+    <dimen name="forget_password_reset_edit_text_margin_right">14dp</dimen>
+    <dimen name="forget_password_reset_edit_text_margin_bottom">10dp</dimen>
+    <dimen name="forget_password_reset_button_width">306dp</dimen>
+    <dimen name="forget_password_reset_button_height">43dp</dimen>
+    <dimen name="forget_password_reset_button_margin_top">8dp</dimen>
+    <dimen name="forget_password_reset_view_margin_right">14dp</dimen>
+    <dimen name="forget_password_reset_view_margin_left">14dp</dimen>
+    <dimen name="forget_password_reset_view_margin_bottom">18dp</dimen>
+
+    <!--Edit profile-->
+    <dimen name="edit_profile_header_padding">15dp</dimen>
+    <dimen name="edit_profile_avatar_margin">15dp</dimen>
+    <dimen name="edit_profile_password_padding">15dp</dimen>
+    <dimen name="edit_profile_password_margin">8dp</dimen>
+    <dimen name="edit_profile_footer_margin">20dp</dimen>
+    <dimen name="edit_profile_social_image_dimension">60dp</dimen>
+    <dimen name="edit_profile_social_image_margin">15dp</dimen>
+    <dimen name="edit_profile_body_container_padding">8dp</dimen>
+    <dimen name="edit_profile_body_container_margin">8dp</dimen>
+    <dimen name="edit_profile_mobile_seperator_height">25dp</dimen>
+    <dimen name="edit_profile_mobile_seperator_width">1dp</dimen>
+    <dimen name="edit_profile_mobile_seperator_margin">5dp</dimen>
+    <dimen name="edit_profile_seperator_margin">3dp</dimen>
+    <dimen name="edit_profile_save_margin">20dp</dimen>
+    <dimen name="edit_profile_avatar_width_height">54dp</dimen>
+    <dimen name="edit_profile_google_plus_margin">15dp</dimen>
+    <dimen name="edit_profile_social_title_margin">10dp</dimen>
+    <integer name="edit_profile_about_max_character">200</integer>
+    <integer name="edit_profile_organization_max_character">100</integer>
+    <integer name="edit_profile_name_max_character">25</integer>
+    <dimen name="edit_profile_vertical_seperator_margin">8dp</dimen>
+    <dimen name="edit_profile_horizontal_seperator_margin">3dp</dimen>
+
+
+    <!--View profile-->
+    <dimen name="view_profile_avatar_container_margin">28dp</dimen>
+    <dimen name="view_profile_name_margin">20dp</dimen>
+    <dimen name="view_profile_avatar_width_height">106dp</dimen>
+    <dimen name="view_profile_edit_icon_size">20dp</dimen>
+    <dimen name="view_profile_edit_icon_container_size">30dp</dimen>
+    <dimen name="view_profile_edit_icon_margin">-8dp</dimen>
+    <dimen name="view_profile_edit_icon_container_margin">-15dp</dimen>
+
+
+    <!--Profile info-->
+    <dimen name="profile_info_header_margin">8dp</dimen>
+    <dimen name="profile_info_header_body_padding">8dp</dimen>
+    <dimen name="profile_info_body_margin">8dp</dimen>
+    <dimen name="profile_info_footer_margin">25dp</dimen>
+    <dimen name="profile_info_data_margin">19dp</dimen>
+    <dimen name="profile_info_title_margin">8dp</dimen>
+    <dimen name="profile_info_social_margin">15dp</dimen>
+    <dimen name="profile_info_social_item_with">42dp</dimen>
+    <dimen name="profile_info_social_item_height">42dp</dimen>
+
+    <!--change password seperator-->
+    <integer name="change_password_password_max_character">60</integer>
+    <dimen name="change_password_seperator_height">1dp</dimen>
+    <dimen name="change_password_seperator_margin_top">10dp</dimen>
+    <dimen name="change_password_container_padding">8dp</dimen>
+    <dimen name="change_password_new_password_container_margin">20dp</dimen>
+    <dimen name="change_password_save_margin">20dp</dimen>
+
+    <!--Products-->
+    <integer name="products_max_lines">2</integer>
+    <dimen name="products_no_products_text_margin">8dp</dimen>
+    <dimen name="products_list_margin">8dp</dimen>
+    <dimen name="products_card_margin">8dp</dimen>
+    <dimen name="products_card_height">130dp</dimen>
+    <dimen name="products_logo_width">156dp</dimen>
+    <dimen name="products_text_container_padding">8dp</dimen>
+    <dimen name="products_text_container_bottom_padding">13dp</dimen>
+    <dimen name="products_title_margin">4dp</dimen>
+    <dimen name="products_time_margin">13dp</dimen>
+
+    <!--Product details-->
+    <integer name="product_details_dynamic_image_margin">10</integer>
+    <dimen name="product_details_parallax_small_title">14sp</dimen>
+    <dimen name="product_details_header_image_height">308dp</dimen>
+    <dimen name="product_details_message_margin">8dp</dimen>
+    <dimen name="product_details_header_container_height">250dp</dimen>
+
+
+    <!-- Mobile or tablet checking -->
+    <bool name="isPhone">true</bool>
+    <!-- Register-->
+    <dimen name="Register_body_container_margin">8dp</dimen>
+    <dimen name="Register_body_container_padding">8dp</dimen>
+    <integer name="Register_name_max_character">25</integer>
+    <integer name="Register_organization_max_character">100</integer>
+    <integer name="Register_pass_max_character">12</integer>
+
+    <!-- Activit Feeds-->
+    <integer name="activity_feeds_title_max_liner">1</integer>
+    <dimen name="activity_feeds_card_margin">8dp</dimen>
+    <dimen name="activity_feeds_card_padding">8dp</dimen>
+    <dimen name="activity_feeds_header_padding">8dp</dimen>
+    <dimen name="activity_feeds_header_padding_bottom">8dp</dimen>
+    <dimen name="activity_feeds_body_text_padding">8dp</dimen>
+    <dimen name="activity_feeds_avatar_margin">8dp</dimen>
+    <dimen name="activity_feeds_image_count">32dp</dimen>
+    <dimen name="activity_feeds_avatar_width_height">50dp</dimen>
+    <dimen name="activity_feeds_image_count_margin">8dp</dimen>
+    <dimen name="activity_feeds_comment_like_seperator_width">2dp</dimen>
+    <dimen name="activity_feeds_comment_like_seperator_height">20dp</dimen>
+    <dimen name="activity_feeds_new_post_margin_right">10dp</dimen>
+    <dimen name="activity_feeds_new_post_margin_bottom">60dp</dimen>
+    <dimen name="activity_feeds_footer_margin">10dp</dimen>
+    <dimen name="activity_feeds_toolbar_paading">7dp
+    </dimen>
+    <dimen name="post_listview_item_assigned_role_margin_left">5dp</dimen>
+
+    <!--this needs to be revised by Samir-->
+    <dimen name="activity_feeds_list_header_margin">8dp</dimen>
+    <dimen name="activity_feeds_list_header_padding">8dp</dimen>
+    <dimen name="activity_feeds_list_header_height">50dp</dimen>
+
+
+    <!--Activity Feeds - News-->
+    <integer name="news_title_max_lines">2</integer>
+    <integer name="news_details_max_lines">3</integer>
+    <dimen name="news_no_products_text_margin">8dp</dimen>
+    <dimen name="news_list_margin">8dp</dimen>
+    <dimen name="news_card_margin">8dp</dimen>
+    <dimen name="news_card_height">170dp</dimen>
+    <dimen name="news_logo_width">156dp</dimen>
+    <dimen name="news_text_container_padding">8dp</dimen>
+    <dimen name="news_text_container_bottom_padding">13dp</dimen>
+    <dimen name="news_title_margin">4dp</dimen>
+    <dimen name="news_time_margin">13dp</dimen>
+
+
+    <!--Activity Feeds - Events-->
+    <integer name="events_max_lines">2</integer>
+    <dimen name="events_no_products_text_margin">8dp</dimen>
+    <dimen name="events_list_margin">8dp</dimen>
+    <dimen name="events_card_margin">8dp</dimen>
+    <dimen name="events_card_height">130dp</dimen>
+    <dimen name="events_logo_width">156dp</dimen>
+    <dimen name="events_text_container_padding">8dp</dimen>
+    <dimen name="events_text_container_bottom_padding">13dp</dimen>
+    <dimen name="events_title_margin">4dp</dimen>
+    <dimen name="events_time_margin">13dp</dimen>
+
+
+    <!--Comments-->
+    <dimen name="comments_like_margin">75dp</dimen>
+    <dimen name="comments_footer_margin">17dp</dimen>
+    <dimen name="comments_sending_container_margin">8dp</dimen>
+    <dimen name="comments_sending_container_padding">8dp</dimen>
+    <dimen name="comments_send_label_width">35dp</dimen>
+
+    <!--Edit Post-->
+    <integer name="edit_post_maximum_characters">1000</integer>
+    <dimen name="edit_post_container_padding">8dp</dimen>
+    <dimen name="edit_post_container_margin">8dp</dimen>
+
+    <!--Permission Message-->
+    <dimen name="permission_container_margin">8dp</dimen>
+    <dimen name="permission_button_margin">20dp</dimen>
+
+
+    <!--Likes-->
+    <dimen name="likes_list_container_padding">10dp</dimen>
+    <dimen name="likes_list_seperator_margin">10dp</dimen>
+    <dimen name="likes_list_seperator_height">1dp</dimen>
+    <dimen name="likes_list_container_margin_top_bottom">100dp</dimen>
+    <dimen name="likes_list_container_margin_left_right">45dp</dimen>
+    <dimen name="likes_list_name_margin">9dp</dimen>
+
+    <!--New Post-->
+    <integer name="new_post_maximum_characters">1000</integer>
+    <integer name="new_post_grid_column_count">1
+    </integer>
+    <!--<integer name="new_post_grid_column_count">2</integer>-->
+    <dimen name="new_post_grid_scpacing">5dp</dimen>
+    <dimen name="new_post_grid_margin">5dp</dimen>
+    <dimen name="new_post_grid_item_height">150dp</dimen>
+    <dimen name="new_post_main_container_padding">8dp</dimen>
+    <dimen name="new_post_sub_container_padding">8dp</dimen>
+    <dimen name="new_post_footer_padding">8dp</dimen>
+    <dimen name="new_post_main_container_margin">8dp</dimen>
+    <dimen name="new_post_text_height">166dp</dimen>
+    <dimen name="new_post_grid_height">313dp</dimen>
+    <dimen name="new_post_footer_height">50dp</dimen>
+    <dimen name="new_post_footer_icon_height">40dp</dimen>
+    <dimen name="new_post_image_height">200dp</dimen>
+
+    <!--Notifications List-->
+    <dimen name="notification_item_height">85dp</dimen>
+    <dimen name="notification_sender_avatar_width">53dp</dimen>
+    <dimen name="notification_sender_avatar_left_margin">10dp</dimen>
+    <dimen name="notification_sender_avatar_right_margin">12dp</dimen>
+    <dimen name="notification_name_text_top_margin">25dp</dimen>
+    <dimen name="notification_admin_name_text_top_margin">12dp</dimen>
+    <dimen name="notification_time_text_top_margin">7dp</dimen>
+    <integer name="notification_name_text_max_lines">2</integer>
+    <!-- Contact Us-->
+    <dimen name="more_textview_right_margin">16dp</dimen>
+    <dimen name="more_shape_left_margin">16dp</dimen>
+    <dimen name="more_contact_top_margin">24dp</dimen>
+    <dimen name="contacts_no_contacts_text_margin">20dp</dimen>
+    <dimen name="contacts_card_height">58dp</dimen>
+    <!-- Event -->
+    <dimen name="event_details_header_image_height">200dp</dimen>
+    <!--Admin Notification-->
+    <dimen name="admin_notification_image_width">24dp</dimen>
+    <dimen name="admin_notification_country_role_layout_height">180dp</dimen>
+    <dimen name="admin_notification_notification_layout_height">162dp</dimen>
+    <dimen name="admin_notification_container_margin">4dp</dimen>
+    <dimen name="admin_notification_text_margin">4dp</dimen>
+    <dimen name="admin_notification_filter_margin">8dp</dimen>
+    <dimen name="admin_notification_role_top_margin">42dp</dimen>
+    <dimen name="admin_notification_country_bottom_margin">12dp</dimen>
+    <dimen name="admin_notification_choose_country_left_padding">11dp</dimen>
+    <dimen name="country_picker_padding">10dp</dimen>
+    <dimen name="country_picker_small_padding">4dp</dimen>
+    <dimen name="role_dialog_width">100dp</dimen>
+    <dimen name="role_dialog_height">220dp</dimen>
+    <dimen name="gallery_photo_list_margin">20dp</dimen>
+    <dimen name="gallery_list_margin">20dp</dimen>
+    <dimen name="galler_photo_progress_bar_width">30dp</dimen>
+    <dimen name="width_about_powered_by">216dp</dimen>
+    <dimen name="height_about_powered_by">96dp</dimen>
+    <dimen name="height_about_title">55dp</dimen>
+    <dimen name="margin_top_about_develop_by">55dp</dimen>
+
+    <dimen name="about_gallery_image_dimension">100dp</dimen>
+    <dimen name="list_item_overview_height">56dp</dimen>
+    <dimen name="list_item_overview_horizontal_padding">16dp</dimen>
+    <dimen name="about_gallery_padding">4dp</dimen>
+    <dimen name="linear_layout_height">500dp</dimen>
+    <dimen name="height_news_cell_item">220dp</dimen>
+    <dimen name="post_image_height">150dp</dimen>
+
+    <!-- New Comers List -->
+    <dimen name="no_employee_book_dimen">180dp</dimen>
+    <dimen name="new_comer_avatar_start_margin">4dp</dimen>
+    <dimen name="new_comer_avatar_end_margin">8dp</dimen>
+    <dimen name="new_comer_list_item_height">56dp</dimen>
+    <dimen name="new_comer_list_header_height">258dp</dimen>
+
+    <!-- birthday-->
+    <dimen name="height_image_birthday">246dp</dimen>
+    <dimen name="height_image_grid_view">246dp</dimen>
+    <dimen name="birthday_margin_top">60dp</dimen>
+    <dimen name="birthday_margin">60dp</dimen>
+    <dimen name="birthday_sender_avatar_right_margin">14dp</dimen>
+    <dimen name="birthday_name_text_top_margin">14dp</dimen>
+    <dimen name="birthday_time_text_top_margin">1dp</dimen>
+    <dimen name="birthday_end_padding">14dp</dimen>
+    <dimen name="birthday_list">600dp</dimen>
+    <dimen name="birthday_padding">4dp</dimen>
+
+    <!-- hr-->
+    <dimen name="hr_height">114dp</dimen>
+    <dimen name="hr_width">119dp</dimen>
+    <dimen name="hr_width_layout">133dp</dimen>
+    <dimen name="hr_end_padding">48dp</dimen>
+    <dimen name="hr_lin_container">26dp</dimen>
+    <dimen name="hr_padding">4dp</dimen>
+    <dimen name="hr_padding_top">4dp</dimen>
+    <dimen name="hr_margin_top">39dp</dimen>
+    <dimen name="hr_width_text">100dp</dimen>
+    <dimen name="hr_text_margin">2dp</dimen>
+    <dimen name="hr_card_margin">4dp</dimen>
+    <!-- expand-->
+    <dimen name="expandable_height">80dp</dimen>
+    <dimen name="expandable_group_height">55dp</dimen>
+    <dimen name="expandable_padding">8dp</dimen>
+    <dimen name="expandable_list_height">0dp</dimen>
+    <!--Greeting Cards-->
+    <dimen name="no_greeting_card_height">113dp</dimen>
+    <dimen name="no_greeting_card_width">76dp</dimen>
+
+    <dimen name="item_greeting_card_width">157dp</dimen>
+    <dimen name="item_greeting_card_height">233dp</dimen>
+    <dimen name="item_greeting_image_height">164dp</dimen>
+    <dimen name="item_greeting_image_width">141dp</dimen>
+    <dimen name="item_greeting_inner_margin">8dp</dimen>
+    <dimen name="grid_greeting_horizontal_margin">19dp</dimen>
+    <dimen name="grid_greeting_vertical_margin">14dp</dimen>
+    <dimen name="grid_greeting_share_margin">24dp</dimen>
+
+    <dimen name="grid_greeting_share_width">19dp</dimen>
+    <dimen name="grid_greeting_share_height">17dp</dimen>
+
+    <integer name="greeting_card_items">2</integer>
+    <!--Medical Network-->
+    <dimen name="height_filter_container_medical_network">100dp</dimen>
+    <dimen name="left_margin_filter_container_medical_netwrok">22dp</dimen>
+    <dimen name="height_button_filter_medical_network">50dp</dimen>
+    <dimen name="margin_top_text_field_filter_medical_network">20dp</dimen>
+    <dimen name="width_button_filter_medical_netwrok">223dp</dimen>
+    <dimen name="marging_bottom_button_search_filter">25dp</dimen>
+    <dimen name="height_of_filter_icon">128dp</dimen>
+    <dimen name="width_of_filter_icon">150dp</dimen>
+    <dimen name="heigt_filter_container">568dp</dimen>
+    <dimen name="height_filter_fileds">440dp</dimen>
+    <dimen name="margin_top_type_medical_child">15dp</dimen>
+    <dimen name="margin_top_filter_icon">37dp</dimen>
+    <dimen name="margein_left_img_editext_medical_netwrok">10dp</dimen>
+    <dimen name="height_box_medical_unit">60dp</dimen>
+    <dimen name="height_img_box_medical_unit">35dp</dimen>
+    <dimen name="margin_left_box_medical_unit">20dp</dimen>
+    <dimen name="margin_right_box_medical_unit">20dp</dimen>
+
+
+    <!--LIBRARY-->
+    <dimen name="photo_width">120dp</dimen>
+    <dimen name="photo_height">70dp</dimen>
+    <dimen name="gallery_list_margin_library">10dp</dimen>
+    <dimen name="margin_top_follow_us_grid">54dp</dimen>
+
+
+    <!--Follow us -->
+    <integer name="follow_us_grid_column_number">2</integer>
+    <dimen name="width_image_follow_use">98dp</dimen>
+    <dimen name="height_image_follow_us">98dp</dimen>
+    <dimen name="vertical_margin_follow_us_cell">27dp</dimen>
+    <dimen name="event_text_padding">10dp</dimen>
+    <dimen name="event_padding">10dp</dimen>
+    <!-- library-->
+    <dimen name="event_horizontal_margin">8dp</dimen>
+    <dimen name="event_list_divider_margin">8dp</dimen>
+    <dimen name="event_item_height">240dp</dimen>
+    <dimen name="event_avatar_margin">16dp</dimen>
+    <dimen name="photo_text_margin">18sp</dimen>
+    <!-- Personal Events -->
+    <dimen name="personal_event_avatar_image_height">50dp</dimen>
+    <dimen name="personal_event_avatar_image_width">50dp</dimen>
+    <dimen name="personal_event_list_item_padding">12dp</dimen>
+    <dimen name="personal_event_list_item_vertical_margin">7dp</dimen>
+    <dimen name="personal_event_name_marginleft">17dp</dimen>
+    <dimen name="personal_event_location_width">101dp</dimen>
+    <dimen name="personal_event_item_child_separator_height">2dp</dimen>
+    <dimen name="personal_event_content_margin_top">16dp</dimen>
+    <dimen name="personal_event_content_margin_bottom">16dp</dimen>
+    <dimen name="personal_event_list_item_right_margin">8dp</dimen>
+    <dimen name="personal_event_list_item_left_margin">8dp</dimen>
+    <dimen name="new_post_separator_margin_bottom">5dp</dimen>
+    <dimen name="personal_event_duration_top_margin">5dp</dimen>
+    <dimen name="promote_icon_margin_right">5dp</dimen>
+    <dimen name="career_detail_padding_left">18dp</dimen>
+    <dimen name="career_detail_padding_right">18dp</dimen>
+    <dimen name="career_detail_padding_top">10dp</dimen>
+    <dimen name="career_detail_padding_bottom">18dp</dimen>
+    <dimen name="career_detail_learn_more_image_width">37dp</dimen>
+    <dimen name="career_detail_learn_more_image_height">37dp</dimen>
+    <dimen name="margin5">5dp</dimen>
+    <dimen name="career_detail_title_margin_bottom">19dp</dimen>
+    <dimen name="question_item_margin_top">10dp</dimen>
+    <dimen name="question_item_margin_right">18dp</dimen>
+    <dimen name="question_item_margin_left">18dp</dimen>
+    <dimen name="question_item_title_margin_bottom">21dp</dimen>
+    <dimen name="question_item_padding">10dp</dimen>
+    <dimen name="question_item_title_margin_left">5dp</dimen>
+    <dimen name="schedule_item_padding">10dp</dimen>
+    <dimen name="schedule_item_separator_height">1dp</dimen>
+    <dimen name="schedule_item_content_padding_top">10dp</dimen>
+    <dimen name="schedule_item_content_padding_bottom">10dp</dimen>
+    <dimen name="schedule_item_content_padding_left">5dp</dimen>
+    <dimen name="schedule_item_content_padding_right">5dp</dimen>
+
+    <dimen name="schedule_item_time_margin_bottom">5dp</dimen>
+    <dimen name="search_user_item_padding">10dp</dimen>
+    <dimen name="search_user_item_margin_top">20dp</dimen>
+    <dimen name="search_user_item_margin_bottom">20dp</dimen>
+    <dimen name="search_user_item_margin_left">5dp</dimen>
+    <dimen name="search_user_item_margin_right">5dp</dimen>
+    <dimen name="categories_list_margin">8dp</dimen>
+    <dimen name="category_item_padding_top">5dp</dimen>
+    <dimen name="category_item_padding_bottom">5dp</dimen>
+    <dimen name="category_item_padding_right">10dp</dimen>
+    <dimen name="category_item_padding_left">10dp</dimen>
+    <dimen name="category_item_name_margin_right">5dp</dimen>
+    <dimen name="category_item_margin_bottom">5dp</dimen>
+    <dimen name="category_item_margin_top">5dp</dimen>
+    <dimen name="my_data_category_detail_list_margin">8dp</dimen>
+    <dimen name="my_data_format_item_padding">10dp</dimen>
+    <dimen name="my_data_format_title_margin">10dp</dimen>
+    <dimen name="my_data_format_update_at_margin">10dp</dimen>
+    <dimen name="my_data_category_data_item_margin_left">10dp</dimen>
+    <dimen name="my_data_category_data_item_margin_right">10dp</dimen>
+    <dimen name="my_data_category_data_item_margin_bottom">5dp</dimen>
+    <dimen name="my_data_category_data_item_margin_top">5dp</dimen>
+    <dimen name="upload_width">110dp</dimen>
+    <dimen name="attached_button_padding">8dp</dimen>
+    <dimen name="menu_name_margin_left">14dp</dimen>
+    <dimen name="general_margin">6dp</dimen>
+    <dimen name="small_inner_spacing">4dp</dimen>
+    <dimen name="normal_text_size">16sp</dimen>
+    <dimen name="margin_image">50dp</dimen>
+    <dimen name="margin_button">40dp</dimen>
+    <dimen name="navigation_margin">20dp</dimen>
+    <dimen name="general_padding">20dp</dimen>
+    <dimen name="logo_margin">80dp</dimen>
+    <dimen name="timeline_margin">50dp</dimen>
+    <dimen name="sign_in_width">80dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="post_image_width">140dp</dimen>
+</resources>
