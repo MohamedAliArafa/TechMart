@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/bg"
     android:orientation="vertical">
 
@@ -38,7 +39,7 @@
 
                 android:layout_marginLeft="40dp"
                 android:layout_marginRight="40dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="60dp"
                 android:orientation="horizontal"
                 android:weightSum="10">
 
@@ -58,7 +59,7 @@
                         android:layout_marginRight="10dp"
                         android:background="@drawable/transperant_bg"
                         android:text="@string/singn_in"
-                        android:textColor="@color/button_light_text"
+                        android:textColor="@color/light_color_text"
                         android:textSize="12sp" />
 
                     <ImageView
@@ -80,7 +81,7 @@
                     android:layout_weight="2"
                     android:gravity="center"
                     android:text="OR"
-                    android:textColor="@color/button_light_text" />
+                    android:textColor="@color/system_bar_background_color" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -102,7 +103,7 @@
                         android:paddingLeft="@dimen/general_margin"
                         android:text="Sign Up"
 
-                        android:textColor="@color/button_light_text"
+                        android:textColor="@color/system_bar_background_color"
                         android:textSize="12sp" />
 
                     <ImageView
@@ -152,14 +153,16 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:background="@android:color/transparent"
-                        android:hint="ENTER YOUR FULL NAME"
+                        android:hint="Enter your full name"
                         android:inputType="text"
                         android:maxLines="1"
-                        android:textColorHint="@color/about_row_grey"
+                        android:textColorHint="@color/light_color_text"
                         android:textSize="@dimen/time_text" />
 
                     <View
                         style="@style/temSepatator"
+                        android:layout_marginLeft="10dp"
+
                         android:layout_below="@+id/et_name"
                         android:layout_marginTop="3dp" />
 
@@ -190,7 +193,7 @@
                         android:hint="@string/hint_mobile"
                         android:inputType="phone"
                         android:maxLines="1"
-                        android:textColorHint="@color/about_row_grey"
+                        android:textColorHint="@color/system_bar_background_color"
                         android:textSize="@dimen/time_text" />
 
                     <View
@@ -258,7 +261,7 @@
                         android:hint="@string/enter_password"
                         android:inputType="textPassword"
                         android:maxLines="1"
-                        android:textColorHint="@color/about_row_grey"
+                        android:textColorHint="@color/light_color_text"
                         android:textSize="@dimen/time_text" />
 
                     <View
@@ -292,7 +295,7 @@
                         android:hint="@string/hint_company"
                         android:inputType="text"
                         android:maxLines="1"
-                        android:textColorHint="@color/about_row_grey"
+                        android:textColorHint="@color/light_color_text"
                         android:textSize="@dimen/time_text" />
 
                     <View
@@ -327,7 +330,7 @@
                         android:hint="@string/hint_position"
                         android:inputType="text"
                         android:maxLines="1"
-                        android:textColorHint="@color/about_row_grey"
+                        android:textColorHint="@color/light_color_text"
                         android:textSize="@dimen/time_text" />
 
                     <View
@@ -360,10 +363,12 @@
                         android:background="@drawable/transperant_bg"
                         android:drawableEnd="@drawable/ic_attachment"
                         android:hint="@string/attach"
+                        android:layout_margin="10dp"
+
                         android:maxLines="1"
                         android:paddingEnd="@dimen/attached_button_padding"
 
-                        android:textColorHint="@color/button_light_text"
+                        android:textColorHint="@color/light_color_text"
                         android:textSize="12sp" />
 
                     <com.a700apps.techmart.utils.CustomTextView
@@ -371,6 +376,8 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/bt_upload"
                         android:gravity="left"
+                        android:layout_margin="10dp"
+
                         android:text="@string/hint_pic"
                         android:textColor="@color/button_light_text"
                         android:textSize="@dimen/time_text" />
@@ -398,11 +405,49 @@
                     android:hint="@string/register"
                     android:maxLines="1"
                     android:padding="@dimen/general_margin"
-                    android:textColorHint="@color/button_light_text"
+                    android:textColorHint="@color/light_color_text"
 
                     android:textSize="12sp" />
 
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/general_margin"
+              android:gravity="center"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/copyright"
+android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="10sp"
+                    tools:layout_editor_absoluteX="41dp"
+                    tools:layout_editor_absoluteY="445dp" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="3dp"
+                    android:paddingStart="3dp"
+                    android:text="@string/department"
+                    android:textColor="@android:color/white"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
 
             <com.wang.avi.AVLoadingIndicatorView
                 android:id="@+id/avi"

@@ -217,7 +217,8 @@
     <style name="temSepatator">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/change_password_seperator_height</item>
-        <item name="android:background">@color/about_row_grey</item>
+        <item name="android:background">@color/light_color_text</item>
+        <item name="android:layout_marginLeft">10dp</item>
 
     </style>
 
