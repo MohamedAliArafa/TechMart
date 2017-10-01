@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -37,9 +39,11 @@ import com.a700apps.techmart.data.model.post;
 import com.a700apps.techmart.data.network.ApiInterface;
 import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.ui.screens.comment.CommentPresenter;
+import com.a700apps.techmart.ui.screens.creatEvent.CreatEventActivity;
 import com.a700apps.techmart.ui.screens.login.LoginActivity;
 import com.a700apps.techmart.ui.screens.register.RegisterActivity;
 import com.a700apps.techmart.utils.ApiClient;
+import com.a700apps.techmart.utils.AppConst;
 import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -72,6 +76,8 @@ public class PostActivity extends AppCompatActivity implements PostView {
     File file;
     public AVLoadingIndicatorView indicatorView;
     private static final int PERMISSION_REQUEST_CODE = 786;
+    private static final int MY_PERMISSIONS_REQUEST_CAMERA= 101;
+    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     ImageView imageView;
 
     ProgressDialog progressDialog;
@@ -99,19 +105,7 @@ public class PostActivity extends AppCompatActivity implements PostView {
             @Override
             public void onClick(View view) {
 //                if(Build.VERSION.SDK_INT >=23){
-                    if (checkPermission()){
-                        selectedImagePath = null;
-                        selectedImageSize = 0;
-                        // select a file
-                        Intent intent = new Intent();
-                        intent.setType("image/*");
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        startActivityForResult(Intent.createChooser(intent,
-                                "Select Picture"), SELECT_PICTURE);
-
-                    }else{
-                        requestPermission();
-                    }
+                    openChooseMethodDialog();
 
 
             }
@@ -123,6 +117,42 @@ public class PostActivity extends AppCompatActivity implements PostView {
             }
         });
 
+    }
+
+    void selectImage() {
+        if (AppConst.checkPermission(PostActivity.this)) {
+            selectedImagePath = null;
+            selectedImageSize = 0;
+            // select a file
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent,
+                    "Select Picture"), SELECT_PICTURE);
+        } else {
+            AppConst.requestPermission(PostActivity.this, PERMISSION_REQUEST_CODE);
+        }
+
+    }
+    private void openChooseMethodDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_choose_media_file);
+        dialog.findViewById(R.id.tv_gallery).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectImage();
+                dialog.dismiss();
+            }
+        });
+        dialog.findViewById(R.id.tv_camera).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                captureImage();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     void openDialog(final EditText title, final EditText Desc) {
@@ -262,6 +292,11 @@ public class PostActivity extends AppCompatActivity implements PostView {
                     }
                     selectedImageSize = file.length();
                 }
+            }else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
+                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                imageView = (ImageView) findViewById(R.id.iv_post);
+                imageView.setImageBitmap(photo);
+                imageView.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -413,7 +448,7 @@ public class PostActivity extends AppCompatActivity implements PostView {
     }
 
     private boolean checkPermission() {
-        int result = ContextCompat.checkSelfPermission(PostActivity.this, android.Manifest.permission.READ_EXTERNAL_STORAGE );
+        int result = ContextCompat.checkSelfPermission(PostActivity.this, android.Manifest.permission.CAMERA);
         if (result == PackageManager.PERMISSION_GRANTED) {
             return true;
         } else {
@@ -421,13 +456,35 @@ public class PostActivity extends AppCompatActivity implements PostView {
         }
     }
 
-
     private void requestPermission() {
-
-        if (ActivityCompat.shouldShowRequestPermissionRationale(PostActivity.this, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            Toast.makeText(PostActivity.this, "Write External Storage permission allows us to access images. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
+        if (ActivityCompat.shouldShowRequestPermissionRationale(PostActivity.this, android.Manifest.permission.CAMERA)) {
+            Toast.makeText(PostActivity.this, "Camera permission allows us take images throught camera. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
         } else {
-            ActivityCompat.requestPermissions(PostActivity.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(PostActivity.this, new String[]{android.Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
         }
+    }
+
+    void captureImage() {
+        if (checkPermission()){
+            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+        }else {
+            requestPermission();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        switch (requestCode){
+            case CAMERA_CAPTURE_IMAGE_REQUEST_CODE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    captureImage();
+                } else{
+                    Toast.makeText(this, "permission denied", Toast.LENGTH_SHORT).show();
+                }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

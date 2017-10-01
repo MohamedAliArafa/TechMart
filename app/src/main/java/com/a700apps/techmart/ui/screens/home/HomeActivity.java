@@ -1,5 +1,8 @@
 package com.a700apps.techmart.ui.screens.home;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
@@ -38,10 +41,13 @@ import com.a700apps.techmart.ui.screens.timeline.EventFragment;
 import com.a700apps.techmart.ui.screens.timeline.TimelineFragment;
 import com.a700apps.techmart.utils.ATCPrefManager;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.Config;
 import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.NavDrawerItem;
+import com.a700apps.techmart.utils.NotificationUtils;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 

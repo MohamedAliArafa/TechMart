@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
@@ -19,6 +20,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -73,7 +75,10 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
     private static final int SELECT_PICTURE = 1;
     private static final int PICK_LOCATION_REQUEST = 2;
     private static final int PERMISSION_REQUEST_CODE = 786;
-    private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 100;
+    private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 102;
+    private static final int MY_PERMISSIONS_REQUEST_CAMERA= 101;
+    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+
     public static EventPresenter presenter;
     public static OneToOneModel model;
     public AVLoadingIndicatorView indicatorView;
@@ -91,6 +96,7 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
     private long selectedImageSize;
     private String selectedImagePath, mImagePath;
     Date currentTime;
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String getPathFromURI(final Context context, final Uri uri) {
 
@@ -206,7 +212,7 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
         findView();
 
 
-         currentTime = Calendar.getInstance().getTime();
+        currentTime = Calendar.getInstance().getTime();
     }
 
     void findView() {
@@ -252,7 +258,8 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
         tv_upload_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectImage();
+//                selectImage();
+                openChooseMethodDialog();
             }
         });
     }
@@ -289,7 +296,8 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_upload_image:
-                selectImage();
+//                selectImage();
+                openChooseMethodDialog();
                 break;
             case R.id.linearLayout1:
 
@@ -343,6 +351,7 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
                 break;
             case R.id.ll_container:
 //                selectImage();
+                openChooseMethodDialog();
                 break;
             case R.id.imageView:
                 finish();
@@ -510,11 +519,44 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
         });
     }
 
+
+    private void openChooseMethodDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_choose_media_file);
+        dialog.findViewById(R.id.tv_gallery).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectImage();
+                dialog.dismiss();
+            }
+        });
+        dialog.findViewById(R.id.tv_camera).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                captureImage();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    void captureImage() {
+        if (checkPermission()){
+            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+        }else {
+            requestPermission();
+        }
+    }
+
+
     //
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK && data != null) {
             if (requestCode == SELECT_PICTURE) {
+
                 int dataSize = 0;
                 File f = null;
                 Uri selectedImageUri = data.getData();
@@ -551,6 +593,11 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
                     Log.d("Latitude", innerModle.getLatitude() + "");
                     Log.d("Longitude", innerModle.getLongitude() + "");
                 }
+            } else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
+                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                imageView = (ImageView) findViewById(R.id.iv_post);
+                imageView.setImageBitmap(photo);
+                imageView.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -600,15 +647,15 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
                 if (serverResponse != null) {
                     if (serverResponse.postData.success) {
                         mImagePath = serverResponse.postData.message;
-                        Log.e("date","start"+mStartDate+"enddate"+mEndDate);
+                        Log.e("date", "start" + mStartDate + "enddate" + mEndDate);
                         if (check) {
 
-                            presenter.sendEvent(mStartTime,mEndTime,innerModle.getLongitude(), innerModle.getLatitude(), getCompleteAddressString(innerModle.getLongitude(), innerModle.getLatitude()), desired_string, PreferenceHelper.getUserId(CreatEventActivity.this),
+                            presenter.sendEvent(mStartTime, mEndTime, innerModle.getLongitude(), innerModle.getLatitude(), getCompleteAddressString(innerModle.getLongitude(), innerModle.getLatitude()), desired_string, PreferenceHelper.getUserId(CreatEventActivity.this),
                                     title.getText().toString(), Desc.getText().toString(), mStartDate, mEndDate, "", false, mImagePath, "", String.valueOf(currentTime), true, CreatEventActivity.this);
                             dialog.dismiss();
                         } else {
 
-                            presenter.sendEvent(mStartTime,mEndTime,innerModle.getLongitude(), innerModle.getLatitude(), getCompleteAddressString(innerModle.getLongitude(), innerModle.getLatitude()), desired_string, PreferenceHelper.getUserId(CreatEventActivity.this),
+                            presenter.sendEvent(mStartTime, mEndTime, innerModle.getLongitude(), innerModle.getLatitude(), getCompleteAddressString(innerModle.getLongitude(), innerModle.getLatitude()), desired_string, PreferenceHelper.getUserId(CreatEventActivity.this),
                                     title.getText().toString(), Desc.getText().toString(), mStartDate, mEndDate, "", false, mImagePath, "", String.valueOf(currentTime), false, CreatEventActivity.this);
                             dialog.dismiss();
                         }
@@ -704,7 +751,6 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent,
                     "Select Picture"), SELECT_PICTURE);
-
         } else {
             AppConst.requestPermission(CreatEventActivity.this, PERMISSION_REQUEST_CODE);
         }
@@ -712,7 +758,7 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
     }
 
     private boolean checkPermission() {
-        int result = ContextCompat.checkSelfPermission(CreatEventActivity.this, Manifest.permission.ACCESS_FINE_LOCATION);
+        int result = ContextCompat.checkSelfPermission(CreatEventActivity.this, Manifest.permission.CAMERA);
         if (result == PackageManager.PERMISSION_GRANTED) {
             return true;
         } else {
@@ -721,12 +767,25 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
     }
 
     private void requestPermission() {
-
-        if (ActivityCompat.shouldShowRequestPermissionRationale(CreatEventActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-            Toast.makeText(CreatEventActivity.this, "Write External Storage permission allows us to access images. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
+        if (ActivityCompat.shouldShowRequestPermissionRationale(CreatEventActivity.this, Manifest.permission.CAMERA)) {
+            Toast.makeText(CreatEventActivity.this, "Camera permission allows us take images throught camera. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
         } else {
-            ActivityCompat.requestPermissions(CreatEventActivity.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_FINE_LOCATION);
+            ActivityCompat.requestPermissions(CreatEventActivity.this, new String[]{android.Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        switch (requestCode){
+            case CAMERA_CAPTURE_IMAGE_REQUEST_CODE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    captureImage();
+                } else{
+                    Toast.makeText(this, "permission denied", Toast.LENGTH_SHORT).show();
+                }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 }
