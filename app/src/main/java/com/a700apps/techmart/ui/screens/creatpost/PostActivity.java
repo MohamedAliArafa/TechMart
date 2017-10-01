@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -66,13 +67,12 @@ public class PostActivity extends AppCompatActivity implements PostView {
     private static final int SELECT_PICTURE = 1;
     private long selectedImageSize;
     private String selectedImagePath, mImagePath;
-    ImageView imageView;
     Dialog dialog;
     int desired_string;
     File file;
     public AVLoadingIndicatorView indicatorView;
     private static final int PERMISSION_REQUEST_CODE = 786;
-
+    ImageView imageView;
 
     ProgressDialog progressDialog;
 
@@ -98,7 +98,7 @@ public class PostActivity extends AppCompatActivity implements PostView {
         linearLayout_select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Build.VERSION.SDK_INT >=23){
+//                if(Build.VERSION.SDK_INT >=23){
                     if (checkPermission()){
                         selectedImagePath = null;
                         selectedImageSize = 0;
@@ -112,16 +112,7 @@ public class PostActivity extends AppCompatActivity implements PostView {
                     }else{
                         requestPermission();
                     }
-                }else{
-                    selectedImagePath = null;
-                    selectedImageSize = 0;
-                    // select a file
-                    Intent intent = new Intent();
-                    intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(intent,
-                            "Select Picture"), SELECT_PICTURE);
-                }
+
 
             }
         });
@@ -232,10 +223,14 @@ public class PostActivity extends AppCompatActivity implements PostView {
     public void UpdateUi(post post) {
 
         dialog.hide();
-        finish();
+//        finish();
+        editTextTitle.setText("");
+        editTextDesc.setText("");
+        imageView.setImageResource(android.R.color.transparent);
     }
 
     //
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
@@ -244,7 +239,7 @@ public class PostActivity extends AppCompatActivity implements PostView {
                 Uri selectedImageUri = data.getData();
                 String scheme = selectedImageUri.getScheme();
                 selectedImagePath = getPathFromURI(PostActivity.this,selectedImageUri);
-                ImageView imageView = (ImageView) findViewById(R.id.iv_post);
+                 imageView = (ImageView) findViewById(R.id.iv_post);
                 imageView.setImageBitmap(BitmapFactory.decodeFile(selectedImagePath));
                 imageView.setVisibility(View.VISIBLE);
                 if (scheme.equals(ContentResolver.SCHEME_CONTENT)) {
@@ -271,6 +266,7 @@ public class PostActivity extends AppCompatActivity implements PostView {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String getPathFromURI(final Context context, final Uri uri) {
 
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;

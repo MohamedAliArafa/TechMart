@@ -206,7 +206,7 @@ public class FragmentMonth extends Fragment implements MettingView {
                 e.printStackTrace();
             }
 
-            viewHolder.textView56.setText(String.valueOf(day)+"\n"+monthString);
+            viewHolder.textView56.setText(String.valueOf(day)+"\n"+monthString.substring(0,4));
 
 
         }

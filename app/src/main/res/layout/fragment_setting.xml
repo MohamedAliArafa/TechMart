@@ -6,7 +6,7 @@
     android:background="@drawable/bg_setting_page"
     android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
@@ -16,14 +16,14 @@
             android:id="@+id/linearLayout6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/button_light_text"
             android:orientation="horizontal">
 
             <ImageView
+                android:paddingStart="8dp"
                 android:id="@+id/iv_back"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
-                app:srcCompat="@drawable/ic_side_menu" />
+                app:srcCompat="@drawable/ic_side_m" />
 
             <TextView
                 android:id="@+id/textView41"
@@ -33,7 +33,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="Setting"
-                android:textColor="@android:color/background_dark"
+                android:textColor="@color/button_light_text"
                 android:textSize="@dimen/normal_text_size"
                 android:visibility="visible" />
 
@@ -61,10 +61,10 @@
             android:orientation="horizontal"
             android:weightSum="10">
 
-            <TextView
+            <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
                 android:id="@+id/tv_title"
                 android:layout_width="0dp"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
@@ -92,16 +92,15 @@
 
             <ImageView
                 android:id="@+id/iv_user_nav_image"
-                android:layout_width="76dp"
-                android:layout_height="76dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="24dp"
-                android:layout_marginStart="24dp"
-                 />
+                android:layout_marginStart="24dp" />
 
-            <TextView
+            <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
                 android:id="@+id/tv_change"
                 android:layout_width="0dp"
                 android:layout_height="60dp"
@@ -122,14 +121,13 @@
             android:id="@+id/lin_notification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="14dp"
             android:orientation="horizontal"
             android:weightSum="10">
 
-            <TextView
+            <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_notification"
                 android:layout_width="0dp"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
@@ -155,14 +153,13 @@
             android:id="@+id/lin_change"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="14dp"
             android:orientation="horizontal"
             android:weightSum="10">
 
-            <TextView
+            <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_change_pass"
                 android:layout_width="0dp"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
@@ -184,7 +181,6 @@
                 android:gravity="center|right"
                 android:inputType="textPassword"
                 android:paddingLeft="@dimen/general_padding"
-                android:text="@string/change_pass"
                 android:textColor="@color/button_light_text" />
 
         </LinearLayout>
@@ -198,14 +194,13 @@
             android:id="@+id/lin_new"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="14dp"
             android:orientation="horizontal"
             android:weightSum="10">
 
-            <TextView
+            <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_change_new_pass"
                 android:layout_width="0dp"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
@@ -240,14 +235,13 @@
             android:id="@+id/lin_repeat_pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="14dp"
             android:orientation="horizontal"
             android:weightSum="10">
 
-            <TextView
+            <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_repeat_pass"
                 android:layout_width="0dp"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
@@ -282,15 +276,14 @@
             android:id="@+id/lin_buttons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="14dp"
             android:orientation="horizontal"
             android:weightSum="10">
 
-            <Button
+            <com.a700apps.techmart.utils.CustomButton
                 android:id="@+id/bt_save"
                 style="@style/EditTextRegisterTextStyle"
                 android:layout_width="@dimen/upload_width"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_margin="@dimen/general_margin"
                 android:background="@color/blackGreenColor"
                 android:maxLines="1"
@@ -298,7 +291,7 @@
                 android:text="@string/save"
                 android:textColor="@color/button_light_text" />
 
-            <Button
+            <com.a700apps.techmart.utils.CustomButton
                 android:id="@+id/bt_cancel"
                 style="@style/EditTextRegisterTextStyle"
                 android:layout_width="@dimen/upload_width"

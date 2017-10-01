@@ -27,6 +27,7 @@ public class PreferenceHelper {
         String LANGUAGE = "language";
         String RECOMMENDED = "recomended";
         String FEEDBACK_KEY = "feedback_key";
+        String NOTIFICATION_KEY = "NOTIFICATION_KEY";
     }
 
     interface Languages {
@@ -83,7 +84,15 @@ public class PreferenceHelper {
         return null;
     }
 
+    public static void setNotificationStatus(Context context , boolean enabled){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        sharedPreferences.edit().putBoolean(PrefsKeys.NOTIFICATION_KEY, enabled).apply();
+    }
 
+    public static boolean getNotificationStatus(Context context){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return sharedPreferences.getBoolean(PrefsKeys.NOTIFICATION_KEY , false);
+    }
 
 
 

@@ -23,6 +23,8 @@ import com.a700apps.techmart.ui.screens.mygroup.MyGroubListActivity;
 import com.a700apps.techmart.ui.screens.profile.MemberProfile;
 import com.a700apps.techmart.ui.screens.userlikes.UserLikesActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.CustomButton;
+import com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
@@ -56,18 +58,17 @@ public class GroupActivity extends AppCompatActivity implements GroupMemberView 
         Icon = (ImageView) findViewById(R.id.imageView26);
 
         rv2 = (EmptyRecyclerView) findViewById(R.id.recyclerView2);
-        mNoData = (TextView) findViewById(R.id.tv_nodata);
+        mNoData = (CustomLightTextView) findViewById(R.id.tv_nodata);
         tv_admin = (TextView) findViewById(R.id.tv_admin);
         tv_member = (TextView) findViewById(R.id.tv_member);
-        mNoData = (TextView) findViewById(R.id.tv_nodata);
-        button7 = (Button) findViewById(R.id.button7);
+        mNoData = (CustomLightTextView) findViewById(R.id.tv_nodata);
+        button7 = (CustomButton) findViewById(R.id.button7);
         button7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(GroupActivity.this, GroupsTimLineActivity.class);
                 myIntent.putExtra("selectedCategory", mId);
                 startActivity(myIntent);
-
             }
         });
     }
@@ -83,18 +84,18 @@ public class GroupActivity extends AppCompatActivity implements GroupMemberView 
         indicatorView.hide();
     }
 
-    @Override
-    public void onBackPressed() {
-
-        super.onBackPressed();
-
-//        ActivityUtils.openActivity(GroupActivity.this, GroupsTimLineActivity.class, true);
-
-        Intent myIntent = new Intent(GroupActivity.this, GroupsTimLineActivity.class);
-        myIntent.putExtra("selectedCategory", mId);
-        startActivity(myIntent);
-
-    }
+//    @Override
+//    public void onBackPressed() {
+//
+//        super.onBackPressed();
+//
+////        ActivityUtils.openActivity(GroupActivity.this, GroupsTimLineActivity.class, true);
+//
+//        Intent myIntent = new Intent(GroupActivity.this, GroupsTimLineActivity.class);
+//        myIntent.putExtra("selectedCategory", mId);
+//        startActivity(myIntent);
+//
+//    }
 
     @Override
     public void updateUi(GroupUsersData.ResultEntity groupusers) {
@@ -154,10 +155,17 @@ public class GroupActivity extends AppCompatActivity implements GroupMemberView 
             viewHolder.Details.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, MemberProfile.class);
+                    Intent intent = new Intent(context, HomeActivity.class);
                     intent.putExtra("RelativId", timeLineItem.getUserID());
                     intent.putExtra("GroupId", GroupId);
                     context.startActivity(intent);
+
+//                    Intent intent = new Intent(context, MemberProfile.class);
+//                    intent.putExtra("RelativId", timeLineItem.getUserID());
+//                    intent.putExtra("GroupId", GroupId);
+//                    context.startActivity(intent);
+
+
                 }
             });
         }
@@ -219,7 +227,12 @@ public class GroupActivity extends AppCompatActivity implements GroupMemberView 
             viewHolder.profile_pic.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, MemberProfile.class);
+//                    Intent intent = new Intent(context, MemberProfile.class);
+//                    intent.putExtra("RelativId", timeLineItem.getUserID());
+//                    intent.putExtra("GroupId", GroupId);
+//                    context.startActivity(intent);
+
+                    Intent intent = new Intent(context, HomeActivity.class);
                     intent.putExtra("RelativId", timeLineItem.getUserID());
                     intent.putExtra("GroupId", GroupId);
                     context.startActivity(intent);

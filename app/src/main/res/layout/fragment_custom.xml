@@ -31,6 +31,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="invisible"
-        app:indicatorColor="@color/red_join_dialog"
+        app:indicatorColor="@color/button_light_text"
         app:indicatorName="BallSpinFadeLoaderIndicator" />
 </LinearLayout>

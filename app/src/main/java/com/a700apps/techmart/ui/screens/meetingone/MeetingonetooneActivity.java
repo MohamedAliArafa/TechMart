@@ -159,7 +159,7 @@ public class MeetingonetooneActivity extends AppCompatActivity implements Meetin
 
         void getLike(OneToOneModel mModel, MyConnectionList.ResultEntity timeLineItem) {
             try {
-                JSONObject registerBody = MainApiHelper.addEvent(mModel.getLongtud(), mModel.getLatitude(), mModel.getAddress(), mModel.getGroupId(), mModel.getCreatedby(), mModel.getTitle(), mModel.getDescr(), mModel.getStartDate(), mModel.getEndDate(), timeLineItem.getUserID(), true,
+                JSONObject registerBody = MainApiHelper.addEvent(mModel.getStartTime(),mModel.getEndTime(),mModel.getLongtud(), mModel.getLatitude(), mModel.getAddress(), mModel.getGroupId(), mModel.getCreatedby(), mModel.getTitle(), mModel.getDescr(), mModel.getStartDate(), mModel.getEndDate(), timeLineItem.getUserID(), true,
                         mModel.getImage(), "", mModel.getCreationDate(),
                         false);
                 MainApi.sendEvent(registerBody, this);

@@ -7,6 +7,7 @@ import com.a700apps.techmart.data.model.AllMessageList;
 import com.a700apps.techmart.data.model.AllSchedualList;
 import com.a700apps.techmart.data.model.CategoryData;
 import com.a700apps.techmart.data.model.CategoryGroupsData;
+import com.a700apps.techmart.data.model.ChangeReciveNotifcationData;
 import com.a700apps.techmart.data.model.CommentData;
 import com.a700apps.techmart.data.model.FriendMessage;
 import com.a700apps.techmart.data.model.GroupTimeLineData;
@@ -15,7 +16,10 @@ import com.a700apps.techmart.data.model.JoinGroupData;
 import com.a700apps.techmart.data.model.LikeData;
 import com.a700apps.techmart.data.model.MyConnectionList;
 import com.a700apps.techmart.data.model.MyProfileData;
+import com.a700apps.techmart.data.model.NoficationData;
+import com.a700apps.techmart.data.model.NotificationDataLike;
 import com.a700apps.techmart.data.model.PostData;
+import com.a700apps.techmart.data.model.PredifinedData;
 import com.a700apps.techmart.data.model.SendMessageResponse;
 import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.data.model.UserData;
@@ -33,7 +37,6 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.PUT;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -44,9 +47,9 @@ import rx.schedulers.Schedulers;
 
 public class MainApi {
 
-    public static final String API_LINK = "http://108.179.204.213:8074/api/";
+    public static final String API_LINK = "http://108.179.204.213:8073/api/";
     public static final String JSON_TYPE = "application/json";
-    public static final String IMAGE_IP = "http://108.179.204.213:8074";
+    public static final String IMAGE_IP = "http://108.179.204.213:8073";
     public static final String TAG_DATE_PICKER = "datepicker";
 
     private static ApiInterface getApi() {
@@ -73,6 +76,32 @@ public class MainApi {
     public static void registerUser(JSONObject jsonBody, final NetworkResponseListener<UserData> responseListener) {
         RequestBody requestBody = getRequestBody(jsonBody);
         getApi().registerUser(requestBody).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<UserData>() {
+
+                    @Override
+                    public void onNext(UserData value) {
+                        final NetworkResponse<UserData> networkResponse = new NetworkResponse<>();
+//                        networkResponse.requestType = AppConstant.NetworkOperationsTypes.REGISTER;
+                        networkResponse.data = value;
+                        responseListener.networkOperationSuccess(networkResponse);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        responseListener.networkOperationFail(e);
+                    }
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+                });
+    }
+
+    public static void registerLinkedUser(JSONObject jsonBody, final NetworkResponseListener<UserData> responseListener) {
+        RequestBody requestBody = getRequestBody(jsonBody);
+        getApi().registerLinkedUser(requestBody).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<UserData>() {
 
@@ -689,6 +718,197 @@ public class MainApi {
             public void onNext(PostData userNetworkData) {
                 NetworkResponse<PostData> networkResponse = new NetworkResponse<>();
                 networkResponse.data = userNetworkData;
+                responseListener.networkOperationSuccess(networkResponse);
+            }
+        });
+    }
+
+    public static void ChangeReciveNotifcationSetting(JSONObject body, final NetworkResponseListener<ChangeReciveNotifcationData> responseListener) {
+        getApi().ChangeReciveNotifcationSetting(getRequestBody(body)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ChangeReciveNotifcationData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                responseListener.networkOperationFail(e);
+                Log.e("error", e.toString());
+            }
+
+            @Override
+            public void onNext(ChangeReciveNotifcationData userNetworkData) {
+                NetworkResponse<ChangeReciveNotifcationData> networkResponse = new NetworkResponse<>();
+                networkResponse.data = userNetworkData;
+                responseListener.networkOperationSuccess(networkResponse);
+            }
+        });
+    }
+
+
+    public static void ChangeLoginPassword(JSONObject body, final NetworkResponseListener<ChangeReciveNotifcationData> responseListener) {
+        getApi().ChangeLoginPassword(getRequestBody(body)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ChangeReciveNotifcationData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                responseListener.networkOperationFail(e);
+                Log.e("error", e.toString());
+            }
+
+            @Override
+            public void onNext(ChangeReciveNotifcationData changePasswordData) {
+                NetworkResponse<ChangeReciveNotifcationData> networkResponse = new NetworkResponse<>();
+                networkResponse.data = changePasswordData;
+                responseListener.networkOperationSuccess(networkResponse);
+            }
+        });
+    }
+
+    public static void ChangeProfilePhoto(JSONObject body, final NetworkResponseListener<ChangeReciveNotifcationData> responseListener) {
+        getApi().ChangeProfilePhoto(getRequestBody(body)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ChangeReciveNotifcationData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                responseListener.networkOperationFail(e);
+                Log.e("error", e.toString());
+            }
+
+            @Override
+            public void onNext(ChangeReciveNotifcationData changePasswordData) {
+                NetworkResponse<ChangeReciveNotifcationData> networkResponse = new NetworkResponse<>();
+                networkResponse.data = changePasswordData;
+                responseListener.networkOperationSuccess(networkResponse);
+            }
+        });
+    }
+
+
+    public static void GetRelativeEventByUserID(JSONObject body, final NetworkResponseListener<TimeLineData> responseListener) {
+        getApi().GetRelativeEventByUserID(getRequestBody(body)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<TimeLineData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                responseListener.networkOperationFail(e);
+                Log.e("error", e.toString());
+            }
+
+            @Override
+            public void onNext(TimeLineData serverResponse) {
+                NetworkResponse<TimeLineData> networkResponse = new NetworkResponse<>();
+                networkResponse.data = serverResponse;
+                responseListener.networkOperationSuccess(networkResponse);
+            }
+        });
+
+
+    }
+
+
+    public static void GetRelativeGroupByUserID(JSONObject body, final NetworkResponseListener<UserGroupData> responseListener) {
+        getApi().GetRelativeGroupByUserID(getRequestBody(body)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<UserGroupData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                responseListener.networkOperationFail(e);
+                Log.e("error", e.toString());
+            }
+
+            @Override
+            public void onNext(UserGroupData changePasswordData) {
+                NetworkResponse<UserGroupData> networkResponse = new NetworkResponse<>();
+                networkResponse.data = changePasswordData;
+                responseListener.networkOperationSuccess(networkResponse);
+            }
+        });
+    }
+
+
+    public static void GetPreDefindMessage(final NetworkResponseListener<PredifinedData> responseListener) {
+        getApi().GetPreDefindMessage().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<PredifinedData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                responseListener.networkOperationFail(e);
+                Log.e("error", e.toString());
+            }
+
+            @Override
+            public void onNext(PredifinedData changePasswordData) {
+                NetworkResponse<PredifinedData> networkResponse = new NetworkResponse<>();
+                networkResponse.data = changePasswordData;
+                responseListener.networkOperationSuccess(networkResponse);
+            }
+        });
+    }
+
+
+    public static void GetNotifications(JSONObject body, final NetworkResponseListener<NoficationData> responseListener) {
+        getApi().getNotifications(getRequestBody(body)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<NoficationData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                responseListener.networkOperationFail(e);
+                Log.e("error", e.toString());
+            }
+
+            @Override
+            public void onNext(NoficationData changePasswordData) {
+                NetworkResponse<NoficationData> networkResponse = new NetworkResponse<>();
+                networkResponse.data = changePasswordData;
+                responseListener.networkOperationSuccess(networkResponse);
+            }
+        });
+    }
+
+    public static void getTimeLineById(JSONObject body, final NetworkResponseListener<NotificationDataLike> responseListener) {
+        getApi().getTimeLineById(getRequestBody(body)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<NotificationDataLike>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                responseListener.networkOperationFail(e);
+                Log.e("error", e.toString());
+            }
+
+            @Override
+            public void onNext(NotificationDataLike changePasswordData) {
+                NetworkResponse<NotificationDataLike> networkResponse = new NetworkResponse<>();
+                networkResponse.data = changePasswordData;
                 responseListener.networkOperationSuccess(networkResponse);
             }
         });

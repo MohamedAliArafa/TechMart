@@ -21,13 +21,21 @@ import com.a700apps.techmart.ui.screens.creatpost.PostActivity;
  */
 
 public class AppConst {
+  public  static String LinkeinUrl="https://api.linkedin.com/v1/people/~:(id,num-connections,picture-url)?format=json";
+
+  // linked in
+  public static final String HOST = "api.linkedin.com";
+  public static final String mTopCardUrl = "https://" + HOST + "/v1/people/~:" +
+          "(id,positions,location,email-address,summary,formatted-name,phone-numbers,public-profile-url,picture-url,picture-urls::(original))";
 
   public  static String BoardMember="2";
     public static String InDividual="1";
 
 
-  public static boolean checkPermission(Context mcontext) {
-    int result = ContextCompat.checkSelfPermission(mcontext, android.Manifest.permission.READ_EXTERNAL_STORAGE );
+
+
+  public static boolean checkPermission(Context context) {
+    int result = ContextCompat.checkSelfPermission(context, android.Manifest.permission.READ_EXTERNAL_STORAGE );
     if (result == PackageManager.PERMISSION_GRANTED) {
       return true;
     } else {
@@ -36,12 +44,12 @@ public class AppConst {
   }
 
 
-  public  static void requestPermission(Context mcontext,int PERMISSION_REQUEST_CODE) {
+  public static void requestPermission(Activity context,int code) {
 
-    if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) mcontext, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
-      Toast.makeText(mcontext, "Write External Storage permission allows us to access images. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
+    if (ActivityCompat.shouldShowRequestPermissionRationale(context, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
+      Toast.makeText(context, "Write External Storage permission allows us to access images. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
     } else {
-      ActivityCompat.requestPermissions((Activity) mcontext, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+      ActivityCompat.requestPermissions(context, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, code);
     }
   }
   //

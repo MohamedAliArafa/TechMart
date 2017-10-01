@@ -56,7 +56,7 @@
                 android:id="@+id/imageView4"
                 android:layout_width="wrap_content"
                 android:layout_height="26dp"
-                app:srcCompat="@drawable/ic_back" />
+                app:srcCompat="@drawable/ic_side_m" />
 
             <EditText
                 android:id="@+id/textView41"
@@ -260,6 +260,7 @@
             android:visibility="gone">
 
             <LinearLayout
+                android:id="@+id/groupLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -301,6 +302,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/eventLayout"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -342,7 +344,7 @@
 
         </LinearLayout>
 
-        <TextView
+        <com.a700apps.techmart.utils.CustomTextView
             android:id="@+id/textView24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -355,7 +357,7 @@
             app:layout_constraintTop_toBottomOf="@+id/view3"
             android:layout_marginStart="32dp" />
 
-        <TextView
+        <com.a700apps.techmart.utils.CustomTextView
             android:id="@+id/textView25"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -368,7 +370,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView24"
             android:layout_marginStart="32dp" />
 
-        <TextView
+        <com.a700apps.techmart.utils.CustomTextView
             android:id="@+id/textView26"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -387,7 +389,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             android:layout_marginBottom="0dp" />
 
-        <TextView
+        <com.a700apps.techmart.utils.CustomTextView
             android:id="@+id/textView27"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -419,7 +421,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/textView27"
             android:layout_marginBottom="0dp" />
 
-        <TextView
+        <com.a700apps.techmart.utils.CustomTextView
             android:id="@+id/textView29"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -450,17 +452,17 @@
             app:layout_constraintHorizontal_bias="0.0"
             android:layout_marginBottom="0dp" />
 
-        <TextView
+        <com.a700apps.techmart.utils.CustomTextView
             android:id="@+id/textView31"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="38dp"
+            android:layout_marginLeft="32dp"
             android:layout_marginTop="13dp"
             android:text="Company:"
             android:textColor="@android:color/white"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView30"
-            android:layout_marginStart="38dp" />
+            android:layout_marginStart="32dp" />
 
         <TextView
             android:id="@+id/tv_company"
@@ -474,7 +476,7 @@
             app:layout_constraintLeft_toRightOf="@+id/textView31"
             android:layout_marginStart="8dp" />
 
-        <Button
+        <com.a700apps.techmart.utils.CustomButton
             android:id="@+id/btn_edit"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
@@ -496,7 +498,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp" />
 
-        <Button
+        <com.a700apps.techmart.utils.CustomButton
             android:id="@+id/btn_follow"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
@@ -515,7 +517,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginStart="24dp" />
 
-        <Button
+        <com.a700apps.techmart.utils.CustomButton
             android:id="@+id/btn_message"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
@@ -523,7 +525,6 @@
             android:background="@drawable/bg_transparent"
             android:padding="5dp"
             android:text="Send Message"
-                android:enabled="false"
             android:textColor="@android:color/white"
             android:textSize="@dimen/time_text"
             app:layout_constraintBottom_toBottomOf="@+id/btn_edit"

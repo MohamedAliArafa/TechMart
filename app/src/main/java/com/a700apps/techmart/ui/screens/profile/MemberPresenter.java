@@ -1,5 +1,6 @@
 package com.a700apps.techmart.ui.screens.profile;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
 
@@ -10,6 +11,7 @@ import com.a700apps.techmart.data.network.MainApiHelper;
 import com.a700apps.techmart.data.network.NetworkResponse;
 import com.a700apps.techmart.data.network.NetworkResponseListener;
 import com.a700apps.techmart.ui.MainPresenter;
+import com.a700apps.techmart.utils.loadingDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +28,9 @@ public class MemberPresenter extends MainPresenter<ProfileView>  {
     void profileData(String UserId,String RelId,int GroupId, Context context) {
 
         mContext = context;
-        view.showLoadingProgress();
+//        view.showLoadingProgress();
+        final Dialog dialogsLoading = new loadingDialog().showDialog(context);
+
 
         try {
             JSONObject registerBody = MainApiHelper.getMemberProfile(UserId,RelId,GroupId);
@@ -34,7 +38,8 @@ public class MemberPresenter extends MainPresenter<ProfileView>  {
                 @Override
                 public void networkOperationSuccess(NetworkResponse<MyProfileData> networkResponse) {
                     if (isDetachView()) return;
-                    view.dismissLoadingProgress();
+                    dialogsLoading.dismiss();
+//                    view.dismissLoadingProgress();
                     MyProfileData userNetworkData = (MyProfileData) networkResponse.data;
                     int errorCode = userNetworkData.ISResultHasData;
 

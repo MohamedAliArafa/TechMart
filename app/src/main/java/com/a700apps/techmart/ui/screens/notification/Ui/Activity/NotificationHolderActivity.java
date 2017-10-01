@@ -1,0 +1,35 @@
+package com.a700apps.techmart.ui.screens.notification.Ui.Activity;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+import com.a700apps.techmart.R;
+import com.a700apps.techmart.data.model.NoficationData;
+import com.a700apps.techmart.ui.screens.notification.Ui.Follow.ViewUserProfile;
+import com.a700apps.techmart.ui.screens.notification.Ui.PostLikes.PostDetailsNotificationFragment;
+
+public class NotificationHolderActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_notification_holder);
+
+        if (getIntent().getStringExtra("holder").equals("like")){
+            NoficationData.Result data = (NoficationData.Result) getIntent().getSerializableExtra("data");
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("data" , data);
+            bundle.putInt("type" , getIntent().getIntExtra("type" , 0));
+            PostDetailsNotificationFragment fragment = new PostDetailsNotificationFragment();
+            fragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.holder , fragment).commit();
+        }else if (getIntent().getStringExtra("holder").equals("follow")){
+            Bundle bundle = new Bundle();
+            bundle.putString("RelativId" , getIntent().getStringExtra("RelativId"));
+            bundle.putString("GroupId" , getIntent().getStringExtra("GroupId" ));
+            ViewUserProfile fragment = new ViewUserProfile();
+            fragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.holder , fragment).commit();
+        }
+    }
+}

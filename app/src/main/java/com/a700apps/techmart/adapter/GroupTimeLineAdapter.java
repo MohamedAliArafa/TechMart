@@ -143,7 +143,7 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
                 });
 
                 Glide.with(context)
-                        .load(MainApi.IMAGE_IP+timeLineItem.getImage())
+                        .load(MainApi.IMAGE_IP+timeLineItem.getImage()).placeholder(R.drawable.placeholder)
                         .into(viewHolderEvent.mEventImageView);
                 break;
             case NOTIF_TYPE_POST:

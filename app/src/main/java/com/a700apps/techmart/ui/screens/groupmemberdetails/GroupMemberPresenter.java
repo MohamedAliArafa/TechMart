@@ -1,5 +1,6 @@
 package com.a700apps.techmart.ui.screens.groupmemberdetails;
 
+import android.app.Dialog;
 import android.content.Context;
 
 import com.a700apps.techmart.data.model.GroupUsersData;
@@ -11,6 +12,7 @@ import com.a700apps.techmart.data.network.NetworkResponseListener;
 import com.a700apps.techmart.ui.MainPresenter;
 import com.a700apps.techmart.ui.screens.register.RegisterView;
 import com.a700apps.techmart.utils.AppUtils;
+import com.a700apps.techmart.utils.loadingDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,19 +24,21 @@ import org.json.JSONObject;
 public class GroupMemberPresenter extends MainPresenter<GroupMemberView> implements NetworkResponseListener<GroupUsersData> {
 
     Context mContext;
-
+    Dialog dialogsLoading;
     void GroupUsers(int  id, String UserID, Context context) {
 
 
         mContext = context;
-        view.showLoadingProgress();
+        dialogsLoading = new loadingDialog().showDialog(context);
+//        view.showLoadingProgress();
 
         try {
             JSONObject registerBody = MainApiHelper.getGroupUsers(id, UserID);
             MainApi.getGroupUsers(registerBody, this);
         } catch (JSONException e) {
             e.printStackTrace();
-            view.dismissLoadingProgress();
+            dialogsLoading.dismiss();
+//            view.dismissLoadingProgress();
         }
 
     }
@@ -43,7 +47,8 @@ public class GroupMemberPresenter extends MainPresenter<GroupMemberView> impleme
     public void networkOperationSuccess(NetworkResponse<GroupUsersData> networkResponse) {
 
         if (isDetachView()) return;
-        view.dismissLoadingProgress();
+//        view.dismissLoadingProgress();
+        dialogsLoading.dismiss();
         GroupUsersData userNetworkData = (GroupUsersData) networkResponse.data;
         int errorCode = userNetworkData.getISResultHasData();
 
@@ -54,6 +59,6 @@ public class GroupMemberPresenter extends MainPresenter<GroupMemberView> impleme
 
     @Override
     public void networkOperationFail(Throwable throwable) {
-
+        dialogsLoading.dismiss();
     }
 }

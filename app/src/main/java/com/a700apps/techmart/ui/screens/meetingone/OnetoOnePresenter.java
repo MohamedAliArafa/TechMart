@@ -57,14 +57,14 @@ public class OnetoOnePresenter extends MainPresenter<MeetingoneView>  {
     }
 
 
-    void sendEvent(double longtude,double lat,String location,int GroupID, String CreatedBY, String Title, String Descr,String StartDate, String EndDate,
+    void sendEvent(String StartTime,String EndTime,double longtude,double lat,String location,int GroupID, String CreatedBY, String Title, String Descr,String StartDate, String EndDate,
                    String OneToOnPartener,boolean IsOneToOneMeeting,  String Image, String MediaFile, String CreationDate, boolean IsPublic, Context context) {
 
         mContext = context;
         view.showLoadingProgress();
 
         try {
-            JSONObject registerBody = MainApiHelper.addEvent(longtude,lat,location,GroupID, CreatedBY, Title, Descr,StartDate,EndDate,OneToOnPartener,IsOneToOneMeeting, Image, MediaFile, CreationDate,
+            JSONObject registerBody = MainApiHelper.addEvent(StartTime, EndTime,longtude,lat,location,GroupID, CreatedBY, Title, Descr,StartDate,EndDate,OneToOnPartener,IsOneToOneMeeting, Image, MediaFile, CreationDate,
                     IsPublic);
             MainApi.sendEvent(registerBody, new NetworkResponseListener<PostData>() {
                 @Override

@@ -17,6 +17,7 @@ import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.register.RegisterActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.AppUtils;
+import com.a700apps.techmart.utils.DialogCreator;
 import com.a700apps.techmart.utils.Validator;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -43,6 +44,7 @@ public class LoginActivity extends Activity implements LoginView, View.OnClickLi
     }
 
     private void findViews() {
+
         emailEditText = ActivityUtils.findView(this, R.id.et_name, EditText.class);
         passwordEditText = ActivityUtils.findView(this, R.id.et_pass, EditText.class);
         mEmailTextView = ActivityUtils.findView(this, R.id.tv_email, TextView.class);
@@ -54,24 +56,29 @@ public class LoginActivity extends Activity implements LoginView, View.OnClickLi
         SignButton.setOnClickListener(this);
          ActivityUtils.applyLightFont(emailEditText);
          ActivityUtils.applyLightFont(passwordEditText);
+         ActivityUtils.applyBoldFont(mEmailTextView);
+         ActivityUtils.applyBoldFont(mPasswordTextView);
+         ActivityUtils.applyBoldFont(loginButton);
+         ActivityUtils.applyBoldFont(SignButton);
 
     }
 
     @Override
     public void showProgress() {
-        indicatorView.setVisibility(View.VISIBLE);
-        indicatorView.show();
+//        indicatorView.setVisibility(View.VISIBLE);
+//        indicatorView.show();
 
     }
 
     @Override
     public void dismissProgress() {
-        indicatorView.hide();
+//        indicatorView.hide();
 
     }
 
     @Override
     public void showErrorDialog(int error) {
+        DialogCreator.showOneButtonDialog(LoginActivity.this, R.string.check_internet, error, null);
 
     }
 

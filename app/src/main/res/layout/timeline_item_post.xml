@@ -2,17 +2,18 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="110dp"
-
     android:id="@+id/contain"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/item_height"
+    android:gravity="center"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="15dp"
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/linearLayout10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:orientation="horizontal"
         app:layout_constraintLeft_toRightOf="@+id/linearLayout11"
@@ -34,20 +35,21 @@
             android:layout_marginStart="5dp"
             android:text="Share"
             android:textColor="@color/blackGreenColor"
-            android:textSize="14sp" />
+            android:textSize="@dimen/greeting_card_text" />
     </LinearLayout>
 
     <ImageView
         android:id="@+id/iv_post"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="@dimen/item_post_image_width"
+        android:layout_height="@dimen/item_post_image_height"
+
         android:layout_marginTop="8dp"
-        android:scaleType="fitCenter"
+        android:scaleType="centerCrop"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/img1" />
+        app:srcCompat="@drawable/img1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp" />
 
     <TextView
         android:id="@+id/tv_group_name"
@@ -59,7 +61,7 @@
         android:padding="2dp"
         android:text="TextView"
         android:textColor="@color/Parallax_text"
-        android:textSize="@dimen/time_text"
+        android:textSize="@dimen/greeting_card_text"
         app:layout_constraintLeft_toRightOf="@+id/iv_post"
         app:layout_constraintTop_toTopOf="@+id/iv_post" />
 
@@ -67,13 +69,13 @@
         android:id="@+id/tv_postedby"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
         android:background="@color/blackGreenColor"
         android:padding="2dp"
         android:text="TextView"
         android:textColor="@color/Parallax_text"
-        android:textSize="@dimen/time_text"
+        android:textSize="@dimen/greeting_card_text"
         app:layout_constraintLeft_toRightOf="@+id/tv_group_name"
         app:layout_constraintTop_toTopOf="@+id/tv_group_name" />
 
@@ -89,16 +91,19 @@
         app:layout_constraintLeft_toRightOf="@+id/tv_postedby"
         app:layout_constraintTop_toTopOf="@+id/tv_group_name" />
 
-    <TextView
+    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textSize="12sp"
+        android:textColor="@color/toolbar_hint_text"
+
+        android:textSize="@dimen/post_card_text"
         app:layout_constraintLeft_toRightOf="@+id/iv_post"
-        app:layout_constraintTop_toBottomOf="@+id/tv_group_name" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_group_name"
+        tools:text="dsfdsgs" />
 
     <TextView
         android:id="@+id/tv_desc"
@@ -106,21 +111,23 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
-        android:textSize="12sp"
+        android:textColor="@color/about_row_grey"
+        android:textSize="@dimen/button_light_text"
         app:layout_constraintLeft_toRightOf="@+id/iv_post"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        tools:text="tdydyd" />
 
     <LinearLayout
         android:id="@+id/linearLayout4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/view11"
         app:layout_constraintLeft_toRightOf="@+id/iv_post"
-        app:layout_constraintTop_toBottomOf="@+id/iv_post"
-        android:layout_marginBottom="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/view11">
+        app:layout_constraintTop_toBottomOf="@+id/iv_post">
 
         <ImageView
             android:id="@+id/iv_like"
@@ -138,7 +145,7 @@
             android:layout_marginStart="5dp"
             android:text="Like"
             android:textColor="@color/blackGreenColor"
-            android:textSize="14dp" />
+            android:textSize="@dimen/greeting_card_text" />
     </LinearLayout>
 
     <LinearLayout
@@ -167,30 +174,30 @@
             android:layout_marginStart="5dp"
             android:text="Comment"
             android:textColor="@color/blackGreenColor"
-            android:textSize="14sp" />
+            android:textSize="@dimen/greeting_card_text" />
     </LinearLayout>
 
     <ImageView
         android:id="@+id/imageView34"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_margin="25dp"
+
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout10"
-        app:layout_constraintRight_toRightOf="parent"
+
         app:layout_constraintTop_toTopOf="@+id/linearLayout10"
         app:srcCompat="@drawable/ic_more"
-        android:layout_marginEnd="8dp" />
-<View
-    android:layout_width="0dp"
-    android:layout_height="1dp"
-    android:background="@android:color/darker_gray"
-    app:layout_constraintBottom_toBottomOf="parent"
-    android:layout_marginBottom="0dp"
-    android:id="@+id/view11"
-    android:layout_marginLeft="0dp"
-    app:layout_constraintLeft_toLeftOf="parent"
-    android:layout_marginRight="0dp"
-    app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <View
+        android:id="@+id/view11"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginBottom="0dp"
+
+        android:background="@color/about_row_grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

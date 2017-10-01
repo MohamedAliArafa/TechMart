@@ -2,6 +2,7 @@ package com.a700apps.techmart.ui.screens.register;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -36,7 +38,13 @@ import com.a700apps.techmart.utils.ApiClient;
 import com.a700apps.techmart.utils.AppConst;
 import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.DialogCreator;
+import com.a700apps.techmart.utils.LinkedinLogin;
+import com.a700apps.techmart.utils.Social;
 import com.a700apps.techmart.utils.Validator;
+import com.a700apps.techmart.utils.loadingDialog;
+import com.linkedin.platform.LISessionManager;
+import com.linkedin.platform.errors.LIApiError;
+import com.linkedin.platform.listeners.ApiResponse;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.File;
@@ -69,7 +77,11 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
     private String selectedImagePath, mImagePath;
     ProgressDialog progressDialog;
     String fullName, password, email, mobile, company, position;
-
+    Social mLinkedInModel = null;
+    private int mRequestCode;
+    private static final int SIGN_IN_CODE = 0;
+    loadingDialog dialogsLoading;
+    ImageView mLikedinImageView,mSignInImageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +89,6 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
         findViews();
         presenter = new RegisterPresenter();
         presenter.attachView(this);
-//        ActivityUtils.hideKeyboard(this);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please Wait Uploading Image...");
@@ -96,11 +107,28 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
         mPositionEditText = ActivityUtils.findView(this, R.id.et_company_position, EditText.class);
         mLinkedInButton = ActivityUtils.findView(this, R.id.btn_register, Button.class);
         indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
+        mLikedinImageView= (ImageView)findViewById(R.id.iv_linkedin);
+        mSignInImageView= (ImageView)findViewById(R.id.iv_signin);
         SignButton.setOnClickListener(this);
         attachButton.setOnClickListener(this);
+        mLinkedInButton.setOnClickListener(this);
+        ActivityUtils.applyLightFont(mFullNameEditText);
+        ActivityUtils.applyLightFont(mPhoneNumberEditText);
+        ActivityUtils.applyLightFont(mEmailEditText);
+        ActivityUtils.applyLightFont(mPasswordEditText);
+        ActivityUtils.applyLightFont(mCompanyEditText);
+        ActivityUtils.applyLightFont(mPositionEditText);
+
+
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+
+        LISessionManager.getInstance(getApplicationContext()).onActivityResult(this,
+                requestCode, resultCode, data);
+
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
                 int dataSize = 0;
@@ -137,6 +165,7 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String getPathFromURI(final Context context, final Uri uri) {
 
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
@@ -239,8 +268,14 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
     public void onClick(View v) {
         int viewId = v.getId();
         switch (viewId) {
+
+            case R.id.btn_register:
+                mLikedinImageView.setVisibility(View.VISIBLE);
+                mSignInImageView.setVisibility(View.GONE);
+                loginWithLinkedin();
+                break;
             case R.id.bt_upload:
-                if (Build.VERSION.SDK_INT >= 21) {
+//                if (Build.VERSION.SDK_INT >= 21) {
                     if (checkPermission()) {
                         selectedImagePath = null;
                         selectedImageSize = 0;
@@ -254,16 +289,7 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                     } else {
                         requestPermission();
                     }
-                } else {
-                    selectedImagePath = null;
-                    selectedImageSize = 0;
-                    // select a file
-                    Intent intent = new Intent();
-                    intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(intent,
-                            "Select Picture"), SELECT_PICTURE);
-                }
+
 
                 break;
             case R.id.bt_register:
@@ -431,5 +457,31 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
             ActivityCompat.requestPermissions(RegisterActivity.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
         }
     }
+
+    private void loginWithLinkedin() {
+        LinkedinLogin.getInstance().loginUsingLinkedIn(RegisterActivity.this);
+        LinkedinLogin.getInstance().setlistenr(new LinkedinLogin.LinkedInLoginListener() {
+
+            @Override
+            public void success(ApiResponse result) {
+                if (mLinkedInModel == null)
+                    mLinkedInModel = new Social();
+                mLinkedInModel = LinkedinLogin.mLinkedInModel;
+                Log.e("email", mLinkedInModel.email);
+                Log.e("name", mLinkedInModel.name);
+                Log.e("photo", mLinkedInModel.photo);
+                Log.e("id", mLinkedInModel.id);
+                presenter.registerLinkedin(mLinkedInModel.name, mLinkedInModel.email,
+                        mLinkedInModel.id,mLinkedInModel.work, mLinkedInModel.work, mLinkedInModel.photo, RegisterActivity.this);
+
+            }
+
+            @Override
+            public void failure(LIApiError error) {
+
+            }
+        });
+    }
+
 
 }

@@ -34,7 +34,12 @@ public class UserGroup {
 
     @SerializedName("IsJoinRequestPending")
     @Expose
-    public String IsJoinRequestPending;
+    public boolean IsJoinRequestPending;
+
+
+    @SerializedName("RoleinGroup")
+    @Expose
+    public int RoleinGroup;
 
 
 }

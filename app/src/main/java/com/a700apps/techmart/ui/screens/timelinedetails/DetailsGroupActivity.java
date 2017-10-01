@@ -267,7 +267,7 @@ public class DetailsGroupActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        ActivityUtils.openActivity(DetailsGroupActivity.this, GroupsTimLineActivity.class, true);
+//        ActivityUtils.openActivity(DetailsGroupActivity.this, GroupsTimLineActivity.class, true);
 
     }
 

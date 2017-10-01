@@ -13,6 +13,7 @@ import com.a700apps.techmart.adapter.PostAdapter;
 import com.a700apps.techmart.adapter.TimelineAdapter;
 import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.utils.DialogCreator;
+import com.a700apps.techmart.utils.EmptyRecyclerView;
 import com.a700apps.techmart.utils.PreferenceHelper;
 
 import java.util.List;
@@ -29,18 +30,18 @@ public class PostsFragment extends Fragment implements TimeLineView {
         //
         // constructor
     }
-
-    RecyclerView rv;
+    View view;
+    EmptyRecyclerView rv;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_time_line_main, container, false);
+         view = inflater.inflate(R.layout.fragment_time_line_main, container, false);
         presenter = new TimeLinePresenter();
         presenter.attachView(this);
 
-        rv = (RecyclerView) view.findViewById(R.id.recyclerView);
-        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()),"2");
+        rv = (EmptyRecyclerView) view.findViewById(R.id.recyclerView);
+        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()),"2",getActivity());
 
         return view;
     }
@@ -57,7 +58,9 @@ public class PostsFragment extends Fragment implements TimeLineView {
 
     @Override
     public void updateUi(List<TimeLineData.ResultEntity> TimelineList) {
-
+        if (TimelineList.size() == 0) {
+            rv.setEmptyView(view.findViewById(R.id.tv_nodata));
+        }
         rv.setAdapter(new PostAdapter(getActivity(),TimelineList));
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
     }

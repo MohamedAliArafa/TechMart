@@ -1,10 +1,13 @@
 package com.a700apps.techmart.ui.screens.login;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 import android.widget.Toast;
 
 import com.a700apps.techmart.R;
-import com.a700apps.techmart.TechMartApp;
 import com.a700apps.techmart.data.model.UserData;
 import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.data.network.MainApiHelper;
@@ -14,7 +17,7 @@ import com.a700apps.techmart.ui.MainPresenter;
 import com.a700apps.techmart.utils.ATCPrefManager;
 import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.PreferenceHelper;
-import com.a700apps.techmart.utils.Validator;
+import com.a700apps.techmart.utils.loadingDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,14 +29,13 @@ import org.json.JSONObject;
 public class LoginPresenter extends MainPresenter<LoginView> implements NetworkResponseListener<UserData> {
 
     private Context mContext;
-
-    void login(String email, String password,Context context) {
+    Dialog dialogsLoading;
+    void login(String email, String password, Context context) {
 
         mContext = context;
         // check internet connection.
 //        context = TechMartApp.getAppContext();
-
-
+        dialogsLoading = new loadingDialog().showDialog(context);
 
         String deviceId = AppUtils.getDeviceId();
         String firebaseToken = AppUtils.getFirebaseToken();
@@ -53,22 +55,29 @@ public class LoginPresenter extends MainPresenter<LoginView> implements NetworkR
 
     @Override
     public void networkOperationSuccess(NetworkResponse<UserData> networkResponse) {
-        if(isDetachView()) return;
-        view.dismissProgress();
+        if (isDetachView()) return;
+        dialogsLoading.dismiss();
         UserData userNetworkData = networkResponse.data;
         int errorCode = userNetworkData.ISResultHasData;
-        PreferenceHelper.saveUser(mContext,userNetworkData.user);
-        ATCPrefManager.setIsUserLoggedIn(mContext, true);
-        if (errorCode==1 ){
+
+        if (errorCode == 1) {
+            PreferenceHelper.saveUser(mContext, userNetworkData.user);
+            ATCPrefManager.setIsUserLoggedIn(mContext, true);
             view.openHomeActivity();
-        }
-        else {
-            Toast.makeText(mContext,"login Faild",Toast.LENGTH_LONG).show();
+        } else {
+//            Toast.makeText(mContext, "login Faild", Toast.LENGTH_LONG).show();
+//            Snackbar snackbar1 = Snackbar.make( view., "Login Failed, please check email or password", Snackbar.LENGTH_SHORT);
+//            snackbar1.setActionTextColor(Color.WHITE);
+//            snackbar1.show();
+            view.showErrorDialog(R.string.error_happened_login);
+
         }
     }
 
     @Override
     public void networkOperationFail(Throwable throwable) {
+        dialogsLoading.dismiss();
+        view.showErrorDialog(R.string.check_internet);
 
     }
 }

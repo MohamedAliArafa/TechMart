@@ -2,6 +2,7 @@ package com.a700apps.techmart.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +15,13 @@ import com.a700apps.techmart.data.model.UserGroup;
 import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.ui.screens.grouptimeline.GroupTimeLineActivity;
 import com.a700apps.techmart.ui.screens.grouptimeline.GroupsTimLineActivity;
+import com.a700apps.techmart.ui.screens.grouptimeline.GroupsTimeLineFragment;
+import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.mygroup.MyGroubListActivity;
 import com.a700apps.techmart.ui.screens.mygroup.MyGroupFragment;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.Globals;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -72,7 +76,9 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
             mNameTextView = (TextView) itemView.findViewById(R.id.tv_name);
             mCreateDate = (TextView) itemView.findViewById(R.id.tv_creat_date);
             mNumber = (TextView) itemView.findViewById(R.id.tv_member_number);
-
+            ActivityUtils.applyLightFont(mNameTextView);
+            ActivityUtils.applyLightFont(mCreateDate);
+            ActivityUtils.applyLightFont(mNumber);
             itemView.findViewById(R.id.view_detail_btn).setOnClickListener(this);
 
 
@@ -81,12 +87,16 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            Intent myIntent = new Intent(context, GroupsTimLineActivity.class);
-            myIntent.putExtra("selectedCategory", mUserGroupList.get(position).ID);
-            context.startActivity(myIntent);
-            ((MyGroubListActivity)context).finish();
+//            Intent myIntent = new Intent(context, GroupsTimLineActivity.class);
+//            myIntent.putExtra("selectedCategory", mUserGroupList.get(position).ID);
+//            context.startActivity(myIntent);
+//            ((MyGroubListActivity) context).finish();
 
-//            ActivityUtils.openActivity(context, GroupTimeLineActivity.class, false);
+            Bundle bundle = new Bundle();
+            bundle.putInt("selectedCategory" ,mUserGroupList.get(position).ID );
+            Globals.GROUP_ID = mUserGroupList.get(position).ID;
+            ((HomeActivity )context).openFragment(GroupsTimeLineFragment.class , bundle);
+
         }
     }
 }

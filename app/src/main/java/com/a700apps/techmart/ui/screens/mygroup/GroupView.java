@@ -1,6 +1,7 @@
 package com.a700apps.techmart.ui.screens.mygroup;
 
 import com.a700apps.techmart.data.model.CategoryData;
+import com.a700apps.techmart.data.model.ServerResponse;
 import com.a700apps.techmart.data.model.UserGroupData;
 
 /**
@@ -14,4 +15,5 @@ public interface GroupView {
     void dismissProgress();
 
     void updateUi(UserGroupData data);
+    void updateRelativeUi(UserGroupData data);
 }

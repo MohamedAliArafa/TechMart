@@ -35,8 +35,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/iv_login_logo"
-                android:layout_marginLeft="@dimen/general_margin"
-                android:layout_marginRight="@dimen/general_margin"
+
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
                 android:layout_marginTop="30dp"
                 android:orientation="horizontal"
                 android:weightSum="10">
@@ -48,12 +49,12 @@
                     android:orientation="vertical">
 
 
-                    <Button
+                    <com.a700apps.techmart.utils.CustomButton
                         android:id="@+id/btn_sign_in"
                         android:layout_width="@dimen/sign_in_width"
                         android:layout_height="30dp"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:background="@drawable/transperant_bg"
                         android:text="@string/singn_in"
@@ -61,15 +62,16 @@
                         android:textSize="12sp" />
 
                     <ImageView
+                        android:id="@+id/iv_signin"
                         android:layout_width="@dimen/sign_in_width"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="10dp"
                         android:background="@drawable/arrow_signup" />
 
 
                 </LinearLayout>
 
-                <TextView
+                <com.a700apps.techmart.utils.CustomTextView
                     android:id="@+id/tv_or"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
@@ -87,7 +89,7 @@
                     android:orientation="vertical">
 
 
-                    <Button
+                    <com.a700apps.techmart.utils.CustomButton
                         android:id="@+id/btn_register"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
@@ -98,16 +100,19 @@
                         android:background="@drawable/bt_signuplinkd"
                         android:gravity="center"
                         android:paddingLeft="@dimen/general_margin"
-                        android:text="REGISTER NOW"
+                        android:text="Sign Up"
 
                         android:textColor="@color/button_light_text"
                         android:textSize="12sp" />
 
-                    <!--<ImageView-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginRight="12dp"-->
-                    <!--android:background="@drawable/arrow_signup" />-->
+                    <ImageView
+                        android:id="@+id/iv_linkedin"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="14dp"
+                        android:background="@drawable/arrow_signup"
+                        android:visibility="gone" />
 
 
                 </LinearLayout>
@@ -130,12 +135,13 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
+                    <com.a700apps.techmart.utils.CustomTextView
+
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:gravity="left"
-                        android:text="FULL NAME"
+                        android:text="User Name "
                         android:textColor="@color/button_light_text"
                         android:textStyle="bold" />
 
@@ -149,7 +155,8 @@
                         android:hint="ENTER YOUR FULL NAME"
                         android:inputType="text"
                         android:maxLines="1"
-                        android:textColorHint="@color/about_row_grey" />
+                        android:textColorHint="@color/about_row_grey"
+                        android:textSize="@dimen/time_text" />
 
                     <View
                         style="@style/temSepatator"
@@ -163,7 +170,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
+                    <com.a700apps.techmart.utils.CustomTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
@@ -183,7 +190,8 @@
                         android:hint="@string/hint_mobile"
                         android:inputType="phone"
                         android:maxLines="1"
-                        android:textColorHint="@color/about_row_grey" />
+                        android:textColorHint="@color/about_row_grey"
+                        android:textSize="@dimen/time_text" />
 
                     <View
                         style="@style/temSepatator"
@@ -197,7 +205,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
+                    <com.a700apps.techmart.utils.CustomTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
@@ -216,7 +224,8 @@
                         android:hint="@string/hint_email"
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
-                        android:textColorHint="@color/about_row_grey" />
+                        android:textColorHint="@color/about_row_grey"
+                        android:textSize="@dimen/time_text" />
 
                     <View
                         style="@style/temSepatator"
@@ -230,7 +239,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
+                    <com.a700apps.techmart.utils.CustomTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
@@ -250,8 +259,7 @@
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:textColorHint="@color/about_row_grey"
-
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/time_text" />
 
                     <View
                         style="@style/temSepatator"
@@ -265,7 +273,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
+                    <com.a700apps.techmart.utils.CustomTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
@@ -284,8 +292,8 @@
                         android:hint="@string/hint_company"
                         android:inputType="text"
                         android:maxLines="1"
-
-                        android:textColorHint="@color/about_row_grey" />
+                        android:textColorHint="@color/about_row_grey"
+                        android:textSize="@dimen/time_text" />
 
                     <View
                         style="@style/temSepatator"
@@ -300,7 +308,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
+                    <com.a700apps.techmart.utils.CustomTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
@@ -319,8 +327,8 @@
                         android:hint="@string/hint_position"
                         android:inputType="text"
                         android:maxLines="1"
-
-                        android:textColorHint="@color/about_row_grey" />
+                        android:textColorHint="@color/about_row_grey"
+                        android:textSize="@dimen/time_text" />
 
                     <View
                         style="@style/temSepatator"
@@ -335,7 +343,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
+                    <com.a700apps.techmart.utils.CustomTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
@@ -345,7 +353,7 @@
                         android:textSize="@dimen/time_text"
                         android:textStyle="bold" />
 
-                    <Button
+                    <com.a700apps.techmart.utils.CustomButton
                         android:id="@+id/bt_upload"
                         android:layout_width="@dimen/upload_width"
                         android:layout_height="30dp"
@@ -358,7 +366,7 @@
                         android:textColorHint="@color/button_light_text"
                         android:textSize="12sp" />
 
-                    <TextView
+                    <com.a700apps.techmart.utils.CustomTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/bt_upload"
@@ -374,14 +382,14 @@
                     android:layout_width="90dp"
                     android:layout_height="90dp"
                     android:layout_marginBottom="0dp"
-                    app:layout_constraintBottom_toTopOf="@+id/view7"
                     android:layout_marginLeft="8dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
                     android:layout_marginRight="8dp"
                     android:visibility="gone"
+                    app:layout_constraintBottom_toTopOf="@+id/view7"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent" />
 
-                <Button
+                <com.a700apps.techmart.utils.CustomButton
                     android:id="@+id/bt_register"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"

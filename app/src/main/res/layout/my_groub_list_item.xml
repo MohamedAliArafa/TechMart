@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="16dp"
     android:background="@drawable/bg_transparent"
     android:orientation="vertical">
 
@@ -21,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_box_logo" />
 
-    <Button
+    <com.a700apps.techmart.utils.CustomButton
         android:id="@+id/view_detail_btn"
         android:layout_width="0dp"
         android:layout_height="25dp"

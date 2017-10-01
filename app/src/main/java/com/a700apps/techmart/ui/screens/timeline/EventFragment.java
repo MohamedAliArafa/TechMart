@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.EventAdapter;
-import com.a700apps.techmart.adapter.PostAdapter;
 import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.utils.DialogCreator;
 import com.a700apps.techmart.utils.PreferenceHelper;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.List;
 
@@ -24,11 +24,14 @@ import java.util.List;
 public class EventFragment extends Fragment implements TimeLineView {
 
     private TimeLinePresenter presenter;
+    AVLoadingIndicatorView indicatorView;
+
     public EventFragment() {
         // Required empty public constructor
     }
 
     RecyclerView rv;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -38,25 +41,26 @@ public class EventFragment extends Fragment implements TimeLineView {
         presenter.attachView(this);
 
         rv = (RecyclerView) view.findViewById(R.id.recyclerView);
-        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()),"1");
+        indicatorView = view.findViewById(R.id.avi);
+        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), "1", getActivity());
 
         return view;
     }
 
     @Override
     public void showLoadingProgress() {
-
+        indicatorView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void dismissLoadingProgress() {
-
+        indicatorView.setVisibility(View.GONE);
     }
 
     @Override
     public void updateUi(List<TimeLineData.ResultEntity> TimelineList) {
 
-        rv.setAdapter(new EventAdapter(getActivity(),TimelineList));
+        rv.setAdapter(new EventAdapter(getActivity(), TimelineList));
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 

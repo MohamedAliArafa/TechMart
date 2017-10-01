@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
 import android.provider.CalendarContract;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -77,14 +78,22 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderPost
                 viewHolder.mPostedByTextView.setText(timeLineItem.getPostedByName());
                 viewHolder.mTitleTextView.setText(timeLineItem.getTitle());
                 viewHolder.mGroupNameTextView.setText(timeLineItem.getGroupName());
+
+                viewHolder.contain.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        openDetails(context, "post", mTimeLineList, position);
+                    }
+                });
+
                 Glide.with(context)
-                        .load(MainApi.IMAGE_IP + timeLineItem.getImage())
+                        .load(MainApi.IMAGE_IP + timeLineItem.getImage()).placeholder(R.drawable.placeholder)
                         .into(viewHolder.mPostImageView);
 
                 viewHolder.moreImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        openDetails(context,"post", mTimeLineList,position);
+                        openDetails(context, "post", mTimeLineList, position);
                     }
                 });
 
@@ -103,9 +112,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderPost
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(context, CommentActivity.class);
-                        intent.putExtra("string_key" , timeLineItem.getID());
+                        intent.putExtra("string_key", timeLineItem.getID());
                         intent.putExtra("likes_number", timeLineItem.getLikeCount());
-                        context. startActivity(intent);
+                        context.startActivity(intent);
                     }
                 });
 
@@ -113,9 +122,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderPost
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(context, CommentActivity.class);
-                        intent.putExtra("string_key" , timeLineItem.getID());
+                        intent.putExtra("string_key", timeLineItem.getID());
                         intent.putExtra("likes_number", timeLineItem.getLikeCount());
-                        context. startActivity(intent);
+                        context.startActivity(intent);
                     }
                 });
                 if (timeLineItem.getIsLike()) {
@@ -181,11 +190,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderPost
 
 
     public class ViewHolderPost extends RecyclerView.ViewHolder {
-        ImageView mPostImageView, addCalenderBtn, mLikeImageView,shareBtn,mComment,mMoreImageView,moreImageView;
-        TextView mTitleTextView, mDescribtionTextView, mPostedByTextView, mGroupNameTextView,tv_comment;
-
+        ImageView mPostImageView, addCalenderBtn, mLikeImageView, shareBtn, mComment, mMoreImageView, moreImageView;
+        TextView mTitleTextView, mDescribtionTextView, mPostedByTextView, mGroupNameTextView, tv_comment,tv_like,tv_share;
+        ConstraintLayout contain;
         public ViewHolderPost(View itemView) {
             super(itemView);
+            contain = (ConstraintLayout) itemView.findViewById(R.id.contain);
+
             mPostImageView = (ImageView) itemView.findViewById(R.id.iv_post);
             mLikeImageView = (ImageView) itemView.findViewById(R.id.iv_like);
             mMoreImageView = (ImageView) itemView.findViewById(R.id.iv_more);
@@ -196,18 +207,23 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderPost
             mPostedByTextView = (TextView) itemView.findViewById(R.id.tv_postedby);
             mGroupNameTextView = (TextView) itemView.findViewById(R.id.tv_group_name);
             shareBtn = (ImageView) itemView.findViewById(R.id.iv_share);
-
+            ActivityUtils.applyLightFont(mDescribtionTextView);
             mComment = (ImageView) itemView.findViewById(R.id.iv_comment);
             tv_comment = (TextView) itemView.findViewById(R.id.tv_comment);
+            tv_like = (TextView) itemView.findViewById(R.id.tv_like);
+            tv_share = (TextView) itemView.findViewById(R.id.tv_share);
+            ActivityUtils.applyLightFont(tv_comment);
+            ActivityUtils.applyLightFont(tv_like);
+            ActivityUtils.applyLightFont(tv_share);
         }
     }
 
-    static void openDetails(Context context,String type,List<TimeLineData.ResultEntity> mTimeLineList,int index) {
+    static void openDetails(Context context, String type, List<TimeLineData.ResultEntity> mTimeLineList, int index) {
         Intent intent = new Intent(context, DetailsActivity.class);
         intent.putExtra("Type", type);
         intent.putExtra("Index", index);
         intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mTimeLineList);
-        context. startActivity(intent);
+        context.startActivity(intent);
     }
 
     void changeLike() {

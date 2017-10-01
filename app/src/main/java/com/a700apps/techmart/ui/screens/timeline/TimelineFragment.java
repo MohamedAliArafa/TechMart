@@ -1,18 +1,12 @@
 package com.a700apps.techmart.ui.screens.timeline;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,33 +14,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.ViewPagerAdapter;
 import com.a700apps.techmart.data.model.TimeLineData;
-import com.a700apps.techmart.ui.screens.groupmemberdetails.GroupActivity;
-import com.a700apps.techmart.ui.screens.grouptimeline.GroupTimeLineActivity;
-import com.a700apps.techmart.ui.screens.grouptimeline.GroupsTimLineActivity;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
-import com.a700apps.techmart.ui.screens.meeting.MeetingActivity;
 import com.a700apps.techmart.ui.screens.mygroup.GroupPagerFragment;
-import com.a700apps.techmart.ui.screens.mygroup.MyGroubListActivity;
-import com.a700apps.techmart.ui.screens.mygroup.MyGroupFragment;
+import com.a700apps.techmart.ui.screens.mygroup.MyGroupsListFragment;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
-import com.a700apps.techmart.ui.screens.register.RegisterActivity;
-import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.DialogCreator;
 import com.a700apps.techmart.utils.PreferenceHelper;
-import com.bumptech.glide.Glide;
-import com.synnapps.carouselview.CarouselView;
-import com.synnapps.carouselview.ImageListener;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.wang.avi.AVLoadingIndicatorView;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -60,20 +44,34 @@ import butterknife.ButterKnife;
 public class TimelineFragment extends Fragment implements View.OnClickListener, TimeLineView {
 
     ImageView mProfileImageView, mNotificationImageView, imageView4;
-    TextView mGroup, mTimline;
+    TextView mGroup, mTimline, mPost, mEvent;
     private TimeLinePresenter presenter;
     public AVLoadingIndicatorView indicatorView;
+
 
     private static ViewPager mPager;
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
     CirclePageIndicator indicator;
+
+
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private LinearLayout mTabContainer;
+
+
+//    public static TimelineFragment newInstance(List<String> data) {
+//        TimelineFragment pagerFragment = new TimelineFragment();
+//        Bundle args = new Bundle();
+//        ArrayList<String> argsValue = new ArrayList<String>(data);
+//        args.putStringArrayList(DATA_ARGS_KEY, argsValue);
+//        pagerFragment.setArguments(args);
+//        return pagerFragment;
+//    }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,62 +91,41 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
         mPager = (ViewPager) view.findViewById(R.id.pager);
         indicator = (CirclePageIndicator)
                 view.findViewById(R.id.indicator);
+        indicatorView = (AVLoadingIndicatorView) view.findViewById(R.id.avi);
+
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) view.findViewById(R.id.vp_timeline);
+
+
+        mProfileImageView = (ImageView) view.findViewById(R.id.new_message);
+        mNotificationImageView = (ImageView) view.findViewById(R.id.new_profile);
+        imageView4 = (ImageView) view.findViewById(R.id.imageView4);
+
+        mGroup = (TextView) view.findViewById(R.id.tv_group);
+        mTimline = (TextView) view.findViewById(R.id.tv_timeline);
+        mPost = (TextView) view.findViewById(R.id.tv_posts);
+        mEvent = (TextView) view.findViewById(R.id.tv_event);
+        mTimline.setBackground(getResources().getDrawable(R.drawable.bt_1));
+
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+
         presenter = new TimeLinePresenter();
         presenter.attachView(this);
-
+        Log.e("Resume", "on view created");
         init(view);
-        indicatorView= (AVLoadingIndicatorView)view. findViewById(R.id.avi);
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) view.findViewById(R.id.vp_timeline);
+
+
         if (!AppUtils.isInternetAvailable(getActivity())) {
-            Snackbar snackbar1 = Snackbar.make(view, R.string.no_internet_connection, Snackbar.LENGTH_SHORT);
-            snackbar1.show();
-            return;
-        }else {
-            presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), "0");
+            Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_LONG).show();
+        } else {
+            presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), "0", getActivity());
         }
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mTabContainer = (LinearLayout) view.findViewById(R.id.lin_category);
-        for (int i = 0; i < mTabContainer.getChildCount(); i++) {
-            mTabContainer.getChildAt(i).setOnClickListener(this);
-        }
-
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                mTabContainer.getChildAt(position).setBackground(getResources().getDrawable(R.drawable.bt_1));
-                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
-                    if (i != position)
-                        mTabContainer.getChildAt(i).setBackground(null);
-                }
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-                if (position == 3) {
-                    ActivityUtils.openActivity(getActivity(), MyGroubListActivity.class, false);
-
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
-        mProfileImageView = (ImageView) view.findViewById(R.id.new_message);
-        mNotificationImageView = (ImageView) view.findViewById(R.id.new_profile);
-        imageView4 = (ImageView) view.findViewById(R.id.imageView4);
+        setViewPager(view);
 
         imageView4.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,9 +147,57 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
                 ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
             }
         });
-        mGroup = (TextView) view.findViewById(R.id.tv_group);
-        mTimline = (TextView) view.findViewById(R.id.tv_timeline);
-        mTimline.setBackground(getResources().getDrawable(R.drawable.bt_1));
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
+    private void setupPagerData() {
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
+        mViewPager.setOffscreenPageLimit(4);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setCurrentItem(0);
+    }
+
+    void setViewPager(View view) {
+
+        setupPagerData();
+        mTabContainer = (LinearLayout) view.findViewById(R.id.lin_category);
+        for (int i = 0; i < mTabContainer.getChildCount(); i++) {
+            mTabContainer.getChildAt(i).setOnClickListener(this);
+        }
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                mTabContainer.getChildAt(position).setBackground(getResources().getDrawable(R.drawable.bt_1));
+                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
+                    if (i != position)
+                        mTabContainer.getChildAt(i).setBackground(null);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                if (position == 3) {
+//                    ActivityUtils.openActivity(getActivity(), MyGroubListActivity.class, false);
+
+                    ((HomeActivity) getActivity()).addFragmentToBackStack(getFragmentManager(), R.id.fragment_container, new MyGroupsListFragment(), false, false);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
     }
 
@@ -197,24 +222,25 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void showLoadingProgress() {
-        indicatorView.setVisibility(View.VISIBLE);
-        indicatorView.show();
+//        indicatorView.setVisibility(View.VISIBLE);
+//        indicatorView.show();
     }
 
     @Override
     public void dismissLoadingProgress() {
-        indicatorView.hide();
+//        indicatorView.hide();
     }
 
     @Override
     public void updateUi(final List<TimeLineData.ResultEntity> TimelineList) {
+
 
         mPager.setAdapter(new ViewPagerAdapter(getActivity(), TimelineList));
 
         final float density = getResources().getDisplayMetrics().density;
         indicator.setViewPager(mPager);
 //Set circle indicator radius
-        indicator.setRadius(5 * density);
+        indicator.setRadius(3 * density);
 
         NUM_PAGES = TimelineList.size();
 
@@ -278,7 +304,9 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
+            Log.e("positonview", position + "");
             switch (position) {
+
                 case 0:
                     return new TimeLineMainFragment();
                 case 1:

@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/event_details_header_image_height"
             android:orientation="vertical"
-            android:scaleType="fitXY" />
+            android:scaleType="centerCrop" />
 
         <LinearLayout
             android:id="@+id/lin_image"
@@ -40,12 +40,13 @@
             android:paddingRight="@dimen/events_text_container_padding"
             android:paddingTop="@dimen/events_text_container_padding">
 
-            <TextView
+            <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_events"
                 style="@style/ParallaxTextStyle"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/events_title_margin"
+                android:textColor="@color/main_light_text"
                 android:layout_weight="60"
                 android:ellipsize="end"
                 android:maxLines="@integer/events_max_lines"
@@ -61,12 +62,13 @@
                 android:orientation="horizontal"
                 android:weightSum="100">
 
-                <TextView
+                <com.a700apps.techmart.utils.CustomTextView
                     android:id="@+id/tv_events_title"
                     style="@style/ParallaxTextStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/events_title_margin"
+                    android:textColor="@color/main_light_text"
                     android:layout_weight="60"
                     android:ellipsize="end"
 
@@ -103,6 +105,7 @@
                     android:layout_marginBottom="@dimen/events_title_margin"
                     android:layout_weight="50"
                     android:ellipsize="end"
+                    android:textColor="@color/main_light_text"
                     android:maxLines="@integer/events_max_lines"
                     android:text="june 12 2017|Time:10:00 am on wards"
                     android:textSize="10sp"
@@ -129,9 +132,9 @@
                     android:layout_height="30dp"
                     android:background="@drawable/linearlayout_background"
                     android:text="Going"
-                    android:visibility="invisible"
                     android:textColor="@color/button_light_text"
                     android:textSize="@dimen/time_text"
+                    android:visibility="invisible"
 
                     />
 

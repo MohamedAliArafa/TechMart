@@ -31,7 +31,7 @@
         app:layout_constraintRight_toRightOf="@+id/textView6"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
-    <TextView
+    <com.a700apps.techmart.utils.CustomTextView
         android:id="@+id/textView6"
         android:layout_width="102dp"
         android:layout_height="30dp"
@@ -81,7 +81,7 @@
             android:id="@+id/imageView4"
             android:layout_width="40dp"
             android:layout_height="30dp"
-            app:srcCompat="@drawable/ic_back" />
+            app:srcCompat="@drawable/ic_side_menu" />
 
         <EditText
             android:id="@+id/edt_search"

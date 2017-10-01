@@ -69,12 +69,16 @@ public class ActivityUtils {
     private static void openNewActivity(Context context, Class className, Bundle bundle, boolean clearStack) {
         Intent intent = new Intent(context, className);
         if (clearStack) {
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         }
         if (bundle != null) {
             intent.putExtras(bundle);
         }
         context.startActivity(intent);
+
+//       overridePendingTransition (0, 0);
     }
 
     public static <T> T findView(View view, @IdRes int viewId, Class<T> type) {

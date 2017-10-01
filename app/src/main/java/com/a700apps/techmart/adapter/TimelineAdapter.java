@@ -91,7 +91,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         switch (itemType) {
             case NOTIF_TYPE_EVENT:
                 ViewHolder viewHolderEvent = (ViewHolder) viewHolder;
-                viewHolderEvent.mDateTextView.setText(timeLineItem.getCreationDate());
+                viewHolderEvent.mDateTextView.setText(timeLineItem.getStartDate());
                 viewHolderEvent.mDescribtionTextView.setText(timeLineItem.getDescr());
                 viewHolderEvent.mTitleTextView.setText(timeLineItem.getTitle());
 

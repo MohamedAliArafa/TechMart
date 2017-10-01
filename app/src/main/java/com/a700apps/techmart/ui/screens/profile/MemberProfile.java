@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.MyProfile;
@@ -41,6 +42,8 @@ public class MemberProfile extends AppCompatActivity implements ProfileView, Vie
     String ImageLink;
     Button mFollowButton, mConnectButton, mMessageButton;
     boolean isFollowing, isConnect;
+    View eventLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,15 +103,18 @@ public class MemberProfile extends AppCompatActivity implements ProfileView, Vie
 
         mGroupCount = (TextView) findViewById(R.id.tv_group);
         mEventCount = (TextView) findViewById(R.id.tv_event);
-
+        eventLayout = findViewById(R.id.eventLayout);
         mFollowButton = (Button) findViewById(R.id.btn_follow);
         mConnectButton = (Button) findViewById(R.id.btn_edit);
         mMessageButton = (Button) findViewById(R.id.btn_message);
         mEmail = (TextView) findViewById(R.id.textView28);
+
+
         mFollowButton.setOnClickListener(this);
         mConnectButton.setOnClickListener(this);
         mMessageButton.setOnClickListener(this);
         mContainerLinearLayout = (LinearLayout) findViewById(R.id.line3);
+        eventLayout.setOnClickListener(this);
 
     }
 
@@ -253,6 +259,10 @@ public class MemberProfile extends AppCompatActivity implements ProfileView, Vie
                 Intent intentDetails = new Intent(MemberProfile.this, ImageDetailsActivity.class);
                 intentDetails.putExtra("ImageUrl", ImageLink);
                 startActivity(intentDetails);
+                break;
+
+            case R.id.eventLayout:
+                Toast.makeText(this, "tttttttttttt", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

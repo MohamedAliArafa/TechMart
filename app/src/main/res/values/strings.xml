@@ -5,6 +5,7 @@
     <string name="invalid_email">Invalid E-mail.</string>
     <string name="empty_mail_field">Empty field</string>
     <string name="no_internet_connection">Kindly check the internet connection.</string>
+    <string name="select_group">Pleast select group.</string>
     <string name="not_supported_image">Please select Format: jpg,tiff.</string>
     <string name="not_image">Please select image</string>
     <string name="select_title">Please enter Title</string>
@@ -18,10 +19,10 @@
     <string name="email">EMAIL</string>
     <string name="hint_email">Your email goes here</string>
     <string name="passord">PASSWORD</string>
-    <string name="upload_pic">UPLOAD YOUR PROFILE</string>
+    <string name="upload_pic">Upload Your Profile Picture</string>
     <string name="hint_pic">Format: jpg,tiff, less than 1MB</string>
-    <string name="attach">ATTACHED</string>
-    <string name="register">GET REGISTERED</string>
+    <string name="attach">Upload</string>
+    <string name="register">Register</string>
     <string name="home">Timeline</string>
     <string name="my_group">My Group</string>
     <string name="new_group">Join New Group</string>
@@ -52,7 +53,7 @@
     <string name="cancel">Cancel</string>
     <string name="login_id">LOGIN ID</string>
     <string name="enter_id">Enter your email</string>
-    <string name="forget">Forget your Password ?</string>
+    <string name="forget">Forgot Your Password?</string>
 
     <string name="country_council">Country Council</string>
     <string name="business_associates">Business Associates</string>
@@ -103,5 +104,7 @@
     <string name="message">Message</string>
     <string name="contact_us">Contact Us</string>
     <string name="check_internet">Kindly check the internet connection.</string>
+    <string name="error_happened">Some error happened .. please try again.</string>
+    <string name="error_happened_login">Login Failed, please check email or password.</string>
 
 </resources>

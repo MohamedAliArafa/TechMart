@@ -104,6 +104,7 @@ public class SplashActivity extends Activity implements SplashView {
     @Override
     public void openHomeActivity() {
         ActivityUtils.openActivity(SplashActivity.this, HomeActivity.class, true);
+        overridePendingTransition(0,0);
     }
 
     @Override

@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.GroupsAdapter;
 import com.a700apps.techmart.adapter.MyGroupDetailAdapter;
+import com.a700apps.techmart.data.model.ServerResponse;
 import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.data.model.UserGroup;
 import com.a700apps.techmart.data.model.UserGroupData;
@@ -37,7 +38,7 @@ import butterknife.ButterKnife;
 public class MyGroupFragment extends Fragment implements GroupView {
 
     ImageView imageView4;
-    ImageView  mNotificationImageView;
+    ImageView mNotificationImageView;
     @BindView(R.id.avi)
     public AVLoadingIndicatorView indicatorView;
     private MyGroupPresenter mPresenter;
@@ -97,14 +98,17 @@ public class MyGroupFragment extends Fragment implements GroupView {
     @Override
     public void dismissProgress() {
         indicatorView.hide();
-
     }
 
     @Override
     public void updateUi(UserGroupData data) {
-        Log.e("adapter","dfjfkffk");
         rv.setAdapter(new MyGroupDetailAdapter(getContext(),data.userGroup));
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+    @Override
+    public void updateRelativeUi(UserGroupData data) {
+
     }
 
 

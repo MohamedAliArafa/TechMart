@@ -1,8 +1,10 @@
 package com.a700apps.techmart.ui.screens.joingroup;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -208,11 +210,18 @@ public class JoinGroupFragment extends Fragment implements CategoryView, View.On
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.nextBtn:
+                if ((isBussines||isCountry||isGroup)==false){
+                    Snackbar snackbar1 = Snackbar.make(view, R.string.select_group, Snackbar.LENGTH_SHORT);
+                    snackbar1.setActionTextColor(Color.WHITE);
+                    snackbar1.show();
+                }else {
+
                 Log.e("intSelectedId", intSelectedId + "");
                 Intent myIntent = new Intent(getActivity(), GroubListActivity.class);
                 myIntent.putExtra("selectedCategory", intSelectedId);
                 startActivity(myIntent);
 
+                }
                 break;
         }
     }

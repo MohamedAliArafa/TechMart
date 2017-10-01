@@ -76,6 +76,9 @@
         <activity android:name=".ui.screens.groupmemberdetails.GroupActivity" />
         <activity android:name=".ui.screens.timelinedetails.DetailsActivity" />
         <activity android:name=".ui.screens.newchat.NewChatActivity" />
+        <activity android:name=".ui.screens.PredefinedMessage.PredifinedMessageActivity"/>
+        <activity android:name=".ui.screens.notification.Ui.Activity.NotificationHolderActivity"/>
+
         <activity
             android:name=".ui.screens.message.ChatActivity"
             android:windowSoftInputMode="stateHidden" />

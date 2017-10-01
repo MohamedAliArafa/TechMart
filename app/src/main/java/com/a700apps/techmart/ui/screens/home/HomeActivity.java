@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -22,18 +23,22 @@ import android.widget.TextView;
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.NavDrawerAdapter;
 import com.a700apps.techmart.data.network.MainApi;
+import com.a700apps.techmart.ui.screens.groupmemberdetails.GroupFragment;
+import com.a700apps.techmart.ui.screens.grouptimeline.GroupsTimeLineFragment;
 import com.a700apps.techmart.ui.screens.joingroup.JoinGroupFragment;
 import com.a700apps.techmart.ui.screens.login.LoginActivity;
 import com.a700apps.techmart.ui.screens.meeting.MeetingActivity;
 import com.a700apps.techmart.ui.screens.message.MessageFragment;
-import com.a700apps.techmart.ui.screens.message.MessagesActivity;
-import com.a700apps.techmart.ui.screens.mygroup.MyGroupFragment;
-import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
-import com.a700apps.techmart.ui.screens.register.RegisterActivity;
+import com.a700apps.techmart.ui.screens.mygroup.MyGroupsListFragment;
+import com.a700apps.techmart.ui.screens.mygroup.RelativeGroupsFragment;
+import com.a700apps.techmart.ui.screens.profile.EditProfileFragment;
+import com.a700apps.techmart.ui.screens.profile.MemberProfileFragment;
 import com.a700apps.techmart.ui.screens.setting.SettingFragment;
+import com.a700apps.techmart.ui.screens.timeline.EventFragment;
 import com.a700apps.techmart.ui.screens.timeline.TimelineFragment;
 import com.a700apps.techmart.utils.ATCPrefManager;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.NavDrawerItem;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
@@ -72,7 +77,50 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         initializeViews();
         presenter = new HomePresenter();
         presenter.attachView(this);
-        openTimeLine();
+
+        if (getIntent().getBooleanExtra("groupLayout", false)) {
+            // show group relative
+            RelativeGroupsFragment fragment = new RelativeGroupsFragment();
+            Bundle bundle = new Bundle();
+
+            bundle.putString("RelativId", getIntent().getStringExtra("RelativId"));
+//            bundle.putString("GroupId", getIntent().getStringExtra("GroupId"));
+            fragment.setArguments(bundle);
+            addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, fragment, false, true);
+
+            //show event relativs
+        } else if (getIntent().getStringExtra("holder") != null ) {
+
+//            GroupsTimeLineFragment fragment = new GroupsTimeLineFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("selectedCategory", getIntent().getStringExtra("selectedCategory"));
+//            fragment.setArguments(bundle);
+
+            openFragment(GroupsTimeLineFragment.class , bundle);
+//            addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, fragment, false
+//                    , true);
+
+        }
+
+//        else if (getIntent().getStringExtra("RelativId") != null) {
+//
+//            MemberProfileFragment fragment = new MemberProfileFragment();
+//            Bundle bundle = new Bundle();
+//
+//            bundle.putString("RelativId", getIntent().getStringExtra("RelativId"));
+//            bundle.putString("GroupId", getIntent().getStringExtra("GroupId"));
+//            fragment.setArguments(bundle);
+//
+//            addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, fragment, false
+//                    , true);
+//
+//        }
+
+        else {
+            openTimeLine();
+//            openFragment(TimelineFragment.class, null);
+
+        }
         Timber.d("on create");
     }
 
@@ -132,8 +180,11 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         mUserProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ActivityUtils.openActivity(HomeActivity.this, EditProfileActivity.class, false);
+//                ActivityUtils.openActivity(HomeActivity.this, EditProfileActivity.class, false);
 
+                addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, new EditProfileFragment(), false
+                        , false);
+                mDrawerLayout.closeDrawer(Gravity.LEFT);
             }
         });
 
@@ -229,18 +280,29 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
 
         switch (resourceId) {
             case R.drawable.ic_timeline:
+
+
                 openTimeLine();
+//                openFragment(TimelineFragment.class, null);
+
+
                 break;
 
             case R.drawable.ic_my_group:
-                addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, new JoinGroupFragment(), false
-                        , true);
+//                addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, new JoinGroupFragment(), false
+//                        , true);
+                openFragment(JoinGroupFragment.class, null);
+
 
                 break;
             case R.drawable.ic_group:
 
-                addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, new MyGroupFragment(), false
-                        , true);
+//                addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, new MyGroupFragment(), false
+//                        , true);
+                openFragment(MyGroupsListFragment.class, null);
+
+//                ((HomeActivity) getActivity()).addFragmentToBackStack(getFragmentManager(), R.id.fragment_container, new MyGroupsListFragment(), false, false);
+
                 break;
 
             case R.drawable.ic_message:
@@ -270,42 +332,84 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onBackPressed() {
         if (mDrawerLayout != null) mDrawerLayout.closeDrawers();
-//        hideToolbarItems();
-        if (mIsActivityFeedsVisible) {
+//
 
-            System.exit(1);
-        } else {
-            showAllFeedsFragment();
+
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof GroupsTimeLineFragment &&
+                Globals.CAME_FROM_NOTIFICATION_TO_GROUP){
+            finish();
         }
-    }
 
-    public void showAllFeedsFragment() {
-        String name = TimelineFragment.class.getSimpleName();
-        TimelineFragment fragment;
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        mIsActivityFeedsVisible = true;
-        if (fragmentManager.findFragmentByTag(name) != null) {
-            fragment = (TimelineFragment) fragmentManager.findFragmentByTag(name);
-            if (fragmentManager.popBackStackImmediate(name, 0)) {
-            }
-//            else if (fragment.isAdded()) {
-//            } else {
-//                addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, new TimelineFragment(), false, true);
-//            }
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof GroupsTimeLineFragment) {
+            openFragment(MyGroupsListFragment.class, null);
+        } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof TimelineFragment) {
+            finish();
+        } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof MyGroupsListFragment) {
+            Log.e("BACK", "back");
+            Globals.RETURN_POSITION = true;
+            openTimeLine();
+//            openFragment(TimelineFragment.class, null);
+
+
+        } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof EventFragment) {
+            Bundle bundle = new Bundle();
+            bundle.putString("RelativId", Globals.userId);
+            Globals.RETURN_POSITION = true;
+            openFragment(MemberProfileFragment.class, bundle);
+        } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof RelativeGroupsFragment) {
+            Bundle bundle = new Bundle();
+            bundle.putString("RelativId", Globals.userId);
+            Globals.RETURN_POSITION = true;
+            openFragment(MemberProfileFragment.class, bundle);
+        } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof GroupFragment) {
+            Bundle bundle = new Bundle();
+            bundle.putInt("selectedCategory", Globals.GROUP_ID);
+            openFragment(GroupsTimeLineFragment.class, bundle);
+        } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof MemberProfileFragment) {
+            Bundle bundle = new Bundle();
+            bundle.putInt("string_key", Globals.GROUP_ID);
+            openFragment(GroupFragment.class, bundle);
         } else {
             openTimeLine();
+//            openFragment(TimelineFragment.class, null);
         }
+//
     }
 
+
     void openTimeLine() {
-        addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, new TimelineFragment(), false
-                , true);
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof TimelineFragment) {
+
+        } else {
+            Fragment fragment = findifFragmentExist(getSupportFragmentManager(), new TimelineFragment());
+            if (fragment == null) {
+                openFragment(TimelineFragment.class, null);
+
+//            addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, new TimelineFragment(), false
+//                    , true);
+            } else {
+                addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, fragment, false
+                        , true);
+            }
+        }
+
+
     }
+
 
     void openMessage() {
         addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, new MessageFragment(), false
                 , true);
+    }
+
+
+    private Fragment findifFragmentExist(FragmentManager fragmentManager, Fragment fragment) {
+        String name = fragment.getClass().getSimpleName();
+        if (fragmentManager.findFragmentByTag(name) != null) {
+            Log.e("Fragment", "Fragment Exist before");
+            return fragmentManager.findFragmentByTag(name);
+        }
+        return null;
     }
 
     public void addFragmentToBackStack(FragmentManager fragmentManager,
@@ -314,19 +418,45 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         mIsActivityFeedsVisible = false;
         if (fragmentManager == null)
             fragmentManager = getSupportFragmentManager();
-        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         String name = fragment.getClass().getSimpleName();
         if (fragmentManager.popBackStackImmediate(name, 0)) return;
 
         if (fragmentManager.findFragmentByTag(name) != null) {
+            Log.e("Fragment", "Fragment Exist before");
             fragment = (Fragment) fragmentManager.findFragmentByTag(name);
             fragmentTransaction.replace(layout, fragment, name);
-        } else
+        } else {
+            Log.e("Fragment", "Fragment not exist before");
             fragmentTransaction.replace(layout, fragment, name);
+        }
 
-//        if (shouldAddToBackStack) fragmentTransaction.addToBackStack(name);
-        if (shouldAddToBackStack) Log.e("class", "Add To Back Stack");
+//        if (shouldAddToBackStack) {
+//            fragmentTransaction.addToBackStack(name);
+//            Log.e("class", "Add To Back Stack");
+//        }
 
         fragmentTransaction.commit();
+
     }
+
+    public void openFragment(Class fragmentClass, Bundle bundle) {
+        Fragment fragment = null;
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        if (bundle != null) {
+            fragment.setArguments(bundle);
+        }
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+
+    }
+
 }

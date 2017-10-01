@@ -4,6 +4,7 @@ import com.a700apps.techmart.data.model.AllMessageList;
 import com.a700apps.techmart.data.model.AllSchedualList;
 import com.a700apps.techmart.data.model.CategoryData;
 import com.a700apps.techmart.data.model.CategoryGroupsData;
+import com.a700apps.techmart.data.model.ChangeReciveNotifcationData;
 import com.a700apps.techmart.data.model.CommentData;
 import com.a700apps.techmart.data.model.FriendMessage;
 import com.a700apps.techmart.data.model.GroupTimeLineData;
@@ -12,7 +13,10 @@ import com.a700apps.techmart.data.model.JoinGroupData;
 import com.a700apps.techmart.data.model.LikeData;
 import com.a700apps.techmart.data.model.MyConnectionList;
 import com.a700apps.techmart.data.model.MyProfileData;
+import com.a700apps.techmart.data.model.NoficationData;
+import com.a700apps.techmart.data.model.NotificationDataLike;
 import com.a700apps.techmart.data.model.PostData;
+import com.a700apps.techmart.data.model.PredifinedData;
 import com.a700apps.techmart.data.model.SendMessageResponse;
 import com.a700apps.techmart.data.model.ServerResponse;
 import com.a700apps.techmart.data.model.TimeLineData;
@@ -38,6 +42,10 @@ public interface ApiInterface {
 
     @POST("User/Register")
     Observable<UserData> registerUser(@Body RequestBody body);
+
+    @POST("user/LinkedINLogin")
+    Observable<UserData> registerLinkedUser(@Body RequestBody body);
+
 
     @POST("User/login")
     Observable<UserData> loginUser(@Body RequestBody body);
@@ -128,6 +136,38 @@ public interface ApiInterface {
 
     @POST("timeline/AttendEvent")
     Observable<PostData> sendAttendee(@Body RequestBody body);
+
+
+    @POST("User/ChangeReciveNotifcationSetting")
+    Observable<ChangeReciveNotifcationData> ChangeReciveNotifcationSetting(@Body RequestBody body);
+
+
+    @POST("User/ChangeLoginPassword")
+    Observable<ChangeReciveNotifcationData> ChangeLoginPassword(@Body RequestBody body);
+
+    @POST("User/ChangeProfilePhoto")
+    Observable<ChangeReciveNotifcationData> ChangeProfilePhoto(@Body RequestBody body);
+
+    @POST("TimeLine/GetRelativeEventByUserID")
+    Observable<TimeLineData> GetRelativeEventByUserID(@Body RequestBody body);
+
+
+
+    @POST("Group/GetRelativeGroupByUserID")
+    Observable<UserGroupData> GetRelativeGroupByUserID(@Body RequestBody body);
+
+
+    @POST("Message/GetPreDefindMessage")
+    Observable<PredifinedData> GetPreDefindMessage();
+
+
+    @POST("Notification/GetUserNotification")
+    Observable<NoficationData> getNotifications(@Body RequestBody body);
+
+
+
+    @POST("TimeLine/GetTimeLineItemByID")
+    Observable<NotificationDataLike> getTimeLineById(@Body RequestBody body);
 
 }
 

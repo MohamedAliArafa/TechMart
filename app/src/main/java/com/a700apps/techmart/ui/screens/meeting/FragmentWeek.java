@@ -26,6 +26,7 @@ import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -202,19 +203,22 @@ public class FragmentWeek extends Fragment implements MettingView {
             viewHolder.titleTextView.setText(schedualList.get(position).getTitle());
             viewHolder.descrTextView.setText(schedualList.get(position).getDescr());
             String string = schedualList.get(position).getStartDate();
-
+            int day = 0, Month = 0;
+            String monthString = "";
             Calendar calender = Calendar.getInstance();
-            int day = 0,Month=0;
             try {
                 calender.setTime(new SimpleDateFormat("yyyy-MM-d").parse(string));
 //                calender.add(Calendar.MONTH,1);
                 day = calender.get(Calendar.DAY_OF_MONTH);
                 Month=  calender.get(Calendar.MONTH);
+
+                monthString = new DateFormatSymbols().getMonths()[Month];
+                Log.e("monthString", monthString);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
 
-            viewHolder.textView56.setText(String.valueOf(day)+"\n"+String.valueOf(Month));
+            viewHolder.textView56.setText(String.valueOf(day)+"\n"+monthString.substring(0,4));
 
         }
 

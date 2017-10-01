@@ -81,6 +81,9 @@ public class MyProfile {
     @Expose
     public String Phone;
 
+    @SerializedName("HaveSharedEventWithMe")
+    @Expose
+    public boolean HaveSharedEventWithMe;
 
 }
 

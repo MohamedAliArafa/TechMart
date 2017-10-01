@@ -1,5 +1,6 @@
 package com.a700apps.techmart.ui.screens.creatEvent;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -7,6 +8,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.location.Address;
@@ -17,7 +19,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -34,15 +39,11 @@ import com.a700apps.techmart.data.model.OneToOneModel;
 import com.a700apps.techmart.data.model.ServerResponse;
 import com.a700apps.techmart.data.model.post;
 import com.a700apps.techmart.data.network.ApiInterface;
-import com.a700apps.techmart.ui.screens.creatpost.PostActivity;
-import com.a700apps.techmart.ui.screens.groupmemberdetails.GroupActivity;
-import com.a700apps.techmart.ui.screens.grouptimeline.GroupsTimLineActivity;
 import com.a700apps.techmart.ui.screens.meetingone.MeetingonetooneActivity;
 import com.a700apps.techmart.utils.ApiClient;
 import com.a700apps.techmart.utils.AppConst;
 import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.MapDialogActivity;
-import com.a700apps.techmart.utils.PermissionTool;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.a700apps.techmart.utils.URLS;
 import com.borax12.materialdaterangepicker.date.DatePickerDialog;
@@ -52,8 +53,8 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.File;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -69,26 +70,124 @@ import retrofit2.Response;
  */
 
 public class CreatEventActivity extends AppCompatActivity implements EventView, View.OnClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+    private static final int SELECT_PICTURE = 1;
+    private static final int PICK_LOCATION_REQUEST = 2;
+    private static final int PERMISSION_REQUEST_CODE = 786;
+    private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 100;
+    public static EventPresenter presenter;
+    public static OneToOneModel model;
+    public AVLoadingIndicatorView indicatorView;
     ImageView mUploadImageView, mLocationImageView, mDateImageView, mBack;
     LinearLayout mLinearContainer, linearLayout_select;
     String date, mStartDate, mEndDate, mStartTime, mEndTime;
-    public static EventPresenter presenter;
     Dialog dialog;
-    public AVLoadingIndicatorView indicatorView;
-
-
+    ImageView imageView;
     TextView tv_location, tv_upload_image, tv_date;
     int desired_string;
     EditText editTextTitle, editTextDesc;
-    private long selectedImageSize;
-    private static final int SELECT_PICTURE = 1;
-    private static final int PICK_LOCATION_REQUEST = 2;
     InnerModle innerModle;
     ProgressDialog progressDialog;
-    private String selectedImagePath, mImagePath;
     LinearLayout linearLayout1;
-    public static OneToOneModel model;
-    private static final int PERMISSION_REQUEST_CODE = 786;
+    private long selectedImageSize;
+    private String selectedImagePath, mImagePath;
+    Date currentTime;
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public static String getPathFromURI(final Context context, final Uri uri) {
+
+        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+
+        // DocumentProvider
+        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+            // ExternalStorageProvider
+            if (isExternalStorageDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                if ("primary".equalsIgnoreCase(type)) {
+                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                }
+            }
+            // DownloadsProvider
+            else if (isDownloadsDocument(uri)) {
+
+                final String id = DocumentsContract.getDocumentId(uri);
+                final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+
+                return getDataColumn(context, contentUri, null, null);
+            }
+            // MediaProvider
+            else if (isMediaDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                Uri contentUri = null;
+                if ("image".equals(type)) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type)) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type)) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
+
+                final String selection = "_id=?";
+                final String[] selectionArgs = new String[]{
+                        split[1]
+                };
+
+                return getDataColumn(context, contentUri, selection, selectionArgs);
+            }
+        }
+        // MediaStore (and general)
+        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+
+            return getDataColumn(context, uri, null, null);
+        }
+        // File
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+
+        return null;
+    }
+
+    public static String getDataColumn(Context context, Uri uri, String selection,
+                                       String[] selectionArgs) {
+
+        Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = {
+                column
+        };
+
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
+                    null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int column_index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(column_index);
+            }
+
+
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return null;
+    }
+
+    public static boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    public static boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    public static boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +204,9 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
 
         desired_string = getIntent().getIntExtra("string_key", 0);
         findView();
+
+
+         currentTime = Calendar.getInstance().getTime();
     }
 
     void findView() {
@@ -134,16 +236,15 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
         tv_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-
-                    PermissionTool.checkPermission(CreatEventActivity.this, PermissionTool.PERMISSION_LOCATION);
-                    PermissionTool.checkPermission(CreatEventActivity.this, PermissionTool.PERMISSION_location_COARSE);
-
+                if (ActivityCompat.checkSelfPermission(CreatEventActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(CreatEventActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(CreatEventActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                    return;
+                } else {
+                    // Write you code here if permission already given.
                     Intent intent1 = new Intent(CreatEventActivity.this, MapDialogActivity.class);
                     startActivityForResult(intent1, PICK_LOCATION_REQUEST);
-                } catch (Exception e) {
-
                 }
+
 
             }
         });
@@ -151,14 +252,7 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
         tv_upload_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectedImagePath = null;
-                selectedImageSize = 0;
-                // select a file
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent,
-                        "Select Picture"), SELECT_PICTURE);
+                selectImage();
             }
         });
     }
@@ -184,9 +278,12 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
     @Override
     public void UpdateUi(post post) {
         dialog.hide();
-        finish();
-    }
+//        finish();
 
+        editTextTitle.setText("");
+        editTextDesc.setText("");
+        imageView.setImageResource(android.R.color.transparent);
+    }
 
     @Override
     public void onClick(View view) {
@@ -231,16 +328,18 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
 
 
                 break;
-            case R.id.iv_location:
-                try {
-                    PermissionTool.checkPermission(CreatEventActivity.this, PermissionTool.PERMISSION_LOCATION);
-                    PermissionTool.checkPermission(CreatEventActivity.this, PermissionTool.PERMISSION_location_COARSE);
 
+            case R.id.iv_location:
+                if (ActivityCompat.checkSelfPermission(CreatEventActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(CreatEventActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(CreatEventActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                    return;
+                } else {
+                    // Write you code here if permission already given.
                     Intent intent1 = new Intent(CreatEventActivity.this, MapDialogActivity.class);
                     startActivityForResult(intent1, PICK_LOCATION_REQUEST);
-                } catch (Exception e) {
-
                 }
+
+
                 break;
             case R.id.ll_container:
 //                selectImage();
@@ -284,8 +383,8 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
 
         String date = "You picked the following date: From- " + dayOfMonth + "/" + (++monthOfYear) + "/" + year + " To " + dayOfMonthEnd + "/" + (++monthOfYearEnd) + "/" + yearEnd;
 
-        mStartDate = dayOfMonth + "/" + (++monthOfYear) + "/" + year;
-        mEndDate = dayOfMonthEnd + "/" + (++monthOfYearEnd) + "/" + yearEnd;
+        mStartDate = dayOfMonth + "-" + (++monthOfYear) + "-" + year;
+        mEndDate = dayOfMonthEnd + "-" + (++monthOfYearEnd) + "-" + yearEnd;
 
         Calendar now = Calendar.getInstance();
         TimePickerDialog tpd = TimePickerDialog.newInstance(
@@ -412,6 +511,7 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
     }
 
     //
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
@@ -419,9 +519,9 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
                 File f = null;
                 Uri selectedImageUri = data.getData();
                 String scheme = selectedImageUri.getScheme();
-                selectedImagePath = getPathFromURI(CreatEventActivity.this,selectedImageUri);
+                selectedImagePath = getPathFromURI(CreatEventActivity.this, selectedImageUri);
 
-                ImageView imageView = (ImageView) findViewById(R.id.iv_post);
+                imageView = (ImageView) findViewById(R.id.iv_post);
                 imageView.setImageBitmap(BitmapFactory.decodeFile(selectedImagePath));
                 imageView.setVisibility(View.VISIBLE);
                 if (scheme.equals(ContentResolver.SCHEME_CONTENT)) {
@@ -454,104 +554,6 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
             }
         }
     }
-
-    public static String getPathFromURI(final Context context, final Uri uri) {
-
-        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
-
-        // DocumentProvider
-        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
-            // ExternalStorageProvider
-            if (isExternalStorageDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-
-                if ("primary".equalsIgnoreCase(type)) {
-                    return Environment.getExternalStorageDirectory() + "/" + split[1];
-                }
-            }
-            // DownloadsProvider
-            else if (isDownloadsDocument(uri)) {
-
-                final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-
-                return getDataColumn(context, contentUri, null, null);
-            }
-            // MediaProvider
-            else if (isMediaDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-
-                Uri contentUri = null;
-                if ("image".equals(type)) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                }
-
-                final String selection = "_id=?";
-                final String[] selectionArgs = new String[]{
-                        split[1]
-                };
-
-                return getDataColumn(context, contentUri, selection, selectionArgs);
-            }
-        }
-        // MediaStore (and general)
-        else if ("content".equalsIgnoreCase(uri.getScheme())) {
-
-            return getDataColumn(context, uri, null, null);
-        }
-        // File
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }
-
-        return null;
-    }
-
-    public static String getDataColumn(Context context, Uri uri, String selection,
-                                       String[] selectionArgs) {
-
-        Cursor cursor = null;
-        final String column = "_data";
-        final String[] projection = {
-                column
-        };
-
-        try {
-            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
-                    null);
-            if (cursor != null && cursor.moveToFirst()) {
-                final int column_index = cursor.getColumnIndexOrThrow(column);
-                return cursor.getString(column_index);
-            }
-
-
-        } finally {
-            if (cursor != null)
-                cursor.close();
-        }
-        return null;
-    }
-
-    public static boolean isExternalStorageDocument(Uri uri) {
-        return "com.android.externalstorage.documents".equals(uri.getAuthority());
-    }
-
-    public static boolean isDownloadsDocument(Uri uri) {
-        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
-    }
-
-    public static boolean isMediaDocument(Uri uri) {
-        return "com.android.providers.media.documents".equals(uri.getAuthority());
-    }
-
 
     private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
         String strAdd = "";
@@ -598,14 +600,16 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
                 if (serverResponse != null) {
                     if (serverResponse.postData.success) {
                         mImagePath = serverResponse.postData.message;
+                        Log.e("date","start"+mStartDate+"enddate"+mEndDate);
                         if (check) {
-                            presenter.sendEvent(innerModle.getLongitude(), innerModle.getLatitude(), getCompleteAddressString(innerModle.getLongitude(), innerModle.getLatitude()), desired_string, PreferenceHelper.getUserId(CreatEventActivity.this),
-                                    title.getText().toString(), Desc.getText().toString(), mStartDate, mEndDate, "", false, mImagePath, "", "", true, CreatEventActivity.this);
+
+                            presenter.sendEvent(mStartTime,mEndTime,innerModle.getLongitude(), innerModle.getLatitude(), getCompleteAddressString(innerModle.getLongitude(), innerModle.getLatitude()), desired_string, PreferenceHelper.getUserId(CreatEventActivity.this),
+                                    title.getText().toString(), Desc.getText().toString(), mStartDate, mEndDate, "", false, mImagePath, "", String.valueOf(currentTime), true, CreatEventActivity.this);
                             dialog.dismiss();
                         } else {
 
-                            presenter.sendEvent(innerModle.getLongitude(), innerModle.getLatitude(), getCompleteAddressString(innerModle.getLongitude(), innerModle.getLatitude()), desired_string, PreferenceHelper.getUserId(CreatEventActivity.this),
-                                    title.getText().toString(), Desc.getText().toString(), mStartDate, mEndDate, "", false, mImagePath, "", "", false, CreatEventActivity.this);
+                            presenter.sendEvent(mStartTime,mEndTime,innerModle.getLongitude(), innerModle.getLatitude(), getCompleteAddressString(innerModle.getLongitude(), innerModle.getLatitude()), desired_string, PreferenceHelper.getUserId(CreatEventActivity.this),
+                                    title.getText().toString(), Desc.getText().toString(), mStartDate, mEndDate, "", false, mImagePath, "", String.valueOf(currentTime), false, CreatEventActivity.this);
                             dialog.dismiss();
                         }
 
@@ -660,6 +664,9 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
                         model.setStartDate(mStartDate);
                         model.setEndDate(mEndDate);
                         model.setImage(mImagePath);
+                        model.setCreationDate(String.valueOf(currentTime));
+                        model.setStartTime(mStartTime);
+                        model.setEndTime(mEndTime);
 
                         Intent intentonetoone = new Intent(CreatEventActivity.this, MeetingonetooneActivity.class);
                         intentonetoone.putExtra("string_key", desired_string);
@@ -688,21 +695,7 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
     }
 
     void selectImage() {
-        if (Build.VERSION.SDK_INT >= 21) {
-            if (AppConst.checkPermission(CreatEventActivity.this)) {
-                selectedImagePath = null;
-                selectedImageSize = 0;
-                // select a file
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent,
-                        "Select Picture"), SELECT_PICTURE);
-
-            } else {
-                AppConst.requestPermission(CreatEventActivity.this, PERMISSION_REQUEST_CODE);
-            }
-        } else {
+        if (AppConst.checkPermission(CreatEventActivity.this)) {
             selectedImagePath = null;
             selectedImageSize = 0;
             // select a file
@@ -711,6 +704,28 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent,
                     "Select Picture"), SELECT_PICTURE);
+
+        } else {
+            AppConst.requestPermission(CreatEventActivity.this, PERMISSION_REQUEST_CODE);
+        }
+
+    }
+
+    private boolean checkPermission() {
+        int result = ContextCompat.checkSelfPermission(CreatEventActivity.this, Manifest.permission.ACCESS_FINE_LOCATION);
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void requestPermission() {
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(CreatEventActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            Toast.makeText(CreatEventActivity.this, "Write External Storage permission allows us to access images. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
+        } else {
+            ActivityCompat.requestPermissions(CreatEventActivity.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_FINE_LOCATION);
         }
     }
 

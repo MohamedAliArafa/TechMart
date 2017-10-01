@@ -13,6 +13,7 @@ import com.a700apps.techmart.data.model.GroupTimeLine;
 import com.a700apps.techmart.data.model.GroupTimeLineData;
 import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.data.network.MainApi;
+import com.a700apps.techmart.utils.CustomTextView;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -42,7 +43,11 @@ public class GroupViewPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return 5;
+        if (imageModelArrayList.size()>5){
+            return 5;
+        }else {
+            return imageModelArrayList.size();
+        }
     }
 
     @Override
@@ -57,8 +62,8 @@ public class GroupViewPagerAdapter extends PagerAdapter {
 
 
         TextView mTime = (TextView) imageLayout.findViewById(R.id.tv_time);
-        TextView mTitle = (TextView) imageLayout.findViewById(R.id.tv_events);
-        TextView mDesc = (TextView) imageLayout.findViewById(R.id.tv_events_title);
+        TextView mTitle = (CustomTextView) imageLayout.findViewById(R.id.tv_events);
+        TextView mDesc = (CustomTextView) imageLayout.findViewById(R.id.tv_events_title);
         TextView mAttendees = (TextView) imageLayout.findViewById(R.id.imageView25);
 
 

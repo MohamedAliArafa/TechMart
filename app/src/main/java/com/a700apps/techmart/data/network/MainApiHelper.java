@@ -26,6 +26,22 @@ public class MainApiHelper {
 
         return body;
     }
+    //
+    public static JSONObject createRegisterLinked(String fullName, String email,String LinkedinId,String company,
+                                                 String position,
+                                                String deviceId, String pnToken,String photo) throws JSONException {
+        JSONObject body = new JSONObject();
+        body.put("Name", fullName);
+        body.put("Email", email);
+        body.put("LinkedInID", LinkedinId);
+        body.put("Company", company);
+        body.put("Position", position);
+        body.put("DeviceID", deviceId);
+        body.put("DeviceToken", pnToken);
+        body.put("Photo", photo);
+
+        return body;
+    }
 
     public static JSONObject createLoginBody(String email, String password, String deviceId, String firebaseToken) throws JSONException {
         JSONObject jsonObject = new JSONObject();
@@ -124,7 +140,7 @@ public class MainApiHelper {
         return jsonObject;
     }
 
-    public static JSONObject addEvent(double Longtude,double Latitude,String LocationName,int GroupID, String CreatedBY, String Title, String Descr,String StartDate, String EndDate,
+    public static JSONObject addEvent(String StartTime,String EndTime,double Longtude,double Latitude,String LocationName,int GroupID, String CreatedBY, String Title, String Descr,String StartDate, String EndDate,
                                      String OneToOnPartener,boolean IsOneToOneMeeting,  String Image, String MediaFile, String CreationDate, boolean IsPublic) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("GroupID", GroupID);
@@ -133,6 +149,9 @@ public class MainApiHelper {
         jsonObject.put("Descr", Descr);
         jsonObject.put("StartDate", StartDate);
         jsonObject.put("EndDate", EndDate);
+        jsonObject.put("StartTime", StartTime);
+        jsonObject.put("EndTime", EndTime);
+        jsonObject.put("CreationDate", EndDate);
         jsonObject.put("OneToOnPartener", OneToOnPartener);
         jsonObject.put("IsOneToOneMeeting", IsOneToOneMeeting);
         jsonObject.put("Image", Image);
@@ -242,6 +261,65 @@ public class MainApiHelper {
         jsonObject.put("EventID", EventID);
         jsonObject.put("UserID", UserID);
         jsonObject.put("IsGoing", IsGoing);
+        return jsonObject;
+    }
+
+
+    public static JSONObject ChangeRecieveNotification(String UserId, boolean reciveNotification) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("UserID", UserId);
+        jsonObject.put("ReciveNotification", reciveNotification);
+        return jsonObject;
+    }
+
+    public static JSONObject ChangeLoginPassword(String UserId, String oldPassword, String newPassword) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("UserID", UserId);
+        jsonObject.put("OldPassword", oldPassword);
+        jsonObject.put("NewPassword", newPassword);
+
+//        Log.e("USER_ID" , UserId);
+        return jsonObject;
+    }
+
+    public static JSONObject ChangeProfilePicture(String UserId, String imageName) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("UserID", UserId);
+        jsonObject.put("Photo", imageName);
+        return jsonObject;
+    }
+
+
+    public static JSONObject GetRelativeEventByUserID(String RelativeID, String UserID) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("RelativeID", RelativeID);
+        jsonObject.put("UserID", UserID);
+
+//        Log.e("Data"  , jsonObject.toString());
+        return jsonObject;
+    }
+
+
+    public static JSONObject GetRelativeGroupByUserID(String RelativeID, String UserID) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("RelativeID", RelativeID);
+        jsonObject.put("UserID", UserID);
+        return jsonObject;
+    }
+
+    public static JSONObject GetNotification(String userId, int pageNumber , int pageSize) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("UserID", userId);
+        jsonObject.put("PageNumber", pageNumber);
+        jsonObject.put("PageSize", pageSize);
+        return jsonObject;
+    }
+
+    public static JSONObject getTimeLineById(int PostID, int Type , String UserID) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("PostID", PostID);
+        jsonObject.put("Type", Type);
+        jsonObject.put("UserID", UserID);
         return jsonObject;
     }
 }

@@ -1,18 +1,20 @@
 package com.a700apps.techmart.ui.screens.category;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.CategoryData;
 import com.a700apps.techmart.ui.screens.listgroup.GroubListActivity;
 import com.a700apps.techmart.ui.screens.register.RegisterPresenter;
+import com.a700apps.techmart.utils.CustomButton;
+import com.a700apps.techmart.utils.CustomTextView;
 import com.wang.avi.AVLoadingIndicatorView;
 
 public class CategoryActivity extends AppCompatActivity  implements CategoryView,View.OnClickListener{
@@ -22,7 +24,7 @@ public class CategoryActivity extends AppCompatActivity  implements CategoryView
     private static final int STATE_IS_BUSINESS = 2;
     private static final int STATE_IS_GROUP = 3;
     ImageView countryBtn, businessBtn, groupBtn;
-    TextView mFirstTextView,mSecondTextView,mThirdTextView;
+    CustomTextView mFirstTextView,mSecondTextView,mThirdTextView;
     private CategoryPresenter presenter;
     public AVLoadingIndicatorView indicatorView;
    int   intSelectedId;
@@ -32,13 +34,13 @@ public class CategoryActivity extends AppCompatActivity  implements CategoryView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
 
-        Button nextBtn = (Button) findViewById(R.id.nextBtn);
+        CustomButton nextBtn = (CustomButton) findViewById(R.id.nextBtn);
         countryBtn = (ImageView) findViewById(R.id.iv_country_council);
         businessBtn = (ImageView) findViewById(R.id.iv_business_associates);
         groupBtn = (ImageView) findViewById(R.id.iv_groups);
-        mFirstTextView=(TextView)findViewById(R.id.textView);
-        mSecondTextView=(TextView)findViewById(R.id.textView2);
-        mThirdTextView=(TextView)findViewById(R.id.textView3);
+        mFirstTextView=(CustomTextView)findViewById(R.id.textView);
+        mSecondTextView=(CustomTextView)findViewById(R.id.textView2);
+        mThirdTextView=(CustomTextView)findViewById(R.id.textView3);
         indicatorView= (AVLoadingIndicatorView) findViewById(R.id.avi);
 
         presenter = new CategoryPresenter();
@@ -138,11 +140,16 @@ public class CategoryActivity extends AppCompatActivity  implements CategoryView
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.nextBtn:
-                Log.e("intSelectedId",intSelectedId+"");
-                Intent myIntent = new Intent(CategoryActivity.this, GroubListActivity.class);
-                myIntent.putExtra("selectedCategory", intSelectedId);
-                startActivity(myIntent);
-
+                if ((isBussines||isCountry||isGroup)==false){
+                    Snackbar snackbar1 = Snackbar.make(view, R.string.select_group, Snackbar.LENGTH_SHORT);
+                    snackbar1.setActionTextColor(Color.WHITE);
+                    snackbar1.show();
+                }else {
+                    Log.e("intSelectedId", intSelectedId + "");
+                    Intent myIntent = new Intent(CategoryActivity.this, GroubListActivity.class);
+                    myIntent.putExtra("selectedCategory", intSelectedId);
+                    startActivity(myIntent);
+                }
                 break;
         }
     }

@@ -13,11 +13,11 @@
         android:id="@+id/rl_email_login_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_gravity="center_horizontal"
         android:baselineAligned="false"
-        android:orientation="vertical"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/iv_login_logo"
@@ -119,17 +119,19 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_below="@+id/linear_pass"
-            android:layout_marginLeft="@dimen/margin_button"
-            android:layout_marginRight="@dimen/margin_button"
+
+            android:layout_marginLeft="@dimen/margin_image"
+            android:layout_marginRight="@dimen/margin_image"
             android:layout_marginTop="14dp"
             android:orientation="horizontal"
             android:weightSum="10">
 
-            <Button
+            <com.a700apps.techmart.utils.CustomButton
                 android:id="@+id/btn_sign_in"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_alignParentBottom="true"
+                android:layout_margin="10dp"
                 android:layout_weight="4"
                 android:background="@drawable/transperant_bg"
                 android:text="SIGN IN"
@@ -137,11 +139,12 @@
 
                 android:textSize="@dimen/sign_up_text_size" />
 
-            <TextView
+            <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_or"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_alignParentBottom="true"
+                android:layout_margin="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
@@ -149,15 +152,16 @@
                 android:text="OR"
                 android:textColor="@color/button_light_text" />
 
-            <Button
+            <com.a700apps.techmart.utils.CustomButton
                 android:id="@+id/btn_register"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_alignParentBottom="true"
+                android:layout_margin="10dp"
                 android:layout_weight="4"
                 android:background="@drawable/transperant_bg"
 
-                android:text="REGISTER NOW"
+                android:text="Sign Up"
                 android:textColor="@color/button_light_text"
                 android:textSize="@dimen/sign_up_text_size" />
 
@@ -168,9 +172,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/linear_horizontal"
-            android:layout_marginLeft="@dimen/margin_button"
-            android:layout_marginRight="@dimen/margin_button"
+            android:layout_marginLeft="@dimen/margin_image"
+            android:layout_marginRight="@dimen/margin_image"
             android:layout_marginTop="@dimen/general_margin"
+            android:paddingLeft="10dp"
             android:gravity="left"
             android:text="@string/forget"
             android:textColor="@color/button_light_text"

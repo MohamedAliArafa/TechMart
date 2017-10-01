@@ -15,17 +15,12 @@ import java.util.List;
 public interface ProfileView {
 
     void showLoadingProgress();
-
     void dismissLoadingProgress();
-
     void updateUi(MyProfile MyProfile);
-
     void updateUiFollow(post success);
     void updateUiUnFollow(post success);
-
     void updateUiConnect(post success);
     void updateUiDisConnect(post success);
-
     void updateUiUpdate(post success);
 
 }

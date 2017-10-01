@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.GroupsAdapter;
+import com.a700apps.techmart.data.model.ServerResponse;
 import com.a700apps.techmart.data.model.UserGroupData;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.login.LoginActivity;
@@ -88,6 +89,11 @@ public class MyGroubListActivity extends AppCompatActivity implements GroupView 
     public void updateUi(UserGroupData data) {
         rv.setAdapter(new GroupsAdapter(this, data.userGroup));
         rv.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    @Override
+    public void updateRelativeUi(UserGroupData data) {
+
     }
 
 }

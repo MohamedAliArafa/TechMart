@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_predifined_message"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_bg_list"
+    tools:context="com.a700apps.techmart.ui.screens.PredefinedMessage.PredifinedMessageActivity">
+
+<RelativeLayout
+    android:id="@+id/container"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_back"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Khaled badawy"
+        android:id="@+id/memberName"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/trans_white"
+        android:textSize="14sp"
+        android:textStyle="bold"/>
+
+
+    <ImageView
+        android:layout_centerVertical="true"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/memberPhoto"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/profile_pic"/>
+
+
+
+</RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/container"
+        android:background="@color/trans_white"/>
+
+
+    <TextView
+        android:layout_below="@id/container"
+        android:id="@+id/tv_predifined"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:text="Send Khaled badawy contact request"
+        android:textAllCaps="true"
+
+        android:textColor="@android:color/white"
+        android:textSize="11sp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_predifined"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/send_predifined"
+        android:layout_below="@id/recyclerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:text="Send Message"
+        android:background="@drawable/bg_transparent"
+        android:textAllCaps="true"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"/>
+</RelativeLayout>

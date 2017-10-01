@@ -23,8 +23,10 @@ import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.ui.screens.category.CategoryPresenter;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.EmptyRecyclerView;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.Calendar;
 import java.util.List;
@@ -33,40 +35,50 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class TimeLineMainFragment extends Fragment implements TimeLineView {
-
+    public AVLoadingIndicatorView indicatorView;
     private TimeLinePresenter presenter;
     public TimeLineMainFragment() {
         // Required empty public constructor
     }
-
-    RecyclerView rv;
+    View view;
+    EmptyRecyclerView rv;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_time_line_main, container, false);
+         view = inflater.inflate(R.layout.fragment_time_line_main, container, false);
         presenter = new TimeLinePresenter();
         presenter.attachView(this);
+        indicatorView = (AVLoadingIndicatorView) view.findViewById(R.id.avi);
 
-         rv = (RecyclerView) view.findViewById(R.id.recyclerView);
-        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()),"0");
+         rv = (EmptyRecyclerView) view.findViewById(R.id.recyclerView);
+        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()),"0",getActivity());
+
 
         return view;
     }
 
     @Override
-    public void showLoadingProgress() {
+    public void onResume() {
+        super.onResume();
 
+    }
+    @Override
+    public void showLoadingProgress() {
+//        indicatorView.setVisibility(View.VISIBLE);
+//        indicatorView.show();
     }
 
     @Override
     public void dismissLoadingProgress() {
-
+//        indicatorView.hide();
     }
 
     @Override
     public void updateUi(List<TimeLineData.ResultEntity> TimelineList) {
-
+        if (TimelineList.size() == 0) {
+            rv.setEmptyView(view.findViewById(R.id.tv_nodata));
+        }
         rv.setAdapter(new TimelineAdapter(getActivity(),TimelineList));
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
     }

@@ -14,6 +14,26 @@ public class OneToOneModel implements Serializable{
     String createdby;
     String title;
 
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    String startTime;
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    String endTime;
+
     public double getLongtud() {
         return Longtud;
     }

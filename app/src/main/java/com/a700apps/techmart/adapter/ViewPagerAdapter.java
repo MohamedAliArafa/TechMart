@@ -18,6 +18,7 @@ import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.data.network.MainApiHelper;
 import com.a700apps.techmart.data.network.NetworkResponse;
 import com.a700apps.techmart.data.network.NetworkResponseListener;
+import com.a700apps.techmart.utils.CustomTextView;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
 
@@ -52,7 +53,12 @@ public class ViewPagerAdapter extends PagerAdapter  {
 
     @Override
     public int getCount() {
-        return 5;
+        if (imageModelArrayList.size()>5){
+            return 5;
+        }else {
+            return imageModelArrayList.size();
+        }
+
     }
 
     @Override
@@ -68,8 +74,8 @@ public class ViewPagerAdapter extends PagerAdapter  {
 
 
         TextView mTime = (TextView) imageLayout.findViewById(R.id.tv_time);
-        TextView mTitle = (TextView) imageLayout.findViewById(R.id.tv_events);
-        TextView mDesc = (TextView) imageLayout.findViewById(R.id.tv_events_title);
+        CustomTextView mTitle = (CustomTextView) imageLayout.findViewById(R.id.tv_events);
+        CustomTextView mDesc = (CustomTextView) imageLayout.findViewById(R.id.tv_events_title);
         TextView mAttendees = (TextView) imageLayout.findViewById(R.id.tv_attendee);
          mGoing =(Button)imageLayout.findViewById(R.id.button7);
         progressDialog = new ProgressDialog(context);
@@ -87,7 +93,7 @@ public class ViewPagerAdapter extends PagerAdapter  {
             if (String.valueOf(timelineItem.getAttendantCount())!=null){
                 mAttendees.setVisibility(View.VISIBLE);
 
-                mAttendees.setText(String.valueOf(timelineItem.getAttendantCount()+"\n"+"Attendees"));
+                mAttendees.setText(String.valueOf(timelineItem.getAttendantCount()+"\n"+"Joined"));
             }else {
                 mAttendees.setVisibility(View.GONE);
             }

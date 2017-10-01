@@ -21,6 +21,7 @@ import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
 import com.a700apps.techmart.ui.screens.timeline.TimeLinePresenter;
 import com.a700apps.techmart.ui.screens.timeline.TimeLineView;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.EmptyRecyclerView;
 import com.a700apps.techmart.utils.PreferenceHelper;
 
 import java.util.List;
@@ -35,20 +36,20 @@ LinearLayout linContain;
     public GroupTimelineFragment() {
         // Required empty public constructor
     }
-
-    RecyclerView rv;
+    View view;
+    EmptyRecyclerView rv;
     int desired_string;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_group_post, container, false);
+         view = inflater.inflate(R.layout.fragment_group_post, container, false);
         presenter = new GroupTimeLinePresenter();
         presenter.attachView(this);
         linContain = (LinearLayout)view.findViewById(R.id.post);
         Bundle arguments = getArguments();
          desired_string = arguments.getInt("string_key");
-        rv = (RecyclerView) view.findViewById(R.id.recyclerView);
+        rv = (EmptyRecyclerView) view.findViewById(R.id.recyclerView);
         presenter.getTimeline(PreferenceHelper.getUserId(getActivity()),desired_string,"0");
 
         linContain.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +77,9 @@ LinearLayout linContain;
 
     @Override
     public void updateUi(List<GroupTimeLineData.ResultEntity> TimelineList) {
-
+        if (TimelineList.size() == 0) {
+            rv.setEmptyView(view.findViewById(R.id.tv_nodata));
+        }
         rv.setAdapter(new GroupTimeLineAdapter(getActivity(),TimelineList));
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
     }

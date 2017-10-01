@@ -58,7 +58,7 @@ public class GroupEventAdapter extends RecyclerView.Adapter<GroupEventAdapter.Vi
                 viewHolderEvent.mTitleTextView.setText(timeLineItem.getTitle());
 
                 Glide.with(context)
-                        .load(MainApi.IMAGE_IP+timeLineItem.getImage())
+                        .load(MainApi.IMAGE_IP+timeLineItem.getImage()).placeholder(R.drawable.placeholder)
                         .into(viewHolderEvent.mEventImageView);
                 viewHolderEvent.contain.setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -74,7 +74,8 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:gravity="bottom"
-            android:padding="2dip"
+            android:padding="10dip"
+            app:radius="2dp"
             app:centered="true"
             app:fillColor="@color/dark_grey"
             app:pageColor="#fff"
@@ -86,6 +87,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:background="@color/card_color"
+
         android:layout_below="@+id/fragment_container"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
@@ -116,42 +119,49 @@
                 android:orientation="horizontal">
 
 
-                <TextView
+                <com.a700apps.techmart.utils.CustomTextView
                     android:id="@+id/tv_timeline"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:layout_weight="1"
                     android:text="Timeline"
+                    android:textSize="12sp"
+
                     android:textColor="@color/button_light_text" />
 
 
-                <TextView
+                <com.a700apps.techmart.utils.CustomTextView
                     android:id="@+id/tv_posts"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:layout_weight="1"
                     android:text="@string/posts"
+                    android:textSize="12sp"
+
                     android:textColor="@color/button_light_text" />
 
 
-                <TextView
+                <com.a700apps.techmart.utils.CustomTextView
                     android:id="@+id/tv_event"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="@string/event"
                     android:layout_weight="1"
+                    android:textSize="12sp"
+
                     android:textColor="@color/button_light_text" />
 
-                <TextView
+                <com.a700apps.techmart.utils.CustomTextView
                     android:id="@+id/tv_group"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:layout_weight="1"
                     android:text="@string/group"
+                    android:textSize="12sp"
                     android:textColor="@color/button_light_text" />
             </LinearLayout>
 

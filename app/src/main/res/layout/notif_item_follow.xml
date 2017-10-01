@@ -68,7 +68,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Our walk has been icreasing in popularity year by year and has attracted more than 10,500 participants in 2016"
+        android:text=""
         android:textColor="@android:color/white"
         android:textSize="12sp"
         app:layout_constraintLeft_toLeftOf="@+id/textView15"

@@ -192,13 +192,13 @@ public class FragmentTomorrow extends Fragment implements MettingView {
             viewHolder.descrTextView.setText(schedualList.get(position).getDescr());
             String string = schedualList.get(position).getStartDate();
             Calendar calender = Calendar.getInstance();
-             int day = 0,Month=0;
-            String monthString ="";
+            int day = 0, Month = 0;
+            String monthString = "";
             try {
                 calender.setTime(new SimpleDateFormat("yyyy-MM-d").parse(string));
 //                calender.add(Calendar.MONTH,1);
-                 day = calender.get(Calendar.DAY_OF_MONTH);
-                Month=  calender.get(Calendar.MONTH);
+                day = calender.get(Calendar.DAY_OF_MONTH);
+                Month = calender.get(Calendar.MONTH);
 
                 monthString = new DateFormatSymbols().getMonths()[Month];
                 Log.e("monthString", monthString);
@@ -207,7 +207,7 @@ public class FragmentTomorrow extends Fragment implements MettingView {
                 e.printStackTrace();
             }
 
-            viewHolder.textView56.setText(String.valueOf(day)+"\n"+monthString);
+            viewHolder.textView56.setText(String.valueOf(day) + "\n" + monthString.substring(0,4));
 
 
         }

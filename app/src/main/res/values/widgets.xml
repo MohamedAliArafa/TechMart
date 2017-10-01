@@ -217,9 +217,8 @@
     <style name="temSepatator">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/change_password_seperator_height</item>
-        <item name="android:background">@android:color/darker_gray</item>
-        <item name="android:layout_marginRight">5dp</item>
-        <item name="android:layout_marginLeft">3dp</item>
+        <item name="android:background">@color/about_row_grey</item>
+
     </style>
 
 
@@ -313,8 +312,8 @@
     </style>
 
     <style name="FooterIcon">
-        <item name="android:layout_width">18dp</item>
-        <item name="android:layout_height">18dp</item>
+        <item name="android:layout_width">14dp</item>
+        <item name="android:layout_height">14dp</item>
         <item name="android:layout_gravity">center_horizontal</item>
     </style>
 

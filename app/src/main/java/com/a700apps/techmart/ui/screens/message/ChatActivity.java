@@ -64,8 +64,8 @@ public class ChatActivity extends AppCompatActivity implements MessageView {
             ReciverName = getIntent().getStringExtra("ReciverName");
             ReciverPhoto = getIntent().getStringExtra("ReciverPhoto");
             chatNameTextView.setText(ReciverName);
-
-            Glide.with(ChatActivity.this).load(MainApi.API_LINK + ReciverPhoto)
+            Log.e("photrrro", MainApi.IMAGE_IP + ReciverPhoto);
+            Glide.with(ChatActivity.this).load(MainApi.IMAGE_IP + ReciverPhoto).placeholder(R.drawable.placeholder)
                     .into(chatImageView);
             Log.e("RelativeID", RelativeID);
             if (RelativeID != null) {
@@ -175,14 +175,14 @@ public class ChatActivity extends AppCompatActivity implements MessageView {
                     ViewHolderMe viewHolderMe = (ViewHolderMe) holder;
                     viewHolderMe.ivDate.setText(responser.get(position).getReadingDateTimeST());
                     viewHolderMe.tvText.setText(responser.get(position).getMessage());
-                    Glide.with(context).load(MainApi.IMAGE_IP + responser.get(position).getSenderPhoto())
+                    Glide.with(context).load(MainApi.IMAGE_IP + responser.get(position).getSenderPhoto()).placeholder(R.drawable.placeholder)
                             .into(viewHolderMe.myImage);
                     break;
                 case CHAT_TYPE_OTHER:
                     ViewHolderOther viewHolderOther = (ViewHolderOther) holder;
                     viewHolderOther.tvDate.setText(responser.get(position).getReadingDateTimeST());
                     viewHolderOther.tvText.setText(responser.get(position).getMessage());
-                    Glide.with(context).load(MainApi.IMAGE_IP + responser.get(position).getReciverPhoto())
+                    Glide.with(context).load(MainApi.IMAGE_IP + responser.get(position).getReciverPhoto()).placeholder(R.drawable.placeholder)
                             .into(viewHolderOther.otherImage);
                     break;
             }

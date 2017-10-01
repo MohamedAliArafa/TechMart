@@ -31,12 +31,12 @@ import java.util.List;
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
     private List<TimeLineData.ResultEntity> mTimeLineList;
     Context context;
-    private static final int NOTIF_TYPE_EVENT= 1;
+    private static final int NOTIF_TYPE_EVENT = 1;
 
 
-    public EventAdapter(Context context,List<TimeLineData.ResultEntity> TimeLineList) {
+    public EventAdapter(Context context, List<TimeLineData.ResultEntity> TimeLineList) {
         this.context = context;
-        this.mTimeLineList =TimeLineList;
+        this.mTimeLineList = TimeLineList;
 
     }
 
@@ -45,20 +45,20 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         TimeLineData.ResultEntity timeLineItem = mTimeLineList.get(position);
         final int itemType = getItemViewType(position);
-        Log.e("timeLineItem.getType()",timeLineItem.getType()+"");
+        Log.e("timeLineItem.getType()", timeLineItem.getType() + "");
 
         switch (itemType) {
             case NOTIF_TYPE_EVENT:
-             ViewHolder viewHolderEvent = (ViewHolder)viewHolder;
-                viewHolderEvent.mDateTextView.setText(timeLineItem.getCreationDate());
+                ViewHolder viewHolderEvent = (ViewHolder) viewHolder;
+                viewHolderEvent.mDateTextView.setText(timeLineItem.getStartDate());
                 viewHolderEvent.mDescribtionTextView.setText(timeLineItem.getDescr());
                 viewHolderEvent.mTitleTextView.setText(timeLineItem.getTitle());
 
                 Glide.with(context)
-                        .load(MainApi.IMAGE_IP+timeLineItem.getImage()).placeholder(R.drawable.placeholder)
+                        .load(MainApi.IMAGE_IP + timeLineItem.getImage()).placeholder(R.drawable.placeholder)
                         .into(viewHolderEvent.mEventImageView);
 
-                viewHolderEvent. contain.setOnClickListener(new View.OnClickListener() {
+                viewHolderEvent.contain.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         openDetails(context, "Event", mTimeLineList, position);
@@ -76,8 +76,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         View noteView;
 //        switch (viewType) {
 //            case NOTIF_TYPE_EVENT:
-                noteView = inflater.inflate(R.layout.timeline_first_item, parent, false);
-                return new ViewHolder(noteView);
+        noteView = inflater.inflate(R.layout.timeline_first_item, parent, false);
+        return new ViewHolder(noteView);
 
 
 //        }
@@ -86,11 +86,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     }
 
 
-
     @Override
     public int getItemViewType(int position) {
         int type = position;
-        Log.e("type",mTimeLineList.get(position).getType()+"");
+        Log.e("type", mTimeLineList.get(position).getType() + "");
         switch (mTimeLineList.get(position).getType()) {
             case 1:
                 return NOTIF_TYPE_EVENT;
@@ -100,32 +99,35 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        Log.e("test",mTimeLineList.size()+"");
+        Log.e("test", mTimeLineList.size() + "");
         return mTimeLineList.size();
     }
 
 
-
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ImageView mEventImageView ,shareBtn, addCalenderBtn;
-        TextView mTitleTextView,mDescribtionTextView,mDateTextView,mGroupNameTextView,tv_add_calender;
+        ImageView mEventImageView, shareBtn, addCalenderBtn;
+        TextView mTitleTextView, mDescribtionTextView, mDateTextView, mGroupNameTextView, tv_add_calender,tv_share;
         RelativeLayout contain;
+
         public ViewHolder(View itemView) {
             super(itemView);
             tv_add_calender = (TextView) itemView.findViewById(R.id.tv_add_calender);
+            tv_share = (TextView) itemView.findViewById(R.id.tv_share);
 
             mEventImageView = (ImageView) itemView.findViewById(R.id.iv_event);
             mTitleTextView = (TextView) itemView.findViewById(R.id.tv_title);
             mDescribtionTextView = (TextView) itemView.findViewById(R.id.tv_description);
             mDateTextView = (TextView) itemView.findViewById(R.id.tv_date);
             contain = (RelativeLayout) itemView.findViewById(R.id.contain);
-
+            ActivityUtils.applyLightFont(mDescribtionTextView);
+            ActivityUtils.applyLightFont(tv_add_calender);
+            ActivityUtils.applyLightFont(tv_share);
             shareBtn = (ImageView) itemView.findViewById(R.id.iv_share);
             addCalenderBtn = (ImageView) itemView.findViewById(R.id.iv_add_calender);
             itemView.setOnClickListener(this);
-                shareBtn.setOnClickListener(this);
-                addCalenderBtn.setOnClickListener(this);
+            shareBtn.setOnClickListener(this);
+            addCalenderBtn.setOnClickListener(this);
             tv_add_calender.setOnClickListener(this);
         }
 

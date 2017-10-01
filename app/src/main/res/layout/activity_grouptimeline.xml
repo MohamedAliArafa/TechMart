@@ -75,6 +75,7 @@
             android:layout_centerHorizontal="true"
             android:gravity="bottom"
             android:padding="4dip"
+            app:radius="2dp"
             app:centered="true"
             app:fillColor="@color/dark_grey"
             app:pageColor="#fff"
@@ -129,13 +130,15 @@
 
             <!--</FrameLayout>-->
 
-            <TextView
+            <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_timeline"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:layout_weight="1"
                 android:text="Timeline"
+                android:textSize="12sp"
+
                 android:textColor="@color/button_light_text" />
 
             <!--<View-->
@@ -143,26 +146,30 @@
             <!--android:layout_height="15dp"-->
             <!--android:background="@color/button_light_text"/>-->
 
-            <TextView
+            <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_posts"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:layout_weight="1"
                 android:text="@string/posts"
+                android:textSize="12sp"
+
                 android:textColor="@color/button_light_text" />
 
 
-            <TextView
+            <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_event"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/event"
                 android:layout_weight="1"
+                android:textSize="12sp"
+
                 android:textColor="@color/button_light_text" />
 
-            <TextView
+            <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_group"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
