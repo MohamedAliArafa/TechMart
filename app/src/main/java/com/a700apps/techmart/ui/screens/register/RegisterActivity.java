@@ -87,6 +87,7 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
     ImageView mLikedinImageView,mSignInImageView;
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
      Dialog dialogsLoading;
+    Button SignButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +105,7 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
     }
 
     private void findViews() {
-        Button SignButton = ActivityUtils.findView(this, R.id.bt_register, Button.class);
+        SignButton = ActivityUtils.findView(this, R.id.bt_register, Button.class);
         Button attachButton = ActivityUtils.findView(this, R.id.bt_upload, Button.class);
         mFullNameEditText = ActivityUtils.findView(this, R.id.et_name, EditText.class);
         mPhoneNumberEditText = ActivityUtils.findView(this, R.id.et_mobile, EditText.class);
@@ -143,10 +144,14 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                 Uri selectedImageUri = data.getData();
                 String scheme = selectedImageUri.getScheme();
                 selectedImagePath = getPathFromURI(RegisterActivity.this, selectedImageUri);
+                if (selectedImageUri==null){
+                    Toast.makeText(this, "Sorry .. please select another image", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 ImageView imageView = (ImageView) findViewById(R.id.iv_post);
                 imageView.setImageBitmap(BitmapFactory.decodeFile(selectedImagePath));
                 imageView.setVisibility(View.VISIBLE);
-                Log.e("ImagePath", selectedImagePath);
+                Log.e("ImagePath", "-->"+selectedImagePath);
 
                 if (scheme.equals(ContentResolver.SCHEME_CONTENT)) {
                     try {
@@ -157,6 +162,11 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                         e.printStackTrace();
                     }
                     selectedImageSize = dataSize;
+//                    if (selectedImageSize>1024){
+//                        Log.e("size more than " , " size more than 1 mega 33333->   " +selectedImageSize);
+//                        Snackbar snackbar1 = Snackbar.make(SignButton, R.string.image_size_exceed, Snackbar.LENGTH_SHORT);
+//                        snackbar1.show();
+//                    }
 
                 } else if (scheme.equals(ContentResolver.SCHEME_FILE)) {
                     String path = selectedImagePath;
@@ -166,6 +176,12 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+//                    if (f.length()>1024){
+//                        Log.e("size more than " , " size more than 1 mega 22222->   " + f.length());
+//                        Snackbar snackbar1 = Snackbar.make(SignButton, R.string.image_size_exceed, Snackbar.LENGTH_SHORT);
+//                        snackbar1.show();
+//                        return;
+//                    }
                     selectedImageSize = f.length();
                 }
             }else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
@@ -391,47 +407,52 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                 company = ActivityUtils.getViewTextValue(mCompanyEditText);
                 position = ActivityUtils.getViewTextValue(mPositionEditText);
 
+                boolean isValid= true;
 
                 boolean emptyName = Validator.isTextEmpty(fullName);
                 if (emptyName) {
                     mFullNameEditText.setError(getResources().getString(R.string.name_length_not_valid));
-                    return;
+                    isValid  =false;
                 }
 
                 boolean validMobileNumber = Validator.validMobileNumber(mobile.replaceFirst("\\+", ""));
                 if (!validMobileNumber) {
                     mPhoneNumberEditText.setError(getResources().getString(R.string.invalid_mobile_number));
-                    return;
+                    isValid  =false;
+                }else if (!mobile.startsWith("96")){
+                    mPhoneNumberEditText.setError(getResources().getString(R.string.invalid_mobile_number));
+                    isValid  =false;
                 }
+
 
                 boolean validEmail = Validator.validEmail(email);
                 if (!validEmail) {
                     mEmailEditText.setError(getResources().getString(R.string.invalid_email));
-                    return;
+                    isValid  =false;
                 }
 
                 boolean validPassword = Validator.validPasswordLength(password);
                 if (!validPassword) {
                     mPasswordEditText.setError(getResources().getString(R.string.invalid_password));
-                    return;
+                    isValid  =false;
                 }
 
                 boolean validCompanyName = Validator.isTextEmpty(company);
                 if (validCompanyName) {
                     mCompanyEditText.setError(getResources().getString(R.string.company_length_not_valid));
-                    return;
+                    isValid  =false;
                 }
 
                 boolean validCompanyPosition = Validator.isTextEmpty(position);
                 if (validCompanyPosition) {
                     mPositionEditText.setError(getResources().getString(R.string.position_length_not_valid));
-                    return;
+                    isValid  =false;
                 }
 
                 if (selectedImagePath == null) {
                     Snackbar snackbar1 = Snackbar.make(v, R.string.not_image, Snackbar.LENGTH_SHORT);
                     snackbar1.show();
-                    return;
+                    isValid  =false;
                 }
 //
 
@@ -440,7 +461,9 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                     Snackbar snackbar1 = Snackbar.make(v, R.string.no_internet_connection, Snackbar.LENGTH_SHORT);
                     snackbar1.show();
                 } else {
-                    uploadFile();
+                    if (isValid){
+                        uploadFile();
+                    }
 
                 }
 
@@ -489,11 +512,18 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
     // Uploading Image/Video
     private void uploadFile() {
 //        progressDialog.show();
-        dialogsLoading  = new loadingDialog().showDialog(RegisterActivity.this);
+
 
         // Map is used to multipart the file using okhttp3.RequestBody
         File file = new File(selectedImagePath);
+        Log.e("size iin kb " , " size in KB ->   " +file.length()/1024);
+        if (file.length()/1024>1024){
 
+            Snackbar snackbar1 = Snackbar.make(SignButton, R.string.image_size_exceed, Snackbar.LENGTH_SHORT);
+            snackbar1.show();
+            return;
+        }
+        dialogsLoading  = new loadingDialog().showDialog(RegisterActivity.this);
         // Parsing any Media type file
         RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), file);
         MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
@@ -562,7 +592,6 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                 Log.e("id", mLinkedInModel.id);
                 presenter.registerLinkedin(mLinkedInModel.name, mLinkedInModel.email,
                         mLinkedInModel.id,mLinkedInModel.work, mLinkedInModel.work, mLinkedInModel.photo, RegisterActivity.this);
-
             }
 
             @Override

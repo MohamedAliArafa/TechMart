@@ -47,7 +47,6 @@ public class LoginPresenter extends MainPresenter<LoginView> implements NetworkR
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -62,9 +61,7 @@ public class LoginPresenter extends MainPresenter<LoginView> implements NetworkR
             ATCPrefManager.setIsUserLoggedIn(mContext, true);
             view.openHomeActivity();
         } else {
-
-            view.showErrorDialog(R.string.error_login);
-
+            view.showErrorDialog(R.string.error_happened_login);
         }
     }
 
@@ -72,6 +69,5 @@ public class LoginPresenter extends MainPresenter<LoginView> implements NetworkR
     public void networkOperationFail(Throwable throwable) {
         dialogsLoading.dismiss();
         view.showErrorDialog(R.string.check_internet);
-
     }
 }

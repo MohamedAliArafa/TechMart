@@ -8,6 +8,7 @@
     <string name="select_group">Pleast select group.</string>
     <string name="not_supported_image">Please select Format: jpg,tiff.</string>
     <string name="not_image">Please select image</string>
+    <string name="image_size_exceed">Please select image less than 1M</string>
     <string name="select_title">Please enter Title</string>
     <string name="select_Post">Please enter Description</string>
     <string name="select_location">Please Select  Location</string>
@@ -15,7 +16,7 @@
     <string name="large_image">Please select image less than 1MB in size.</string>
     <string name="no_image">Please select an attach image.</string>
     <string name="mobile_number">Mobile Number</string>
-    <string name="hint_mobile">Enter your mobile number</string>
+    <string name="hint_mobile">mobile number Ex(+96xxxxxxxxxxxx)</string>
     <string name="email">Email</string>
     <string name="hint_email">Your email goes here</string>
     <string name="passord">Password</string>
@@ -86,7 +87,7 @@
     <string name="hint_company">enter your company name</string>
     <string name="company_position">Position</string>
     <string name="hint_position">enter your company position</string>
-    <string name="company_length_not_valid">Please enter valid name</string>
+    <string name="company_length_not_valid">Please enter valid Company name</string>
     <string name="position_length_not_valid">Please enter valid position</string>
     <string name="enter_password">Enter your password</string>
     <string name="posts">Posts</string>
