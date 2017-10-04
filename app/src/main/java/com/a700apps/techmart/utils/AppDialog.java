@@ -43,7 +43,8 @@ public class AppDialog {
     static class SmallDialog {
 
         private Context context;
-        private int dialogTitle, dialogText, dialogQuestion;
+        private int dialogTitle, dialogQuestion;
+        String dialogText;
         private int rightButtonText, leftButtonText;
         private boolean showLeftButton, showQuestion, showText, showEditText;
         private TextView titleTextView, textTextView, questionTextView;
@@ -66,7 +67,7 @@ public class AppDialog {
             return this;
         }
 
-        SmallDialog dialogText(int text) {
+        SmallDialog dialogText(String text) {
             this.dialogText = text;
             return this;
         }
@@ -149,23 +150,23 @@ public class AppDialog {
 //            ActivityUtils.applyFont(dialogView);
             titleTextView = ActivityUtils.findView(dialogView, R.id.tv_dialog_title, TextView.class);
             textTextView = ActivityUtils.findView(dialogView, R.id.tv_dialog_text, TextView.class);
-            questionTextView = ActivityUtils.findView(dialogView, R.id.tv_dialog_question, TextView.class);
             leftButton = ActivityUtils.findView(dialogView, R.id.tv_dialog_cancel, TextView.class);
             rightButton = ActivityUtils.findView(dialogView, R.id.tv_dialog_ok, TextView.class);
-
+//
+            textTextView.setText(dialogTitle);
             if (dialogTitle != 0) {
-                titleTextView.setText(dialogTitle);
+                titleTextView.setText(dialogText);
             }
 
-
-            if (showQuestion) {
-                questionTextView.setVisibility(View.VISIBLE);
-                if (dialogQuestion != 0) {
-                    questionTextView.setText(dialogQuestion);
-                }
-            } else {
-                questionTextView.setVisibility(View.GONE);
-            }
+//
+//            if (showQuestion) {
+//                questionTextView.setVisibility(View.VISIBLE);
+//                if (dialogQuestion != 0) {
+//                    questionTextView.setText(dialogQuestion);
+//                }
+//            } else {
+//                questionTextView.setVisibility(View.GONE);
+//            }
 
             if (showLeftButton) {
                 leftButton.setVisibility(View.VISIBLE);

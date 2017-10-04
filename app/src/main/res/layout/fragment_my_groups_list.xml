@@ -91,8 +91,8 @@
 
         <ImageView
             android:id="@+id/imageView4"
-            android:layout_width="40dp"
-            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_side_menu" />
 
         <EditText
@@ -100,11 +100,14 @@
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:gravity="left"
             android:text="@string/search_name"
-            android:textColor="@android:color/white"
+            android:textColor="@color/light_color_text"
             android:textSize="@dimen/time_text"
+            android:textColorHint="@color/light_color_text"
 
             />
 
@@ -112,7 +115,9 @@
             android:id="@+id/new_message"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            app:srcCompat="@drawable/ic_user" />
+            app:srcCompat="@drawable/ic_user"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"/>
 
         <ImageView
             android:id="@+id/new_profile"

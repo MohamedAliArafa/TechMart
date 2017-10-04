@@ -103,7 +103,6 @@ public class GroupFragment extends Fragment implements GroupMemberView {
                 .into(Icon);
 
         if (groupusers.getBoardMemebes().size() == 0) {
-//            mNoData.setVisibility(View.VISIBLE);
             rv.setEmptyView(view.findViewById(R.id.tv_nodata));
         }
         tv_member.setText(String.valueOf(groupusers.getBoardMemebes().size()));
@@ -111,7 +110,7 @@ public class GroupFragment extends Fragment implements GroupMemberView {
         rv.setAdapter(new AdminAdapter(getActivity(), groupusers.getBoardMemebes(), mId));
         rv.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         if (groupusers.getOtheMemebes().size() == 0) {
-            rv2.setEmptyView(view.findViewById(R.id.tv_nodata));
+            rv2.setEmptyView(view.findViewById(R.id.tv_memeber));
 
         }
         rv2.setAdapter(new GroupActivity.MemberAdapter(getActivity(), groupusers.getOtheMemebes(), mId));

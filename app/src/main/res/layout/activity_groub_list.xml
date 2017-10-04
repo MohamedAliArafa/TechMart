@@ -23,12 +23,13 @@
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
         android:layout_marginTop="8dp"
+
         android:background="@android:color/white"
         app:layout_constraintLeft_toLeftOf="@+id/textView6"
         app:layout_constraintRight_toRightOf="@+id/textView6"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
-    <TextView
+    <com.a700apps.techmart.utils.CustomTextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,12 +42,11 @@
         android:textAllCaps="true"
         android:textColor="@android:color/white"
         android:textSize="@dimen/main_dark_text"
-        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.v7.widget.RecyclerView
+    <com.a700apps.techmart.utils.EmptyRecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -55,8 +55,30 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/view"
-
         android:layout_marginTop="32dp" />
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+
+        android:background="@color/light_color_text"
+        android:layout_marginBottom="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintLeft_toLeftOf="parent" />
+    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+        android:id="@+id/tv_nodata"
+        android:layout_width="0dp"
+        android:layout_height="551dp"
+        android:text="There is no data"
+
+        android:gravity="center"
+        tools:layout_editor_absoluteY="8dp"
+        android:visibility="gone"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="@+id/recyclerView"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/recyclerView" />
 
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/avi"

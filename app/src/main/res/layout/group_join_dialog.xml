@@ -9,7 +9,7 @@
     android:orientation="vertical">
 
 
-    <TextView
+    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,11 +47,11 @@
 
             <ImageView
                 android:id="@+id/imageView6"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 app:srcCompat="@drawable/ic_favorit" />
 
-            <TextView
+            <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
                 android:id="@+id/textView14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:text="Board Member"
-                android:textSize="@dimen/time_text"
+                android:textSize="@dimen/icon_text"
                 android:textColor="@android:color/white" />
         </LinearLayout>
 
@@ -76,18 +76,18 @@
 
             <ImageView
                 android:id="@+id/imageView6"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 app:srcCompat="@drawable/ic_profile" />
 
-            <TextView
+            <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
                 android:id="@+id/textView14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
-                android:textSize="@dimen/time_text"
+                android:textSize="@dimen/icon_text"
 
                 android:text="Individual"
                 android:textColor="@android:color/white" />
@@ -97,8 +97,8 @@
 
     <ImageView
         android:id="@+id/imageView8"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintRight_toRightOf="parent"

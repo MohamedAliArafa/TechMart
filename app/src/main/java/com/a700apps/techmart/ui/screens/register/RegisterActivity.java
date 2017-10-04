@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
@@ -17,12 +18,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -47,6 +50,7 @@ import com.linkedin.platform.errors.LIApiError;
 import com.linkedin.platform.listeners.ApiResponse;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 
@@ -80,8 +84,9 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
     Social mLinkedInModel = null;
     private int mRequestCode;
     private static final int SIGN_IN_CODE = 0;
-    loadingDialog dialogsLoading;
     ImageView mLikedinImageView,mSignInImageView;
+    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+     Dialog dialogsLoading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,10 +95,12 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
         presenter = new RegisterPresenter();
         presenter.attachView(this);
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Please Wait Uploading Image...");
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
+
+
+//        progressDialog = new ProgressDialog(this);
+//        progressDialog.setMessage("Please Wait Uploading Image...");
+//        progressDialog.setCancelable(false);
+//        progressDialog.setCanceledOnTouchOutside(false);
     }
 
     private void findViews() {
@@ -155,15 +162,45 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                     String path = selectedImagePath;
                     try {
                         f = new File(path);
+//                        f.getName();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     selectedImageSize = f.length();
                 }
+            }else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+//                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                ImageView imageView = (ImageView) findViewById(R.id.iv_post);
+//                selectedImagePath = getPathFromURI(RegisterActivity.this,data.getData());
+
+
+                // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+                Uri tempUri = getImageUri(getApplicationContext(), imageBitmap);
+
+                // CALL THIS METHOD TO GET THE ACTUAL PATH
+                selectedImagePath = getRealPathFromURI(tempUri);
+
+                imageView.setImageBitmap(imageBitmap);
+                imageView.setVisibility(View.VISIBLE);
             }
         }
     }
 
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    public String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String getPathFromURI(final Context context, final Uri uri) {
@@ -264,6 +301,57 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
     }
 
 
+    private void openChooseMethodDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_choose_media_file);
+        dialog.findViewById(R.id.tv_gallery).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectImage();
+                dialog.dismiss();
+            }
+        });
+        dialog.findViewById(R.id.tv_camera).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                captureImage();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    void selectImage() {
+        if (AppConst.checkPermission(RegisterActivity.this)) {
+            selectedImagePath = null;
+            selectedImageSize = 0;
+            // select a file
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent,
+                    "Select Picture"), SELECT_PICTURE);
+        } else {
+            AppConst.requestPermission(RegisterActivity.this, PERMISSION_REQUEST_CODE);
+        }
+    }
+    void captureImage() {
+        if (checkPermission()){
+//            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//            startActivityForResult(cameraIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+
+            dispatchTakePictureIntent();
+        }else {
+            requestPermission();
+        }
+    }
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+        }
+    }
     @Override
     public void onClick(View v) {
         int viewId = v.getId();
@@ -276,19 +364,22 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                 break;
             case R.id.bt_upload:
 //                if (Build.VERSION.SDK_INT >= 21) {
-                    if (checkPermission()) {
-                        selectedImagePath = null;
-                        selectedImageSize = 0;
-                        // select a file
-                        Intent intent = new Intent();
-                        intent.setType("image/*");
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        startActivityForResult(Intent.createChooser(intent,
-                                "Select Picture"), SELECT_PICTURE);
+//                    if (checkPermission()) {
 
-                    } else {
-                        requestPermission();
-                    }
+                        openChooseMethodDialog();
+
+//                        selectedImagePath = null;
+//                        selectedImageSize = 0;
+//                        // select a file
+//                        Intent intent = new Intent();
+//                        intent.setType("image/*");
+//                        intent.setAction(Intent.ACTION_GET_CONTENT);
+//                        startActivityForResult(Intent.createChooser(intent,
+//                                "Select Picture"), SELECT_PICTURE);
+
+//                    } else {
+//                        requestPermission();
+//                    }
 
 
                 break;
@@ -374,31 +465,31 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
 
     @Override
     public void openCouncilActivity() {
-        ActivityUtils.openActivity(RegisterActivity.this, CategoryActivity.class, false);
+        ActivityUtils.openActivity(RegisterActivity.this, CategoryActivity.class, true);
     }
 
     @Override
     public void showLoadingProgress() {
-        indicatorView.setVisibility(View.VISIBLE);
-        indicatorView.show();
+//        indicatorView.setVisibility(View.VISIBLE);
+//        indicatorView.show();
 
     }
 
     @Override
     public void dismissLoadingProgress() {
-        indicatorView.hide();
+//        indicatorView.hide();
 
     }
 
     @Override
     public void showErrorDialog(int error) {
-        DialogCreator.showOneButtonDialog(RegisterActivity.this, R.string.check_internet, error, null);
-
+        DialogCreator.showOneButtonDialog(RegisterActivity.this, R.string.email_exist, "Error", null);
     }
 
     // Uploading Image/Video
     private void uploadFile() {
-        progressDialog.show();
+//        progressDialog.show();
+        dialogsLoading  = new loadingDialog().showDialog(RegisterActivity.this);
 
         // Map is used to multipart the file using okhttp3.RequestBody
         File file = new File(selectedImagePath);
@@ -417,10 +508,9 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                 if (serverResponse != null) {
                     if (serverResponse.postData.success) {
                         mImagePath = serverResponse.postData.message;
-//                        presenter.sendPost(desired_string, PreferenceHelper.getUserId(PostActivity.this),
-//                                    title.getText().toString(), Desc.getText().toString(), mImagePath, "", "", false, PostActivity.this);
+
 //                            dialog.dismiss();
-                        presenter.register(fullName, password, email, mobile, selectedImagePath, company, position, RegisterActivity.this);
+                        presenter.register(fullName, password, email, mobile, mImagePath, company, position, RegisterActivity.this);
 
                     }
 
@@ -428,19 +518,20 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                     assert serverResponse != null;
                     Log.v("Response", serverResponse.toString());
                 }
-                progressDialog.dismiss();
+//                progressDialog.dismiss();
+                dialogsLoading.dismiss();
             }
 
             @Override
             public void onFailure(Call<ServerResponse> call, Throwable t) {
-                progressDialog.dismiss();
+//                progressDialog.dismiss();
+                dialogsLoading.dismiss();
                 Toast.makeText(RegisterActivity.this, getString(R.string.check_internet), Toast.LENGTH_LONG).show();
             }
         });
     }
-
     private boolean checkPermission() {
-        int result = ContextCompat.checkSelfPermission(RegisterActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        int result = ContextCompat.checkSelfPermission(RegisterActivity.this, android.Manifest.permission.CAMERA);
         if (result == PackageManager.PERMISSION_GRANTED) {
             return true;
         } else {
@@ -448,13 +539,11 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
         }
     }
 
-
     private void requestPermission() {
-
-        if (ActivityCompat.shouldShowRequestPermissionRationale(RegisterActivity.this, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            Toast.makeText(RegisterActivity.this, "Write External Storage permission allows us to access images. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
+        if (ActivityCompat.shouldShowRequestPermissionRationale(RegisterActivity.this, android.Manifest.permission.CAMERA)) {
+            Toast.makeText(RegisterActivity.this, "Camera permission allows us take images throught camera. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
         } else {
-            ActivityCompat.requestPermissions(RegisterActivity.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(RegisterActivity.this, new String[]{android.Manifest.permission.CAMERA}, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
         }
     }
 
@@ -481,6 +570,21 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
 
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        switch (requestCode){
+            case CAMERA_CAPTURE_IMAGE_REQUEST_CODE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    captureImage();
+                } else{
+                    Toast.makeText(this, "permission denied", Toast.LENGTH_SHORT).show();
+                }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 

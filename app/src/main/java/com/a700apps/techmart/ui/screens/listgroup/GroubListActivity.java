@@ -29,7 +29,9 @@ import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.mygroup.MyGroubListActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.AppConst;
+import com.a700apps.techmart.utils.EmptyRecyclerView;
 import com.a700apps.techmart.utils.PreferenceHelper;
+import com.bumptech.glide.Glide;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONException;
@@ -40,7 +42,7 @@ import java.util.List;
 public class GroubListActivity extends AppCompatActivity implements GroubView {
 
     private GroupPresenter presenter;
-    RecyclerView rv;
+    EmptyRecyclerView rv;
     public AVLoadingIndicatorView indicatorView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,7 @@ public class GroubListActivity extends AppCompatActivity implements GroubView {
 
 
         getExtra();
-        rv = (RecyclerView) findViewById(R.id.recyclerView);
+        rv = (EmptyRecyclerView) findViewById(R.id.recyclerView);
 
 
     }
@@ -79,6 +81,10 @@ public class GroubListActivity extends AppCompatActivity implements GroubView {
 
     @Override
     public void updateUi(List<CategoryGroups> CategoryGroups) {
+        if (CategoryGroups.size() == 0) {
+//            mNoData.setVisibility(View.VISIBLE);
+            rv.setEmptyView(findViewById(R.id.tv_nodata));
+        }
         rv.setAdapter(new GroupsAdapter(GroubListActivity.this,CategoryGroups));
         rv.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -101,7 +107,7 @@ public class GroubListActivity extends AppCompatActivity implements GroubView {
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder viewHolder,final int position) {
+        public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
             CategoryGroups categoryGroupItem = mCategoryGroupList.get(position);
 
             viewHolder. mMemberNumberTextView.setText(String.valueOf(categoryGroupItem.MemberCount));
@@ -136,6 +142,10 @@ public class GroubListActivity extends AppCompatActivity implements GroubView {
                         }
                     });
 
+
+                    Glide.with(context)
+                            .load(MainApi.IMAGE_IP + mCategoryGroupList.get(position).Icon).placeholder(R.drawable.ic_profile)
+                            .into(  viewHolder.mIconImageView);
                     // set the layout for the Dialogr
                     dialog.setContentView(root);
                     dialog.show();

@@ -48,6 +48,7 @@ import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 
@@ -293,11 +294,43 @@ public class PostActivity extends AppCompatActivity implements PostView {
                     selectedImageSize = file.length();
                 }
             }else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
-                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+//                Bitmap photo = (Bitmap) data.getExtras().get("data");
                 imageView = (ImageView) findViewById(R.id.iv_post);
-                imageView.setImageBitmap(photo);
+//                selectedImagePath = getPathFromURI(PostActivity.this,data.getData());
+
+
+                // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+                Uri tempUri = getImageUri(getApplicationContext(), imageBitmap);
+
+                // CALL THIS METHOD TO GET THE ACTUAL PATH
+                selectedImagePath = getRealPathFromURI(tempUri);
+
+                imageView.setImageBitmap(imageBitmap);
                 imageView.setVisibility(View.VISIBLE);
             }
+        }
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    public String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
         }
     }
 
@@ -466,8 +499,10 @@ public class PostActivity extends AppCompatActivity implements PostView {
 
     void captureImage() {
         if (checkPermission()){
-            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(cameraIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+//            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//            startActivityForResult(cameraIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+
+            dispatchTakePictureIntent();
         }else {
             requestPermission();
         }

@@ -78,7 +78,7 @@ public class LoginActivity extends Activity implements LoginView, View.OnClickLi
 
     @Override
     public void showErrorDialog(int error) {
-        DialogCreator.showOneButtonDialog(LoginActivity.this, R.string.check_internet, error, null);
+        DialogCreator.showOneButtonDialog(LoginActivity.this, error, "Error", null);
 
     }
 

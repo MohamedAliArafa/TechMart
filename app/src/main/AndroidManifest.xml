@@ -37,9 +37,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="me.iwf.photopicker.PhotoPickerActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
         <activity
             android:name=".ui.screens.login.LoginActivity"
             android:screenOrientation="portrait"
@@ -48,6 +46,7 @@
             android:name=".ui.screens.register.RegisterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
+            android:configChanges="orientation|keyboardHidden"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.screens.home.HomeActivity"

@@ -55,7 +55,7 @@ public class InnerModle implements Parcelable {
         Longitude = longitude;
     }
 
-    public double getLatitude() {
+    public Double getLatitude() {
         return Latitude;
     }
 

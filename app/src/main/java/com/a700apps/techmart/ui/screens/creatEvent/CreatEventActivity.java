@@ -26,6 +26,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -36,7 +37,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.a700apps.techmart.R;
+import com.a700apps.techmart.adapter.OneToneAdapter;
 import com.a700apps.techmart.data.model.InnerModle;
+import com.a700apps.techmart.data.model.MyConnectionList;
 import com.a700apps.techmart.data.model.OneToOneModel;
 import com.a700apps.techmart.data.model.ServerResponse;
 import com.a700apps.techmart.data.model.post;
@@ -45,6 +48,7 @@ import com.a700apps.techmart.ui.screens.meetingone.MeetingonetooneActivity;
 import com.a700apps.techmart.utils.ApiClient;
 import com.a700apps.techmart.utils.AppConst;
 import com.a700apps.techmart.utils.AppUtils;
+import com.a700apps.techmart.utils.EmptyRecyclerView;
 import com.a700apps.techmart.utils.MapDialogActivity;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.a700apps.techmart.utils.URLS;
@@ -53,6 +57,7 @@ import com.borax12.materialdaterangepicker.time.RadialPickerLayout;
 import com.borax12.materialdaterangepicker.time.TimePickerDialog;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Calendar;
@@ -76,7 +81,7 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
     private static final int PICK_LOCATION_REQUEST = 2;
     private static final int PERMISSION_REQUEST_CODE = 786;
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 102;
-    private static final int MY_PERMISSIONS_REQUEST_CAMERA= 101;
+    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 101;
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
 
     public static EventPresenter presenter;
@@ -87,7 +92,7 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
     String date, mStartDate, mEndDate, mStartTime, mEndTime;
     Dialog dialog;
     ImageView imageView;
-    TextView tv_location, tv_upload_image, tv_date;
+    TextView tv_location, tv_upload_image, tv_date, mSelectMeeting;
     int desired_string;
     EditText editTextTitle, editTextDesc;
     InnerModle innerModle;
@@ -96,6 +101,9 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
     private long selectedImageSize;
     private String selectedImagePath, mImagePath;
     Date currentTime;
+    EmptyRecyclerView rv;
+    List<MyConnectionList.ResultEntity> mUserMeetingList;
+    boolean isOpen = false;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String getPathFromURI(final Context context, final Uri uri) {
@@ -224,17 +232,22 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
         mBack = (ImageView) findViewById(R.id.imageView);
         tv_upload_image = (TextView) findViewById(R.id.tv_upload_image);
         tv_location = (TextView) findViewById(R.id.tv_location);
-        tv_date = (TextView) findViewById(R.id.tv_location);
+        tv_date = (TextView) findViewById(R.id.tv_date);
 
         editTextTitle = (EditText) findViewById(R.id.editText2);
         editTextDesc = (EditText) findViewById(R.id.editText4);
         linearLayout_select = (LinearLayout) findViewById(R.id.ll_container);
+        mSelectMeeting = (TextView) findViewById(R.id.tv_select_meeting);
+        presenter.getOneToOne(PreferenceHelper.getUserId(this), desired_string, this);
+        rv = (EmptyRecyclerView) findViewById(R.id.recyclerView3);
+
         mBack.setOnClickListener(this);
         mUploadImageView.setOnClickListener(this);
         mLocationImageView.setOnClickListener(this);
         mDateImageView.setOnClickListener(this);
         mLinearContainer.setOnClickListener(this);
         linearLayout_select.setOnClickListener(this);
+        mSelectMeeting.setOnClickListener(this);
         tv_date.setOnClickListener(this);
 
         linearLayout1.setOnClickListener(this);
@@ -285,16 +298,42 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
     @Override
     public void UpdateUi(post post) {
         dialog.hide();
-//        finish();
+        finish();
 
-        editTextTitle.setText("");
-        editTextDesc.setText("");
-        imageView.setImageResource(android.R.color.transparent);
+//        editTextTitle.setText("");
+//        editTextDesc.setText("");
+//        imageView.setImageResource(android.R.color.transparent);
+    }
+
+    @Override
+    public void update(List<MyConnectionList.ResultEntity> userMeeting) {
+//        if (userMeeting.size() == 0) {
+//            rv.setEmptyView(findViewById(R.id.tv_memeber));
+//
+//        }
+        mUserMeetingList = userMeeting;
+        rv.setAdapter(new OneToneAdapter(this, userMeeting, desired_string, model));
+        rv.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.tv_select_meeting:
+                if (isOpen) {
+                    isOpen = false;
+                    rv.setVisibility(View.GONE);
+                } else {
+                    isOpen = true;
+                    if (mUserMeetingList.size() > 0) {
+                        rv.setVisibility(View.VISIBLE);
+                    } else {
+                        Toast.makeText(CreatEventActivity.this, "There is no data in your connection", Toast.LENGTH_LONG).show();
+                    }
+
+                }
+
+                break;
             case R.id.iv_upload_image:
 //                selectImage();
                 openChooseMethodDialog();
@@ -303,16 +342,18 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
 
 
                 if (editTextTitle.getText().toString().isEmpty()) {
-                    Toast.makeText(CreatEventActivity.this, R.string.select_title, Toast.LENGTH_LONG).show();
+                    editTextTitle.setError(getResources().getString(R.string.select_title));
+
                     return;
                 }
 
                 if (editTextDesc.getText().toString().isEmpty()) {
-                    Toast.makeText(CreatEventActivity.this, R.string.select_title, Toast.LENGTH_LONG).show();
+                    editTextDesc.setError(getResources().getString(R.string.select_Post));
+
                     return;
                 }
 
-                if ((innerModle.getLongitude()) == null) {
+                if ((innerModle.getLongitude() == null) || (innerModle.getLatitude() == null)) {
                     Toast.makeText(CreatEventActivity.this, R.string.select_location, Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -439,15 +480,16 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
 
                 if (title.getText().toString().isEmpty()) {
                     dialog.dismiss();
-                    Toast.makeText(CreatEventActivity.this, R.string.select_title, Toast.LENGTH_LONG).show();
+                    title.setError(getResources().getString(R.string.select_title));
                     return;
                 }
 
                 if (Desc.getText().toString().isEmpty()) {
                     dialog.dismiss();
-                    Toast.makeText(CreatEventActivity.this, R.string.select_title, Toast.LENGTH_LONG).show();
+                    Desc.setError(getResources().getString(R.string.select_Post));
+                    return;
                 }
-                if (Double.isNaN(innerModle.getLongitude()) || Double.isNaN((innerModle.getLatitude()))) {
+                if ((innerModle.getLongitude() == null) || (innerModle.getLatitude() == null)) {
                     dialog.dismiss();
                     Toast.makeText(CreatEventActivity.this, R.string.select_location, Toast.LENGTH_LONG).show();
                     return;
@@ -482,17 +524,17 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
 
                 if (title.getText().toString().isEmpty()) {
                     dialog.dismiss();
-                    Toast.makeText(CreatEventActivity.this, R.string.select_title, Toast.LENGTH_LONG).show();
+                    title.setError(getResources().getString(R.string.select_title));
                     return;
                 }
 
                 if (Desc.getText().toString().isEmpty()) {
                     dialog.dismiss();
-                    Toast.makeText(CreatEventActivity.this, R.string.select_title, Toast.LENGTH_LONG).show();
+                    Desc.setError(getResources().getString(R.string.select_Post));
                     return;
                 }
 
-                if (Double.isNaN(innerModle.getLongitude()) || Double.isNaN((innerModle.getLatitude()))) {
+                if ((innerModle.getLongitude() == null) || (innerModle.getLatitude() == null)) {
                     dialog.dismiss();
                     Toast.makeText(CreatEventActivity.this, R.string.select_location, Toast.LENGTH_LONG).show();
                     return;
@@ -534,18 +576,20 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
         dialog.findViewById(R.id.tv_camera).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                captureImage();
+//                captureImage();
+                dispatchTakePictureIntent();
                 dialog.dismiss();
+
             }
         });
         dialog.show();
     }
 
     void captureImage() {
-        if (checkPermission()){
+        if (checkPermission()) {
             Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(cameraIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
-        }else {
+        } else {
             requestPermission();
         }
     }
@@ -594,11 +638,43 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
                     Log.d("Longitude", innerModle.getLongitude() + "");
                 }
             } else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
-                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+//                Bitmap photo = (Bitmap) data.getExtras().get("data");
                 imageView = (ImageView) findViewById(R.id.iv_post);
-                imageView.setImageBitmap(photo);
+//                selectedImagePath = getPathFromURI(PostActivity.this,data.getData());
+
+
+                // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+                Uri tempUri = getImageUri(getApplicationContext(), imageBitmap);
+
+                // CALL THIS METHOD TO GET THE ACTUAL PATH
+                selectedImagePath = getRealPathFromURI(tempUri);
+
+                imageView.setImageBitmap(imageBitmap);
                 imageView.setVisibility(View.VISIBLE);
             }
+        }
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    public String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
         }
     }
 
@@ -719,10 +795,6 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
                         intentonetoone.putExtra("string_key", desired_string);
                         intentonetoone.putExtra("MyClass", model);
                         startActivity(intentonetoone);
-//                        presenter.sendEvent(innerModle.getLongitude(), innerModle.getLatitude(), getCompleteAddressString(innerModle.getLongitude(), innerModle.getLatitude()), desired_string, PreferenceHelper.getUserId(CreatEventActivity.this),
-//                                title.getText().toString(), Desc.getText().toString(), mStartDate, mEndDate, "", true, mImagePath, "", "", false, CreatEventActivity.this);
-//                        dialog.dismiss();
-
 
                     }
 
@@ -777,12 +849,12 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-        switch (requestCode){
+        switch (requestCode) {
             case CAMERA_CAPTURE_IMAGE_REQUEST_CODE:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     captureImage();
-                } else{
+                } else {
                     Toast.makeText(this, "permission denied", Toast.LENGTH_SHORT).show();
                 }
         }

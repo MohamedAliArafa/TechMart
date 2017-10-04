@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
 
-    <TextView
+    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
         android:id="@+id/tv_dialog_title"
         style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="match_parent"
@@ -16,30 +16,31 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:textColor="@android:color/white"
-        tools:text="Dialog title" />
+        tools:text="Error" />
 
 
-    <TextView
+    <com.a700apps.techmart.utils.CustomTextView
         android:id="@+id/tv_dialog_text"
         style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:textSize="12sp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:textColor="@color/gray_join_dialog"
         tools:text="this is title" />
 
-    <TextView
-        android:id="@+id/tv_dialog_question"
-        style="@style/TextAppearance.AppCompat.Medium"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:textColor="@color/gray_join_dialog"
-        tools:text="this is title" />
+    <!--<TextView-->
+        <!--android:id="@+id/tv_dialog_question"-->
+        <!--style="@style/TextAppearance.AppCompat.Medium"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:paddingLeft="20dp"-->
+        <!--android:paddingRight="20dp"-->
+        <!--android:textColor="@color/gray_join_dialog"-->
+        <!--tools:text="this is title" />-->
 
 
     <LinearLayout
@@ -71,6 +72,7 @@
             android:gravity="center"
             android:padding="5dp"
             android:text="ok"
+            android:textSize="12sp"
             android:textColor="@color/gray_join_dialog" />
     </LinearLayout>
 </LinearLayout>

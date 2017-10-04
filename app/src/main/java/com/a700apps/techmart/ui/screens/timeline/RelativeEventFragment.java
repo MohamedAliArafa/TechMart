@@ -71,7 +71,7 @@ public class RelativeEventFragment extends Fragment implements TimeLineView {
 
     @Override
     public void showErrorDialog(int error) {
-        DialogCreator.showOneButtonDialog(getActivity(), R.string.check_internet, error, null);
+        DialogCreator.showOneButtonDialog(getActivity(), R.string.check_internet, "Error", null);
 
     }
 

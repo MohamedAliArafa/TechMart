@@ -15,7 +15,7 @@
     <dimen name="birthday_text_size">29sp</dimen>
     <dimen name="sign_up_text_size">12sp</dimen>
     <dimen name="greeting_card_text">12sp</dimen>
-    <dimen name="post_card_text">1sp</dimen>
+    <dimen name="post_card_text">16sp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
@@ -153,7 +153,7 @@
 
     <!--change password seperator-->
     <integer name="change_password_password_max_character">60</integer>
-    <dimen name="change_password_seperator_height">1dp</dimen>
+    <dimen name="change_password_seperator_height">.5dp</dimen>
     <dimen name="change_password_seperator_margin_top">10dp</dimen>
     <dimen name="change_password_container_padding">8dp</dimen>
     <dimen name="change_password_new_password_container_margin">20dp</dimen>
@@ -500,5 +500,6 @@
     <dimen name="item_post_image_width">110dp</dimen>
     <dimen name="item_post_image_height">80dp</dimen>
     <dimen name="item_height">115dp</dimen>
+    <dimen name="login_linear_height">110dp</dimen>
 
 </resources>

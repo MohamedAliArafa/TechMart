@@ -126,9 +126,7 @@ public class MeetingonetooneActivity extends AppCompatActivity implements Meetin
             viewHolder.  mContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                   sendEvent(innerModle.getLongitude(), innerModle.getLatitude(), getCompleteAddressString(innerModle.getLongitude(), innerModle.getLatitude()), desired_string, PreferenceHelper.getUserId(CreatEventActivity.this),
-//                                title.getText().toString(), Desc.getText().toString(), mStartDate, mEndDate, "", true, mImagePath, "", "", false, CreatEventActivity.this);
-////
+
                     getLike(mModel,timeLineItem);
                 }
             });

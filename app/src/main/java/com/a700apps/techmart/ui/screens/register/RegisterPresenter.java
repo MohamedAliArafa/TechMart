@@ -1,12 +1,9 @@
 package com.a700apps.techmart.ui.screens.register;
 
+import android.app.Dialog;
 import android.content.Context;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
-import android.view.View;
 
 import com.a700apps.techmart.R;
-import com.a700apps.techmart.TechMartApp;
 import com.a700apps.techmart.data.model.User;
 import com.a700apps.techmart.data.model.UserData;
 import com.a700apps.techmart.data.network.MainApi;
@@ -17,7 +14,7 @@ import com.a700apps.techmart.ui.MainPresenter;
 import com.a700apps.techmart.utils.ATCPrefManager;
 import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.PreferenceHelper;
-import com.a700apps.techmart.utils.Validator;
+import com.a700apps.techmart.utils.loadingDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,12 +24,14 @@ import org.json.JSONObject;
  */
 
 public class RegisterPresenter extends MainPresenter<RegisterView> {
-Context mContext;
+    Context mContext;
 
     void register(String fullName, String password, String email, String mobile, String photo, String company, String position, Context context) {
 
         mContext = context;
-        view.showLoadingProgress();
+//        view.showLoadingProgress();
+        final Dialog dialogsLoading = new loadingDialog().showDialog(context);
+
 
         String deviceId = AppUtils.getDeviceId();
         String firebaseToken = AppUtils.getFirebaseToken();
@@ -43,27 +42,31 @@ Context mContext;
                 @Override
                 public void networkOperationSuccess(NetworkResponse<UserData> networkResponse) {
                     if (isDetachView()) return;
-                    view.dismissLoadingProgress();
+//                    view.dismissLoadingProgress();
+                    dialogsLoading.dismiss();
                     UserData userNetworkData = (UserData) networkResponse.data;
                     int errorCode = userNetworkData.ISResultHasData;
-
-                    saveUserData(userNetworkData.user);
-                    ATCPrefManager.setIsUserLoggedIn(mContext, true);
                     if (errorCode == 1) {
+                        saveUserData(userNetworkData.user);
+                        ATCPrefManager.setIsUserLoggedIn(mContext, true);
                         view.openCouncilActivity();
+                    } else {
+                        networkOperationFail(new Throwable("This email is already Taken"));
                     }
                 }
 
                 @Override
                 public void networkOperationFail(Throwable throwable) {
-                    view.dismissLoadingProgress();
-                    view.showErrorDialog(R.string.check_internet);
+//                    view.dismissLoadingProgress();
+                    dialogsLoading.dismiss();
+                    view.showErrorDialog(R.string.email_exist);
 
                 }
             });
         } catch (JSONException e) {
             e.printStackTrace();
-            view.dismissLoadingProgress();
+//            view.dismissLoadingProgress();
+            dialogsLoading.dismiss();
         }
 
     }
@@ -75,10 +78,8 @@ Context mContext;
     }
 
 
-
-
-    void registerLinkedin(String fullName, String email,String LinkedinId,String company,
-                          String position,String photo, Context context) {
+    void registerLinkedin(String fullName, String email, String LinkedinId, String company,
+                          String position, String photo, Context context) {
 
         mContext = context;
         view.showLoadingProgress();
@@ -86,9 +87,9 @@ Context mContext;
         String deviceId = AppUtils.getDeviceId();
         String firebaseToken = AppUtils.getFirebaseToken();
         try {
-            JSONObject registerBody = MainApiHelper.createRegisterLinked( fullName,  email, LinkedinId,company,
-                     position,
-                     deviceId,  firebaseToken, photo);
+            JSONObject registerBody = MainApiHelper.createRegisterLinked(fullName, email, LinkedinId, company,
+                    position,
+                    deviceId, firebaseToken, photo);
             MainApi.registerLinkedUser(registerBody, new NetworkResponseListener<UserData>() {
                 @Override
                 public void networkOperationSuccess(NetworkResponse<UserData> networkResponse) {
@@ -102,7 +103,7 @@ Context mContext;
                         saveUserData(userNetworkData.user);
                         ATCPrefManager.setIsUserLoggedIn(mContext, true);
                         view.openCouncilActivity();
-                    }else {
+                    } else {
                         view.showErrorDialog(R.string.error_happened_login);
                     }
                 }

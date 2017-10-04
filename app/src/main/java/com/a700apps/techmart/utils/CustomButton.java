@@ -15,19 +15,19 @@ public class CustomButton extends android.support.v7.widget.AppCompatButton{
     public CustomButton(Context context) {
         super(context);
 
-        Typeface face=Typeface.createFromAsset(context.getAssets(), "fonts/" +"dax-bold-59784f71222f0.ttf");
+        Typeface face=Typeface.createFromAsset(context.getAssets(), "fonts/" +"dax-light-5978520ee6c5f.otf");
         this.setTypeface(face);
     }
 
     public CustomButton(Context context, AttributeSet attrs) {
         super(context, attrs);
-        Typeface face=Typeface.createFromAsset(context.getAssets(), "fonts/" +"dax-bold-59784f71222f0.ttf");
+        Typeface face=Typeface.createFromAsset(context.getAssets(), "fonts/" +"dax-light-5978520ee6c5f.otf");
         this.setTypeface(face);
     }
 
     public CustomButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        Typeface face=Typeface.createFromAsset(context.getAssets(),"fonts/" +"dax-bold-59784f71222f0.ttf");
+        Typeface face=Typeface.createFromAsset(context.getAssets(),"fonts/" +"dax-light-5978520ee6c5f.otf");
         this.setTypeface(face);
     }
 

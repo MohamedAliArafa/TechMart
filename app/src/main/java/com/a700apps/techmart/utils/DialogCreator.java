@@ -15,7 +15,7 @@ public class DialogCreator {
 
 
 
-    public static void showOneButtonDialog(Context context, int tittle, int text,
+    public static void showOneButtonDialog(Context context, int tittle, String text,
                                            AppDialog.RightButtonClickListener buttonClickListener) {
         AppDialog.SmallDialog dialog = new AppDialog.SmallDialog(context);
         dialog.dialogTitle(tittle);
@@ -33,15 +33,16 @@ public class DialogCreator {
     }
 
 
-    public static void showTwoButtonDialog(Context context, int tittle, int text,
+    public static void showTwoButtonDialog(Context context, int tittle, String text,
                                            AppDialog.RightButtonClickListener buttonClickListener,
                                            AppDialog.LeftButtonClickListener leftButtonClickListener) {
         AppDialog.SmallDialog dialog = new AppDialog.SmallDialog(context);
         dialog.dialogTitle(tittle);
+        dialog.dialogText(text);
         dialog.showLeftButton(true);
         dialog.showEditText(false);
         dialog.showQuestion(true);
-        dialog.dialogQuestion(text);
+//        dialog.dialogQuestion(text);
         if (buttonClickListener != null) {
             dialog.rightButtonClickListener(buttonClickListener);
         }
