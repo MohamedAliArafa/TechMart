@@ -113,7 +113,9 @@ public class GroubListActivity extends AppCompatActivity implements GroubView {
             viewHolder. mMemberNumberTextView.setText(String.valueOf(categoryGroupItem.MemberCount));
             viewHolder. mCreationDateTextView.setText(categoryGroupItem.CreationDate);
             viewHolder. mNameTextView.setText(categoryGroupItem.Name);
-
+            Glide.with(context)
+                    .load(MainApi.IMAGE_IP + mCategoryGroupList.get(position).Icon).placeholder(R.drawable.ic_box_logo)
+                    .into(  viewHolder.mIconImageView);
             Button enrollBtn = (Button) viewHolder.itemView.findViewById(R.id.button);
             enrollBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -126,6 +128,7 @@ public class GroubListActivity extends AppCompatActivity implements GroubView {
                     View root = inflater.inflate(R.layout.group_join_dialog, null);
                     LinearLayout indLinear = (LinearLayout) root.findViewById(R.id.lin_board);
                     LinearLayout individualLinear = (LinearLayout) root.findViewById(R.id.lin_individual);
+                    ImageView close = root.findViewById(R.id.imageView8);
                     indLinear.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -133,7 +136,12 @@ public class GroubListActivity extends AppCompatActivity implements GroubView {
                             dialog.dismiss();
                         }
                     });
-
+                    close.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
+                        }
+                    });
                     individualLinear.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -142,10 +150,6 @@ public class GroubListActivity extends AppCompatActivity implements GroubView {
                         }
                     });
 
-
-                    Glide.with(context)
-                            .load(MainApi.IMAGE_IP + mCategoryGroupList.get(position).Icon).placeholder(R.drawable.ic_profile)
-                            .into(  viewHolder.mIconImageView);
                     // set the layout for the Dialogr
                     dialog.setContentView(root);
                     dialog.show();

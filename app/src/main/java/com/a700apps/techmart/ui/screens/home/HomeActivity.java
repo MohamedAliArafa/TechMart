@@ -318,15 +318,14 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
 
                 break;
 
-            case R.drawable.ic_my_group:
+            case R.drawable.ic_group:
 //                addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, new JoinGroupFragment(), false
 //                        , true);
                 openFragment(JoinGroupFragment.class, null);
 
 
                 break;
-            case R.drawable.ic_group:
-
+            case R.drawable.ic_my_group:
 //                addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, new MyGroupFragment(), false
 //                        , true);
                 openFragment(MyGroupsListFragment.class, null);

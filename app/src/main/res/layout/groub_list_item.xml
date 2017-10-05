@@ -9,10 +9,11 @@
 
     <ImageView
         android:id="@+id/iv_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="90dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_box_logo"
         app:layout_constraintVertical_bias="0.0" />
@@ -36,7 +37,7 @@
             android:layout_height="wrap_content"
             android:text="@string/member"
             android:textColor="@android:color/white"
-            android:textSize="14sp" />
+            android:textSize="9sp" />
 
         <TextView
             android:id="@+id/tv_member_number"
@@ -103,7 +104,7 @@
             android:layout_gravity="center_horizontal"
             android:text="Enrol as"
             android:textColor="@android:color/white"
-            android:textSize="12sp"/>
+            android:textSize="9sp"/>
 
         <Button
             android:id="@+id/button"

@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by samir salah on 9/11/2017.
  */
 
-public class UserGroup {
+public class UserGroup{
 
     @SerializedName("ID")
     @Expose
