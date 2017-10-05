@@ -49,6 +49,7 @@ import com.a700apps.techmart.utils.ApiClient;
 import com.a700apps.techmart.utils.AppConst;
 import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
+import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.MapDialogActivity;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.a700apps.techmart.utils.URLS;
@@ -76,7 +77,8 @@ import retrofit2.Response;
  * Created by samir salah on 9/13/2017.
  */
 
-public class CreatEventActivity extends AppCompatActivity implements EventView, View.OnClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class CreatEventActivity extends AppCompatActivity implements
+        EventView, View.OnClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener , OneToneAdapter.onUserSelected {
     private static final int SELECT_PICTURE = 1;
     private static final int PICK_LOCATION_REQUEST = 2;
     private static final int PERMISSION_REQUEST_CODE = 786;
@@ -250,7 +252,7 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
         mSelectMeeting.setOnClickListener(this);
         tv_date.setOnClickListener(this);
 
-        linearLayout1.setOnClickListener(this);
+//        linearLayout1.setOnClickListener(this);
 
         tv_location.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -297,12 +299,13 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
 
     @Override
     public void UpdateUi(post post) {
-        dialog.hide();
-        finish();
+        if (dialog!=null){
+            dialog.hide();
+        }
 
-//        editTextTitle.setText("");
-//        editTextDesc.setText("");
-//        imageView.setImageResource(android.R.color.transparent);
+        Globals.mIndex= 2;
+        Globals.oneToOneId = null;
+        finish();
     }
 
     @Override
@@ -398,7 +401,48 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
                 finish();
                 break;
             case R.id.ll_comment_container:
-                openDialog(editTextTitle, editTextDesc);
+                if (Globals.oneToOneId==null){
+                    openDialog(editTextTitle, editTextDesc);
+                }else {
+
+                    if (editTextTitle.getText().toString().isEmpty()) {
+//                        dialog.dismiss();
+                        editTextTitle.setError(getResources().getString(R.string.select_title));
+                        return;
+                    }
+
+                    if (editTextDesc.getText().toString().isEmpty()) {
+//                        dialog.dismiss();
+                        editTextDesc.setError(getResources().getString(R.string.select_Post));
+                        return;
+                    }
+                    if ((innerModle.getLongitude() == null) || (innerModle.getLatitude() == null)) {
+//                        dialog.dismiss();
+                        Toast.makeText(CreatEventActivity.this, R.string.select_location, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    if (selectedImagePath == null) {
+//                        dialog.dismiss();
+                        Toast.makeText(CreatEventActivity.this, R.string.not_image, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if (mStartDate == null || mEndDate == null) {
+                        Toast.makeText(CreatEventActivity.this, R.string.select_date, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    uploadFileOnetoOne(editTextTitle , editTextDesc);
+//                    presenter.sendEvent(mStartTime, mEndTime, innerModle.getLongitude(),
+//                            innerModle.getLatitude(),
+//                            getCompleteAddressString(innerModle.getLongitude(),innerModle.getLatitude()),
+//                            desired_string,
+//                            PreferenceHelper.getUserId(CreatEventActivity.this),
+//                            editTextTitle.getText().toString()
+//                            , editTextDesc.getText().toString(),
+//                            mStartDate, mEndDate,
+//                            Globals.oneToOneId, true, mImagePath, "", String.valueOf(currentTime), false, CreatEventActivity.this);
+                }
                 break;
             case R.id.tv_date:
                 Calendar now = Calendar.getInstance();
@@ -775,26 +819,34 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
                 if (serverResponse != null) {
                     if (serverResponse.postData.success) {
                         mImagePath = serverResponse.postData.message;
+                        presenter.sendEvent(mStartTime, mEndTime, innerModle.getLongitude(),
+                                innerModle.getLatitude(),
+                                getCompleteAddressString(innerModle.getLongitude(),innerModle.getLatitude()),
+                                desired_string,
+                                PreferenceHelper.getUserId(CreatEventActivity.this),
+                                editTextTitle.getText().toString()
+                                , editTextDesc.getText().toString(),
+                                mStartDate, mEndDate,
+                                Globals.oneToOneId, true, mImagePath, "", String.valueOf(currentTime), false, CreatEventActivity.this);
 
-
-                        model = new OneToOneModel();
-                        model.setLongtud(innerModle.getLongitude());
-                        model.setLatitude(innerModle.getLatitude());
-                        model.setGroupId(desired_string);
-                        model.setCreatedby(PreferenceHelper.getUserId(CreatEventActivity.this));
-                        model.setTitle(title.getText().toString());
-                        model.setDescr(Desc.getText().toString());
-                        model.setStartDate(mStartDate);
-                        model.setEndDate(mEndDate);
-                        model.setImage(mImagePath);
-                        model.setCreationDate(String.valueOf(currentTime));
-                        model.setStartTime(mStartTime);
-                        model.setEndTime(mEndTime);
-
-                        Intent intentonetoone = new Intent(CreatEventActivity.this, MeetingonetooneActivity.class);
-                        intentonetoone.putExtra("string_key", desired_string);
-                        intentonetoone.putExtra("MyClass", model);
-                        startActivity(intentonetoone);
+//                        model = new OneToOneModel();
+//                        model.setLongtud(innerModle.getLongitude());
+//                        model.setLatitude(innerModle.getLatitude());
+//                        model.setGroupId(desired_string);
+//                        model.setCreatedby(PreferenceHelper.getUserId(CreatEventActivity.this));
+//                        model.setTitle(title.getText().toString());
+//                        model.setDescr(Desc.getText().toString());
+//                        model.setStartDate(mStartDate);
+//                        model.setEndDate(mEndDate);
+//                        model.setImage(mImagePath);
+//                        model.setCreationDate(String.valueOf(currentTime));
+//                        model.setStartTime(mStartTime);
+//                        model.setEndTime(mEndTime);
+//
+//                        Intent intentonetoone = new Intent(CreatEventActivity.this, MeetingonetooneActivity.class);
+//                        intentonetoone.putExtra("string_key", desired_string);
+//                        intentonetoone.putExtra("MyClass", model);
+//                        startActivity(intentonetoone);
 
                     }
 
@@ -859,5 +911,22 @@ public class CreatEventActivity extends AppCompatActivity implements EventView, 
                 }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void onSelectUser(String userId, String username) {
+        mSelectMeeting.setText(username);
+        if (isOpen) {
+            isOpen = false;
+            rv.setVisibility(View.GONE);
+        } else {
+            isOpen = true;
+            if (mUserMeetingList.size() > 0) {
+                rv.setVisibility(View.VISIBLE);
+            } else {
+                Toast.makeText(CreatEventActivity.this, "There is no data in your connection", Toast.LENGTH_LONG).show();
+            }
+
+        }
     }
 }

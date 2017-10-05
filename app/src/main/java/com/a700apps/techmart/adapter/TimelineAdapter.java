@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import android.provider.CalendarContract;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +21,10 @@ import com.a700apps.techmart.data.network.MainApiHelper;
 import com.a700apps.techmart.data.network.NetworkResponse;
 import com.a700apps.techmart.data.network.NetworkResponseListener;
 import com.a700apps.techmart.ui.screens.comment.CommentActivity;
-import com.a700apps.techmart.ui.screens.groupmemberdetails.GroupActivity;
-import com.a700apps.techmart.ui.screens.grouptimeline.GroupsTimLineActivity;
-import com.a700apps.techmart.ui.screens.message.ChatActivity;
-import com.a700apps.techmart.ui.screens.mygroup.MyGroubListActivity;
-import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
+import com.a700apps.techmart.ui.screens.home.HomeActivity;
+import com.a700apps.techmart.ui.screens.mygroup.MyGroupsListFragment;
 import com.a700apps.techmart.ui.screens.profile.MemberProfile;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
-import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
 
@@ -111,16 +106,16 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         context.startActivity(sendIntent);
                     }
                 });
-                   viewHolderEvent.tv_share.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
-                    sendIntent.setType("text/plain");
-                    context.startActivity(sendIntent);
-                }
-            });
+                viewHolderEvent.tv_share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                        sendIntent.setType("text/plain");
+                        context.startActivity(sendIntent);
+                    }
+                });
 
                 viewHolderEvent.addCalenderBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -139,7 +134,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                 });
 
-                viewHolderEvent. tv_add_calender.setOnClickListener(new View.OnClickListener() {
+                viewHolderEvent.tv_add_calender.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Calendar cal = Calendar.getInstance();
@@ -183,14 +178,19 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 viewHolderPost.mPostedByTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ActivityUtils.openActivity(context, EditProfileActivity.class, false);
+//                        ActivityUtils.openActivity(context, EditProfileActivity.class, false);
+                        Intent intent = new Intent(context, MemberProfile.class);
+                        intent.putExtra("RelativId", String.valueOf(timeLineItem.getCreatedBY()));
+                        intent.putExtra("GroupId", timeLineItem.getGroupID());
+                        context.startActivity(intent);
                     }
                 });
 
                 viewHolderPost.mGroupNameTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ActivityUtils.openActivity(context, MyGroubListActivity.class, false);
+//                        ActivityUtils.openActivity(context, MyGroubListActivity.class, false);
+                        ((HomeActivity) context).addFragmentToBackStack(((HomeActivity) context).getSupportFragmentManager(), R.id.fragment_container, new MyGroupsListFragment(), false, false);
 
                     }
                 });
@@ -346,8 +346,9 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView mEventImageView, shareBtn, addCalenderBtn;
-        TextView mTitleTextView, mDescribtionTextView, mDateTextView, mGroupNameTextView,tv_share,tv_add_calender;
+        TextView mTitleTextView, mDescribtionTextView, mDateTextView, mGroupNameTextView, tv_share, tv_add_calender;
         RelativeLayout contain;
+
         public ViewHolder(View itemView) {
             super(itemView);
             contain = (RelativeLayout) itemView.findViewById(R.id.contain);

@@ -18,4 +18,13 @@ public class Globals {
 
     public static int SELECTED_ID = -1;
 
+    public static int mIndex = -1;
+
+
+
+    public static String oneToOneId = null;
+    public static String onrToOneName = "";
+
+
+
 }

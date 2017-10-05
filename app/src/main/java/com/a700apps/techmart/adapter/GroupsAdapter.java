@@ -21,6 +21,7 @@ import com.a700apps.techmart.ui.screens.mygroup.MyGroubListActivity;
 import com.a700apps.techmart.ui.screens.mygroup.MyGroupFragment;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.Globals;
 import com.bumptech.glide.Glide;
 
@@ -53,7 +54,8 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
     public void onBindViewHolder(GroupsAdapter.ViewHolder viewHolder, int position) {
         UserGroup mUserGroupItem = mUserGroupList.get(position);
         viewHolder.mNameTextView.setText(mUserGroupItem.Name);
-        viewHolder.mCreateDate.setText(mUserGroupItem.CreationDate);
+
+        viewHolder.mCreateDate.setText(  String.valueOf(AppUtils.getDate(mUserGroupItem.CreationDate)));
         viewHolder.mNameTextView.setText(mUserGroupItem.Name);
         viewHolder.mNumber.setText(String.valueOf(mUserGroupItem.MemberCount));
         Glide.with(context)

@@ -32,7 +32,7 @@
             android:paddingRight="@dimen/events_text_container_padding"
             android:paddingTop="@dimen/events_text_container_padding">
 
-            <TextView
+            <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_events"
                 style="@style/ParallaxTextStyle"
                 android:layout_width="100dp"
@@ -53,7 +53,7 @@
                 android:orientation="horizontal"
                 android:weightSum="100">
 
-                <TextView
+                <com.a700apps.techmart.utils.CustomTextView
                     android:id="@+id/tv_events_title"
                     style="@style/ParallaxTextStyle"
                     android:layout_width="0dp"
@@ -208,17 +208,16 @@
         android:id="@+id/lin_category"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/fragment_container"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:weightSum="100">
 
 
-        <TextView
-            android:id="@+id/tv_event_title"
+        <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+            android:id="@+id/tv_event_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
             android:layout_marginLeft="24dp"
             android:background="@color/blue_join_dialog"
             android:gravity="center"
@@ -227,19 +226,19 @@
 
         <TextView
             android:id="@+id/tv_"
-            android:layout_width="4dp"
-            android:layout_height="wrap_content"
+            android:layout_width="3dp"
+            android:layout_height="20dp"
             android:background="@color/red_join_dialog"
             android:gravity="center"
             android:textColor="@color/button_light_text" />
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_events_desc"
+    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+        android:id="@+id/tv_event_title"
         style="@style/ParallaxTextStyle"
         android:layout_width="match_parent"
-        android:layout_height="210dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/lin_category"
         android:layout_marginBottom="@dimen/events_title_margin"
         android:layout_marginLeft="24dp"
@@ -247,8 +246,21 @@
         android:alpha=".3"
         android:ellipsize="end"
         android:maxLines="@integer/events_max_lines"
-        android:textColor="@color/background_color"
-        android:textSize="@dimen/main_dark_text" />
+        android:textColor="@color/light_color_text"
+        android:textSize="@dimen/post_card_text" />
+
+    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+        android:id="@+id/tv_events_desc"
+        style="@style/ParallaxTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:layout_below="@+id/tv_event_title"
+        android:layout_marginBottom="@dimen/events_title_margin"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:ellipsize="end"
+        android:textColor="@color/light_color_text"
+        android:textSize="@dimen/main_light_text" />
 
 
     <LinearLayout
@@ -280,7 +292,7 @@
                 tools:layout_editor_absoluteX="106dp"
                 tools:layout_editor_absoluteY="106dp" />
 
-            <TextView
+            <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
                 android:id="@+id/tv_like"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -302,7 +314,7 @@
                 tools:layout_editor_absoluteX="224dp"
                 tools:layout_editor_absoluteY="106dp" />
 
-            <TextView
+            <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
                 android:id="@+id/tv_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -323,7 +335,7 @@
                 tools:layout_editor_absoluteX="303dp"
                 tools:layout_editor_absoluteY="106dp" />
 
-            <TextView
+            <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
                 android:id="@+id/tv_share"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -358,7 +370,7 @@
             android:layout_margin="10dp"
             android:orientation="vertical">
 
-            <TextView
+            <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -474,7 +486,7 @@
         android:gravity="right"
         android:orientation="horizontal">
 
-        <TextView
+        <com.a700apps.techmart.utils.CustomTextView
             android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
@@ -485,7 +497,7 @@
             android:textColor="@color/blackGreenColor"
             android:textSize="14sp" />
 
-        <TextView
+        <com.a700apps.techmart.utils.CustomTextView
             android:id="@+id/next"
             android:layout_width="wrap_content"
             android:layout_height="30dp"

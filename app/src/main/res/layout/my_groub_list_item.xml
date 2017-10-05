@@ -51,7 +51,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/iv_group"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/button"
+        app:layout_constraintRight_toLeftOf="@+id/view_detail_btn"
         android:layout_marginRight="8dp">
 
         <TextView

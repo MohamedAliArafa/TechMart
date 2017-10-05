@@ -2,46 +2,29 @@ package com.a700apps.techmart.ui.screens.grouptimeline;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.GroupViewPagerAdapter;
-import com.a700apps.techmart.adapter.ViewPagerAdapter;
-import com.a700apps.techmart.data.model.GroupTimeLine;
 import com.a700apps.techmart.data.model.GroupTimeLineData;
-import com.a700apps.techmart.ui.screens.groupmemberdetails.GroupActivity;
 import com.a700apps.techmart.ui.screens.groupmemberdetails.GroupFragment;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.mygroup.GroupPagerFragment;
-import com.a700apps.techmart.ui.screens.mygroup.MyGroubListActivity;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
-import com.a700apps.techmart.ui.screens.timeline.EventFragment;
 import com.a700apps.techmart.ui.screens.timeline.GroupTimeLineFragment;
-import com.a700apps.techmart.ui.screens.timeline.PostsFragment;
-import com.a700apps.techmart.ui.screens.timeline.TimeLineMainFragment;
-import com.a700apps.techmart.ui.screens.timeline.TimeLinePresenter;
-import com.a700apps.techmart.ui.screens.timeline.TimelineFragment;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -50,12 +33,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.a700apps.techmart.R;
-
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GroupsTimeLineFragment extends Fragment implements View.OnClickListener , GroupTimlineView{
+public class GroupsTimeLineFragment extends Fragment implements View.OnClickListener, GroupTimlineView {
 
     ImageView imageView4;
     ImageView mProfileImageView, mNotificationImageView;
@@ -75,7 +56,6 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
     int intValue;
 
 
-
     void init(View view) {
         mPager = (ViewPager) view.findViewById(R.id.pager);
         indicator = (CirclePageIndicator)
@@ -83,29 +63,35 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
     }
 
     void getExtra() {
-        Bundle bundle= getArguments();
-        intValue = bundle.getInt("selectedCategory",0);
+        Bundle bundle = getArguments();
+        intValue = bundle.getInt("selectedCategory", 0);
 
 //        String.valueOf(intValue)
 //        presenter.getGroupCategory(String.valueOf(intValue), "1f443dc9-43f7-4f92-9e3f-76805cd0823c");
-        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()),intValue, "0");
+        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), intValue, "0");
 
     }
-    
+
     public GroupsTimeLineFragment() {
         // Required empty public constructor
     }
 
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Globals.mIndex = -1;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_groups_timeline, container, false);
+        View view = inflater.inflate(R.layout.fragment_groups_timeline, container, false);
         presenter = new GroupTimeLinePresenter();
         presenter.attachView(this);
         init(view);
-        indicatorView= (AVLoadingIndicatorView) view.findViewById(R.id.avi);
+        indicatorView = (AVLoadingIndicatorView) view.findViewById(R.id.avi);
         getExtra();
 
         // Set up the ViewPager with the sections adapter.
@@ -138,8 +124,8 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
 //                    startActivity(intent);
 
                     Bundle bundle = new Bundle();
-                    bundle.putInt("string_key" , intValue);
-                    ((HomeActivity)getActivity()).openFragment(GroupFragment.class , bundle);
+                    bundle.putInt("string_key", intValue);
+                    ((HomeActivity) getActivity()).openFragment(GroupFragment.class, bundle);
 //                    ActivityUtils.openActivity(getActivity(), GroupActivity.class, false);
                 }
             }
@@ -174,12 +160,12 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
             @Override
             public void onClick(View v) {
 //                ActivityUtils.openActivity(getActivity(), HomeActivity.class, true);
-                ((HomeActivity)getActivity()).openDrawer();
+                ((HomeActivity) getActivity()).openDrawer();
 
             }
         });
 //
-        
+
         return view;
     }
 
@@ -266,6 +252,14 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Globals.mIndex != -1)
+            mViewPager.setCurrentItem(Globals.mIndex);
+    }
+
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -277,7 +271,6 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
         }
 
 
-
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
@@ -286,25 +279,25 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
                 case 0:
 //                    return new TimeLineMainFragment();
 
-                    GroupTimelineFragment gouprTimeline =new GroupTimelineFragment();
+                    GroupTimelineFragment gouprTimeline = new GroupTimelineFragment();
                     Bundle argumentsgroup = new Bundle();
-                    argumentsgroup.putInt( "string_key" , intValue);
+                    argumentsgroup.putInt("string_key", intValue);
                     gouprTimeline.setArguments(argumentsgroup);
                     return gouprTimeline;
 
                 case 1:
 //                    setupGroupPost();
-                    GroupPostFragment POST =new GroupPostFragment();
+                    GroupPostFragment POST = new GroupPostFragment();
                     Bundle arguments = new Bundle();
-                    arguments.putInt( "string_key" , intValue);
+                    arguments.putInt("string_key", intValue);
                     POST.setArguments(arguments);
                     return POST;
 //                    addFragment(arguments, new GroupPostFragment());
                 case 2:
 //                    setupGroupEvent();
-                    GroupEventFragment Event =new GroupEventFragment();
+                    GroupEventFragment Event = new GroupEventFragment();
                     Bundle argumentsEvent = new Bundle();
-                    argumentsEvent.putInt( "string_key" , intValue);
+                    argumentsEvent.putInt("string_key", intValue);
                     Event.setArguments(argumentsEvent);
                     return Event;
 
@@ -341,7 +334,7 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
     protected void addFragment(Bundle bundle, Fragment fragment) {
         //get the transaction
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        if(bundle != null)
+        if (bundle != null)
             fragment.setArguments(bundle);
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
@@ -352,8 +345,6 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
 
 ///////////////////////////////
 
-
-    
 
 //    @Override
 //    public void onBackPressed() {

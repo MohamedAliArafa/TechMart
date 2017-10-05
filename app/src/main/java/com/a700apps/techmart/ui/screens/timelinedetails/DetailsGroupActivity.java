@@ -25,6 +25,8 @@ import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.CustomTextView;
+import com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -71,11 +73,11 @@ public class DetailsGroupActivity extends AppCompatActivity implements View.OnCl
         mProfileImageView = (ImageView) findViewById(R.id.new_message);
         iv_slider = (ImageView) findViewById(R.id.iv_slider);
         mNotificationImageView = (ImageView) findViewById(R.id.new_profile);
-        next = (TextView) findViewById(R.id.next);
-        back = (TextView) findViewById(R.id.back);
-        tv_comment = (TextView) findViewById(R.id.tv_comment);
-        tv_share = (TextView) findViewById(R.id.tv_share);
-        tv_like = (TextView) findViewById(R.id.tv_like);
+        next = (CustomTextView) findViewById(R.id.next);
+        back = (CustomTextView) findViewById(R.id.back);
+        tv_comment = (CustomLightTextView) findViewById(R.id.tv_comment);
+        tv_share = (CustomLightTextView) findViewById(R.id.tv_share);
+        tv_like = (CustomLightTextView) findViewById(R.id.tv_like);
         tv_going = (TextView) findViewById(R.id.textView53);
 
         imageView4 = (ImageView) findViewById(R.id.imageView4);
@@ -115,10 +117,10 @@ public class DetailsGroupActivity extends AppCompatActivity implements View.OnCl
             }
         });
 
-        mTitle = (TextView) findViewById(R.id.tv_event_title);
-        mDescTextView = (TextView) findViewById(R.id.tv_events_desc);
-        mSlideTitle = (TextView) findViewById(R.id.tv_events_title);
-        mSlidertype = (TextView) findViewById(R.id.tv_events);
+        mTitle = (CustomLightTextView) findViewById(R.id.tv_event_title);
+        mDescTextView = (CustomLightTextView) findViewById(R.id.tv_events_desc);
+        mSlideTitle = (CustomTextView) findViewById(R.id.tv_events_title);
+        mSlidertype = (CustomTextView) findViewById(R.id.tv_events);
 
         mLikeLinearContainer = (LinearLayout) findViewById(R.id.container);
         mEventLinearContainer = (LinearLayout) findViewById(R.id.container_event);
@@ -179,7 +181,7 @@ public class DetailsGroupActivity extends AppCompatActivity implements View.OnCl
             public void onClick(View view) {
                 if (index <= mList.size()) {
                     finish();
-                    Intent intent = new Intent(DetailsGroupActivity.this, DetailsActivity.class);
+                    Intent intent = new Intent(DetailsGroupActivity.this, DetailsGroupActivity.class);
                     intent.putExtra("Type", Type);
                     intent.putExtra("Index", index + 1);
                     intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mList);
@@ -195,7 +197,7 @@ public class DetailsGroupActivity extends AppCompatActivity implements View.OnCl
             public void onClick(View view) {
                 if (index > 0) {
                     finish();
-                    Intent intent = new Intent(DetailsGroupActivity.this, DetailsActivity.class);
+                    Intent intent = new Intent(DetailsGroupActivity.this, DetailsGroupActivity.class);
                     intent.putExtra("Type", Type);
                     intent.putExtra("Index", index - 1);
                     intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mList);

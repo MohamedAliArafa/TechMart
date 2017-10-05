@@ -29,6 +29,7 @@ import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.mygroup.MyGroubListActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.AppConst;
+import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
@@ -111,8 +112,11 @@ public class GroubListActivity extends AppCompatActivity implements GroubView {
             CategoryGroups categoryGroupItem = mCategoryGroupList.get(position);
 
             viewHolder. mMemberNumberTextView.setText(String.valueOf(categoryGroupItem.MemberCount));
-            viewHolder. mCreationDateTextView.setText(categoryGroupItem.CreationDate);
+            viewHolder. mCreationDateTextView.setText(String.valueOf(AppUtils.getDate(categoryGroupItem.CreationDate)));
             viewHolder. mNameTextView.setText(categoryGroupItem.Name);
+            Glide.with(context)
+                    .load(MainApi.IMAGE_IP + mCategoryGroupList.get(position).Icon).placeholder(R.drawable.ic_profile)
+                    .into(  viewHolder.mIconImageView);
 
             Button enrollBtn = (Button) viewHolder.itemView.findViewById(R.id.button);
             enrollBtn.setOnClickListener(new View.OnClickListener() {
@@ -143,9 +147,7 @@ public class GroubListActivity extends AppCompatActivity implements GroubView {
                     });
 
 
-                    Glide.with(context)
-                            .load(MainApi.IMAGE_IP + mCategoryGroupList.get(position).Icon).placeholder(R.drawable.ic_profile)
-                            .into(  viewHolder.mIconImageView);
+
                     // set the layout for the Dialogr
                     dialog.setContentView(root);
                     dialog.show();

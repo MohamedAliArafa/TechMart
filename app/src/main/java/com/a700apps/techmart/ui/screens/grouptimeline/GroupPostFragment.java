@@ -76,6 +76,13 @@ public class GroupPostFragment extends Fragment implements GroupTimlineView {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), desired_string, "2");
+
+    }
+
+    @Override
     public void updateUi(List<GroupTimeLineData.ResultEntity> TimelineList) {
         if (TimelineList.size() == 0) {
             rv.setEmptyView(view.findViewById(R.id.tv_nodata));

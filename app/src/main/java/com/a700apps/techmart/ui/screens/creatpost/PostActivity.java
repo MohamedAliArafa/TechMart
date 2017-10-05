@@ -31,20 +31,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.a700apps.techmart.Manifest;
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.ServerResponse;
-import com.a700apps.techmart.data.model.UploadObject;
 import com.a700apps.techmart.data.model.post;
 import com.a700apps.techmart.data.network.ApiInterface;
-import com.a700apps.techmart.data.network.MainApi;
-import com.a700apps.techmart.ui.screens.comment.CommentPresenter;
-import com.a700apps.techmart.ui.screens.creatEvent.CreatEventActivity;
-import com.a700apps.techmart.ui.screens.login.LoginActivity;
-import com.a700apps.techmart.ui.screens.register.RegisterActivity;
+import com.a700apps.techmart.ui.screens.home.HomeActivity;
+import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.ApiClient;
 import com.a700apps.techmart.utils.AppConst;
 import com.a700apps.techmart.utils.AppUtils;
+import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -58,8 +54,6 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by samir salah on 9/13/2017.
@@ -77,7 +71,7 @@ public class PostActivity extends AppCompatActivity implements PostView {
     File file;
     public AVLoadingIndicatorView indicatorView;
     private static final int PERMISSION_REQUEST_CODE = 786;
-    private static final int MY_PERMISSIONS_REQUEST_CAMERA= 101;
+    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 101;
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     ImageView imageView;
 
@@ -106,7 +100,7 @@ public class PostActivity extends AppCompatActivity implements PostView {
             @Override
             public void onClick(View view) {
 //                if(Build.VERSION.SDK_INT >=23){
-                    openChooseMethodDialog();
+                openChooseMethodDialog();
 
 
             }
@@ -135,6 +129,7 @@ public class PostActivity extends AppCompatActivity implements PostView {
         }
 
     }
+
     private void openChooseMethodDialog() {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -254,10 +249,9 @@ public class PostActivity extends AppCompatActivity implements PostView {
     public void UpdateUi(post post) {
 
         dialog.hide();
-//        finish();
-        editTextTitle.setText("");
-        editTextDesc.setText("");
-        imageView.setImageResource(android.R.color.transparent);
+        finish();
+        Globals.mIndex= 1;
+//
     }
 
     //
@@ -269,8 +263,8 @@ public class PostActivity extends AppCompatActivity implements PostView {
                 file = null;
                 Uri selectedImageUri = data.getData();
                 String scheme = selectedImageUri.getScheme();
-                selectedImagePath = getPathFromURI(PostActivity.this,selectedImageUri);
-                 imageView = (ImageView) findViewById(R.id.iv_post);
+                selectedImagePath = getPathFromURI(PostActivity.this, selectedImageUri);
+                imageView = (ImageView) findViewById(R.id.iv_post);
                 imageView.setImageBitmap(BitmapFactory.decodeFile(selectedImagePath));
                 imageView.setVisibility(View.VISIBLE);
                 if (scheme.equals(ContentResolver.SCHEME_CONTENT)) {
@@ -293,7 +287,7 @@ public class PostActivity extends AppCompatActivity implements PostView {
                     }
                     selectedImageSize = file.length();
                 }
-            }else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
+            } else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
 //                Bitmap photo = (Bitmap) data.getExtras().get("data");
@@ -375,7 +369,7 @@ public class PostActivity extends AppCompatActivity implements PostView {
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[] {
+                final String[] selectionArgs = new String[]{
                         split[1]
                 };
 
@@ -475,7 +469,7 @@ public class PostActivity extends AppCompatActivity implements PostView {
             @Override
             public void onFailure(Call<ServerResponse> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(PostActivity.this,getString(R.string.check_internet),Toast.LENGTH_LONG).show();
+                Toast.makeText(PostActivity.this, getString(R.string.check_internet), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -498,12 +492,12 @@ public class PostActivity extends AppCompatActivity implements PostView {
     }
 
     void captureImage() {
-        if (checkPermission()){
+        if (checkPermission()) {
 //            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 //            startActivityForResult(cameraIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
 
             dispatchTakePictureIntent();
-        }else {
+        } else {
             requestPermission();
         }
     }
@@ -511,12 +505,12 @@ public class PostActivity extends AppCompatActivity implements PostView {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-        switch (requestCode){
+        switch (requestCode) {
             case CAMERA_CAPTURE_IMAGE_REQUEST_CODE:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     captureImage();
-                } else{
+                } else {
                     Toast.makeText(this, "permission denied", Toast.LENGTH_SHORT).show();
                 }
         }

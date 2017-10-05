@@ -23,6 +23,7 @@ import com.a700apps.techmart.data.network.NetworkResponseListener;
 import com.a700apps.techmart.ui.screens.meeting.MeetingActivity;
 import com.a700apps.techmart.ui.screens.meetingone.MeetingonetooneActivity;
 import com.a700apps.techmart.ui.screens.profile.MemberProfile;
+import com.a700apps.techmart.utils.Globals;
 import com.bumptech.glide.Glide;
 
 import org.json.JSONException;
@@ -39,11 +40,14 @@ public class OneToneAdapter extends RecyclerView.Adapter<OneToneAdapter.ViewHold
     private int GroupId;
     Context context;
     OneToOneModel mModel;
+    onUserSelected onUserSelected;
     public OneToneAdapter(Context context, List<MyConnectionList.ResultEntity> TimeLineList,int mId,OneToOneModel model) {
         this.context = context;
         this.mGroupUsersList = TimeLineList;
         this.GroupId=mId;
         this.mModel=model;
+
+        onUserSelected = (OneToneAdapter.onUserSelected) context;
     }
 
     @Override
@@ -60,7 +64,7 @@ public class OneToneAdapter extends RecyclerView.Adapter<OneToneAdapter.ViewHold
         final   MyConnectionList.ResultEntity timeLineItem = mGroupUsersList.get(position);
 //            viewHolder.profile_pic.
         Glide.with(context)
-                .load(MainApi.IMAGE_IP +  timeLineItem.getName())
+                .load(MainApi.IMAGE_IP +  timeLineItem.getName()).placeholder(R.drawable.ic_profile)
                 .into(viewHolder.profile);
         viewHolder.mName.setText(timeLineItem.getName());
         viewHolder.Company.setText(timeLineItem.getCompany());
@@ -76,11 +80,13 @@ public class OneToneAdapter extends RecyclerView.Adapter<OneToneAdapter.ViewHold
             }
         });
 
-        viewHolder.  mContainer.setOnClickListener(new View.OnClickListener() {
+        viewHolder.mContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                getLike(mModel,timeLineItem);
+                Globals.oneToOneId = timeLineItem.getUserID();
+                onUserSelected.onSelectUser(timeLineItem.getUserID() , timeLineItem.getName());
+//                getLike(mModel,timeLineItem);
             }
         });
     }
@@ -140,8 +146,13 @@ public class OneToneAdapter extends RecyclerView.Adapter<OneToneAdapter.ViewHold
 
         @Override
         public void onClick(View v) {
-            int position = getAdapterPosition();
-            context.startActivity(new Intent(context, MemberProfile.class));
+//            int position = getAdapterPosition();
+//            context.startActivity(new Intent(context, MemberProfile.class));
         }
+    }
+
+
+    public interface onUserSelected{
+        void onSelectUser(String userId , String username);
     }
 }
