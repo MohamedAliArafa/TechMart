@@ -47,9 +47,13 @@ import com.a700apps.techmart.utils.NavDrawerItem;
 import com.a700apps.techmart.utils.NotificationUtils;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import butterknife.ButterKnife;
 import timber.log.Timber;
@@ -179,10 +183,19 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         });
 
         mUserProfileName.setText(PreferenceHelper.getSavedUser(this).Name);
+        String image = MainApi.IMAGE_IP + PreferenceHelper.getSavedUser(this).Photo;
+//
+//        Glide.with(HomeActivity.this)
+//                .load("https://camo.mybb.com/e01de90be6012adc1b1701dba899491a9348ae79/687474703a2f2f7777772e6a71756572797363726970742e6e65742f696d616765732f53696d706c6573742d526573706f6e736976652d6a51756572792d496d6167652d4c69676874626f782d506c7567696e2d73696d706c652d6c69676874626f782e6a7067").placeholder(R.drawable.ic_profile)
+//                .into(mUserProfile);
+
+
         Glide.with(HomeActivity.this)
-                .load(MainApi.IMAGE_IP + PreferenceHelper.getSavedUser(this).Photo).placeholder(R.drawable.ic_profile)
+                .load(image).placeholder(R.drawable.ic_profile)
+                .listener(new LoggingListener<String, GlideDrawable>())
                 .into(mUserProfile);
 
+        Log.e("profileImage",image);
         mUserProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -195,7 +208,18 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         });
 
     }
-
+    public class LoggingListener<T, R> implements RequestListener<T, R> {
+        @Override public boolean onException(Exception e, Object model, Target target, boolean isFirstResource) {
+            android.util.Log.d("GLIDE", String.format(Locale.ROOT,
+                    "onException(%s, %s, %s, %s)", e, model, target, isFirstResource), e);
+            return false;
+        }
+        @Override public boolean onResourceReady(Object resource, Object model, Target target, boolean isFromMemoryCache, boolean isFirstResource) {
+            android.util.Log.d("GLIDE", String.format(Locale.ROOT,
+                    "onResourceReady(%s, %s, %s, %s, %s)", resource, model, target, isFromMemoryCache, isFirstResource));
+            return false;
+        }
+    }
     public void openDrawer() {
         mDrawerLayout.openDrawer(Gravity.START);
     }

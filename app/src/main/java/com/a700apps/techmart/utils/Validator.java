@@ -69,7 +69,7 @@ public class Validator {
         return password.matches("^(?=.*\\d+)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%]{8,50}$");
     }
     public static boolean validPasswordLength(String password) {
-        return !(password.length() < 6|| password.length() > 50);
+        return !(password.length() < 8|| password.length() > 50);
     }
     //number.length() <= 14 &&
     public static boolean validMobileNumber(String number) {
