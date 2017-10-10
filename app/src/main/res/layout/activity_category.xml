@@ -43,7 +43,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="32dp"
-        android:background="@drawable/bg_transparent"
+        android:background="@drawable/transperant_bg"
         android:gravity="center"
         android:text="@string/next"
         android:textColor="@color/light_color_text"

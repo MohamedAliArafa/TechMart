@@ -130,6 +130,7 @@ public class GroubListActivity extends AppCompatActivity implements GroubView {
                     View root = inflater.inflate(R.layout.group_join_dialog, null);
                     LinearLayout indLinear = (LinearLayout) root.findViewById(R.id.lin_board);
                     LinearLayout individualLinear = (LinearLayout) root.findViewById(R.id.lin_individual);
+                    ImageView close = (ImageView) root.findViewById(R.id.imageView8);
                     indLinear.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -138,6 +139,12 @@ public class GroubListActivity extends AppCompatActivity implements GroubView {
                         }
                     });
 
+                    close.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
+                        }
+                    });
                     individualLinear.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

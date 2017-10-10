@@ -225,10 +225,10 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
 
     @Override
     public void updateUiConnect(post success) {
-        mMessageButton.setVisibility(View.VISIBLE);
-        mFollowButton.setText(R.string.unfollow);
-        mConnectButton.setText(R.string.disconnect);
-        mContainerLinearLayout.setVisibility(View.VISIBLE);
+//        mMessageButton.setVisibility(View.VISIBLE);
+//        mFollowButton.setText(R.string.unfollow);
+//        mConnectButton.setText(R.string.disconnect);
+//        mContainerLinearLayout.setVisibility(View.VISIBLE);
 
     }
 

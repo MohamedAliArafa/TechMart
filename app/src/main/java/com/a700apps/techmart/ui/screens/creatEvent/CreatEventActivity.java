@@ -53,6 +53,7 @@ import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.MapDialogActivity;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.a700apps.techmart.utils.URLS;
+import com.a700apps.techmart.utils.loadingDialog;
 import com.borax12.materialdaterangepicker.date.DatePickerDialog;
 import com.borax12.materialdaterangepicker.time.RadialPickerLayout;
 import com.borax12.materialdaterangepicker.time.TimePickerDialog;
@@ -106,6 +107,7 @@ public class CreatEventActivity extends AppCompatActivity implements
     EmptyRecyclerView rv;
     List<MyConnectionList.ResultEntity> mUserMeetingList;
     boolean isOpen = false;
+     Dialog dialogsLoading;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String getPathFromURI(final Context context, final Uri uri) {
@@ -217,7 +219,6 @@ public class CreatEventActivity extends AppCompatActivity implements
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
         innerModle = new InnerModle();
-
         desired_string = getIntent().getIntExtra("string_key", 0);
         findView();
 
@@ -288,13 +289,17 @@ public class CreatEventActivity extends AppCompatActivity implements
 
     @Override
     public void showLoadingProgress() {
-        indicatorView.setVisibility(View.VISIBLE);
-        indicatorView.show();
+        dialogsLoading = new loadingDialog().showDialog(this);
+
+//        indicatorView.setVisibility(View.VISIBLE);
+//        indicatorView.show();
     }
 
     @Override
-    public void dismissLoadingProgress() {
-        indicatorView.hide();
+    public void dismissLoadingProgress()
+
+    {
+        dialogsLoading.dismiss();
     }
 
     @Override

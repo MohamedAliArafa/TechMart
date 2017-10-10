@@ -92,9 +92,9 @@ public class URLS {
     public static final String EXTRA_TITLE = "title";
 
 
-    public static final String URL_BASE_IMAGE = "http://108.179.204.213:8090/";
+    public static final String URL_BASE_IMAGE = "http://23.236.154.106:8086/";
     //    public static final String URL_BASE_LOCAL = "http://192.168.20.111:8090/api/";
-    public static final String URL_BASE = "http://108.179.204.213:8070/";
+    public static final String URL_BASE = "http://23.236.154.106:8086/";
 
     // another local url
     //public static final String URL_BASE = "http://192.168.20.111:8070/";

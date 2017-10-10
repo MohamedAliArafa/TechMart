@@ -146,7 +146,7 @@ public class MessageFragment extends Fragment implements MessageView  {
 
         @Override
         public void onBindViewHolder(MessagesAdapter.ViewHolder viewHolder, final int position) {
-            viewHolder.nameTextView.setText(responser.get(position).getReciverName());
+            viewHolder.nameTextView.setText(responser.get(position).getSenderName());
             viewHolder.chatTextTextView.setText(responser.get(position).getMessage());
             viewHolder.lastSeenTextView.setText(responser.get(position).getReadingDateTimeST());
             Glide.with(context).load(MainApi.IMAGE_IP + responser.get(position).getReciverPhoto()).placeholder(R.drawable.placeholder)

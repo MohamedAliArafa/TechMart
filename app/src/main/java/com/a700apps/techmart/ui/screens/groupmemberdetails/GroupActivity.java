@@ -21,11 +21,13 @@ import com.a700apps.techmart.ui.screens.grouptimeline.GroupsTimLineActivity;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.mygroup.MyGroubListActivity;
 import com.a700apps.techmart.ui.screens.profile.MemberProfile;
+import com.a700apps.techmart.ui.screens.profile.MemberProfileFragment;
 import com.a700apps.techmart.ui.screens.userlikes.UserLikesActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.CustomButton;
 import com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
+import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -232,13 +234,18 @@ public class GroupActivity extends AppCompatActivity implements GroupMemberView 
 //                    intent.putExtra("GroupId", GroupId);
 //                    context.startActivity(intent);
 
-                    Intent intent = new Intent(context, HomeActivity.class);
-                    intent.putExtra("RelativId", timeLineItem.getUserID());
-                    intent.putExtra("GroupId", GroupId);
-                    context.startActivity(intent);
+//                    Intent intent = new Intent(context, HomeActivity.class);
+//                    intent.putExtra("RelativId", timeLineItem.getUserID());
+//                    intent.putExtra("GroupId", GroupId);
+//                    context.startActivity(intent);
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("RelativId", timeLineItem.getUserID());
+                    bundle.putInt("GroupId", GroupId);
+                    Globals.userId = timeLineItem.getUserID();
+                    ((HomeActivity) context).openFragment(MemberProfileFragment.class, bundle);
                 }
             });
-
         }
 
         @Override

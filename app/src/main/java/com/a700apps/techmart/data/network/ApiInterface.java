@@ -10,6 +10,7 @@ import com.a700apps.techmart.data.model.FriendMessage;
 import com.a700apps.techmart.data.model.GroupTimeLineData;
 import com.a700apps.techmart.data.model.GroupUsersData;
 import com.a700apps.techmart.data.model.JoinGroupData;
+import com.a700apps.techmart.data.model.JoinGroupRequestsData;
 import com.a700apps.techmart.data.model.LikeData;
 import com.a700apps.techmart.data.model.MyConnectionList;
 import com.a700apps.techmart.data.model.MyProfileData;
@@ -164,10 +165,32 @@ public interface ApiInterface {
     @POST("Notification/GetUserNotification")
     Observable<NoficationData> getNotifications(@Body RequestBody body);
 
+    @POST("TimeLine/GetTimeLineItemByID")
+    Observable<NotificationDataLike> getTimeLineById(@Body RequestBody body);
+
+
+
+    @POST("TimeLine/GetGroupTimeLine")
+    Observable<GroupTimeLineData> getTimelineMember(@Body RequestBody body);
 
 
     @POST("TimeLine/GetTimeLineItemByID")
-    Observable<NotificationDataLike> getTimeLineById(@Body RequestBody body);
+    Observable<PostData> getTimeLineItemByID(@Body RequestBody body);
+
+    @POST("Group/Removemember")
+    Observable<PostData> removeMember(@Body RequestBody body);
+
+    @POST("user/GetAllGroupUsers")
+    Observable<UserData> getAllGroupUsers(@Body RequestBody body);
+
+    @POST("Group/GetJoinGroupRequests")
+    Observable<JoinGroupRequestsData> getJoinGroupRequests(@Body RequestBody body);
+
+    @POST("TimeLine/ManageTimeLineItem")
+    Observable<PostData> manageTimeLineItem(@Body RequestBody body);
+
+    @POST("TimeLine/EditeTimeLineItem")
+    Observable<PostData> editeTimeLineItem(@Body RequestBody body);
 
 }
 

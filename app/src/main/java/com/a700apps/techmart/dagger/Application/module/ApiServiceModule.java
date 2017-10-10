@@ -31,7 +31,7 @@ public class ApiServiceModule {
         return new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHttpClient)
-                .baseUrl("http://108.179.204.213:8073/api/")
+                .baseUrl("http://23.236.154.106:8086/api/")
                 .build();
     }
 

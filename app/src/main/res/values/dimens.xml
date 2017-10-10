@@ -14,7 +14,7 @@
     <dimen name="Parallax_text">20sp</dimen>
     <dimen name="birthday_text_size">29sp</dimen>
     <dimen name="sign_up_text_size">12sp</dimen>
-    <dimen name="greeting_card_text">12sp</dimen>
+    <dimen name="greeting_card_text">13sp</dimen>
     <dimen name="post_card_text">16sp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
@@ -497,7 +497,7 @@
     <dimen name="sign_in_width">70dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="post_image_width">140dp</dimen>
-    <dimen name="item_post_image_width">110dp</dimen>
+    <dimen name="item_post_image_width">100dp</dimen>
     <dimen name="item_post_image_height">80dp</dimen>
     <dimen name="item_height">115dp</dimen>
     <dimen name="login_linear_height">110dp</dimen>

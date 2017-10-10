@@ -22,4 +22,13 @@ public class User {
     @SerializedName("Photo")
     @Expose
     public String Photo;
+
+    @SerializedName("Company")
+    @Expose
+    public String Company;
+
+    @SerializedName("Position")
+    @Expose
+    public String Position;
+
 }

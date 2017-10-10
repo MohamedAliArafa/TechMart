@@ -13,6 +13,7 @@ import com.a700apps.techmart.data.model.FriendMessage;
 import com.a700apps.techmart.data.model.GroupTimeLineData;
 import com.a700apps.techmart.data.model.GroupUsersData;
 import com.a700apps.techmart.data.model.JoinGroupData;
+import com.a700apps.techmart.data.model.JoinGroupRequestsData;
 import com.a700apps.techmart.data.model.LikeData;
 import com.a700apps.techmart.data.model.MyConnectionList;
 import com.a700apps.techmart.data.model.MyProfileData;
@@ -47,9 +48,9 @@ import rx.schedulers.Schedulers;
 
 public class MainApi {
 
-    public static final String API_LINK = "http://108.179.204.213:8073/api/";
+    public static final String API_LINK = "http://23.236.154.106:8086/api/";
     public static final String JSON_TYPE = "application/json";
-    public static final String IMAGE_IP = "http://108.179.204.213:8073";
+    public static final String IMAGE_IP = "http://23.236.154.106:8086";
     public static final String TAG_DATE_PICKER = "datepicker";
 
     private static ApiInterface getApi() {
@@ -913,7 +914,162 @@ public class MainApi {
             }
         });
     }
+    // Member
 
+    public static void getMemberTimeLine(JSONObject body, final NetworkResponseListener<GroupTimeLineData> responseListener) {
+        getApi().getTimelineMember(getRequestBody(body)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<GroupTimeLineData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                responseListener.networkOperationFail(e);
+            }
+
+            @Override
+            public void onNext(GroupTimeLineData userNetworkData) {
+                NetworkResponse<GroupTimeLineData> networkResponse = new NetworkResponse<>();
+                networkResponse.data = userNetworkData;
+                responseListener.networkOperationSuccess(networkResponse);
+            }
+        });
+    }
+
+    public static void getTimeLineItemByID(JSONObject body, final NetworkResponseListener<PostData> responseListener) {
+        getApi().getTimeLineItemByID(getRequestBody(body)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<PostData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                responseListener.networkOperationFail(e);
+            }
+
+            @Override
+            public void onNext(PostData userNetworkData) {
+                NetworkResponse<PostData> networkResponse = new NetworkResponse<>();
+                networkResponse.data = userNetworkData;
+                responseListener.networkOperationSuccess(networkResponse);
+            }
+        });
+    }
+
+    public static void removeMember(JSONObject body, final NetworkResponseListener<PostData> responseListener) {
+        getApi().removeMember(getRequestBody(body)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<PostData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                responseListener.networkOperationFail(e);
+            }
+
+            @Override
+            public void onNext(PostData userNetworkData) {
+                NetworkResponse<PostData> networkResponse = new NetworkResponse<>();
+                networkResponse.data = userNetworkData;
+                responseListener.networkOperationSuccess(networkResponse);
+            }
+        });
+    }
+
+    public static void getAllGroupUsers(JSONObject body, final NetworkResponseListener<UserData> responseListener) {
+        getApi().getAllGroupUsers(getRequestBody(body)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<UserData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                responseListener.networkOperationFail(e);
+            }
+
+            @Override
+            public void onNext(UserData userNetworkData) {
+                NetworkResponse<UserData> networkResponse = new NetworkResponse<>();
+                networkResponse.data = userNetworkData;
+                responseListener.networkOperationSuccess(networkResponse);
+            }
+        });
+    }
+
+    public static void getJoinGroupRequests(JSONObject body, final NetworkResponseListener<JoinGroupRequestsData> responseListener) {
+        getApi().getJoinGroupRequests(getRequestBody(body)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<JoinGroupRequestsData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                responseListener.networkOperationFail(e);
+            }
+
+            @Override
+            public void onNext(JoinGroupRequestsData userNetworkData) {
+                NetworkResponse<JoinGroupRequestsData> networkResponse = new NetworkResponse<>();
+                networkResponse.data = userNetworkData;
+                responseListener.networkOperationSuccess(networkResponse);
+            }
+        });
+    }
+
+    public static void manageTimelineItem(JSONObject body, final NetworkResponseListener<PostData> responseListener) {
+        getApi().manageTimeLineItem(getRequestBody(body)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<PostData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                responseListener.networkOperationFail(e);
+            }
+
+            @Override
+            public void onNext(PostData userNetworkData) {
+                NetworkResponse<PostData> networkResponse = new NetworkResponse<>();
+                networkResponse.data = userNetworkData;
+                responseListener.networkOperationSuccess(networkResponse);
+            }
+        });
+    }
+
+
+    public static void editTimelineItem(JSONObject body, final NetworkResponseListener<PostData> responseListener) {
+        getApi().editeTimeLineItem(getRequestBody(body)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<PostData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                responseListener.networkOperationFail(e);
+            }
+
+            @Override
+            public void onNext(PostData userNetworkData) {
+                NetworkResponse<PostData> networkResponse = new NetworkResponse<>();
+                networkResponse.data = userNetworkData;
+                responseListener.networkOperationSuccess(networkResponse);
+            }
+        });
+    }
 }
 
 

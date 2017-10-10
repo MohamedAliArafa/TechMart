@@ -426,7 +426,7 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                 if (!validMobileNumber) {
                     mPhoneNumberEditText.setError(getResources().getString(R.string.invalid_mobile_number));
                     isValid = false;
-                } else if (!mobile.startsWith("96")) {
+                } else if (!mobile.startsWith("97")) {
                     mPhoneNumberEditText.setError(getResources().getString(R.string.invalid_mobile_number));
                     isValid = false;
                 }

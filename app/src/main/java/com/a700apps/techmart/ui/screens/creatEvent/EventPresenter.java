@@ -65,6 +65,7 @@ public class EventPresenter extends MainPresenter<EventView> {
         mContext = context;
         view.showLoadingProgress();
 
+
         try {
             JSONObject registerBody = MainApiHelper.getMyConnectinGroup(UserID,GroupID);
             MainApi.getMyConnectionListGroup(registerBody, new NetworkResponseListener<MyConnectionList>() {

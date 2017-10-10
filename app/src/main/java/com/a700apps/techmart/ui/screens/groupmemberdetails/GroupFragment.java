@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.GroupUsersData;
@@ -223,15 +224,13 @@ public class GroupFragment extends Fragment implements GroupMemberView {
             viewHolder.profile_pic.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    Intent intent = new Intent(context, MemberProfile.class);
-//                    intent.putExtra("RelativId", timeLineItem.getUserID());
-//                    intent.putExtra("GroupId", GroupId);
-//                    context.startActivity(intent);
 
-                    Intent intent = new Intent(context, HomeActivity.class);
-                    intent.putExtra("RelativId", timeLineItem.getUserID());
-                    intent.putExtra("GroupId", GroupId);
-                    context.startActivity(intent);
+                    Toast.makeText(context, "dsgsgdsg", Toast.LENGTH_SHORT).show();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("RelativId", timeLineItem.getUserID());
+                    bundle.putInt("GroupId", GroupId);
+                    Globals.userId = timeLineItem.getUserID();
+                    ((HomeActivity) context).openFragment(MemberProfileFragment.class, bundle);
                 }
             });
 

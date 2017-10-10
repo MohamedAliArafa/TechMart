@@ -6,10 +6,10 @@
     android:layout_height="@dimen/item_height"
     android:id="@+id/contain"
     android:gravity="center"
-    android:layout_marginStart="15dp"
-    android:layout_marginEnd="15dp"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
     android:orientation="vertical">
 
     <ImageView
@@ -132,9 +132,16 @@
         tools:layout_editor_absoluteX="362dp"
         tools:layout_editor_absoluteY="73dp" />
 
+
+
     <View
-        style="@style/temSepatator"
-        android:layout_below="@+id/lin_contain"
-        android:layout_marginTop="@dimen/about_end_padding"
-        />
+        android:id="@+id/view11"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/about_row_grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 </RelativeLayout>

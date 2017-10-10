@@ -90,7 +90,12 @@ public class PostActivity extends AppCompatActivity implements PostView {
         linearLayout_post = (LinearLayout) findViewById(R.id.linearLayout_post);
         linearLayout_select = (LinearLayout) findViewById(R.id.linearLayout);
         indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
-
+        findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please Wait Uploading Image...");
         progressDialog.setCancelable(false);
