@@ -1,47 +1,112 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
+    <!--<ImageView-->
+    <!--android:id="@+id/imageView3"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:scaleType="centerCrop"-->
+    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--app:layout_constraintRight_toRightOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="parent"-->
+    <!--app:srcCompat="@drawable/ic_bg_list"-->
+    <!--app:layout_constraintHorizontal_bias="0.0"-->
+    <!--app:layout_constraintVertical_bias="0.0" />-->
 
+    <View
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/blue_join_dialog"
+        app:layout_constraintLeft_toLeftOf="@+id/textView6"
+        app:layout_constraintRight_toRightOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <com.a700apps.techmart.utils.CustomTextView
+        android:id="@+id/textView6"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="60dp"
+        android:gravity="center"
         android:text="Relative Events"
-        android:textColor="@color/trans_white"
-        tools:layout_marginTop="50dp"
-        android:id="@+id/title"
-        android:layout_centerHorizontal="true"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="3dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="2dp"
-        android:layout_below="@id/title"
-        android:layout_alignStart="@id/title"
-        android:layout_alignEnd="@id/title"
-        android:background="@color/trans_white"/>
-    <!-- TODO: Update blank fragment layout -->
+        android:textAllCaps="true"
+        android:textColor="@color/blue_join_dialog"
+        android:textSize="14sp"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.a700apps.techmart.utils.EmptyRecyclerView
         android:id="@+id/recyclerView"
-        android:layout_below="@id/title"
-        android:layout_marginTop="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
-        android:id="@+id/tv_nodata"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/view" />
+
+
+    <RelativeLayout
+        android:id="@+id/linearLayout6"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_marginTop="0dp"
+        android:background="@color/grey"
         android:gravity="center"
-        android:textColor="@color/button_light_text"
-        android:text="There is no data"
-        android:visibility="gone"
-        tools:layout_editor_absoluteY="8dp" />
+        android:orientation="horizontal"
+        android:padding="6dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            app:srcCompat="@drawable/ic_back" />
+
+        <!--<EditText-->
+        <!--android:id="@+id/edt_search"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="36dp"-->
+        <!--android:layout_gravity="center_vertical"-->
+        <!--android:layout_weight="1"-->
+        <!--android:gravity="left"-->
+        <!--android:text="@string/search_name"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:textSize="@dimen/time_text"-->
+        <!--/>-->
+
+        <!--<ImageView-->
+        <!--android:id="@+id/new_message"-->
+        <!--android:layout_width="24dp"-->
+        <!--android:layout_height="24dp"-->
+        <!--app:srcCompat="@drawable/ic_user" />-->
+
+        <ImageView
+            android:id="@+id/new_profile"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+
+            app:srcCompat="@drawable/ic_notification" />
+    </RelativeLayout>
 
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/avi"
@@ -49,7 +114,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:visibility="invisible"
         app:indicatorColor="@color/red_join_dialog"
-        app:indicatorName="BallSpinFadeLoaderIndicator" />
-</RelativeLayout>
+        app:indicatorName="BallSpinFadeLoaderIndicator"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

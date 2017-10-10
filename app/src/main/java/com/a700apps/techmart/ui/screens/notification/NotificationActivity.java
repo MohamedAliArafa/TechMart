@@ -201,13 +201,13 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                     ConnectViewHolder holder = (ConnectViewHolder) viewHolder;
                     holder.name.setText(result.getRelativeUserName());//
                     holder.message.setText(result.getMessage());//
-                    Glide.with(context).load(MainApi.IMAGE_IP + "/" + result.getIcon()).placeholder(R.drawable.ic_profile).into(holder.profile);
+                    Glide.with(context).load(MainApi.IMAGE_IP + result.getIcon()).placeholder(R.drawable.ic_profile).into(holder.profile);
 
                     break;
                 case NOTIF_TYPE_FOLLOW:
                     FollowViewHolder followViewHolder = (FollowViewHolder) viewHolder;
                     if (list.get(position).getTypeID() == NOTIF_TYPE_FOLLOW) {
-                        followViewHolder.nameTv.setText(result.getRelativeUserName() + " Followed You");
+                        followViewHolder.nameTv.setText(result.getRelativeUserName());// + " Followed You"
                     } else {
                         followViewHolder.nameTv.setText(result.getRelativeUserName() + " Accepted your connection request");//
                         followViewHolder.itemNameTv.setText(result.getMessage());//
@@ -215,17 +215,27 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                         followViewHolder.youToHide.setVisibility(View.INVISIBLE);
                     }
 
-                    Glide.with(context).load(MainApi.IMAGE_IP + "/" + result.getIcon()).placeholder(R.drawable.ic_profile).into(followViewHolder.profileImageView);
+                    Glide.with(context).load(MainApi.IMAGE_IP +  result.getIcon()).placeholder(R.drawable.ic_profile).into(followViewHolder.profileImageView);
 
                     break;
                 case NOTIF_TYPE_POST:
 
                     result = list.get(position);
+
                     PostAddedViewHolder postAddedViewHolder = (PostAddedViewHolder) viewHolder;
                     postAddedViewHolder.nameTv.setText(result.getRelativeUserName());
                     postAddedViewHolder.itemNameTv.setText(result.getMessage());
-                    Glide.with(context).load(MainApi.IMAGE_IP + result.getIcon())
-                            .placeholder(R.drawable.ic_profile).into(postAddedViewHolder.profileImageView);
+                    if (result.getTypeID() == NOTIF_TYPE_SOME_ONE_LIKE_POST){
+                        Glide.with(context).load(R.drawable.ic_like_active)
+                                .placeholder(R.drawable.ic_like).into(postAddedViewHolder.profileImageView);
+                    }else if (result.getTypeID() == NOTIF_TYPE_SOME_ONE_COMMENT_POST){
+                        Glide.with(context).load(R.drawable.ic_comment)
+                                .placeholder(R.drawable.ic_comment).into(postAddedViewHolder.profileImageView);
+                    }else{
+                        Log.e("ICON" , MainApi.IMAGE_IP+result.getIcon().toString());
+                        Glide.with(context).load(MainApi.IMAGE_IP+result.getIcon().toString())
+                                .placeholder(R.drawable.ic_profile).into(postAddedViewHolder.profileImageView);
+                    }
                     break;
                 case NOTIF_TYPE_EVENT:
                     result = list.get(position);
@@ -233,8 +243,20 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                     eventAddedViewHolder.nameTv.setText(result.getRelativeUserName());
                     eventAddedViewHolder.eventDetailsTv.setText(result.getMessage());
                     eventAddedViewHolder.itemTimeTv.setText(result.getCreatedDate());
-//                    Glide.with(context).load(MainApi.IMAGE_IP + result.getIcon())
-//                            .placeholder(R.drawable.ic_profile).into(eventAddedViewHolder.);
+                    break;
+
+                case NOTIF_TYPE_GROUP_REQUEST:
+                    result = list.get(position);
+                    GroupViewHolder groupViewHolder = (GroupViewHolder) viewHolder;
+                    groupViewHolder.messageTv.setText(result.getMessage());
+                    groupViewHolder.descriptionTv.setText(result.getGroupName());
+                    break;
+
+                case NOTIF_TYPE_MESSAGE:
+                    result = list.get(position);
+                    ChatViewHolder chatViewHolder = (ChatViewHolder) viewHolder;
+                    chatViewHolder.messageTv.setText(result.getItemName());
+                    chatViewHolder.descriptionTv.setText(result.getRelativeUserName());
                     break;
                 case NOTIF_TYPE_VIDEO:
                     break;

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="350dp"
+    android:background="@color/red_join_dialog"
+    android:layout_height="wrap_content">
+
+
+    <com.a700apps.techmart.utils.CustomTextView
+        android:layout_width="match_parent"
+        android:text="@string/logout"
+        android:id="@+id/logout_title"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:layout_marginStart="24dp"
+        android:gravity="start|center"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:id="@+id/seperator"
+        android:textColor="@color/white"
+        android:background="@color/separator"
+        android:layout_below="@id/logout_title"/>
+
+    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+        android:layout_width="match_parent"
+        android:text="Are you sure you want to log out ? "
+        android:id="@+id/logout_desc"
+        android:textSize="14sp"
+        android:layout_below="@id/seperator"
+        android:layout_marginStart="24dp"
+        android:gravity="start|center"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="6dp"
+        android:layout_below="@id/logout_desc"
+        android:weightSum="2">
+
+        <com.a700apps.techmart.utils.CustomButton
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:layout_marginEnd="5dp"
+            android:id="@+id/cancel"
+            android:background="@drawable/button_background"
+            android:text="@string/cancel"
+            android:layout_weight="1"/>
+
+        <com.a700apps.techmart.utils.CustomButton
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:text="@string/logout"
+            android:background="@drawable/button_background"
+            android:id="@+id/logout"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+</RelativeLayout>

@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.MyProfile;
@@ -269,14 +270,10 @@ public class ViewUserProfile extends Fragment implements ProfileView, View.OnCli
                 startActivity(intentDetails);
                 break;
             case R.id.eventLayout:
-//                Toast.makeText(getActivity(), "456", Toast.LENGTH_SHORT).show();
                 EventFragment fragment = new EventFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("RelativId" , mRelId);
-                fragment.setArguments(bundle);
-
-                ((HomeActivity) getActivity()).addFragmentToBackStack(getFragmentManager(), R.id.fragment_container, fragment, false
-                        , false);
+                ((HomeActivity) getActivity()).openFragment(EventFragment.class , bundle);
                 break;
             case R.id.groupLayout:
 //                Toast.makeText(getActivity(), "123", Toast.LENGTH_SHORT).show();

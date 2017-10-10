@@ -22,6 +22,11 @@ public class MyProfile {
     @Expose
     public String LinkedInID;
 
+
+    @SerializedName("LinkedinProfile")
+    @Expose
+    public String LinkedInProfile;
+
     @SerializedName("PostsCount")
     @Expose
     public int PostsCount;
@@ -84,6 +89,10 @@ public class MyProfile {
     @SerializedName("HaveSharedEventWithMe")
     @Expose
     public boolean HaveSharedEventWithMe;
+
+    @SerializedName("IsConntectionRequestPending")
+    @Expose
+    public boolean IsConntectionRequestPending;
 
 }
 

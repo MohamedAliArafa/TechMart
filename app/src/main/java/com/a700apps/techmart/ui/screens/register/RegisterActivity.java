@@ -139,12 +139,13 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                 int dataSize = 0;
                 File f = null;
                 Uri selectedImageUri = data.getData();
-                String scheme = selectedImageUri.getScheme();
-                selectedImagePath = getPathFromURI(RegisterActivity.this, selectedImageUri);
                 if (selectedImageUri == null) {
                     Toast.makeText(this, "Sorry .. please select another image", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                String scheme = selectedImageUri.getScheme();
+                selectedImagePath = getPathFromURI(RegisterActivity.this, selectedImageUri);
+
                 ImageView imageView = (ImageView) findViewById(R.id.iv_post);
                 imageView.setImageBitmap(BitmapFactory.decodeFile(selectedImagePath));
                 imageView.setVisibility(View.VISIBLE);
@@ -427,7 +428,10 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                     mPhoneNumberEditText.setError(getResources().getString(R.string.invalid_mobile_number));
                     isValid = false;
                 } else if (!mobile.startsWith("97")) {
-                    mPhoneNumberEditText.setError(getResources().getString(R.string.invalid_mobile_number));
+                    mPhoneNumberEditText.setError(getResources().getString(R.string.invalid_mobile_number_97));
+                    isValid = false;
+                }else if (mobile.length()!=14){
+                    mPhoneNumberEditText.setError(getResources().getString(R.string.invalid_mobile_number_size));
                     isValid = false;
                 }
 
@@ -524,11 +528,11 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
         File file = new File(selectedImagePath);
         Log.e("size in kb ", " size in KB -> " + file.length() / 1024);
 
-        if (file.length() / 1024 > 1024) {
-            Snackbar snackbar1 = Snackbar.make(SignButton, R.string.image_size_exceed, Snackbar.LENGTH_SHORT);
-            snackbar1.show();
-            return;
-        }
+//        if (file.length() / 1024 > 1024) {
+//            Snackbar snackbar1 = Snackbar.make(SignButton, R.string.image_size_exceed, Snackbar.LENGTH_SHORT);
+//            snackbar1.show();
+//            return;
+//        }
 
         dialogsLoading = new loadingDialog().showDialog(RegisterActivity.this);
         // Parsing any Media type file

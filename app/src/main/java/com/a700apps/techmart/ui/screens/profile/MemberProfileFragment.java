@@ -27,6 +27,7 @@ import com.a700apps.techmart.data.model.MyProfile;
 import com.a700apps.techmart.data.model.post;
 import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.ui.screens.PredefinedMessage.PredifinedMessageActivity;
+import com.a700apps.techmart.ui.screens.groupmemberdetails.GroupFragment;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.message.ChatActivity;
 import com.a700apps.techmart.ui.screens.mygroup.MyGroupFragment;
@@ -36,6 +37,7 @@ import com.a700apps.techmart.ui.screens.timeline.EventFragment;
 import com.a700apps.techmart.ui.screens.timeline.RelativeEventFragment;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.ImageDetailsActivity;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.a700apps.techmart.utils.loadingDialog;
@@ -59,7 +61,7 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
     LinearLayout mContainerLinearLayout;
     String ImageLink;
     Button mFollowButton, mConnectButton, mMessageButton;
-    boolean isFollowing, isConnect;
+    boolean isFollowing, isConnect , isConnectPending;
     View eventLayout , groupLayout;
 
     MyProfile myProfile;
@@ -84,7 +86,7 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
         imageView4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().onBackPressed();
+                ((HomeActivity)getActivity()).openDrawer();
             }
         });
 
@@ -165,6 +167,8 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
         mFriend.setText(String.valueOf(MyProfile.FriendsCount));
         mEmail.setText(MyProfile.Email);
         mCompany.setText(MyProfile.Company);
+        mGroupCount.setText(String.valueOf(MyProfile.GroupCount));
+        mEventCount.setText(String.valueOf(MyProfile.EventCount));
         if (MyProfile.IsFollowed) {
             isFollowing = true;
 //            isConnect = true;
@@ -198,6 +202,10 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
             mContainerLinearLayout.setVisibility(View.GONE);
         }
 
+        if (MyProfile.IsConntectionRequestPending){
+            isConnectPending = true;
+            mConnectButton.setText(getString(R.string.canecl_connect));
+        }
     }
 
     @Override
@@ -206,8 +214,8 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
         mMessageButton.setVisibility(View.VISIBLE);
         mFollowButton.setText(R.string.unfollow);
         mContainerLinearLayout.setVisibility(View.VISIBLE);
-//
-
+        int count = Integer.parseInt(mFollowers.getText().toString());
+        mFollowers.setText(String.valueOf(++count));
 
     }
 
@@ -215,6 +223,10 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
     public void updateUiUnFollow(post success) {
         mMessageButton.setVisibility(View.GONE);
         mFollowButton.setText(R.string.follow);
+            int count = Integer.parseInt(mFollowers.getText().toString());
+            mFollowers.setText(String.valueOf(--count));
+            isFollowing = false;
+
         if (isConnect) {
             mContainerLinearLayout.setVisibility(View.VISIBLE);
         } else {
@@ -225,11 +237,14 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
 
     @Override
     public void updateUiConnect(post success) {
-//        mMessageButton.setVisibility(View.VISIBLE);
-//        mFollowButton.setText(R.string.unfollow);
-//        mConnectButton.setText(R.string.disconnect);
+        mMessageButton.setVisibility(View.VISIBLE);
+        mFollowButton.setText(R.string.unfollow);
+        mConnectButton.setText(R.string.canecl_connect);
+        mConnectButton.setText(R.string.canecl_connect);
 //        mContainerLinearLayout.setVisibility(View.VISIBLE);
 
+        int count = Integer.parseInt(mFriend.getText().toString());
+        mFriend.setText(String.valueOf(++count));
     }
 
     @Override
@@ -238,6 +253,10 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
         mMessageButton.setVisibility(View.GONE);
         mConnectButton.setText(R.string.connect);
         mContainerLinearLayout.setVisibility(View.GONE);
+
+        int count = Integer.parseInt(mFriend.getText().toString());
+        mFriend.setText(String.valueOf(--count));
+
     }
 
     @Override
@@ -260,21 +279,24 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
 
                 break;
             case R.id.btn_edit:
-                if (isConnect) {
+                if (isConnect ) {
                     isConnect = false;
                     presenter.sendConnect(mRelId, PreferenceHelper.getUserId(getActivity()), "false");
+                } else if (isConnectPending){
+                    isConnectPending = false;
+                    presenter.sendConnect(mRelId, PreferenceHelper.getUserId(getActivity()), "false");
                 } else {
-                    isConnect = true;
+//                    isConnect = true;
                     presenter.sendConnect(mRelId, PreferenceHelper.getUserId(getActivity()), "true");
                 }
                 break;
             case R.id.btn_message:
-
-                if (isConnect && myProfile.HaveSharedEventWithMe){
+//                if (isConnect && myProfile.HaveSharedEventWithMe){
+//                    openPredifinedActivity();
+//                }else
+                if (isFollowing &&  myProfile.HaveSharedEventWithMe ){
                     openPredifinedActivity();
-                }else if (myProfile.IsFollowed &&  myProfile.HaveSharedEventWithMe ){
-                    openPredifinedActivity();
-                }else {
+                }else if (isConnect){
                     openChatActivity();
                 }
                 break;
@@ -285,9 +307,11 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
                 startActivity(intentDetails);
                 break;
             case R.id.eventLayout:
-//                Toast.makeText(getActivity(), "456", Toast.LENGTH_SHORT).show();
                 Bundle bundle = new Bundle();
                 bundle.putString("RelativId" , mRelId);
+                Globals.groupId = GroupId;
+                Globals.relativeId = mRelId;
+
                 ((HomeActivity) getActivity()).openFragment(RelativeEventFragment.class ,bundle);
 //                ((HomeActivity) getActivity()).addFragmentToBackStack(getFragmentManager(), R.id.fragment_container, fragment, false
 //                        , false);
@@ -296,8 +320,9 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
 //                Toast.makeText(getActivity(), "123", Toast.LENGTH_SHORT).show();
 //                RelativeGroupsFragment relativeGroupsFragment = new RelativeGroupsFragment();
                 Bundle bundle2 = new Bundle();
-                bundle2.putBoolean("groupLayout" , true);
                 bundle2.putString("RelativId" , mRelId);
+                Globals.groupId = GroupId;
+                Globals.relativeId = mRelId;
 //                relativeGroupsFragment.setArguments(bundle2);
                 ((HomeActivity) getActivity()).openFragment(RelativeGroupsFragment.class ,bundle2);
 //                ((HomeActivity) getActivity()).addFragmentToBackStack(getFragmentManager(), R.id.fragment_container, relativeGroupsFragment, false

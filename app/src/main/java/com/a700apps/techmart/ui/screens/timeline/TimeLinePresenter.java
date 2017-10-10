@@ -55,8 +55,8 @@ public class TimeLinePresenter extends MainPresenter<TimeLineView>  {
 
     }
 
-    void GetRelativeEventByUserID(String RelativeID, String UserID){
-
+    void GetRelativeEventByUserID(String RelativeID, String UserID , Context context){
+        dialogsLoading = new loadingDialog().showDialog(context);
         try {
             JSONObject registerBody = MainApiHelper.GetRelativeEventByUserID(RelativeID, UserID);
             MainApi.GetRelativeEventByUserID(registerBody, new NetworkResponseListener<TimeLineData>() {
@@ -64,6 +64,7 @@ public class TimeLinePresenter extends MainPresenter<TimeLineView>  {
                 public void networkOperationSuccess(NetworkResponse<TimeLineData> networkResponse) {
                     dialogsLoading.dismiss();
                     if (isDetachView()) return;
+
                     TimeLineData userNetworkData = (TimeLineData) networkResponse.data;
                     int errorCode = userNetworkData.getISResultHasData();
                     view.updateUi(userNetworkData.getResult());
@@ -71,7 +72,7 @@ public class TimeLinePresenter extends MainPresenter<TimeLineView>  {
 
                 @Override
                 public void networkOperationFail(Throwable throwable) {
-                    view.showErrorDialog(R.string.check_internet);
+                    view.showErrorDialog(R.string.error_happened);
                 }
             });
         } catch (JSONException e) {

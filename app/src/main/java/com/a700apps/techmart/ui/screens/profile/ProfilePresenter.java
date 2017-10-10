@@ -1,5 +1,6 @@
 package com.a700apps.techmart.ui.screens.profile;
 
+import android.app.Dialog;
 import android.content.Context;
 
 import com.a700apps.techmart.data.model.MyProfileData;
@@ -12,6 +13,7 @@ import com.a700apps.techmart.data.network.NetworkResponseListener;
 import com.a700apps.techmart.ui.MainPresenter;
 import com.a700apps.techmart.ui.screens.register.RegisterView;
 import com.a700apps.techmart.utils.AppUtils;
+import com.a700apps.techmart.utils.loadingDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,6 +26,7 @@ public class ProfilePresenter   extends MainPresenter<ProfileView> {
 
 
     Context mContext;
+    Dialog dialogsLoading;
 
     void profileData(String UserId, Context context) {
         mContext = context;
@@ -56,11 +59,11 @@ public class ProfilePresenter   extends MainPresenter<ProfileView> {
     }
     //
 
-    void updateProfileData(String UserID, String Name,String LinkedinProfile,
+    void updateProfileData(Context context , String UserID, String Name,String LinkedinProfile,
                            String photo,String company,String position,String phone) {
 //        mContext = context;
         view.showLoadingProgress();
-
+        dialogsLoading = new loadingDialog().showDialog(context);
         try {
             JSONObject registerBody = MainApiHelper.saveProfileData( UserID,  Name, LinkedinProfile,
                      photo, company, position, phone);
@@ -73,18 +76,20 @@ public class ProfilePresenter   extends MainPresenter<ProfileView> {
                     int errorCode = userNetworkData.ISResultHasData;
 
                     if (errorCode == 1) {
+                        dialogsLoading.dismiss();
                         view.updateUiUpdate(userNetworkData.postData);
                     }
                 }
 
                 @Override
                 public void networkOperationFail(Throwable throwable) {
-
+                    dialogsLoading.dismiss();
                 }
             });
         } catch (JSONException e) {
             e.printStackTrace();
-            view.dismissLoadingProgress();
+            dialogsLoading.dismiss();
+//            view.dismissLoadingProgress();
         }
     }
 

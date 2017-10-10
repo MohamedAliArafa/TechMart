@@ -1,8 +1,6 @@
 package com.a700apps.techmart.ui.screens.home;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
+import android.app.Dialog;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
@@ -19,6 +17,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -38,19 +37,17 @@ import com.a700apps.techmart.ui.screens.profile.EditProfileFragment;
 import com.a700apps.techmart.ui.screens.profile.MemberProfileFragment;
 import com.a700apps.techmart.ui.screens.setting.SettingFragment;
 import com.a700apps.techmart.ui.screens.timeline.EventFragment;
+import com.a700apps.techmart.ui.screens.timeline.RelativeEventFragment;
 import com.a700apps.techmart.ui.screens.timeline.TimelineFragment;
 import com.a700apps.techmart.utils.ATCPrefManager;
 import com.a700apps.techmart.utils.ActivityUtils;
-import com.a700apps.techmart.utils.Config;
 import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.NavDrawerItem;
-import com.a700apps.techmart.utils.NotificationUtils;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -99,14 +96,14 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
             addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, fragment, false, true);
 
             //show event relativs
-        } else if (getIntent().getStringExtra("holder") != null ) {
+        } else if (getIntent().getStringExtra("holder") != null) {
 
 //            GroupsTimeLineFragment fragment = new GroupsTimeLineFragment();
             Bundle bundle = new Bundle();
             bundle.putString("selectedCategory", getIntent().getStringExtra("selectedCategory"));
 //            fragment.setArguments(bundle);
 
-            openFragment(GroupsTimeLineFragment.class , bundle);
+            openFragment(GroupsTimeLineFragment.class, bundle);
 //            addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, fragment, false
 //                    , true);
 
@@ -195,31 +192,44 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
                 .listener(new LoggingListener<String, GlideDrawable>())
                 .into(mUserProfile);
 
-        Log.e("profileImage",image);
+        Log.e("profileImage", image);
         mUserProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                ActivityUtils.openActivity(HomeActivity.this, EditProfileActivity.class, false);
 
-                addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, new EditProfileFragment(), false
-                        , false);
+//                addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, new EditProfileFragment(), false
+//                        , false);
+                openFragment(EditProfileFragment.class, null);
                 mDrawerLayout.closeDrawer(Gravity.LEFT);
             }
         });
 
     }
+
+
+    //    public void loadProfileImage(){
+//        Glide.with(HomeActivity.this)
+//                .load(image).placeholder(R.drawable.ic_profile)
+//                .listener(new LoggingListener<String, GlideDrawable>())
+//                .into(mUserProfile);
+//    }
     public class LoggingListener<T, R> implements RequestListener<T, R> {
-        @Override public boolean onException(Exception e, Object model, Target target, boolean isFirstResource) {
-            android.util.Log.d("GLIDE", String.format(Locale.ROOT,
+        @Override
+        public boolean onException(Exception e, Object model, Target target, boolean isFirstResource) {
+            android.util.Log.d("GLIDE1", String.format(Locale.ROOT,
                     "onException(%s, %s, %s, %s)", e, model, target, isFirstResource), e);
             return false;
         }
-        @Override public boolean onResourceReady(Object resource, Object model, Target target, boolean isFromMemoryCache, boolean isFirstResource) {
-            android.util.Log.d("GLIDE", String.format(Locale.ROOT,
+
+        @Override
+        public boolean onResourceReady(Object resource, Object model, Target target, boolean isFromMemoryCache, boolean isFirstResource) {
+            android.util.Log.d("GLIDE2", String.format(Locale.ROOT,
                     "onResourceReady(%s, %s, %s, %s, %s)", resource, model, target, isFromMemoryCache, isFirstResource));
             return false;
         }
     }
+
     public void openDrawer() {
         mDrawerLayout.openDrawer(Gravity.START);
     }
@@ -350,12 +360,60 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
                         , true);
                 break;
             case R.drawable.ic_logout:
-                ATCPrefManager.setIsUserLoggedIn(HomeActivity.this, false);
-                ActivityUtils.openActivity(HomeActivity.this, LoginActivity.class, true);
+                showConfirmDialog();
+//                ATCPrefManager.setIsUserLoggedIn(HomeActivity.this, false);
+//                ActivityUtils.openActivity(HomeActivity.this, LoginActivity.class, true);
                 break;
             default:
                 break;
         }
+    }
+
+    private void showConfirmDialog() {
+
+        // Create custom dialog object
+        final Dialog dialog = new Dialog(HomeActivity.this);
+
+        dialog.setContentView(R.layout.logout_confirm_dialog);
+
+        // set values for custom dialog components - text, image and button
+        Button logout = (Button) dialog.findViewById(R.id.logout);
+        Button cancel = (Button) dialog.findViewById(R.id.cancel);
+
+        dialog.show();
+
+        Button declineButton = (Button) dialog.findViewById(R.id.cancel);
+        // if decline button is clicked, close the custom dialog
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                dialog.dismiss();
+            }
+        });
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ATCPrefManager.setIsUserLoggedIn(HomeActivity.this, false);
+                ActivityUtils.openActivity(HomeActivity.this, LoginActivity.class, true);
+            }
+        });
+
+//        new AlertDialog.Builder(this)
+//                .setIcon(android.R.drawable.ic_dialog_alert)
+//                .setTitle("Log out")
+//                .setMessage("Are you sure you want to Log out from your account?")
+//                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+//                {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        ATCPrefManager.setIsUserLoggedIn(HomeActivity.this, false);
+//                        ActivityUtils.openActivity(HomeActivity.this, LoginActivity.class, true);
+//                    }
+//
+//                })
+//                .setNegativeButton("No", null).show();
     }
 
     @Override
@@ -365,7 +423,7 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
         if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof GroupsTimeLineFragment &&
-                Globals.CAME_FROM_NOTIFICATION_TO_GROUP){
+                Globals.CAME_FROM_NOTIFICATION_TO_GROUP) {
             finish();
         }
 
@@ -398,6 +456,16 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
             Bundle bundle = new Bundle();
             bundle.putInt("string_key", Globals.GROUP_ID);
             openFragment(GroupFragment.class, bundle);
+        } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof RelativeEventFragment) {
+            Bundle bundle = new Bundle();
+            bundle.putInt("GroupId", Globals.groupId);
+            bundle.putString("RelativId", Globals.relativeId);
+            openFragment(MemberProfileFragment.class, bundle);
+        } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof RelativeGroupsFragment) {
+            Bundle bundle = new Bundle();
+            bundle.putInt("GroupId", Globals.groupId);
+            bundle.putString("RelativId", Globals.relativeId);
+            openFragment(MemberProfileFragment.class, bundle);
         } else {
             openTimeLine();
 //            openFragment(TimelineFragment.class, null);

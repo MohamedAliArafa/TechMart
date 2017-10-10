@@ -7,43 +7,45 @@
     android:gravity="center"
     android:orientation="horizontal"
     android:weightSum="10">
-<LinearLayout
-    android:id="@+id/layout"
-    android:layout_width="match_parent"
-    android:layout_height="59dp"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:orientation="horizontal"
-    android:weightSum="10">
-    <com.a700apps.techmart.utils.CustomTextView
-        android:id="@+id/tv_nav_drawer"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="left"
-        android:layout_marginLeft="@dimen/small_inner_spacing"
-        android:layout_marginTop="@dimen/general_margin"
-        android:layout_weight="8"
-        android:gravity="center_vertical"
-        android:maxLines="1"
-        android:textColor="@color/button_light_text"
-        android:textSize="@dimen/main_light_text"
-        tools:text="TITLE" />
+
 
 
     <ImageView
         android:id="@+id/iv_nav_drawer_item"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="right"
-        android:src="@drawable/ic_group"
-        android:layout_marginRight="@dimen/small_inner_spacing"/>
-</LinearLayout>
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="right|center"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="@dimen/small_inner_spacing"
+        android:src="@drawable/ic_group" />
+
+        <com.a700apps.techmart.utils.CustomTextView
+            android:id="@+id/tv_nav_drawer"
+            android:layout_width="0dp"
+
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:layout_marginLeft="24dp"
+            android:layout_toStartOf="@id/iv_nav_drawer_item"
+            android:layout_marginTop="@dimen/general_margin"
+            android:gravity="center_vertical"
+            android:layout_alignParentStart="true"
+            android:maxLines="1"
+            android:textColor="@color/button_light_text"
+            android:textSize="@dimen/main_light_text"
+            tools:text="TITLE" />
+
+
+
+
     <TextView
-        android:layout_below="@id/layout"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginEnd="2dp"
-        android:background="@color/gry_border"/>
+        android:layout_alignParentBottom="true"
+        android:background="@color/separator" />
 
 
 </RelativeLayout>

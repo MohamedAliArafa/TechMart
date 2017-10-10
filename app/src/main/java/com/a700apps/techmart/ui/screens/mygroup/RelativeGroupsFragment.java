@@ -59,8 +59,7 @@ public class RelativeGroupsFragment extends Fragment implements GroupView {
         mSideMenuImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtils.openActivity(getActivity(), HomeActivity.class, true);
-
+                getActivity().onBackPressed();
             }
         });
 

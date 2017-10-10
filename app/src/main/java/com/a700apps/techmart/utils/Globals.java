@@ -18,6 +18,9 @@ public class Globals {
 
     public static int SELECTED_ID = -1;
 
+    // from member profile to shared events and group use these params
+    public static String relativeId = null;
+    public static int groupId ;
     public static int mIndex = -1;
 
 

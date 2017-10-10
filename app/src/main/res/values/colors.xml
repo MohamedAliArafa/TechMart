@@ -90,6 +90,8 @@
     <color name="blue_join_dialog">#117874</color>
 
     <color name="trans_white">#7dffffff</color>
+    <color name="white">#ffffff</color>
+    <color name="separator">#b3b3b3</color>
 
 </resources>
 

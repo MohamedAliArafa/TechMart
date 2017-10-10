@@ -2,8 +2,10 @@
     <string name="app_name">TechMart</string>
 
     <string name="invalid_password">The password should contains numbers and letters, its length should exceed 8 characters.</string>
-    <string name="invalid_email">Invalid E-mail.</string>
+    <string name="invalid_email"> Email field is empty</string>
+    <string name="invalid_email_format"> Enter valid email</string>
     <string name="empty_mail_field">Empty field</string>
+    <string name="enter_your_password">Please enter your password</string>
     <string name="no_internet_connection">Kindly check the internet connection.</string>
     <string name="select_group">Pleast select group.</string>
     <string name="not_supported_image">Please select Format: jpg,tiff.</string>
@@ -35,7 +37,7 @@
 
     <string-array name="nav_drawer_titles">
         <item>Timeline</item>
-        <item>My Group</item>
+        <item>My Groups</item>
         <item>Join New Group</item>
         <item>Messages</item>
         <item>Schedule</item>
@@ -79,6 +81,8 @@
     <string name="group_description2">Emirate enviroment group  06 April - 08 April 2017  common English usage misconception  The crafting of clear</string>
     <string name="name_length_not_valid">Please enter valid name</string>
     <string name="invalid_mobile_number">Please enter valid mobile number</string>
+    <string name="invalid_mobile_number_97">mobile number should start with 97</string>
+    <string name="invalid_mobile_number_size">mobile number should be 14 numbers</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -99,6 +103,7 @@
     <string name="follow">Follow</string>
     <string name="unfollow">UnFollow</string>
     <string name="disconnect">DisConnect</string>
+    <string name="canecl_connect">Cancel Request</string>
     <string name="connect">Connect</string>
     <string name="thanks_you">Thanks for reaching out.\n Our team will be happy support you</string>
     <string name="call">Call</string>

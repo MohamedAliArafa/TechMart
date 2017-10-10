@@ -23,6 +23,12 @@ public class User {
     @Expose
     public String Photo;
 
+    public String LinkedinProfile;
+
+    public String Phone;
+
+
+
     @SerializedName("Company")
     @Expose
     public String Company;

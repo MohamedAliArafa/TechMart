@@ -37,9 +37,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/menu_name_margin_left"
-            android:layout_marginTop="13dp"
             android:gravity="center"
             android:minLines="1"
+
             android:paddingBottom="4dp"
             android:textColor="@android:color/white"
             android:textSize="14sp"

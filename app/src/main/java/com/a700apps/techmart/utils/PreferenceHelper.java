@@ -3,6 +3,7 @@ package com.a700apps.techmart.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.a700apps.techmart.data.model.User;
 import com.google.gson.Gson;
@@ -58,6 +59,11 @@ public class PreferenceHelper {
 
     public static void saveUser(Context context, User user) {
         saveValue(context, PrefsKeys.USER_DATA, new Gson().toJson(user));
+    }
+
+
+    public static void test(){
+
     }
 
 

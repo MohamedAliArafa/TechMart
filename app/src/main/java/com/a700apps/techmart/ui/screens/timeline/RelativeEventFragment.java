@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.EventAdapter;
 import com.a700apps.techmart.data.model.TimeLineData;
+import com.a700apps.techmart.ui.screens.home.HomeActivity;
+import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
+import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.DialogCreator;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
 import com.a700apps.techmart.utils.PreferenceHelper;
@@ -45,7 +48,22 @@ public class RelativeEventFragment extends Fragment implements TimeLineView {
         indicatorView = view.findViewById(R.id.avi);
 
         String relativeId = getArguments().getString("RelativId");
-        presenter.GetRelativeEventByUserID(relativeId, PreferenceHelper.getUserId(getActivity()));
+        presenter.GetRelativeEventByUserID(relativeId, PreferenceHelper.getUserId(getActivity()) , getActivity());
+
+        view.findViewById(R.id.imageView4).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                ((HomeActivity)getActivity()).openDrawer();
+                getActivity().onBackPressed();
+            }
+        });
+
+        view.findViewById(R.id.new_profile).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActivityUtils.openActivity(getActivity() , NotificationActivity.class , false);
+            }
+        });
 
         return view;
     }
@@ -71,7 +89,7 @@ public class RelativeEventFragment extends Fragment implements TimeLineView {
 
     @Override
     public void showErrorDialog(int error) {
-        DialogCreator.showOneButtonDialog(getActivity(), R.string.check_internet, "Error", null);
+        DialogCreator.showOneButtonDialog(getActivity() , error, "Error", null);
 
     }
 

@@ -154,7 +154,7 @@ public class EditProfileActivity extends AppCompatActivity implements ProfileVie
                 break;
 
             case R.id.btn_save:
-              presenter.updateProfileData(PreferenceHelper.getUserId(EditProfileActivity.this),
+              presenter.updateProfileData(this , PreferenceHelper.getUserId(EditProfileActivity.this),
                       mName.getText().toString(),"","",mCompany.getText().toString(),
                       mPosition.getText().toString(),mPhone.getText().toString());
 

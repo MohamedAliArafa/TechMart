@@ -81,7 +81,7 @@
             android:id="@+id/imageView4"
             android:layout_width="40dp"
             android:layout_height="30dp"
-            app:srcCompat="@drawable/ic_side_menu" />
+            app:srcCompat="@drawable/ic_back" />
 
         <EditText
             android:id="@+id/edt_search"

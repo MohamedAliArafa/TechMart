@@ -8,11 +8,9 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.a700apps.techmart.R;
-import com.a700apps.techmart.TechMartApp;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.register.RegisterActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
@@ -28,7 +26,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 public class LoginActivity extends Activity implements LoginView, View.OnClickListener {
     //GUI References.
     EditText emailEditText, passwordEditText;
-    TextView mEmailTextView,mPasswordTextView;
+    TextView mEmailTextView, mPasswordTextView;
     //Objects.
     private LoginPresenter presenter;
     private ProgressDialog progressDialog;
@@ -54,12 +52,12 @@ public class LoginActivity extends Activity implements LoginView, View.OnClickLi
         indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
         loginButton.setOnClickListener(this);
         SignButton.setOnClickListener(this);
-         ActivityUtils.applyLightFont(emailEditText);
-         ActivityUtils.applyLightFont(passwordEditText);
-         ActivityUtils.applyBoldFont(mEmailTextView);
-         ActivityUtils.applyBoldFont(mPasswordTextView);
-         ActivityUtils.applyBoldFont(loginButton);
-         ActivityUtils.applyBoldFont(SignButton);
+        ActivityUtils.applyLightFont(emailEditText);
+        ActivityUtils.applyLightFont(passwordEditText);
+        ActivityUtils.applyBoldFont(mEmailTextView);
+        ActivityUtils.applyBoldFont(mPasswordTextView);
+        ActivityUtils.applyBoldFont(loginButton);
+        ActivityUtils.applyBoldFont(SignButton);
 
     }
 
@@ -101,27 +99,28 @@ public class LoginActivity extends Activity implements LoginView, View.OnClickLi
     @Override
     public void onClick(View v) {
         int viewId = v.getId();
+        boolean isValid = true;
         if (viewId == R.id.btn_sign_in) {
             String email = ActivityUtils.getViewTextValue(emailEditText);
             String password = ActivityUtils.getViewTextValue(passwordEditText);
             boolean validPassword = Validator.validPasswordLength(password);
             boolean validEmail = Validator.validEmail(email);
             if (email.isEmpty()) {
-                emailEditText.setError(getResources().getString(R.string.empty_mail_field));
-                return;
+                emailEditText.setError(getResources().getString(R.string.invalid_email));
+                isValid = false;
             }
             if (!validEmail) {
-                emailEditText.setError(getResources().getString(R.string.invalid_email));
-                return;
+                emailEditText.setError(getResources().getString(R.string.invalid_email_format));
+                isValid = false;
             }
-            if (password.isEmpty()){
-                passwordEditText.setError(getResources().getString(R.string.empty_mail_field));
-                return;
+            if (password.isEmpty()) {
+                passwordEditText.setError(getResources().getString(R.string.enter_your_password));
+                isValid = false;
             }
 
             if (!validPassword) {
                 passwordEditText.setError(getResources().getString(R.string.invalid_password));
-                return;
+                isValid = false;
             }
             if (!AppUtils.isInternetAvailable(LoginActivity.this)) {
                 Snackbar snackbar1 = Snackbar.make(v, R.string.no_internet_connection, Snackbar.LENGTH_SHORT);
@@ -131,7 +130,8 @@ public class LoginActivity extends Activity implements LoginView, View.OnClickLi
             }
 
             // login click.
-            presenter.login(email, password, LoginActivity.this);
+            if (isValid)
+                presenter.login(email, password, LoginActivity.this);
         } else if (viewId == R.id.btn_register) {
             openRegisterActivity();
         }
