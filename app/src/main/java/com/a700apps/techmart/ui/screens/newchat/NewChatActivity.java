@@ -7,17 +7,16 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.a700apps.techmart.R;
+import com.a700apps.techmart.adapter.AutoCompleteMessagesAdapter;
 import com.a700apps.techmart.data.model.AllMessageList;
 import com.a700apps.techmart.data.model.FriendMessage;
 import com.a700apps.techmart.data.model.MyConnectionList;
@@ -57,8 +56,10 @@ public class NewChatActivity extends AppCompatActivity implements MessageView {
         UserIDsArrayList = new ArrayList<>();
         connectionList = (RecyclerView) findViewById(R.id.recyclerView);
         autoCompleteText = (AutoCompleteTextView) findViewById(R.id.auto_complete_text);
-        mCancel=(TextView)findViewById(R.id.tv_cancel) ;
-        mBackImageView=(ImageView)findViewById(R.id.iv_back);
+        autoCompleteText.setThreshold(1);
+
+        mCancel = (TextView) findViewById(R.id.tv_cancel);
+        mBackImageView = (ImageView) findViewById(R.id.iv_back);
         mBackImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,19 +73,6 @@ public class NewChatActivity extends AppCompatActivity implements MessageView {
             }
         });
         connectionList.setLayoutManager(new LinearLayoutManager(this));
-        ArrayAdapter<MyConnectionList.ResultEntity> adapter = new ArrayAdapter<MyConnectionList.ResultEntity>
-                (NewChatActivity.this, android.R.layout.simple_list_item_1, connectionListResult);
-        autoCompleteText.setAdapter(adapter);
-        autoCompleteText.setThreshold(1);
-        autoCompleteText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                String selection = (String) parent.getItemAtPosition(position);
-                Log.e("your selected item", "" + connectionListResult.get(position).getUserID());
-                Log.e("your selected ", "" + UserIDsArrayList.get(position));
-            }
-        });
         presenter.getMyConnectionList(NewChatActivity.this, PreferenceHelper.getUserId(NewChatActivity.this));
     }
 
@@ -122,6 +110,19 @@ public class NewChatActivity extends AppCompatActivity implements MessageView {
             namesArrayList.add(responser.get(i).getName());
             UserIDsArrayList.add(responser.get(i).getUserID());
         }
+        autoCompleteText.setAdapter(new AutoCompleteMessagesAdapter(this, R.layout.notif_item_group_approved, responser));
+        autoCompleteText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                MyConnectionList.ResultEntity resultEntity = (MyConnectionList.ResultEntity) adapterView.getItemAtPosition(i);
+                Intent intent = new Intent(NewChatActivity.this, ChatActivity.class);
+                intent.putExtra("RelativeID", resultEntity.getUserID());
+                intent.putExtra("ReciverName", resultEntity.getName());
+                intent.putExtra("ReciverPhoto", resultEntity.getPhoto());
+                startActivity(intent);
+            }
+        });
     }
 
 

@@ -41,7 +41,6 @@ public class MessageFragment extends Fragment implements MessageView  {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
     }
 
 
@@ -107,7 +106,6 @@ public class MessageFragment extends Fragment implements MessageView  {
     public void fillMessagesList(List<AllMessageList.ResultEntity> responser) {
         MessagesAdapter messagesAdapter = new MessagesAdapter(getActivity(), responser);
         messageList.setAdapter(messagesAdapter);
-
     }
 
     @Override

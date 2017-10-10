@@ -65,7 +65,6 @@
         android:layout_width="0dp"
         android:layout_height="551dp"
         android:text="There is no data"
-
         android:gravity="center"
         tools:layout_editor_absoluteY="8dp"
         android:visibility="gone"
@@ -95,7 +94,7 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_side_menu" />
 
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/edt_search"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
@@ -104,7 +103,7 @@
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:gravity="left"
-            android:text="@string/search_name"
+            android:hint="Enter search key"
             android:textColor="@color/light_color_text"
             android:textSize="@dimen/time_text"
             android:textColorHint="@color/light_color_text"

@@ -40,7 +40,7 @@
         <item>Messages</item>
         <item>Schedule</item>
         <item>Settings</item>
-        <item>Logout</item>
+        <item>Log out</item>
     </string-array>
     <string name="drawer_opened_desc">Drawer is Opened</string>
     <string name="drawer_closed_desc">Drawer is Closed</string>
@@ -59,7 +59,7 @@
     <string name="country_council">Country Council</string>
     <string name="business_associates">Business Associates</string>
     <string name="groups">Groups</string>
-    <string name="copyright">Copyright c 2017 |</string>
+    <string name="copyright">Copyright &#169; 2017 |</string>
     <string name="department">Department of Economic Development Dubai</string>
     <string name="select_your_category">Select Your Category</string>
     <string name="next">Next</string>

@@ -1,6 +1,5 @@
 package com.a700apps.techmart.ui.screens.register;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -35,7 +34,6 @@ import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.ServerResponse;
 import com.a700apps.techmart.data.network.ApiInterface;
 import com.a700apps.techmart.ui.screens.category.CategoryActivity;
-import com.a700apps.techmart.ui.screens.creatpost.PostActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.ApiClient;
 import com.a700apps.techmart.utils.AppConst;
@@ -61,8 +59,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.R.attr.data;
-
 
 /**
  * Created by samir salah on 8/16/2017.
@@ -71,6 +67,7 @@ import static android.R.attr.data;
 public class RegisterActivity extends Activity implements RegisterView, View.OnClickListener {
 
     private static final int PERMISSION_REQUEST_CODE = 786;
+    private static final int Permission_storage_code = 787;
     EditText mFullNameEditText, mPhoneNumberEditText, mEmailEditText, mPasswordEditText, mCompanyEditText, mPositionEditText;
     private static final int SELECT_PICTURE = 1;
     private long selectedImageSize;
@@ -84,10 +81,11 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
     Social mLinkedInModel = null;
     private int mRequestCode;
     private static final int SIGN_IN_CODE = 0;
-    ImageView mLikedinImageView,mSignInImageView;
+    ImageView mLikedinImageView, mSignInImageView;
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
-     Dialog dialogsLoading;
+    Dialog dialogsLoading;
     Button SignButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +93,6 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
         findViews();
         presenter = new RegisterPresenter();
         presenter.attachView(this);
-
 
 
 //        progressDialog = new ProgressDialog(this);
@@ -115,8 +112,8 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
         mPositionEditText = ActivityUtils.findView(this, R.id.et_company_position, EditText.class);
         mLinkedInButton = ActivityUtils.findView(this, R.id.btn_register, Button.class);
         indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
-        mLikedinImageView= (ImageView)findViewById(R.id.iv_linkedin);
-        mSignInImageView= (ImageView)findViewById(R.id.iv_signin);
+        mLikedinImageView = (ImageView) findViewById(R.id.iv_linkedin);
+        mSignInImageView = (ImageView) findViewById(R.id.iv_signin);
         SignButton.setOnClickListener(this);
         attachButton.setOnClickListener(this);
         mLinkedInButton.setOnClickListener(this);
@@ -144,14 +141,14 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                 Uri selectedImageUri = data.getData();
                 String scheme = selectedImageUri.getScheme();
                 selectedImagePath = getPathFromURI(RegisterActivity.this, selectedImageUri);
-                if (selectedImageUri==null){
+                if (selectedImageUri == null) {
                     Toast.makeText(this, "Sorry .. please select another image", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 ImageView imageView = (ImageView) findViewById(R.id.iv_post);
                 imageView.setImageBitmap(BitmapFactory.decodeFile(selectedImagePath));
                 imageView.setVisibility(View.VISIBLE);
-                Log.e("ImagePath", "-->"+selectedImagePath);
+                Log.e("ImagePath", "-->" + selectedImagePath);
 
                 if (scheme.equals(ContentResolver.SCHEME_CONTENT)) {
                     try {
@@ -184,7 +181,8 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
 //                    }
                     selectedImageSize = f.length();
                 }
-            }else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
+            } else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
+
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
 //                Bitmap photo = (Bitmap) data.getExtras().get("data");
@@ -200,6 +198,8 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
 
                 imageView.setImageBitmap(imageBitmap);
                 imageView.setVisibility(View.VISIBLE);
+
+
             }
         }
     }
@@ -352,22 +352,29 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
             AppConst.requestPermission(RegisterActivity.this, PERMISSION_REQUEST_CODE);
         }
     }
+
     void captureImage() {
-        if (checkPermission()){
+        if (checkPermission(android.Manifest.permission.CAMERA)) {
 //            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 //            startActivityForResult(cameraIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+            if (AppConst.checkPermission(RegisterActivity.this)) {
+                dispatchTakePictureIntent();
+            } else {
+                AppConst.requestPermission(RegisterActivity.this, Permission_storage_code);
+            }
 
-            dispatchTakePictureIntent();
-        }else {
-            requestPermission();
+        } else {
+            requestPermission(android.Manifest.permission.CAMERA);
         }
     }
+
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
         }
     }
+
     @Override
     public void onClick(View v) {
         int viewId = v.getId();
@@ -382,7 +389,7 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
 //                if (Build.VERSION.SDK_INT >= 21) {
 //                    if (checkPermission()) {
 
-                        openChooseMethodDialog();
+                openChooseMethodDialog();
 
 //                        selectedImagePath = null;
 //                        selectedImageSize = 0;
@@ -407,52 +414,52 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                 company = ActivityUtils.getViewTextValue(mCompanyEditText);
                 position = ActivityUtils.getViewTextValue(mPositionEditText);
 
-                boolean isValid= true;
+                boolean isValid = true;
 
                 boolean emptyName = Validator.isTextEmpty(fullName);
                 if (emptyName) {
                     mFullNameEditText.setError(getResources().getString(R.string.name_length_not_valid));
-                    isValid  =false;
+                    isValid = false;
                 }
 
                 boolean validMobileNumber = Validator.validMobileNumber(mobile.replaceFirst("\\+", ""));
                 if (!validMobileNumber) {
                     mPhoneNumberEditText.setError(getResources().getString(R.string.invalid_mobile_number));
-                    isValid  =false;
-                }else if (!mobile.startsWith("96")){
+                    isValid = false;
+                } else if (!mobile.startsWith("96")) {
                     mPhoneNumberEditText.setError(getResources().getString(R.string.invalid_mobile_number));
-                    isValid  =false;
+                    isValid = false;
                 }
 
 
                 boolean validEmail = Validator.validEmail(email);
                 if (!validEmail) {
                     mEmailEditText.setError(getResources().getString(R.string.invalid_email));
-                    isValid  =false;
+                    isValid = false;
                 }
 
                 boolean validPassword = Validator.validPasswordLength(password);
                 if (!validPassword) {
                     mPasswordEditText.setError(getResources().getString(R.string.invalid_password));
-                    isValid  =false;
+                    isValid = false;
                 }
 
                 boolean validCompanyName = Validator.isTextEmpty(company);
                 if (validCompanyName) {
                     mCompanyEditText.setError(getResources().getString(R.string.company_length_not_valid));
-                    isValid  =false;
+                    isValid = false;
                 }
 
                 boolean validCompanyPosition = Validator.isTextEmpty(position);
                 if (validCompanyPosition) {
                     mPositionEditText.setError(getResources().getString(R.string.position_length_not_valid));
-                    isValid  =false;
+                    isValid = false;
                 }
 
                 if (selectedImagePath == null) {
                     Snackbar snackbar1 = Snackbar.make(v, R.string.not_image, Snackbar.LENGTH_SHORT);
                     snackbar1.show();
-                    isValid  =false;
+                    isValid = false;
                 }
 //
 
@@ -461,12 +468,11 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                     Snackbar snackbar1 = Snackbar.make(v, R.string.no_internet_connection, Snackbar.LENGTH_SHORT);
                     snackbar1.show();
                 } else {
-                    if (isValid){
+                    if (isValid) {
                         uploadFile();
                     }
 
                 }
-
 
                 break;
             default:
@@ -516,14 +522,15 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
 
         // Map is used to multipart the file using okhttp3.RequestBody
         File file = new File(selectedImagePath);
-        Log.e("size iin kb " , " size in KB ->   " +file.length()/1024);
-        if (file.length()/1024>1024){
+        Log.e("size in kb ", " size in KB -> " + file.length() / 1024);
 
+        if (file.length() / 1024 > 1024) {
             Snackbar snackbar1 = Snackbar.make(SignButton, R.string.image_size_exceed, Snackbar.LENGTH_SHORT);
             snackbar1.show();
             return;
         }
-        dialogsLoading  = new loadingDialog().showDialog(RegisterActivity.this);
+
+        dialogsLoading = new loadingDialog().showDialog(RegisterActivity.this);
         // Parsing any Media type file
         RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), file);
         MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
@@ -560,8 +567,9 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
             }
         });
     }
-    private boolean checkPermission() {
-        int result = ContextCompat.checkSelfPermission(RegisterActivity.this, android.Manifest.permission.CAMERA);
+
+    private boolean checkPermission(String permission) {//android.Manifest.permission.CAMERA
+        int result = ContextCompat.checkSelfPermission(RegisterActivity.this, permission);
         if (result == PackageManager.PERMISSION_GRANTED) {
             return true;
         } else {
@@ -569,11 +577,11 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
         }
     }
 
-    private void requestPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(RegisterActivity.this, android.Manifest.permission.CAMERA)) {
+    private void requestPermission(String permission) {//android.Manifest.permission.CAMERA
+        if (ActivityCompat.shouldShowRequestPermissionRationale(RegisterActivity.this, permission)) {
             Toast.makeText(RegisterActivity.this, "Camera permission allows us take images throught camera. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
         } else {
-            ActivityCompat.requestPermissions(RegisterActivity.this, new String[]{android.Manifest.permission.CAMERA}, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+            ActivityCompat.requestPermissions(RegisterActivity.this, new String[]{permission}, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
         }
     }
 
@@ -591,7 +599,7 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                 Log.e("photo", mLinkedInModel.photo);
                 Log.e("id", mLinkedInModel.id);
                 presenter.registerLinkedin(mLinkedInModel.name, mLinkedInModel.email,
-                        mLinkedInModel.id,mLinkedInModel.work, mLinkedInModel.work, mLinkedInModel.photo, RegisterActivity.this);
+                        mLinkedInModel.id, mLinkedInModel.work, mLinkedInModel.work, mLinkedInModel.photo, RegisterActivity.this);
             }
 
             @Override
@@ -604,12 +612,12 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-        switch (requestCode){
+        switch (requestCode) {
             case CAMERA_CAPTURE_IMAGE_REQUEST_CODE:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     captureImage();
-                } else{
+                } else {
                     Toast.makeText(this, "permission denied", Toast.LENGTH_SHORT).show();
                 }
         }

@@ -345,7 +345,6 @@
 
     <style name="NavDrawerList">
         <item name="android:divider">@color/button_light_text</item>
-        <item name="android:dividerHeight">1dp</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_gravity">start</item>
         <item name="android:fadingEdgeLength">0dp</item>
