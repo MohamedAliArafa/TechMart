@@ -48,6 +48,7 @@ dependencies {
         transitive = true;
     }
     compile project(':linkedin-sdk')
+
     compile 'com.android.support:appcompat-v7:26.0.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.jakewharton:butterknife:8.5.1'
@@ -83,6 +84,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     annotationProcessor 'android.arch.lifecycle:compiler:1.0.0-alpha9'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
-
 }
 apply plugin: 'com.google.gms.google-services'
