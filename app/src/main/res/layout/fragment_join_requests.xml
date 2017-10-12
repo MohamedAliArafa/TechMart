@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_join_requests"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_bg_list">
+
+
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_margin="12dp"
+        android:padding="8dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_back"/>
+
+    <com.a700apps.techmart.utils.CustomTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Membership Approval"
+        android:textSize="14sp"
+        android:id="@+id/text"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        android:padding="28dp"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recyclerView"
+        android:background="@color/transparent"
+        android:layout_below="@id/text"
+        ></android.support.v7.widget.RecyclerView>
+</RelativeLayout>

@@ -80,9 +80,8 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
         viewHolder.manageLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                presenter.manageTimeLineItem(singleItem.getID() , singleItem.getRequestedRole() , PreferenceHelper.getUserId(context) , 1);
-
-                showConfirmDialog(singleItem.getID() , singleItem.getRequestedRole());
+//                presenter.manageRequestItem(singleItem.getID() , singleItem.getRequestedRole() , PreferenceHelper.getUserId(context) , 1);
+                showConfirmDialog(singleItem.getID());
             }
         });
 
@@ -90,7 +89,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
 
     }
 
-    private void showConfirmDialog(final int postId , final int type) {
+    private void showConfirmDialog(final int postId ) {
 
         // Create custom dialog object
         final Dialog dialog = new Dialog(context);
@@ -116,7 +115,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
         approveImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.manageTimeLineItem(postId, type, PreferenceHelper.getUserId(context), 1);
+                presenter.manageRequestItem(postId, 1,1, PreferenceHelper.getUserId(context));
                 dialog.dismiss();
             }
         });
@@ -124,7 +123,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
         approveTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.manageTimeLineItem(postId, type, PreferenceHelper.getUserId(context), 1);
+                presenter.manageRequestItem(postId, 1,1, PreferenceHelper.getUserId(context));
                 dialog.dismiss();
             }
         });
@@ -132,7 +131,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
         rejectImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.manageTimeLineItem(postId, type, PreferenceHelper.getUserId(context), 2);
+                presenter.manageRequestItem(postId, 2,1, PreferenceHelper.getUserId(context));
                 dialog.dismiss();
             }
         });
@@ -140,7 +139,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
         rejectTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.manageTimeLineItem(postId, type, PreferenceHelper.getUserId(context), 2);
+                presenter.manageRequestItem(postId, 2,1, PreferenceHelper.getUserId(context));
                 dialog.dismiss();
             }
         });
@@ -148,7 +147,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
         deferImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.manageTimeLineItem(postId, type, PreferenceHelper.getUserId(context), 3);
+                presenter.manageRequestItem(postId, 3,1, PreferenceHelper.getUserId(context));
                 dialog.dismiss();
             }
         });
@@ -156,7 +155,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
         deferTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.manageTimeLineItem(postId, type, PreferenceHelper.getUserId(context), 3);
+                presenter.manageRequestItem(postId, 3,1, PreferenceHelper.getUserId(context));
                 dialog.dismiss();
             }
         });

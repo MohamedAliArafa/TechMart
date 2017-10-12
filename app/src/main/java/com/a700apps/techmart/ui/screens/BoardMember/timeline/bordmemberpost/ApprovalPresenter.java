@@ -1,6 +1,5 @@
-package com.a700apps.techmart.ui.screens.BoardMember.DialogApproval;
+package com.a700apps.techmart.ui.screens.BoardMember.timeline.bordmemberpost;
 
-import com.a700apps.techmart.data.model.NotificationDataLike;
 import com.a700apps.techmart.data.model.PostData;
 import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.data.network.MainApiHelper;
@@ -18,7 +17,7 @@ import org.json.JSONObject;
 public class ApprovalPresenter extends MainPresenter<approvalView> {
 
 
-    public void manageTimeLineItem(int itemId, int type, String userId, final int status) {
+    void manageTimeLineItem(int itemId, int type , String userId , final int status) {
 
         view.showLoadingProgress();
 

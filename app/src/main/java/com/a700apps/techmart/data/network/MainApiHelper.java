@@ -395,5 +395,14 @@ public class MainApiHelper {
         return jsonObject;
     }
 
+    public static JSONObject changeRequestStatus(int id , int requestStatus , int requestRole ,String UserID) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("ID", id);
+        jsonObject.put("RequestStatus", requestStatus );
+        jsonObject.put("RequestedRole", requestRole);
+        jsonObject.put("UserID", UserID);
+        return jsonObject;
+    }
+
 
 }

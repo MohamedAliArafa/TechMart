@@ -44,9 +44,11 @@ public class BoardPostFragment extends Fragment implements BoardTimlineView {
         Bundle arguments = getArguments();
         mGroupId = arguments.getInt("string_key");
         rv = (EmptyRecyclerView) view.findViewById(R.id.recyclerView);
-        presenter.getTimeline(mGroupId, PreferenceHelper.getUserId(getActivity()),2);
+//        presenter.getTimeline(mGroupId, PreferenceHelper.getUserId(getActivity()),2);
         return view;
     }
+
+
 
     @Override
     public void showLoadingProgress() {
@@ -63,7 +65,6 @@ public class BoardPostFragment extends Fragment implements BoardTimlineView {
     public void onResume() {
         super.onResume();
         presenter.getTimeline(mGroupId,PreferenceHelper.getUserId(getActivity()),2);
-
     }
 
     @Override

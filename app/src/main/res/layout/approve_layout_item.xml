@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/iv_approve_profile"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginBottom="2dp"
         android:layout_marginLeft="@dimen/margin5"
         android:layout_marginTop="2dp"

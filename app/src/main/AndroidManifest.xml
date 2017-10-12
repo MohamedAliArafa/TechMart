@@ -125,7 +125,6 @@
             android:label="@string/title_activity_maps" />
         <activity android:name=".ui.screens.BoardMember.EditTimeLine.EditTimeLineActivity" />
         <activity android:name=".ui.screens.BoardMember.DialogApproval.DialogActivity" />
-        <activity android:name=".ui.screens.BoardMember.JoinRequests.JoinRequestsActivity"></activity>
     </application>
 
 </manifest>

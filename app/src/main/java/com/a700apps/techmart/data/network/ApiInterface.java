@@ -196,6 +196,11 @@ public interface ApiInterface {
     @POST("Group/GetBoardMemeberManagedGroups")
     Observable<UserGroupData> manageGroup(@Body RequestBody body);
 
+
+    @POST("Group/ChangeRquestStatus")
+    Observable<PostData> changeRequestStatus(@Body RequestBody body);
+
+
 }
 
 

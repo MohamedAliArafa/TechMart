@@ -1,7 +1,6 @@
 package com.a700apps.techmart.ui.screens.home;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
@@ -26,9 +25,8 @@ import android.widget.TextView;
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.NavDrawerAdapter;
 import com.a700apps.techmart.data.network.MainApi;
-import com.a700apps.techmart.ui.screens.BoardMember.DialogApproval.DialogActivity;
-import com.a700apps.techmart.ui.screens.BoardMember.EditTimeLine.EditTimeLineActivity;
-import com.a700apps.techmart.ui.screens.BoardMember.JoinRequests.JoinRequestsActivity;
+import com.a700apps.techmart.ui.screens.BoardMember.JoinRequests.JoinRequestsFragment;
+import com.a700apps.techmart.ui.screens.BoardMember.timeline.BoardMemberTimelineFragment;
 import com.a700apps.techmart.ui.screens.groupmemberdetails.GroupFragment;
 import com.a700apps.techmart.ui.screens.grouptimeline.GroupsTimeLineFragment;
 import com.a700apps.techmart.ui.screens.joingroup.JoinGroupFragment;
@@ -476,6 +474,10 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
             bundle.putInt("GroupId", Globals.groupId);
             bundle.putString("RelativId", Globals.relativeId);
             openFragment(MemberProfileFragment.class, bundle);
+        } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof JoinRequestsFragment) {
+            Bundle bundle = new Bundle();
+            bundle.putInt("selectedCategory", Globals.GROUP_ID);
+            openFragment(BoardMemberTimelineFragment.class, bundle);
         } else {
             openTimeLine();
 //            openFragment(TimelineFragment.class, null);

@@ -96,4 +96,48 @@ public class RequestsPresenter extends MainPresenter<RequestsView> {
         }
 
     }
+
+
+    public void manageRequestItem(int itemId, final int requestStatus , int requestRole, String userId ) {
+
+        view.showLoadingProgress();
+
+        try {
+            JSONObject jsonObject = MainApiHelper.changeRequestStatus(itemId, requestStatus ,requestRole , userId );
+
+            MainApi.changeRequestStatus(jsonObject, new NetworkResponseListener<PostData>() {
+
+                @Override
+                public void networkOperationSuccess(NetworkResponse<PostData> networkResponse) {
+                    if (isDetachView()) return;
+                    view.dismissLoadingProgress();
+                    PostData userNetworkData = (PostData) networkResponse.data;
+                    int errorCode = userNetworkData.ISResultHasData;
+
+                    if (errorCode == 1) {
+                        switch (requestStatus){
+                            case 1:
+                                view.showToast("Request Approved");
+                                break;
+                            case 2:
+                                view.showToast("Request Rejected");
+                                break;
+                            case 3:
+                                view.showToast("Request Defered");
+                                break;
+                        }
+                    }
+                }
+
+                @Override
+                public void networkOperationFail(Throwable throwable) {
+                    view.dismissLoadingProgress();
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+            view.dismissLoadingProgress();
+        }
+
+    }
 }

@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.a700apps.techmart.R;
+import com.a700apps.techmart.ui.screens.BoardMember.JoinRequests.JoinRequestsFragment;
 import com.a700apps.techmart.ui.screens.BoardMember.timeline.boardmemberapproval.BoardApprovalFragment;
 import com.a700apps.techmart.ui.screens.BoardMember.timeline.boardmemberevent.BoardEventFragment;
 import com.a700apps.techmart.ui.screens.BoardMember.timeline.boardmembermembers.BoardMemberFragment;
@@ -24,7 +25,6 @@ import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.mygroup.GroupPagerFragment;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
-import com.a700apps.techmart.ui.screens.timeline.GroupTimeLineFragment;
 import com.a700apps.techmart.utils.ActivityUtils;
 
 import butterknife.ButterKnife;
@@ -155,8 +155,8 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
 
                 if (position == 4) {
 //                    ActivityUtils.openActivity(getActivity(), MyGroubListActivity.class, false);
-
-                    ((HomeActivity) getActivity()).addFragmentToBackStack(getFragmentManager(), R.id.fragment_container, new BoardApprovalFragment(), false, false);
+//                    ((HomeActivity) getActivity()).addFragmentToBackStack(getFragmentManager(), R.id.fragment_container, new BoardApprovalFragment(), false, false);
+                    ((HomeActivity) getActivity()).openFragment(JoinRequestsFragment.class,null);
                 }
             }
 
@@ -235,9 +235,13 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
                     UsersBoard.setArguments(argumentsusers);
                     return UsersBoard;
                 case 4:
-                    return new GroupPagerFragment();
+//                    ActivityUtils.openActivity(getActivity() , JoinRequestsActivity.class , false);
+                    JoinRequestsFragment joinRequestsFragment = new JoinRequestsFragment();
+
+                    return joinRequestsFragment;
+
                 default:
-                    return new GroupTimeLineFragment();
+                    return new JoinRequestsFragment();
             }
         }
 

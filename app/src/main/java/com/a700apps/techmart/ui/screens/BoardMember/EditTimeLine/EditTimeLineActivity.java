@@ -76,6 +76,7 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     private String selectedImagePath;
     int postId , type ;
+    String imageName ;
     NotificationDataLike.Result result;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,10 +98,10 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
         presenter = new EdittPresenter();
         presenter.attachView(this);
 
-        postId= 108;
-        type= 2;
-//        int postId= getIntent().getIntExtra("postId" , 0);
-//        int type= getIntent().getIntExtra("type" , 0);
+//        postId= 108;
+//        type= 2;
+        postId= getIntent().getIntExtra("postId" , 0);
+        type= getIntent().getIntExtra("type" , 0);
 
         presenter.getTimelineItem(postId , type, PreferenceHelper.getUserId(this));
 
@@ -124,6 +125,7 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
         headerEditText.setText(result.getTitle());
         descriptionEditText.setText(result.getDescr());
         selectedImageView.setVisibility(View.VISIBLE);
+        imageName = result.getImage().replace("/UploadedImages/" , "");
         Glide.with(this).load(MainApi.IMAGE_IP+result.getImage()).into(selectedImageView);//.placeholder(R.drawable.ratring_pic)
 
         dismissLoadingProgress();
@@ -473,8 +475,10 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
             case R.id.save_layout:
                 if (validate()){
                     if (selectedImagePath==null){
-                        presenter.editTimeLineItem(""+result.getGroupID() , postId ,result.getIsPublic() , headerEditText.getText().toString() ,
-                                descriptionEditText.getText().toString() , "" ,"",PreferenceHelper.getUserId(this) , result.getType());
+                        presenter.editTimeLineItem(""+result.getGroupID() , postId ,result.getIsPublic() ,
+                                headerEditText.getText().toString() ,
+                                descriptionEditText.getText().toString() , imageName ,"",
+                                PreferenceHelper.getUserId(this) , result.getType());
                     }else {
                         uploadFile();
                     }

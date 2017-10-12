@@ -34,7 +34,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
-            android:text="Share"
+            android:text="Edit"
             android:textColor="@color/blackGreenColor"
             android:textSize="@dimen/time_text" />
     </LinearLayout>
