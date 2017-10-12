@@ -118,10 +118,10 @@ public class LoginActivity extends Activity implements LoginView, View.OnClickLi
                 isValid = false;
             }
 
-            if (!validPassword) {
-                passwordEditText.setError(getResources().getString(R.string.invalid_password));
-                isValid = false;
-            }
+//            if (!validPassword) {
+//                passwordEditText.setError(getResources().getString(R.string.invalid_password));
+//                isValid = false;
+//            }
             if (!AppUtils.isInternetAvailable(LoginActivity.this)) {
                 Snackbar snackbar1 = Snackbar.make(v, R.string.no_internet_connection, Snackbar.LENGTH_SHORT);
                 snackbar1.setActionTextColor(Color.WHITE);

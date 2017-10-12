@@ -1,5 +1,6 @@
 package com.a700apps.techmart.data.network;
 
+import com.a700apps.techmart.data.model.AllGroupUsers;
 import com.a700apps.techmart.data.model.AllMessageList;
 import com.a700apps.techmart.data.model.AllSchedualList;
 import com.a700apps.techmart.data.model.CategoryData;
@@ -181,7 +182,7 @@ public interface ApiInterface {
     Observable<PostData> removeMember(@Body RequestBody body);
 
     @POST("user/GetAllGroupUsers")
-    Observable<UserData> getAllGroupUsers(@Body RequestBody body);
+    Observable<AllGroupUsers> getAllGroupUsers(@Body RequestBody body);
 
     @POST("Group/GetJoinGroupRequests")
     Observable<JoinGroupRequestsData> getJoinGroupRequests(@Body RequestBody body);
@@ -191,6 +192,9 @@ public interface ApiInterface {
 
     @POST("TimeLine/EditeTimeLineItem")
     Observable<PostData> editeTimeLineItem(@Body RequestBody body);
+
+    @POST("Group/GetBoardMemeberManagedGroups")
+    Observable<UserGroupData> manageGroup(@Body RequestBody body);
 
 }
 

@@ -29,6 +29,7 @@ import com.a700apps.techmart.ui.screens.groupmemberdetails.GroupFragment;
 import com.a700apps.techmart.ui.screens.grouptimeline.GroupsTimeLineFragment;
 import com.a700apps.techmart.ui.screens.joingroup.JoinGroupFragment;
 import com.a700apps.techmart.ui.screens.login.LoginActivity;
+import com.a700apps.techmart.ui.screens.managegroupboardmember.ManageBoardGroupFragment;
 import com.a700apps.techmart.ui.screens.meeting.MeetingActivity;
 import com.a700apps.techmart.ui.screens.message.MessageFragment;
 import com.a700apps.techmart.ui.screens.mygroup.MyGroupsListFragment;
@@ -41,6 +42,7 @@ import com.a700apps.techmart.ui.screens.timeline.RelativeEventFragment;
 import com.a700apps.techmart.ui.screens.timeline.TimelineFragment;
 import com.a700apps.techmart.utils.ATCPrefManager;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.CustomButton;
 import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.NavDrawerItem;
 import com.a700apps.techmart.utils.PreferenceHelper;
@@ -327,6 +329,9 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
                 break;
+            case R.drawable.ic_3:
+                openFragment(ManageBoardGroupFragment.class, null);
+                break;
 
             case R.drawable.ic_group:
 //                addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, new JoinGroupFragment(), false
@@ -377,12 +382,12 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         dialog.setContentView(R.layout.logout_confirm_dialog);
 
         // set values for custom dialog components - text, image and button
-        Button logout = (Button) dialog.findViewById(R.id.logout);
-        Button cancel = (Button) dialog.findViewById(R.id.cancel);
+        Button logout = (CustomButton) dialog.findViewById(R.id.logout);
+        Button cancel = (CustomButton) dialog.findViewById(R.id.cancel);
 
         dialog.show();
 
-        Button declineButton = (Button) dialog.findViewById(R.id.cancel);
+        Button declineButton = (CustomButton) dialog.findViewById(R.id.cancel);
         // if decline button is clicked, close the custom dialog
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
