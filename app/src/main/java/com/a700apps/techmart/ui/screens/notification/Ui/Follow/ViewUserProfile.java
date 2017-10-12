@@ -24,6 +24,7 @@ import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.message.ChatActivity;
 import com.a700apps.techmart.ui.screens.mygroup.RelativeGroupsFragment;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
+import com.a700apps.techmart.ui.screens.notification.Ui.Activity.NotificationHolderActivity;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
 import com.a700apps.techmart.ui.screens.profile.ProfileView;
 import com.a700apps.techmart.ui.screens.timeline.EventFragment;
@@ -285,6 +286,15 @@ public class ViewUserProfile extends Fragment implements ProfileView, View.OnCli
 
                 ((HomeActivity) getActivity()).addFragmentToBackStack(getFragmentManager(), R.id.fragment_container, relativeGroupsFragment, false
                         , false);
+
+//                if (getActivity() instanceof HomeActivity){
+//                    ((HomeActivity) getActivity()).addFragmentToBackStack(getFragmentManager(), R.id.fragment_container, relativeGroupsFragment, false
+//                            , false);
+//                }else if (getActivity() instanceof NotificationHolderActivity){
+//                    ((NotificationHolderActivity) getActivity()).addFragmentToBackStack(getFragmentManager(), R.id.fragment_container, relativeGroupsFragment, false
+//                            , false);
+//                }
+
                 break;
         }
     }

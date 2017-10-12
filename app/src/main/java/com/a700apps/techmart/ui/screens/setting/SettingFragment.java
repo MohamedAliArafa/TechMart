@@ -1,9 +1,11 @@
 package com.a700apps.techmart.ui.screens.setting;
 
+import android.app.Dialog;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
@@ -13,6 +15,8 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,9 +41,11 @@ import com.a700apps.techmart.utils.AppConst;
 import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.a700apps.techmart.utils.Validator;
+import com.a700apps.techmart.utils.loadingDialog;
 import com.bumptech.glide.Glide;
 import com.suke.widget.SwitchButton;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import butterknife.BindViews;
@@ -68,8 +74,9 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
     private final int PERMISSION_REQUEST_CODE = 10;
     File selectedFile;
     EditText oldPasswordEditText, newPasswordEditText, repeatPasswordEditText;
-    Button save;
+    Button save , bt_cancel;
     TextView tv_change;
+    Dialog dialogsLoading;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,6 +104,7 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
         newPasswordEditText = view.findViewById(R.id.edt_change_new_pass);
         repeatPasswordEditText = view.findViewById(R.id.edt_repeat_pass);
         save = view.findViewById(R.id.bt_save);
+        bt_cancel = view.findViewById(R.id.bt_cancel);
 
         presenter = new SettingPresenter();
         presenter.attachView(this);
@@ -116,16 +124,19 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
         changeRecieveNotification.setOnCheckedChangeListener(this);
         save.setOnClickListener(this);
         tv_change.setOnClickListener(this);
+        bt_cancel.setOnClickListener(this);
         mProfileImageView.setOnClickListener(this);
     }
 
     @Override
     public void showLoadingProgress() {
+        dialogsLoading = new loadingDialog().showDialog(getActivity());
 //        Toast.makeText(getActivity(), "show loading view", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void dismissLoadingProgress() {
+        dialogsLoading.dismiss();
 //        Toast.makeText(getActivity(), "dismiss loading view", Toast.LENGTH_SHORT).show();
     }
 
@@ -166,7 +177,7 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
         }
 
         if (!repeatPasswordEditText.getText().toString().trim().equals(newPasswordEditText.getText().toString().trim())) {
-            repeatPasswordEditText.setError("password don't match");
+            repeatPasswordEditText.setError("Passwords don't match");
             return;
         }
 
@@ -211,17 +222,37 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_save:
-                changeLoginPassword();
+
+                if (AppUtils.isInternetAvailable(getActivity())){
+                    changeLoginPassword();
+                }else {
+                    showToast(getString(R.string.check_internet));
+                }
+
                 break;
 
             case R.id.iv_user_nav_image:
                 openSelectIntent();
                 break;
+            case R.id.bt_cancel:
+
+                if (selectedImagePath!=null && !selectedImagePath.equals("")){
+                    mProfileImageView.setImageBitmap(null);
+                }
+
+                oldPasswordEditText.setText("");
+                repeatPasswordEditText.setText("");
+                newPasswordEditText.setText("");
+                break;
 
             case R.id.tv_change:
 //                presenter.ChangeProfilePicture(PreferenceHelper.getUserId(getActivity()), selectedFile);
 
-                uploadFile(selectedImagePath);
+                if (AppUtils.isInternetAvailable(getActivity())){
+                    uploadFile(selectedImagePath);
+                }else {
+                    showToast(getString(R.string.check_internet));
+                }
                 break;
         }
     }
@@ -262,7 +293,7 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
 
                 Uri selectedImageUri = data.getData();
                 selectedImagePath = getPathFromURI(getActivity(), selectedImageUri);
-                mProfileImageView.setImageBitmap(BitmapFactory.decodeFile(selectedImagePath));
+                Glide.with(this).load(bitmapToByte(BitmapFactory.decodeFile(selectedImagePath))).asBitmap().into(mProfileImageView);
                 try {
                     selectedFile = new File(selectedImagePath);
                 } catch (Exception e) {
@@ -369,9 +400,17 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
 
+
+    private byte[] bitmapToByte(Bitmap bitmap){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
+    }
     private void uploadFile(String filePath) {
         // Map is used to multipart the file using okhttp3.RequestBody
         if (filePath!=null && !filePath.equals("")){
+            showLoadingProgress();
             File file = new File(filePath);
 
             // Parsing any Media type file
@@ -388,6 +427,7 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
                     Log.e("Responce", serverResponse.postData.message);
                     if (serverResponse != null) {
                         if (serverResponse.postData.success) {
+                            dismissLoadingProgress();
                             String mImagePath = serverResponse.postData.message;
                             presenter.ChangeProfilePicture(PreferenceHelper.getUserId(getActivity()), mImagePath);
                         }

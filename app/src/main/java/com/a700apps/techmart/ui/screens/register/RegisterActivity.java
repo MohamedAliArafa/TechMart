@@ -124,7 +124,6 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
         ActivityUtils.applyLightFont(mCompanyEditText);
         ActivityUtils.applyLightFont(mPositionEditText);
 
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

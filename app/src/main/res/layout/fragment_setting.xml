@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     android:background="@drawable/bg_setting_page"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
-        android:orientation="vertical">
+>
 
         <LinearLayout
             android:id="@+id/linearLayout6"
@@ -23,19 +23,19 @@
                 android:id="@+id/iv_back"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
-                app:srcCompat="@drawable/ic_side_m" />
+                app:srcCompat="@drawable/ic_side_menu_logo" />
 
-            <TextView
-                android:id="@+id/textView41"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Setting"
-                android:textColor="@color/button_light_text"
-                android:textSize="@dimen/normal_text_size"
-                android:visibility="visible" />
+            <!--<TextView-->
+                <!--android:id="@+id/textView41"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:layout_weight="1"-->
+                <!--android:gravity="center"-->
+                <!--android:text="Setting"-->
+                <!--android:textColor="@color/button_light_text"-->
+                <!--android:textSize="@dimen/normal_text_size"-->
+                <!--android:visibility="visible" />-->
 
             <ImageView
                 android:id="@+id/new_message"
@@ -53,52 +53,51 @@
         </LinearLayout>
 
         <LinearLayout
+            android:layout_below="@id/linearLayout6"
             android:id="@+id/linear_horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/general_padding"
             android:layout_marginBottom="14dp"
-            android:layout_marginTop="30dp"
-            android:orientation="horizontal"
-            android:weightSum="10">
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="25dp"
+            android:orientation="horizontal">
 
-            <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+            <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_title"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
-                android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_weight="9"
                 android:gravity="center|left"
-                android:paddingLeft="@dimen/general_padding"
+                android:layout_weight="9.55"
                 android:text="@string/preference_setting"
+                android:textSize="14sp"
                 android:textColor="@color/button_light_text" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|right"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/ic_setting" />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/iv_img"
+            android:layout_below="@id/linear_horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="14dp"
+            android:layout_marginEnd="@dimen/general_padding"
             android:orientation="horizontal"
-            android:weightSum="10">
+            android:layout_marginStart="25dp">
 
             <ImageView
                 android:id="@+id/iv_user_nav_image"
                 android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="24dp"
-                android:layout_marginStart="24dp" />
+                android:layout_height="60dp"/>
 
             <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
                 android:id="@+id/tv_change"
@@ -107,33 +106,34 @@
                 android:layout_marginRight="10dp"
                 android:layout_weight="10"
                 android:gravity="center|right"
-                android:paddingRight="@dimen/general_padding"
                 android:text="@string/change"
                 android:textColor="@color/button_light_text" />
         </LinearLayout>
 
         <View
+            android:id="@+id/view1"
             style="@style/menuItemSepatator"
             android:layout_below="@+id/iv_img"
             android:layout_marginTop="3dp" />
 
         <LinearLayout
+            android:layout_below="@id/view1"
             android:id="@+id/lin_notification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="10">
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="@dimen/general_padding">
 
             <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_notification"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
-                android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="9.5"
                 android:gravity="center|left"
-                android:paddingLeft="@dimen/general_padding"
+
                 android:text="@string/notification"
                 android:textColor="@color/button_light_text" />
 
@@ -145,15 +145,18 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/view2"
             style="@style/menuItemSepatator"
             android:layout_below="@+id/lin_notification"
             android:layout_marginTop="3dp" />
 
         <LinearLayout
+            android:layout_below="@id/view2"
             android:id="@+id/lin_change"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginStart="25dp"
             android:weightSum="10">
 
             <com.a700apps.techmart.utils.CustomTextView
@@ -161,11 +164,9 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
-                android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="6"
                 android:gravity="center|left"
-                android:paddingLeft="@dimen/general_padding"
                 android:text="@string/change_pass"
                 android:textColor="@color/button_light_text" />
 
@@ -177,24 +178,33 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="4"
+
+                android:textColorHint="@color/white"
+                android:gravity="center|start"
+
                 android:background="@color/transparent"
-                android:gravity="center|right"
                 android:inputType="textPassword"
+                android:hint="@string/password_hint"
+                android:ellipsize="start"
+                android:nextFocusDown="@+id/edt_change_new_pass"
                 android:paddingLeft="@dimen/general_padding"
                 android:textColor="@color/button_light_text" />
 
         </LinearLayout>
 
         <View
+            android:id="@+id/view3"
             style="@style/menuItemSepatator"
             android:layout_below="@+id/lin_change"
             android:layout_marginTop="3dp" />
 
         <LinearLayout
+            android:layout_below="@id/view3"
             android:id="@+id/lin_new"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginStart="25dp"
             android:weightSum="10">
 
             <com.a700apps.techmart.utils.CustomTextView
@@ -202,11 +212,9 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
-                android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="6"
                 android:gravity="center|left"
-                android:paddingLeft="@dimen/general_padding"
                 android:text="@string/new_pass"
                 android:textColor="@color/button_light_text" />
 
@@ -217,9 +225,12 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:nextFocusDown="@+id/edt_repeat_pass"
                 android:layout_weight="4"
+                android:ellipsize="start"
+                android:textColorHint="@color/white"
+                android:gravity="center|start"
                 android:background="@color/transparent"
-                android:gravity="center|right"
                 android:inputType="textPassword"
                 android:paddingLeft="@dimen/general_padding"
                 android:textColor="@color/button_light_text" />
@@ -227,14 +238,17 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/view4"
             style="@style/menuItemSepatator"
             android:layout_below="@+id/lin_new"
             android:layout_marginTop="3dp" />
 
         <LinearLayout
+            android:layout_below="@id/view4"
             android:id="@+id/lin_repeat_pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
             android:orientation="horizontal"
             android:weightSum="10">
 
@@ -243,11 +257,9 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
-                android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="6"
                 android:gravity="center|left"
-                android:paddingLeft="@dimen/general_padding"
                 android:text="@string/repeat_pass"
                 android:textColor="@color/button_light_text" />
 
@@ -260,9 +272,13 @@
                 android:layout_marginRight="10dp"
                 android:layout_weight="4"
                 android:background="@color/transparent"
-                android:gravity="center|right"
+                android:ellipsize="start"
+                android:textColorHint="@color/white"
+                android:gravity="center|start"
                 android:inputType="textPassword"
                 android:paddingLeft="@dimen/general_padding"
+                android:imeOptions="actionDone"
+                android:maxLines="1"
                 android:textColor="@color/button_light_text" />
 
         </LinearLayout>
@@ -270,13 +286,17 @@
         <View
             style="@style/menuItemSepatator"
             android:layout_below="@+id/lin_repeat_pass"
+            android:id="@+id/view5"
             android:layout_marginTop="3dp" />
 
         <LinearLayout
+            android:layout_below="@id/view5"
+            android:layout_marginTop="@dimen/general_margin"
             android:id="@+id/lin_buttons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginStart="25dp"
             android:weightSum="10">
 
             <com.a700apps.techmart.utils.CustomButton
@@ -284,11 +304,12 @@
                 style="@style/EditTextRegisterTextStyle"
                 android:layout_width="@dimen/upload_width"
                 android:layout_height="40dp"
-                android:layout_margin="@dimen/general_margin"
                 android:background="@color/blackGreenColor"
                 android:maxLines="1"
                 android:paddingEnd="@dimen/attached_button_padding"
                 android:text="@string/save"
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:textColor="@color/button_light_text" />
 
             <com.a700apps.techmart.utils.CustomButton
@@ -304,7 +325,40 @@
                 android:textColor="@color/button_light_text" />
 
         </LinearLayout>
-    </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/copyright"
+                android:textColor="@android:color/white"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="3dp"
+                android:paddingStart="3dp"
+                android:text="@string/department"
+                android:textColor="@android:color/white"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 
 </ScrollView>

@@ -46,8 +46,8 @@ public class MyGroupPresenter extends MainPresenter<GroupView> {
 
                 @Override
                 public void networkOperationFail(Throwable throwable) {
-                    Log.e("error", throwable.toString());
                     dialogsLoading.dismiss();
+                    Log.e("error", throwable.toString());
                 }
             });
         } catch (JSONException e) {

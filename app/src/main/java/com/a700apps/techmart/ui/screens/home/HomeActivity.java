@@ -1,6 +1,7 @@
 package com.a700apps.techmart.ui.screens.home;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
@@ -25,6 +26,9 @@ import android.widget.TextView;
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.NavDrawerAdapter;
 import com.a700apps.techmart.data.network.MainApi;
+import com.a700apps.techmart.ui.screens.BoardMember.DialogApproval.DialogActivity;
+import com.a700apps.techmart.ui.screens.BoardMember.EditTimeLine.EditTimeLineActivity;
+import com.a700apps.techmart.ui.screens.BoardMember.JoinRequests.JoinRequestsActivity;
 import com.a700apps.techmart.ui.screens.groupmemberdetails.GroupFragment;
 import com.a700apps.techmart.ui.screens.grouptimeline.GroupsTimeLineFragment;
 import com.a700apps.techmart.ui.screens.joingroup.JoinGroupFragment;
@@ -85,13 +89,14 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         presenter = new HomePresenter();
         presenter.attachView(this);
 
+//        startActivity(new Intent(this , JoinRequestsActivity.class));
         if (getIntent().getBooleanExtra("groupLayout", false)) {
             // show group relative
             RelativeGroupsFragment fragment = new RelativeGroupsFragment();
             Bundle bundle = new Bundle();
 
             bundle.putString("RelativId", getIntent().getStringExtra("RelativId"));
-//            bundle.putString("GroupId", getIntent().getStringExtra("GroupId"));
+//             bundle.putString("GroupId", getIntent().getStringExtra("GroupId"));
             fragment.setArguments(bundle);
             addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, fragment, false, true);
 

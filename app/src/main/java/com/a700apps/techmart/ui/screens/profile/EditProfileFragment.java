@@ -5,6 +5,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
@@ -13,8 +14,10 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +40,9 @@ import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.ApiClient;
 import com.a700apps.techmart.utils.AppConst;
+import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.PreferenceHelper;
+import com.a700apps.techmart.utils.Validator;
 import com.a700apps.techmart.utils.loadingDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -45,6 +50,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Locale;
 
@@ -58,7 +64,7 @@ import retrofit2.Response;
 import static android.app.Activity.RESULT_OK;
 
 public class EditProfileFragment extends Fragment implements ProfileView, View.OnClickListener {
-    ImageView mProfileImageView, mNotificationImageView, mProfileUserImageView;
+    ImageView mNotificationImageView, mProfileUserImageView;//mProfileImageView
     ImageView imageView4;
     TextView mFriend, mFollowers, mPosts, mEmail;
     private ProfilePresenter presenter;
@@ -72,6 +78,7 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
     Dialog dialogsLoading;
 
     String returnedImage = "/UploadedImages/";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -99,15 +106,15 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
             }
         });
 
-        mProfileImageView = (ImageView) view.findViewById(R.id.new_message);
+//        mProfileImageView = (ImageView) view.findViewById(R.id.new_message);
         mNotificationImageView = (ImageView) view.findViewById(R.id.new_profile);
 
-        mProfileImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ActivityUtils.openActivity(getActivity(), EditProfileActivity.class, false);
-            }
-        });
+//        mProfileImageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ActivityUtils.openActivity(getActivity(), EditProfileActivity.class, false);
+//            }
+//        });
 
         mNotificationImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -243,13 +250,18 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
 
     @Override
     public void updateUiUpdate(post success) {
-        User user =PreferenceHelper.getSavedUser(getActivity());
+        User user = PreferenceHelper.getSavedUser(getActivity());
         user.Name = mName.getText().toString();
         user.Photo = returnedImage;
-        PreferenceHelper.saveUser(getActivity() , user);
+        PreferenceHelper.saveUser(getActivity(), user);
         Toast.makeText(getActivity(), "Profile updated successfully", Toast.LENGTH_SHORT).show();
     }
-
+    private byte[] bitmapToByte(Bitmap bitmap){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        super.onActivityResult(requestCode, resultCode, data);
@@ -262,7 +274,7 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
                     return;
                 }
                 selectedImagePath = getPathFromURI(getActivity(), selectedImageUri);
-                mProfileUserImageView.setImageBitmap(BitmapFactory.decodeFile(selectedImagePath));
+                Glide.with(this).load(bitmapToByte(BitmapFactory.decodeFile(selectedImagePath))).asBitmap().into(mProfileUserImageView);
 
                 Log.e("path", "-->" + selectedImagePath);
             }
@@ -296,7 +308,7 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
 //                            user.Photo = mImagePath;
 //                            PreferenceHelper.saveUser(getActivity() , user);
                             dialogsLoading.dismiss();
-                            returnedImage+=serverResponse.postData.message;
+                            returnedImage += serverResponse.postData.message;
                             presenter.updateProfileData(getActivity(), PreferenceHelper.getUserId(getActivity()),
                                     mName.getText().toString(), mLinkedin.getText().toString(), mImagePath, mCompany.getText().toString(),
                                     mPosition.getText().toString(), mPhone.getText().toString());
@@ -426,7 +438,7 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
                 mPhone.setEnabled(true);
                 mPosition.setEnabled(true);
                 mLinkedin.setEnabled(true);
-                mProfileImageView.setEnabled(true);
+//                mProfileImageView.setEnabled(true);
                 mProfileUserImageView.setEnabled(true);
 
                 mName.requestFocus();
@@ -437,12 +449,21 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
 
             case R.id.btn_save:
                 if (isEnabled) {
-                    if (selectedImagePath != null) {
-                        uploadFile(selectedImagePath);
+                    if (AppUtils.isInternetAvailable(getActivity())) {
+
+                        if (selectedImagePath != null) {
+                            if (validate(true)){
+                                uploadFile(selectedImagePath);
+                            }
+                        } else {
+                            if (validate(false)){
+                                presenter.updateProfileData(getActivity(), PreferenceHelper.getUserId(getActivity()),
+                                        mName.getText().toString(), mLinkedin.getText().toString(), "", mCompany.getText().toString(),
+                                        mPosition.getText().toString(), mPhone.getText().toString());
+                            }
+                        }
                     } else {
-                        presenter.updateProfileData(getActivity(), PreferenceHelper.getUserId(getActivity()),
-                                mName.getText().toString(), mLinkedin.getText().toString(), "", mCompany.getText().toString(),
-                                mPosition.getText().toString(), mPhone.getText().toString());
+                        Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(getActivity(), "choose to update first", Toast.LENGTH_SHORT).show();
@@ -454,6 +475,56 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
 
                 break;
         }
+    }
+
+    private boolean validate(boolean checkImage) {
+        boolean isValid = true;
+
+        boolean emptyName = Validator.isTextEmpty(mName.getText().toString().trim());
+        if (emptyName) {
+            mName.setError(getResources().getString(R.string.name_length_not_valid));
+            isValid = false;
+        }
+
+        String mobile = mPhone.getText().toString().trim();
+        boolean validMobileNumber = Validator.validMobileNumber(mobile.replaceFirst("\\+", ""));
+        if (!validMobileNumber) {
+            mPhone.setError(getResources().getString(R.string.invalid_mobile_number));
+            isValid = false;
+        } else if (!mobile.startsWith("97")) {
+            mPhone.setError(getResources().getString(R.string.invalid_mobile_number_97));
+            isValid = false;
+        } else if (mobile.length() != 14) {
+            mPhone.setError(getResources().getString(R.string.invalid_mobile_number_size));
+            isValid = false;
+        }
+
+        boolean validCompanyName = Validator.isTextEmpty(mCompany.getText().toString().trim());
+        if (validCompanyName) {
+            mCompany.setError(getResources().getString(R.string.company_length_not_valid));
+            isValid = false;
+        }
+
+        if (mLinkedin.getText()!=null && !mLinkedin.getText().toString().trim()
+                .matches("((http(s?)://)*([a-zA-Z0-9\\-])*\\.|[linkedin])[linkedin/~\\-]+\\.[a-zA-Z0-9/~\\-_,&=\\?\\.;]+[^\\.,\\s<]")){
+            mLinkedin.setError(getResources().getString(R.string.invalid_url));
+            isValid = false;
+        }
+
+        boolean validCompanyPosition = Validator.isTextEmpty(mPosition.getText().toString().trim());
+        if (validCompanyPosition) {
+            mPosition.setError(getResources().getString(R.string.position_length_not_valid));
+            isValid = false;
+        }
+
+        if (checkImage) {
+            if (selectedImagePath == null) {
+                Toast.makeText(getActivity(), "Choose Image please", Toast.LENGTH_SHORT).show();
+                isValid = false;
+            }
+        }
+
+        return  isValid;
     }
 
     public class LoggingListener<T, R> implements RequestListener<T, R> {

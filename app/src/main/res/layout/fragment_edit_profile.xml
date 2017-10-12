@@ -18,7 +18,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/event2" />
+        app:srcCompat="@drawable/bg_cover" />
 
     <LinearLayout
         android:id="@+id/linearLayout6"
@@ -49,11 +49,11 @@
             android:textSize="@dimen/time_text"
             android:visibility="invisible" />
 
-        <ImageView
-            android:id="@+id/new_message"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            app:srcCompat="@drawable/ic_stat_ic_user" />
+        <!--<ImageView-->
+            <!--android:id="@+id/new_message"-->
+            <!--android:layout_width="24dp"-->
+            <!--android:layout_height="24dp"-->
+            <!--app:srcCompat="@drawable/ic_stat_ic_user" />-->
 
         <ImageView
             android:id="@+id/new_profile"

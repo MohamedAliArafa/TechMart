@@ -23,6 +23,7 @@ import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.message.ChatActivity;
 import com.a700apps.techmart.ui.screens.notification.Ui.Activity.NotificationHolderActivity;
+import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
 import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
@@ -60,7 +61,11 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
         presenter = new NotificationPresenter();
         presenter.attachView(this);
 
-        presenter.loadData(PreferenceHelper.getUserId(this), currentPage, itemsPerPage);
+        if (AppUtils.isInternetAvailable(this)){
+            presenter.loadData(PreferenceHelper.getUserId(this), currentPage, itemsPerPage);
+        }else {
+            showToast(getString(R.string.check_internet));
+        }
 
         nextTextView.setOnClickListener(new View.OnClickListener() {
             @Override

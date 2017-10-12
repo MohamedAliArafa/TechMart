@@ -152,7 +152,8 @@ public class GroupsTimLineActivity  extends AppCompatActivity implements View.On
         imageView4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtils.openActivity(GroupsTimLineActivity.this, HomeActivity.class, true);
+//                ActivityUtils.openActivity(GroupsTimLineActivity.this, HomeActivity.class, true);
+                finish();
 
             }
         });
@@ -163,7 +164,7 @@ public class GroupsTimLineActivity  extends AppCompatActivity implements View.On
     public void onBackPressed() {
         super.onBackPressed();
 
-        ActivityUtils.openActivity(GroupsTimLineActivity.this, HomeActivity.class, true);
+//        ActivityUtils.openActivity(GroupsTimLineActivity.this, HomeActivity.class, true);
 
     }
 

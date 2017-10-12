@@ -171,7 +171,7 @@ public class RelativeGroupAadpter extends RecyclerView.Adapter<RelativeGroupAadp
                     Intent myIntent = new Intent(context, GroupsTimLineActivity.class);
                     myIntent.putExtra("selectedCategory", mUserGroupList.get(getAdapterPosition()).ID);
                     context.startActivity(myIntent);
-                    ((HomeActivity) context).finish();
+//                    ((HomeActivity) context).finish();
                 }
             }
 

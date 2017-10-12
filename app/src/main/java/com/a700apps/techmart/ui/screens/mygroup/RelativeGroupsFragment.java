@@ -3,6 +3,7 @@ package com.a700apps.techmart.ui.screens.mygroup;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,18 +19,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 
 import com.a700apps.techmart.R;
+import com.a700apps.techmart.adapter.AutoCompleteGroupAdapter;
 import com.a700apps.techmart.adapter.GroupsAdapter;
 import com.a700apps.techmart.adapter.RelativeGroupAadpter;
 import com.a700apps.techmart.data.model.ServerResponse;
+import com.a700apps.techmart.data.model.UserGroup;
 import com.a700apps.techmart.data.model.UserGroupData;
+import com.a700apps.techmart.ui.screens.grouptimeline.GroupsTimeLineFragment;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.login.LoginActivity;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.Globals;
 import com.wang.avi.AVLoadingIndicatorView;
 
 public class RelativeGroupsFragment extends Fragment implements GroupView {
@@ -37,6 +44,8 @@ public class RelativeGroupsFragment extends Fragment implements GroupView {
     RecyclerView rv;
     ImageView mProfileImageView, mNotificationImageView, mSideMenuImageView;
     public AVLoadingIndicatorView indicatorView;
+    AutoCompleteTextView searchAutoCompleteTextView;
+
 
 
     public RelativeGroupsFragment() {
@@ -55,11 +64,14 @@ public class RelativeGroupsFragment extends Fragment implements GroupView {
         mProfileImageView = (ImageView) view.findViewById(R.id.new_message);
         mNotificationImageView = (ImageView) view.findViewById(R.id.new_profile);
         mSideMenuImageView = (ImageView) view.findViewById(R.id.imageView4);
+        searchAutoCompleteTextView = view.findViewById(R.id.edt_search);
+        searchAutoCompleteTextView.setThreshold(1);
 
         mSideMenuImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().onBackPressed();
+//                getActivity().onBackPressed();
+                ((HomeActivity)getActivity()).openDrawer();
             }
         });
 
@@ -80,6 +92,17 @@ public class RelativeGroupsFragment extends Fragment implements GroupView {
         mPresenter.GetRelativeGroupByUserID(getActivity() , getArguments().getString("RelativId"));
         rv = (RecyclerView) view.findViewById(R.id.recyclerView);
 
+        searchAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                UserGroup group = (UserGroup) adapterView.getItemAtPosition(i);
+                Log.e("CLICK" , group.Name);
+                Bundle bundle = new Bundle();
+                bundle.putInt("selectedCategory" ,group.ID );
+                Globals.GROUP_ID = group.ID;
+                ((HomeActivity )getActivity()).openFragment(GroupsTimeLineFragment.class , bundle);
+            }
+        });
         return view;
     }
 
@@ -106,14 +129,14 @@ public class RelativeGroupsFragment extends Fragment implements GroupView {
     public void updateUi(UserGroupData data) {
         rv.setAdapter(new GroupsAdapter(getActivity(), data.userGroup));
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        searchAutoCompleteTextView.setAdapter(new AutoCompleteGroupAdapter(getActivity() , R.layout.custom_text_view , data.userGroup));
     }
 
     @Override
     public void updateRelativeUi(UserGroupData data) {
         rv.setAdapter(new RelativeGroupAadpter(getActivity(), data.userGroup));
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+        searchAutoCompleteTextView.setAdapter(new AutoCompleteGroupAdapter(getActivity() , R.layout.custom_text_view , data.userGroup));
     }
-
 }
 

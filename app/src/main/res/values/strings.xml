@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">TechMart</string>
 
-    <string name="invalid_password">The password should contains numbers and letters, its length should exceed 8 characters.</string>
+    <string name="invalid_password">The password length should exceed 8 characters.</string>
     <string name="invalid_email"> Email field is empty</string>
+    <string name="invalid_url">  this url is not valid</string>
     <string name="invalid_email_format"> Enter valid email</string>
     <string name="empty_mail_field">Empty field</string>
     <string name="enter_your_password">Please enter your password</string>
@@ -25,6 +26,8 @@
     <string name="upload_pic">Upload Your Profile Picture</string>
     <string name="hint_pic">Format: jpg,tiff, less than 1MB</string>
     <string name="attach">Upload</string>
+    <string name="upload_multimedia">Upload multimedia</string>
+    <string name="remove_multimedia">remove media</string>
     <string name="register">Register</string>
     <string name="home">Timeline</string>
     <string name="my_group">My Group</string>
@@ -34,6 +37,7 @@
     <string name="setting">Settings</string>
     <string name="logout">Logout</string>
     <string name="menu_name">Abdul Rahman</string>
+    <string name="password_hint">************</string>
 
     <string-array name="nav_drawer_titles">
         <item>Timeline</item>
@@ -83,6 +87,10 @@
     <string name="invalid_mobile_number">Please enter valid mobile number</string>
     <string name="invalid_mobile_number_97">mobile number should start with 97</string>
     <string name="invalid_mobile_number_size">mobile number should be 14 numbers</string>
+    <string name="manage_settings">Manage settings</string>
+    <string name="approved">Approved</string>
+    <string name="rejected">Rejected</string>
+    <string name="defer">Defer</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -101,8 +109,8 @@
     <string name="share_via">TechMart Link</string>
     <string name="title_activity_maps">Map</string>
     <string name="follow">Follow</string>
-    <string name="unfollow">UnFollow</string>
-    <string name="disconnect">DisConnect</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="disconnect">Disconnect</string>
     <string name="canecl_connect">Cancel Request</string>
     <string name="connect">Connect</string>
     <string name="thanks_you">Thanks for reaching out.\n Our team will be happy support you</string>
@@ -114,5 +122,9 @@
     <string name="error_happened">Some error happened .. please try again.</string>
     <string name="error_happened_login">Login Failed, please check email or password.</string>
     <string name="error_login">Something wrong happened, please try again.</string>
+
+
+    <string name="edit_hint_header">Write heading for this timeLine.</string>
+    <string name="search_hint">Enter Search</string>
 
 </resources>

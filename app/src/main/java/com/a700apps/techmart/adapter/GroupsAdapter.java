@@ -81,8 +81,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
             ActivityUtils.applyLightFont(mCreateDate);
             ActivityUtils.applyLightFont(mNumber);
             itemView.findViewById(R.id.view_detail_btn).setOnClickListener(this);
-
-
+            itemView.setOnClickListener(this);
         }
 
         @Override

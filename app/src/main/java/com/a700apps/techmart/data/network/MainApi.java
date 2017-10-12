@@ -916,6 +916,30 @@ public class MainApi {
             }
         });
     }
+
+
+    public static void editTimeLineItem(JSONObject body, final NetworkResponseListener<PostData> responseListener) {
+        getApi().editeTimeLineItem(getRequestBody(body)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<PostData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                responseListener.networkOperationFail(e);
+                Log.e("error", e.toString());
+            }
+
+            @Override
+            public void onNext(PostData changePasswordData) {
+                NetworkResponse<PostData> networkResponse = new NetworkResponse<>();
+                networkResponse.data = changePasswordData;
+                responseListener.networkOperationSuccess(networkResponse);
+            }
+        });
+    }
     // Member
 
     public static void getMemberTimeLine(JSONObject body, final NetworkResponseListener<GroupTimeLineData> responseListener) {
@@ -1030,29 +1054,6 @@ public class MainApi {
 
     public static void manageTimelineItem(JSONObject body, final NetworkResponseListener<PostData> responseListener) {
         getApi().manageTimeLineItem(getRequestBody(body)).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<PostData>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                responseListener.networkOperationFail(e);
-            }
-
-            @Override
-            public void onNext(PostData userNetworkData) {
-                NetworkResponse<PostData> networkResponse = new NetworkResponse<>();
-                networkResponse.data = userNetworkData;
-                responseListener.networkOperationSuccess(networkResponse);
-            }
-        });
-    }
-
-
-    public static void editTimelineItem(JSONObject body, final NetworkResponseListener<PostData> responseListener) {
-        getApi().editeTimeLineItem(getRequestBody(body)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<PostData>() {
             @Override
             public void onCompleted() {

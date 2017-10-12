@@ -56,7 +56,24 @@ public class SettingPresenter extends MainPresenter<SettingView> implements Netw
         try {
             view.showLoadingProgress();
             JSONObject registerBody = MainApiHelper.ChangeLoginPassword(userId, oldPassword , newPassword);
-            MainApi.ChangeLoginPassword(registerBody, this);
+            MainApi.ChangeLoginPassword(registerBody, new NetworkResponseListener<ChangeReciveNotifcationData>() {
+                @Override
+                public void networkOperationSuccess(NetworkResponse<ChangeReciveNotifcationData> networkResponse) {
+                    view.dismissLoadingProgress();
+                    if ( !networkResponse.data.getResult().getSuccess()){
+                        networkOperationFail(new Throwable(networkResponse.data.getResult().getMessage()));
+//                        view.showErrorDialog(R.string.error_happened); //networkResponse.data.getResult().getMessage()
+                    }else {
+                        view.showToast("Password changed successfully");
+                    }
+                }
+
+                @Override
+                public void networkOperationFail(Throwable throwable) {
+                    view.showToast(""+throwable.getMessage());
+                    view.dismissLoadingProgress();
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
             view.dismissLoadingProgress();
@@ -72,17 +89,19 @@ public class SettingPresenter extends MainPresenter<SettingView> implements Netw
             MainApi.ChangeProfilePhoto(registerBody, new NetworkResponseListener<ChangeReciveNotifcationData>() {
                 @Override
                 public void networkOperationSuccess(NetworkResponse<ChangeReciveNotifcationData> networkResponse) {
+                    view.dismissLoadingProgress();
                     if ( !networkResponse.data.getResult().getSuccess()){
                         networkOperationFail(new Throwable(networkResponse.data.getResult().getMessage()));
                         view.showErrorDialog(R.string.error_happened); //networkResponse.data.getResult().getMessage()
                     }else {
-                        view.saveNewPic(pathServer);
+                        view.showToast("Image changes successfully");
+                        view.saveNewPic("/UploadedImages/"+pathServer);
                     }
                 }
 
                 @Override
                 public void networkOperationFail(Throwable throwable) {
-
+                    view.dismissLoadingProgress();
                 }
             });
         } catch (JSONException e) {

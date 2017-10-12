@@ -28,7 +28,7 @@ public class ImageDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_details);
         findview();
         ImageLink = getIntent().getStringExtra("ImageUrl");
-        Log.e("pathinmdkdk", ImageLink);
+        Log.e("pathinmdkdk", ""+ImageLink);
         Glide.with(ImageDetailsActivity.this)
                 .load( ImageLink).placeholder(R.drawable.placeholder)
                 .into(mDetailsImageView);

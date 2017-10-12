@@ -91,7 +91,15 @@
 
     <color name="trans_white">#7dffffff</color>
     <color name="white">#ffffff</color>
+
+
     <color name="separator">#b3b3b3</color>
+    <color name="edit_background">#f6f6f6</color>
+
+
+    <color name="btn_approve">#159b04</color>
+    <color name="btn_defer">#d16904</color>
+    <color name="btn_reject">#e62535</color>
 
 </resources>
 
