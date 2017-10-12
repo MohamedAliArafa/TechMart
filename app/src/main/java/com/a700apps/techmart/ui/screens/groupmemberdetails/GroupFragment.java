@@ -225,7 +225,7 @@ public class GroupFragment extends Fragment implements GroupMemberView {
                 @Override
                 public void onClick(View view) {
 
-                    Toast.makeText(context, "dsgsgdsg", Toast.LENGTH_SHORT).show();
+
                     Bundle bundle = new Bundle();
                     bundle.putString("RelativId", timeLineItem.getUserID());
                     bundle.putInt("GroupId", GroupId);

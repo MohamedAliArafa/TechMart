@@ -389,5 +389,11 @@ public class MainApiHelper {
         return jsonObject;
     }
 
+    public static JSONObject manageGroupMember(String UserID) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("UserID", UserID);
+        return jsonObject;
+    }
+
 
 }

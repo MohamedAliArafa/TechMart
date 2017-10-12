@@ -65,14 +65,6 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
     private LinearLayout mTabContainer;
 
 
-//    public static TimelineFragment newInstance(List<String> data) {
-//        TimelineFragment pagerFragment = new TimelineFragment();
-//        Bundle args = new Bundle();
-//        ArrayList<String> argsValue = new ArrayList<String>(data);
-//        args.putStringArrayList(DATA_ARGS_KEY, argsValue);
-//        pagerFragment.setArguments(args);
-//        return pagerFragment;
-//    }
 
 
     @Override

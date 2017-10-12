@@ -3,6 +3,7 @@ package com.a700apps.techmart.data.network;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.a700apps.techmart.data.model.AllGroupUsers;
 import com.a700apps.techmart.data.model.AllMessageList;
 import com.a700apps.techmart.data.model.AllSchedualList;
 import com.a700apps.techmart.data.model.CategoryData;
@@ -1008,9 +1009,9 @@ public class MainApi {
         });
     }
 
-    public static void getAllGroupUsers(JSONObject body, final NetworkResponseListener<UserData> responseListener) {
+    public static void getAllGroupUsers(JSONObject body, final NetworkResponseListener<AllGroupUsers> responseListener) {
         getApi().getAllGroupUsers(getRequestBody(body)).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<UserData>() {
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<AllGroupUsers>() {
             @Override
             public void onCompleted() {
 
@@ -1022,8 +1023,8 @@ public class MainApi {
             }
 
             @Override
-            public void onNext(UserData userNetworkData) {
-                NetworkResponse<UserData> networkResponse = new NetworkResponse<>();
+            public void onNext(AllGroupUsers userNetworkData) {
+                NetworkResponse<AllGroupUsers> networkResponse = new NetworkResponse<>();
                 networkResponse.data = userNetworkData;
                 responseListener.networkOperationSuccess(networkResponse);
             }
@@ -1068,6 +1069,52 @@ public class MainApi {
             @Override
             public void onNext(PostData userNetworkData) {
                 NetworkResponse<PostData> networkResponse = new NetworkResponse<>();
+                networkResponse.data = userNetworkData;
+                responseListener.networkOperationSuccess(networkResponse);
+            }
+        });
+    }
+
+
+    public static void editTimelineItem(JSONObject body, final NetworkResponseListener<PostData> responseListener) {
+        getApi().editeTimeLineItem(getRequestBody(body)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<PostData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                responseListener.networkOperationFail(e);
+            }
+
+            @Override
+            public void onNext(PostData userNetworkData) {
+                NetworkResponse<PostData> networkResponse = new NetworkResponse<>();
+                networkResponse.data = userNetworkData;
+                responseListener.networkOperationSuccess(networkResponse);
+            }
+        });
+    }
+
+    public static void manageGroupBoard(JSONObject body, final NetworkResponseListener<UserGroupData> responseListener) {
+        getApi().manageGroup(getRequestBody(body)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<UserGroupData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                responseListener.networkOperationFail(e);
+                Log.e("error", e.toString());
+            }
+
+            @Override
+            public void onNext(UserGroupData userNetworkData) {
+                NetworkResponse<UserGroupData> networkResponse = new NetworkResponse<>();
                 networkResponse.data = userNetworkData;
                 responseListener.networkOperationSuccess(networkResponse);
             }
