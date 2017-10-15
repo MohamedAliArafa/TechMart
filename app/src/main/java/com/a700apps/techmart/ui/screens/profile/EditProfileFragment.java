@@ -68,7 +68,7 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
     ImageView imageView4;
     TextView mFriend, mFollowers, mPosts, mEmail;
     private ProfilePresenter presenter;
-    public AVLoadingIndicatorView indicatorView;
+//    public AVLoadingIndicatorView indicatorView;
     EditText mCompany, mPhone, mPosition, mLinkedin, mName;
     Button btn_edit, btn_save;
     final int SELECT_PICTURE_CHANGE = 321, PERMISSION_REQUEST_CODE = 322;
@@ -95,7 +95,7 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
         init(view);
 
         imageView4 = (ImageView) view.findViewById(R.id.imageView4);
-        indicatorView = (AVLoadingIndicatorView) view.findViewById(R.id.avi);
+//        indicatorView = (AVLoadingIndicatorView) view.findViewById(R.id.avi);
 
         presenter.profileData(PreferenceHelper.getUserId(getActivity()), getActivity());
         imageView4.setOnClickListener(new View.OnClickListener() {
@@ -166,7 +166,7 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
 
     @Override
     public void dismissLoadingProgress() {
-        indicatorView.hide();
+//        indicatorView.hide();
     }
 
     //    void openSelectIntent() {
