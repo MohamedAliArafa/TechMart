@@ -131,13 +131,13 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
                         Calendar cal = Calendar.getInstance();
                         Intent intent = new Intent(Intent.ACTION_EDIT);
                         intent.setType("vnd.android.cursor.item/event");
-                        intent.putExtra(CalendarContract.Events.TITLE, "Event");
+                        intent.putExtra(CalendarContract.Events.TITLE, timeLineItem.getTitle());
                         intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                                cal.getTime().getTime());
+                                timeLineItem.getStartDate());
                         intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
-                                cal.getTime().getTime());
+                                timeLineItem.getEndDate());
                         intent.putExtra(CalendarContract.Events.ALL_DAY, false);// periodicity
-                        intent.putExtra(CalendarContract.Events.DESCRIPTION, "Tech Mart Event");
+                        intent.putExtra(CalendarContract.Events.DESCRIPTION,timeLineItem.getDescr());
                         context.startActivity(intent);
                     }
                 });
@@ -192,7 +192,7 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
                     }
                 });
                 Glide.with(context)
-                        .load(MainApi.IMAGE_IP+timeLineItem.getImage())
+                        .load(MainApi.IMAGE_IP+timeLineItem.getImage()).placeholder(R.drawable.placeholder)
                         .into(viewHolderPost.mPostImageView);
 
                 viewHolderPost.mComment.setOnClickListener(new View.OnClickListener() {

@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/activity_feeds_body_text_padding"
                 android:gravity="center|left"
-                android:hint="Write Heading for your time line "
+                android:hint="Write Heading For Your Timeline "
                 android:padding="4dp"
                 android:paddingLeft="@dimen/activity_feeds_body_text_padding"
                 android:paddingRight="@dimen/activity_feeds_body_text_padding"
@@ -45,7 +45,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="70dp"
                     android:background="@color/logo_color"
-                    android:hint="short description about the post"
+                    android:hint="Short Description About The Post"
+
                     android:padding="8dp"
                     android:scaleType="centerCrop" />
 

@@ -159,7 +159,7 @@ public class NewChatActivity extends AppCompatActivity implements MessageView {
 
         @Override
         public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-            Glide.with(context).load(MainApi.IMAGE_IP + responser.get(position).getPhoto())
+            Glide.with(context).load(MainApi.IMAGE_IP + responser.get(position).getPhoto()).placeholder(R.drawable.placeholder)
                     .into(viewHolder.userImageView);
             viewHolder.nameTextView.setText(responser.get(position).getName());
             viewHolder.seenImage.setVisibility(View.GONE);

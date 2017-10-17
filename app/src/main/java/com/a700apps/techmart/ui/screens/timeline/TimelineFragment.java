@@ -261,7 +261,12 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
 //Set circle indicator radius
         indicator.setRadius(3 * density);
 
-        NUM_PAGES = TimelineList.size();
+//        NUM_PAGES = TimelineList.size();
+        if (TimelineList.size()>5){
+            NUM_PAGES = 5;
+        }else {
+            NUM_PAGES = TimelineList.size();
+        }
 
         // Auto start of viewpager
         final Handler handler;

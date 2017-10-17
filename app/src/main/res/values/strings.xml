@@ -129,6 +129,8 @@
     <string name="error_happened">Some error happened .. please try again.</string>
     <string name="error_happened_login">Login Failed, please check email or password.</string>
     <string name="error_login">Something wrong happened, please try again.</string>
+    <string name="add_post">Post under progress.</string>
+    <string name="add_event">Event under progress.</string>
 
 
     <string name="edit_hint_header">Write heading for this timeLine.</string>

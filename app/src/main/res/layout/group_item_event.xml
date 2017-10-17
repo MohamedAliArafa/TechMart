@@ -170,11 +170,11 @@
                     </LinearLayout>
 
 
-                    <View
-                        android:layout_width="@dimen/activity_feeds_comment_like_seperator_width"
-                        android:layout_height="@dimen/activity_feeds_comment_like_seperator_height"
-                        android:layout_gravity="center_vertical"
-                        android:background="@color/icon_color" />
+                    <!--<View-->
+                        <!--android:layout_width="@dimen/activity_feeds_comment_like_seperator_width"-->
+                        <!--android:layout_height="@dimen/activity_feeds_comment_like_seperator_height"-->
+                        <!--android:layout_gravity="center_vertical"-->
+                        <!--android:background="@color/icon_color" />-->
 
                     <LinearLayout
                         android:id="@+id/ll_comment_container"

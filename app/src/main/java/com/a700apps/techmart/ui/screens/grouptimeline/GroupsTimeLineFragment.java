@@ -1,6 +1,7 @@
 package com.a700apps.techmart.ui.screens.grouptimeline;
 
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,7 @@ import com.a700apps.techmart.ui.screens.timeline.GroupTimeLineFragment;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
+import com.a700apps.techmart.utils.loadingDialog;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -55,7 +57,7 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
     private LinearLayout mTabContainer;
     private GroupTimeLinePresenter presenter;
     int intValue;
-
+    Dialog dialogsLoading;
 
     void init(View view) {
         mPager = (ViewPager) view.findViewById(R.id.pager);
@@ -192,14 +194,16 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
 
     @Override
     public void showLoadingProgress() {
-        indicatorView.setVisibility(View.VISIBLE);
-
-        indicatorView.show();
+//        indicatorView.setVisibility(View.VISIBLE);
+//
+//        indicatorView.show();
+        dialogsLoading = new loadingDialog().showDialog(getActivity());
     }
 
     @Override
     public void dismissLoadingProgress() {
-        indicatorView.hide();
+        dialogsLoading.dismiss();
+//        indicatorView.hide();
     }
 
     @Override
@@ -211,7 +215,12 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
 //Set circle indicator radius
         indicator.setRadius(3 * density);
 
-        NUM_PAGES = TimelineList.size();
+
+        if (TimelineList.size()>5){
+            NUM_PAGES = 5;
+        }else {
+            NUM_PAGES = TimelineList.size();
+        }
 
         // Auto start of viewpager
         final Handler handler;
