@@ -214,10 +214,10 @@ public class CreatEventActivity extends AppCompatActivity implements
         presenter = new EventPresenter();
         presenter.attachView(this);
         indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Please Wait Uploading Image...");
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
+//        progressDialog = new ProgressDialog(this);
+//        progressDialog.setMessage("Please Wait Uploading Image...");
+//        progressDialog.setCancelable(false);
+//        progressDialog.setCanceledOnTouchOutside(false);
         innerModle = new InnerModle();
         desired_string = getIntent().getIntExtra("string_key", 0);
         findView();
@@ -297,7 +297,6 @@ public class CreatEventActivity extends AppCompatActivity implements
 
     @Override
     public void dismissLoadingProgress()
-
     {
         dialogsLoading.dismiss();
     }
@@ -307,6 +306,8 @@ public class CreatEventActivity extends AppCompatActivity implements
         if (dialog!=null){
             dialog.hide();
         }
+
+        Toast.makeText(CreatEventActivity.this, getString(R.string.add_event), Toast.LENGTH_LONG).show();
 
         Globals.mIndex= 2;
         Globals.oneToOneId = null;
@@ -438,15 +439,6 @@ public class CreatEventActivity extends AppCompatActivity implements
                     }
 
                     uploadFileOnetoOne(editTextTitle , editTextDesc);
-//                    presenter.sendEvent(mStartTime, mEndTime, innerModle.getLongitude(),
-//                            innerModle.getLatitude(),
-//                            getCompleteAddressString(innerModle.getLongitude(),innerModle.getLatitude()),
-//                            desired_string,
-//                            PreferenceHelper.getUserId(CreatEventActivity.this),
-//                            editTextTitle.getText().toString()
-//                            , editTextDesc.getText().toString(),
-//                            mStartDate, mEndDate,
-//                            Globals.oneToOneId, true, mImagePath, "", String.valueOf(currentTime), false, CreatEventActivity.this);
                 }
                 break;
             case R.id.tv_date:
@@ -482,8 +474,8 @@ public class CreatEventActivity extends AppCompatActivity implements
 
         String date = "You picked the following date: From- " + dayOfMonth + "/" + (++monthOfYear) + "/" + year + " To " + dayOfMonthEnd + "/" + (++monthOfYearEnd) + "/" + yearEnd;
 
-        mStartDate = dayOfMonth + "-" + (++monthOfYear) + "-" + year;
-        mEndDate = dayOfMonthEnd + "-" + (++monthOfYearEnd) + "-" + yearEnd;
+        mStartDate =year  + "-" + (++monthOfYear) + "-" + dayOfMonth;
+        mEndDate =  yearEnd+ "-" + (++monthOfYearEnd) + "-" +  dayOfMonthEnd;
 
         Calendar now = Calendar.getInstance();
         TimePickerDialog tpd = TimePickerDialog.newInstance(
@@ -518,9 +510,16 @@ public class CreatEventActivity extends AppCompatActivity implements
         dialog.setContentView(R.layout.my_dialog);
         dialog.show();
 
-
+        LinearLayout lin_close = (LinearLayout) dialog.findViewById(R.id.lin_close);
         TextView tv_public = (TextView) dialog.findViewById(R.id.tv_public);
         TextView tv_group = (TextView) dialog.findViewById(R.id.tv_group);
+
+        lin_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
 
         tv_public.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -538,7 +537,7 @@ public class CreatEventActivity extends AppCompatActivity implements
                     Desc.setError(getResources().getString(R.string.select_Post));
                     return;
                 }
-                if ((innerModle.getLongitude() == null) || (innerModle.getLatitude() == null)) {
+                if ((innerModle.getLongitude()== null) || (innerModle.getLatitude() == null)) {
                     dialog.dismiss();
                     Toast.makeText(CreatEventActivity.this, R.string.select_location, Toast.LENGTH_LONG).show();
                     return;
@@ -729,20 +728,20 @@ public class CreatEventActivity extends AppCompatActivity implements
 
     private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
         String strAdd = "";
-        Geocoder geocoder = new Geocoder(CreatEventActivity.this, Locale.getDefault());
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
             if (addresses != null) {
                 Address returnedAddress = addresses.get(0);
                 StringBuilder strReturnedAddress = new StringBuilder("");
 
-                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
-                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append(",");
+                if (returnedAddress.getAddressLine(0) != null && !returnedAddress.getAddressLine(0).isEmpty()) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(0)).append(",");
                 }
                 strAdd = strReturnedAddress.toString();
-                Log.e("Current loction address", "" + strReturnedAddress.toString());
+                Log.w("Current loction address", "" + strReturnedAddress.toString());
             } else {
-                Log.e("Current loction address", "No Address returned!");
+                Log.w("Current loction address", "No Address returned!");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -753,8 +752,8 @@ public class CreatEventActivity extends AppCompatActivity implements
 
     // Uploading Image/Video
     private void uploadFile(final EditText title, final EditText Desc, final boolean check) {
-        progressDialog.show();
-
+//        progressDialog.show();
+        dialogsLoading = new loadingDialog().showDialog(this);
         // Map is used to multipart the file using okhttp3.RequestBody
         File file = new File(selectedImagePath);
 
@@ -791,12 +790,13 @@ public class CreatEventActivity extends AppCompatActivity implements
                     assert serverResponse != null;
                     Log.v("Response", serverResponse.toString());
                 }
-                progressDialog.dismiss();
+//                progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<ServerResponse> call, Throwable t) {
-                progressDialog.dismiss();
+//                progressDialog.dismiss();
+                dialogsLoading.dismiss();
                 Toast.makeText(CreatEventActivity.this, getString(R.string.check_internet), Toast.LENGTH_LONG).show();
             }
         });
@@ -805,8 +805,8 @@ public class CreatEventActivity extends AppCompatActivity implements
 
     //    onetoone
     private void uploadFileOnetoOne(final EditText title, final EditText Desc) {
-        progressDialog.show();
-
+//        progressDialog.show();
+        dialogsLoading = new loadingDialog().showDialog(this);
         // Map is used to multipart the file using okhttp3.RequestBody
         File file = new File(selectedImagePath);
 
@@ -859,12 +859,13 @@ public class CreatEventActivity extends AppCompatActivity implements
                     assert serverResponse != null;
                     Log.e("Response", serverResponse.toString());
                 }
-                progressDialog.dismiss();
+//                progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<ServerResponse> call, Throwable t) {
-                progressDialog.dismiss();
+//                progressDialog.dismiss();
+                dialogsLoading.dismiss();
                 Toast.makeText(CreatEventActivity.this, getString(R.string.check_internet), Toast.LENGTH_LONG).show();
             }
         });

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -115,7 +116,9 @@ public class GroupFragment extends Fragment implements GroupMemberView {
 
         }
         rv2.setAdapter(new GroupActivity.MemberAdapter(getActivity(), groupusers.getOtheMemebes(), mId));
-        rv2.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        int numberOfColumns = 3;
+        rv2.setLayoutManager(new GridLayoutManager(getActivity(), numberOfColumns));
+//        rv2.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
     }
 

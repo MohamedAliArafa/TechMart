@@ -35,13 +35,14 @@ import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.ServerResponse;
 import com.a700apps.techmart.data.model.post;
 import com.a700apps.techmart.data.network.ApiInterface;
-import com.a700apps.techmart.ui.screens.home.HomeActivity;
-import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.ui.screens.creatEvent.CreatEventActivity;
 import com.a700apps.techmart.utils.ApiClient;
 import com.a700apps.techmart.utils.AppConst;
 import com.a700apps.techmart.utils.AppUtils;
+import com.a700apps.techmart.utils.CustomeEditText;
 import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
+import com.a700apps.techmart.utils.loadingDialog;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.ByteArrayOutputStream;
@@ -61,7 +62,7 @@ import retrofit2.Response;
 
 public class PostActivity extends AppCompatActivity implements PostView {
     private PostPresenter presenter;
-    EditText editTextTitle, editTextDesc;
+    CustomeEditText editTextTitle, editTextDesc;
     LinearLayout linearLayout_post, linearLayout_select;
     private static final int SELECT_PICTURE = 1;
     private long selectedImageSize;
@@ -77,6 +78,8 @@ public class PostActivity extends AppCompatActivity implements PostView {
 
     ProgressDialog progressDialog;
 
+    Dialog dialogsLoading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,8 +88,8 @@ public class PostActivity extends AppCompatActivity implements PostView {
         presenter = new PostPresenter();
         presenter.attachView(this);
         desired_string = getIntent().getIntExtra("string_key", 0);
-        editTextTitle = (EditText) findViewById(R.id.editText2);
-        editTextDesc = (EditText) findViewById(R.id.editText4);
+        editTextTitle = (CustomeEditText) findViewById(R.id.editText2);
+        editTextDesc = (CustomeEditText) findViewById(R.id.editText4);
         linearLayout_post = (LinearLayout) findViewById(R.id.linearLayout_post);
         linearLayout_select = (LinearLayout) findViewById(R.id.linearLayout);
         indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
@@ -96,10 +99,12 @@ public class PostActivity extends AppCompatActivity implements PostView {
                 finish();
             }
         });
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Please Wait Uploading Image...");
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
+
+
+//        progressDialog = new ProgressDialog(this);
+//        progressDialog.setMessage("Please Wait Uploading Image...");
+//        progressDialog.setCancelable(false);
+//        progressDialog.setCanceledOnTouchOutside(false);
 //
         linearLayout_select.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,10 +167,16 @@ public class PostActivity extends AppCompatActivity implements PostView {
         dialog.setContentView(R.layout.my_dialog);
         dialog.show();
 
-
+        LinearLayout lin_close = (LinearLayout) dialog.findViewById(R.id.lin_close);
         TextView tv_public = (TextView) dialog.findViewById(R.id.tv_public);
         TextView tv_group = (TextView) dialog.findViewById(R.id.tv_group);
 
+        lin_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
         tv_public.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -241,22 +252,24 @@ public class PostActivity extends AppCompatActivity implements PostView {
 
     @Override
     public void showLoadingProgress() {
-        indicatorView.setVisibility(View.VISIBLE);
-        indicatorView.show();
+//        indicatorView.setVisibility(View.VISIBLE);
+//        indicatorView.show();
+        dialogsLoading = new loadingDialog().showDialog(this);
     }
 
     @Override
     public void dismissLoadingProgress() {
-        indicatorView.hide();
+        dialogsLoading.dismiss();
+//        indicatorView.hide();
     }
 
     @Override
     public void UpdateUi(post post) {
-
+        Toast.makeText(PostActivity.this, getString(R.string.add_post), Toast.LENGTH_LONG).show();
         dialog.hide();
         finish();
-        Globals.mIndex= 1;
-//
+        Globals.mIndex = 1;
+
     }
 
     //
@@ -433,8 +446,8 @@ public class PostActivity extends AppCompatActivity implements PostView {
 
     // Uploading Image/Video
     private void uploadFile(final EditText title, final EditText Desc, final boolean check) {
-        progressDialog.show();
-
+//        progressDialog.show();
+        dialogsLoading = new loadingDialog().showDialog(this);
         // Map is used to multipart the file using okhttp3.RequestBody
         File file = new File(selectedImagePath);
 
@@ -468,12 +481,14 @@ public class PostActivity extends AppCompatActivity implements PostView {
                     assert serverResponse != null;
                     Log.v("Response", serverResponse.toString());
                 }
-                progressDialog.dismiss();
+//                progressDialog.dismiss();
+//                dialogsLoading.dismiss();
             }
 
             @Override
             public void onFailure(Call<ServerResponse> call, Throwable t) {
-                progressDialog.dismiss();
+//                progressDialog.dismiss();
+                dialogsLoading.dismiss();
                 Toast.makeText(PostActivity.this, getString(R.string.check_internet), Toast.LENGTH_LONG).show();
             }
         });

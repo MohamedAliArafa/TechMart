@@ -83,7 +83,7 @@ public class EventPresenter extends MainPresenter<EventView> {
 
                 @Override
                 public void networkOperationFail(Throwable throwable) {
-
+                    view.dismissLoadingProgress();
                 }
             });
         } catch (JSONException e) {

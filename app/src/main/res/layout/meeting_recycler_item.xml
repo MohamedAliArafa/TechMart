@@ -13,7 +13,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/bg_transparent"
+        android:background="@drawable/box_month"
         android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,7 +24,6 @@
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="@color/blackGreenColor"
             android:gravity="center"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
@@ -45,7 +44,7 @@
 
     </LinearLayout>
 
-    <TextView
+    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
         android:id="@+id/title_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -54,13 +53,15 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textColor="@android:color/white"
+        android:textColor="@color/card_color"
         android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@+id/linearLayout9"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="@dimen/post_card_text"
+        />
 
-    <TextView
+    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
         android:id="@+id/Descr_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -68,7 +69,8 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:textColor="@android:color/white"
+        android:textSize="@dimen/greeting_card_text"
+        android:textColor="@color/light_color_text"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toRightOf="@+id/linearLayout9"
         app:layout_constraintRight_toRightOf="parent"

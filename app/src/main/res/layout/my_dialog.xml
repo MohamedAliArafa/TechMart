@@ -1,37 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rel_contain"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/button_light_text"
-    android:id="@+id/rel_contain"
+
+
     >
+
+    <LinearLayout
+        android:id="@+id/lin_close"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray_join_dialog"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+        <TextView
+            android:id="@+id/tv_close"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="9.5"
+
+
+            />
+
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+
+            android:background="@drawable/ic_close" />
+
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/tv_public"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_below="@+id/lin_close"
         android:background="@color/red_join_dialog"
-        android:text="Public"
-        android:textColor="@color/button_light_text"
         android:gravity="center"
-        />
+        android:text="Public"
+        android:textColor="@color/button_light_text" />
+
     <View
         android:id="@+id/seperator"
         android:layout_width="fill_parent"
         android:layout_height="2dp"
         android:layout_below="@+id/tv_public"
-        android:background="#c0c0c0"/>
+        android:background="#c0c0c0" />
 
     <TextView
         android:id="@+id/tv_group"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@+id/seperator"
-        android:textColor="@color/button_light_text"
-
         android:background="@color/blackGreenColor"
-        android:text="Group"
+
         android:gravity="center"
-        />
+        android:text="  In Group"
+        android:textColor="@color/button_light_text" />
 
 </RelativeLayout>

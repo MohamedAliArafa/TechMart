@@ -16,6 +16,7 @@
     <dimen name="sign_up_text_size">12sp</dimen>
     <dimen name="greeting_card_text">13sp</dimen>
     <dimen name="post_card_text">16sp</dimen>
+    <dimen name="setting_text">18sp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
@@ -153,7 +154,7 @@
 
     <!--change password seperator-->
     <integer name="change_password_password_max_character">60</integer>
-    <dimen name="change_password_seperator_height">.5dp</dimen>
+    <dimen name="change_password_seperator_height">.25dp</dimen>
     <dimen name="change_password_seperator_margin_top">10dp</dimen>
     <dimen name="change_password_container_padding">8dp</dimen>
     <dimen name="change_password_new_password_container_margin">20dp</dimen>

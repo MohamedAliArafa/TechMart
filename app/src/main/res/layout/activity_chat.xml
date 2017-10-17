@@ -64,12 +64,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintRight_toRightOf="parent"
 
-        <EditText
+        android:background="@drawable/bg_transparent">
+
+        <com.a700apps.techmart.utils.CustomeEditText
             android:id="@+id/message_edit_text"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginBottom="0dp"
             android:layout_weight="1.9"
             android:background="@drawable/bg_transparent"
@@ -79,8 +81,10 @@
             android:padding="10dp"
             android:paddingLeft="20dp"
             android:paddingStart="20dp"
-            android:textColor="@android:color/white"
-            android:textColorHint="@android:color/white"
+            android:textSize="12dp"
+
+            android:textColor="@color/light_color_text"
+            android:textColorHint="@color/light_color_text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -90,8 +94,9 @@
             android:id="@+id/send_Image_view"
             android:layout_width="25dp"
             android:layout_height="match_parent"
-            android:layout_margin="4dp"
+            android:layout_marginLeft="10dp"
             android:contentDescription="@null"
+            android:layout_gravity="center"
             app:srcCompat="@drawable/ic_send_image" />
     </LinearLayout>
 
