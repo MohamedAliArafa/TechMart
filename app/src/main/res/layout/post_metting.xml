@@ -42,8 +42,8 @@
 
         <ImageView
             android:id="@+id/imageView7"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
             android:layout_margin="5dp"
             app:srcCompat="@android:drawable/arrow_down_float" />
 
@@ -137,8 +137,8 @@
 
             <ImageView
                 android:id="@+id/iv_upload_image"
-                android:layout_width="14dp"
-                android:layout_height="14dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/general_margin"
                 android:src="@drawable/ic_upload_image" />
 
@@ -149,12 +149,12 @@
                 android:layout_marginLeft="8dp"
                 android:text="Multimedia"
                 android:textColor="@color/blackGreenColor"
-                android:textSize="@dimen/sign_up_text_size" />
+                android:textSize="@dimen/greeting_card_text" />
 
             <ImageView
                 android:id="@+id/iv_location"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/general_margin"
                 android:src="@drawable/ic_location" />
 
@@ -165,13 +165,13 @@
                 android:layout_marginLeft="8dp"
                 android:text="Location"
                 android:textColor="@color/blackGreenColor"
-                android:textSize="@dimen/sign_up_text_size" />
+                android:textSize="@dimen/greeting_card_text" />
 
 
             <ImageView
                 android:id="@+id/iv_date"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/general_margin"
                 android:src="@drawable/ic_select_date" />
 
@@ -179,7 +179,7 @@
                 android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="6dp"
                 android:text="select date"
                 android:textColor="@color/blackGreenColor"
                 android:textSize="@dimen/sign_up_text_size" />
