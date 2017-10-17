@@ -24,6 +24,7 @@ import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.mygroup.GroupPagerFragment;
 import com.a700apps.techmart.ui.screens.mygroup.MyGroupsListFragment;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
+import com.a700apps.techmart.ui.screens.notification.NotificationFragment;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
 import com.a700apps.techmart.ui.screens.profile.EditProfileFragment;
 import com.a700apps.techmart.utils.ActivityUtils;
@@ -113,7 +114,6 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
         Log.e("Resume", "on view created");
         init(view);
 
-
         if (!AppUtils.isInternetAvailable(getActivity())) {
             Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_LONG).show();
         } else {
@@ -139,7 +139,8 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
         mNotificationImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
+//                ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
+                ((HomeActivity)getActivity()).openFragment(NotificationFragment.class , null);
             }
         });
 
@@ -149,7 +150,6 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onResume() {
         super.onResume();
-
     }
 
     private void setupPagerData() {
@@ -171,11 +171,11 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                mTabContainer.getChildAt(position).setBackground(getResources().getDrawable(R.drawable.bt_1));
-                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
-                    if (i != position)
-                        mTabContainer.getChildAt(i).setBackground(null);
-                }
+//                mTabContainer.getChildAt(position).setBackground(getResources().getDrawable(R.drawable.bt_1));
+//                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
+//                    if (i != position)
+//                        mTabContainer.getChildAt(i).setBackground(null);
+//                }
             }
 
             @Override
@@ -202,15 +202,39 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
         switch (viewId) {
             case R.id.tv_timeline:
                 mViewPager.setCurrentItem(0);
+                int position = 0;
+                mTabContainer.getChildAt(position).setBackground(getResources().getDrawable(R.drawable.bt_1));
+                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
+                    if (i != position)
+                        mTabContainer.getChildAt(i).setBackground(null);
+                }
                 break;
             case R.id.tv_posts:
                 mViewPager.setCurrentItem(1);
+                int pos2 = 1;
+                mTabContainer.getChildAt(pos2).setBackground(getResources().getDrawable(R.drawable.bt_1));
+                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
+                    if (i != pos2)
+                        mTabContainer.getChildAt(i).setBackground(null);
+                }
                 break;
             case R.id.tv_event:
                 mViewPager.setCurrentItem(2);
+                int pos3 = 2;
+                mTabContainer.getChildAt(pos3).setBackground(getResources().getDrawable(R.drawable.bt_1));
+                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
+                    if (i != pos3)
+                        mTabContainer.getChildAt(i).setBackground(null);
+                }
                 break;
             case R.id.tv_group:
                 mViewPager.setCurrentItem(3);
+                int pos4 = 3;
+                mTabContainer.getChildAt(pos4).setBackground(getResources().getDrawable(R.drawable.bt_1));
+                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
+                    if (i != pos4)
+                        mTabContainer.getChildAt(i).setBackground(null);
+                }
                 break;
         }
     }

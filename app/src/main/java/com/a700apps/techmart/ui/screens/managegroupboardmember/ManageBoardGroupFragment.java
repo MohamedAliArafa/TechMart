@@ -23,6 +23,7 @@ import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.mygroup.GroupView;
 import com.a700apps.techmart.ui.screens.mygroup.MyGroupPresenter;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
+import com.a700apps.techmart.ui.screens.notification.NotificationFragment;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
@@ -79,7 +80,9 @@ public class ManageBoardGroupFragment extends Fragment implements manageGroupVie
         mNotificationImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
+//                ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
+                ((HomeActivity)getActivity()).openFragment(NotificationFragment.class , null);
+
             }
         });
 

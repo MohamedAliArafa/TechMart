@@ -79,10 +79,11 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <string name="prev"><![CDATA[< Prev]]></string>
+    <string name="prev"><![CDATA[< Pervious]]></string>
     <string name="next_btn"><![CDATA[Next >]]></string>
     <string name="search_name">Enter your full name</string>
     <string name="description">A line break that is inserted manually, and preserved when re-flowing</string>
+    <string name="enter_description">Please provide short description</string>
     <string name="action_settings">Setting</string>
     <string name="group_description">A line break that is inserted manually, and preserved when re-flowing, may still be distinct from a paragraph break, although this is typically  Many published books use a device to separate certain paragraphs further when there is a change of scene or time</string>
     <string name="group_description2">Emirate enviroment group  06 April - 08 April 2017  common English usage misconception  The crafting of clear</string>
@@ -117,6 +118,7 @@
     <string name="unfollow">Unfollow</string>
     <string name="disconnect">Disconnect</string>
     <string name="canecl_connect">Cancel Request</string>
+    <string name="approve_connect">Approve Request</string>
     <string name="connect">Connect</string>
     <string name="thanks_you">Thanks for reaching out.\n Our team will be happy support you</string>
     <string name="call">Call</string>

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.LikeData;
@@ -25,6 +26,7 @@ import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.mygroup.MyGroupsListFragment;
 import com.a700apps.techmart.ui.screens.profile.MemberProfile;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
+import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
 
@@ -219,17 +221,21 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 viewHolderPost.tv_like.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-                        if (timeLineItem.getIsLike()) {
-                            timeLineItem.setIsLike(false);
-                            isLike = "false";
-                            viewHolderPost.mLikeImageView.setImageResource(R.drawable.ic_like);
-                        } else {
-                            isLike = "true";
-                            timeLineItem.setIsLike(true);
-                            viewHolderPost.mLikeImageView.setImageResource(R.drawable.ic_like_active);
+                        if (AppUtils.isInternetAvailable(context)){
+                            if (timeLineItem.getIsLike()) {
+                                timeLineItem.setIsLike(false);
+                                isLike = "false";
+                                viewHolderPost.mLikeImageView.setImageResource(R.drawable.ic_like);
+                            } else {
+                                isLike = "true";
+                                timeLineItem.setIsLike(true);
+                                viewHolderPost.mLikeImageView.setImageResource(R.drawable.ic_like_active);
+                            }
+                            getLike(timeLineItem);
+                        }else {
+                            Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                         }
-                        getLike(timeLineItem);
+
 
                     }
                 });
@@ -241,8 +247,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(context, CommentActivity.class);
-                        intent.putExtra("string_key", timeLineItem.getID());
-                        intent.putExtra("likes_number", timeLineItem.getLikeCount());
+                        intent.putExtra("string_key", mTimeLineList.get(position).getID());
+                        intent.putExtra("likes_number", mTimeLineList.get(position).getLikeCount());
                         context.startActivity(intent);
                     }
                 });
@@ -268,16 +274,21 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     @Override
                     public void onClick(View view) {
 
-                        if (timeLineItem.getIsLike()) {
-                            timeLineItem.setIsLike(false);
-                            isLike = "false";
-                            viewHolderPost.mLikeImageView.setImageResource(R.drawable.ic_like);
-                        } else {
-                            isLike = "true";
-                            timeLineItem.setIsLike(true);
-                            viewHolderPost.mLikeImageView.setImageResource(R.drawable.ic_like_active);
+                        if (AppUtils.isInternetAvailable(context)){
+                            if (timeLineItem.getIsLike()) {
+                                timeLineItem.setIsLike(false);
+                                isLike = "false";
+                                viewHolderPost.mLikeImageView.setImageResource(R.drawable.ic_like);
+                            } else {
+                                isLike = "true";
+                                timeLineItem.setIsLike(true);
+                                viewHolderPost.mLikeImageView.setImageResource(R.drawable.ic_like_active);
+                            }
+                            getLike(timeLineItem);
+
+                        }else {
+                            Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                         }
-                        getLike(timeLineItem);
 
                     }
                 });
@@ -382,6 +393,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         intent.putExtra("Index", index);
         intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mTimeLineList);
         context.startActivity(intent);
+
+
     }
 
     void changeLike() {

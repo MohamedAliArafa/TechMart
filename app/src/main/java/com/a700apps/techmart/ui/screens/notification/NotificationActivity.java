@@ -3,7 +3,6 @@ package com.a700apps.techmart.ui.screens.notification;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -61,16 +60,22 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
         presenter = new NotificationPresenter();
         presenter.attachView(this);
 
-        if (AppUtils.isInternetAvailable(this)){
+        if (AppUtils.isInternetAvailable(this)) {
             presenter.loadData(PreferenceHelper.getUserId(this), currentPage, itemsPerPage);
-        }else {
+        } else {
             showToast(getString(R.string.check_internet));
         }
 
+        if (currentPage == 1) {
+            previosTextView.setVisibility(View.GONE);
+        }
         nextTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 presenter.loadData(PreferenceHelper.getUserId(NotificationActivity.this), ++currentPage, itemsPerPage);
+                if (previosTextView.getVisibility() == View.GONE) {
+                    previosTextView.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -79,6 +84,9 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
             public void onClick(View view) {
                 if (currentPage > 1) {
                     presenter.loadData(PreferenceHelper.getUserId(NotificationActivity.this), --currentPage, itemsPerPage);
+                    if (currentPage == 1) {
+                        previosTextView.setVisibility(View.GONE);
+                    }
                 }
             }
         });
@@ -95,7 +103,12 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
     public void loadData(List<NoficationData.Result> list) {
         if (list.size() == 0) {
             rv.setEmptyView(findViewById(R.id.emptyIndiscator));
+            nextTextView.setVisibility(View.GONE);
+        } else {
+            if (nextTextView.getVisibility() == View.GONE)
+                nextTextView.setVisibility(View.VISIBLE);
         }
+
         rv.setAdapter(new NotificationAdapter(this, list));
     }
 
@@ -220,7 +233,7 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                         followViewHolder.youToHide.setVisibility(View.INVISIBLE);
                     }
 
-                    Glide.with(context).load(MainApi.IMAGE_IP +  result.getIcon()).placeholder(R.drawable.ic_profile).into(followViewHolder.profileImageView);
+                    Glide.with(context).load(MainApi.IMAGE_IP + result.getIcon()).placeholder(R.drawable.ic_profile).into(followViewHolder.profileImageView);
 
                     break;
                 case NOTIF_TYPE_POST:
@@ -230,15 +243,15 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                     PostAddedViewHolder postAddedViewHolder = (PostAddedViewHolder) viewHolder;
                     postAddedViewHolder.nameTv.setText(result.getRelativeUserName());
                     postAddedViewHolder.itemNameTv.setText(result.getMessage());
-                    if (result.getTypeID() == NOTIF_TYPE_SOME_ONE_LIKE_POST){
+                    if (result.getTypeID() == NOTIF_TYPE_SOME_ONE_LIKE_POST) {
                         Glide.with(context).load(R.drawable.ic_like_active)
                                 .placeholder(R.drawable.ic_like).into(postAddedViewHolder.profileImageView);
-                    }else if (result.getTypeID() == NOTIF_TYPE_SOME_ONE_COMMENT_POST){
+                    } else if (result.getTypeID() == NOTIF_TYPE_SOME_ONE_COMMENT_POST) {
                         Glide.with(context).load(R.drawable.ic_comment)
                                 .placeholder(R.drawable.ic_comment).into(postAddedViewHolder.profileImageView);
-                    }else{
-                        Log.e("ICON" , MainApi.IMAGE_IP+result.getIcon().toString());
-                        Glide.with(context).load(MainApi.IMAGE_IP+result.getIcon().toString())
+                    } else {
+//                        Log.e("ICON" , MainApi.IMAGE_IP+result.getIcon().toString());
+                        Glide.with(context).load(MainApi.IMAGE_IP + result.getIcon().toString())
                                 .placeholder(R.drawable.ic_profile).into(postAddedViewHolder.profileImageView);
                     }
                     break;
@@ -354,7 +367,6 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
             ImageView profile;
 
 
-
             NotificationPresenter presenter;
             int position = 0;
 //            Dialog dialogsLoading;
@@ -381,12 +393,24 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                 switch (v.getId()) {
 
                     case R.id.connectBtn:
-                        position = getAdapterPosition();
-                        presenter.sendConnect(list.get(getAdapterPosition()).getRelativeUserID(), PreferenceHelper.getUserId(context), "true");
+                        if (AppUtils.isInternetAvailable(context)) {
+                            position = getAdapterPosition();
+                            presenter.sendConnect(list.get(getAdapterPosition()).getRelativeUserID(), PreferenceHelper.getUserId(context), "true");
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                        }
                         break;
                     case R.id.ignoreBtn:
-                        position = getAdapterPosition();
-                        afterConnectSuccess();
+                        if (AppUtils.isInternetAvailable(context)) {
+//                        position = getAdapterPosition();
+                            presenter.sendConnect(list.get(getAdapterPosition()).getRelativeUserID(), PreferenceHelper.getUserId(context), "false");
+                            presenter.deleteNotification(list.get(getAdapterPosition()).getID());
+//                        list.remove(position);
+//                        afterConnectSuccess();
+
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                        }
                         break;
                 }
             }
@@ -423,20 +447,20 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
             }
         }
 
-        public class PostAddedViewHolder extends RecyclerView.ViewHolder implements LikesView, View.OnClickListener {
+        public class PostAddedViewHolder extends RecyclerView.ViewHolder implements NotificationView, View.OnClickListener {
 
 //            Button connectButton, ignoreButton;
 //            TextView name, message;
 
             TextView nameTv, itemNameTv, viewPost;
-            ImageView dismiss, profileImageView, likeImage;
+            ImageView dismiss, profileImageView, likeImage, viewImageView;
 
 
-            LikesPresenter presenter;
+            NotificationPresenter presenter;
 
             public PostAddedViewHolder(View itemView) {
                 super(itemView);
-                presenter = new LikesPresenter();
+                presenter = new NotificationPresenter();
                 presenter.attachView(this);
 
 
@@ -446,11 +470,13 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                 dismiss = itemView.findViewById(R.id.imageView16);
                 profileImageView = itemView.findViewById(R.id.imageView14);
                 likeImage = itemView.findViewById(R.id.imageView14);
+                viewImageView = itemView.findViewById(R.id.imageView15);
 
                 likeImage.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_notif_white));
                 itemView.findViewById(R.id.textView34).setVisibility(View.INVISIBLE);
                 viewPost.setOnClickListener(this);
                 dismiss.setOnClickListener(this);
+                viewImageView.setOnClickListener(this);
             }
 
             @Override
@@ -459,20 +485,59 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                 switch (v.getId()) {
 
                     case R.id.textView37:
-                        NoficationData.Result data = list.get(getAdapterPosition());
-                        Intent intent = new Intent(context, NotificationHolderActivity.class);
-                        intent.putExtra("holder", "like");
-                        intent.putExtra("data", data);
-                        intent.putExtra("type", list.get(getAdapterPosition()).getTypeID());
-                        context.startActivity(intent);
+                        if (AppUtils.isInternetAvailable(context)) {
+                            NoficationData.Result data = list.get(getAdapterPosition());
+                            Intent intent = new Intent(context, NotificationHolderActivity.class);
+                            intent.putExtra("holder", "like");
+                            intent.putExtra("data", data);
+                            intent.putExtra("type", list.get(getAdapterPosition()).getTypeID());
+                            context.startActivity(intent);
+
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    case R.id.imageView15:
+                        if (AppUtils.isInternetAvailable(context)) {
+                            NoficationData.Result data2 = list.get(getAdapterPosition());
+                            Intent intent2 = new Intent(context, NotificationHolderActivity.class);
+                            intent2.putExtra("holder", "like");
+                            intent2.putExtra("data", data2);
+                            intent2.putExtra("type", list.get(getAdapterPosition()).getTypeID());
+                            context.startActivity(intent2);
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                        }
                         break;
                     case R.id.imageView16:
-                        list.remove(getAdapterPosition());
-                        notifyItemRemoved(getAdapterPosition());
-                        break;
+                        if (AppUtils.isInternetAvailable(context)) {
+//                        list.remove(getAdapterPosition());
+                            presenter.deleteNotification(list.get(getAdapterPosition()).getID());
+//                        notifyItemRemoved(getAdapterPosition());
+                            break;
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                        }
                 }
             }
 
+
+            @Override
+            public void loadData(List<NoficationData.Result> list) {
+
+            }
+
+            @Override
+            public void afterConnectSuccess() {
+                int position = getAdapterPosition();
+                list.remove(position);
+                notifyItemRemoved(position);
+            }
+
+            @Override
+            public void afterFail() {
+
+            }
 
             @Override
             public void showToast(String msg) {
@@ -480,30 +545,32 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
             }
 
             @Override
-            public void viewPost() {
+            public void showLoading() {
 
             }
 
             @Override
-            public void dismiss() {
+            public void dismissLoad() {
 
             }
+
+
         }
 
-        public class EventAddedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public class EventAddedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,NotificationView {
 
 //            Button connectButton, ignoreButton;
 //            TextView name, message;
 
             TextView nameTv, itemTimeTv, addToCalenderTv, eventDetailsTv;
             ImageView dismiss;
-
-
+            NotificationPresenter presenter;
 
             public EventAddedViewHolder(View itemView) {
                 super(itemView);
 
-
+                presenter = new NotificationPresenter();
+                presenter.attachView(this);
                 nameTv = itemView.findViewById(R.id.textView15);
                 itemTimeTv = itemView.findViewById(R.id.textView35);
                 eventDetailsTv = itemView.findViewById(R.id.textView36);
@@ -521,12 +588,17 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                 switch (v.getId()) {
 
                     case R.id.textView37:
-                        NoficationData.Result data = list.get(getAdapterPosition());
-                        Intent intent = new Intent(context, NotificationHolderActivity.class);
-                        intent.putExtra("holder", "like");
-                        intent.putExtra("data", data);
-                        intent.putExtra("type", list.get(getAdapterPosition()).getTypeID());
-                        context.startActivity(intent);
+                        if (AppUtils.isInternetAvailable(context)) {
+                            NoficationData.Result data = list.get(getAdapterPosition());
+                            Intent intent = new Intent(context, NotificationHolderActivity.class);
+                            intent.putExtra("holder", "like");
+                            intent.putExtra("data", data);
+                            intent.putExtra("type", list.get(getAdapterPosition()).getTypeID());
+                            context.startActivity(intent);
+
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                        }
 //                        Calendar cal = Calendar.getInstance();
 //
 //                        Intent intent = new Intent(Intent.ACTION_EDIT);
@@ -541,32 +613,72 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
 //                        context.startActivity(intent);
                         break;
                     case R.id.imageView16:
-                        list.remove(getAdapterPosition());
-                        notifyItemRemoved(getAdapterPosition());
-                        break;
+                        if (AppUtils.isInternetAvailable(context)) {
+                            presenter.deleteNotification(list.get(getAdapterPosition()).getID());
+//                            list.remove(getAdapterPosition());
+//                            notifyItemRemoved(getAdapterPosition());
+                            break;
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                        }
+
                 }
             }
+            @Override
+            public void loadData(List<NoficationData.Result> list) {
 
+            }
+
+            @Override
+            public void afterConnectSuccess() {
+                int position = getAdapterPosition();
+                list.remove(position);
+                notifyItemRemoved(position);
+            }
+
+            @Override
+            public void afterFail() {
+
+            }
+
+            @Override
+            public void showToast(String msg) {
+                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void showLoading() {
+
+            }
+
+            @Override
+            public void dismissLoad() {
+
+            }
 
         }
 
-        public class FollowViewHolder extends RecyclerView.ViewHolder implements FollowView, View.OnClickListener {
+        public class FollowViewHolder extends RecyclerView.ViewHolder implements NotificationView, View.OnClickListener {
 
             TextView nameTv, itemNameTv, viewPost;
-            ImageView dismiss, profileImageView;
-            TextView followToHide , youToHide;
-//            LikesPresenter presenter;
+            ImageView dismiss, profileImageView, viewImage;
+            TextView followToHide, youToHide;
+            //            LikesPresenter presenter;
+            NotificationPresenter presenter;
 
             public FollowViewHolder(View itemView) {
                 super(itemView);
 //                presenter = new LikesPresenter();
 //                presenter.attachView(this);
 
+                presenter = new NotificationPresenter();
+                presenter.attachView(this);
 
                 nameTv = itemView.findViewById(R.id.textView15);
                 itemNameTv = itemView.findViewById(R.id.textView36);
                 viewPost = itemView.findViewById(R.id.textView37);
                 dismiss = itemView.findViewById(R.id.imageView16);
+                viewImage = itemView.findViewById(R.id.imageView15);
                 profileImageView = itemView.findViewById(R.id.imageView14);
                 followToHide = itemView.findViewById(R.id.textView34);
                 youToHide = itemView.findViewById(R.id.textView35);
@@ -576,6 +688,7 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
 //                }
                 viewPost.setOnClickListener(this);
                 dismiss.setOnClickListener(this);
+                viewImage.setOnClickListener(this);
             }
 
             @Override
@@ -584,21 +697,60 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                 switch (v.getId()) {
 
                     case R.id.textView37:
-                        NoficationData.Result data = list.get(getAdapterPosition());
-                        Intent intent = new Intent(context, NotificationHolderActivity.class);
-                        intent.putExtra("holder", "follow");
-                        intent.putExtra("RelativId", data.getRelativeUserID());
-                        intent.putExtra("GroupId", data.getGroupID());
+                        if (AppUtils.isInternetAvailable(context)) {
+                            NoficationData.Result data = list.get(getAdapterPosition());
+                            Intent intent = new Intent(context, NotificationHolderActivity.class);
+                            intent.putExtra("holder", "follow");
+                            intent.putExtra("RelativId", data.getRelativeUserID());
+                            intent.putExtra("GroupId", data.getGroupID());
+                            context.startActivity(intent);
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                        }
 
-                        context.startActivity(intent);
+                        break;
+                    case R.id.imageView15:
+                        if (AppUtils.isInternetAvailable(context)) {
+                            NoficationData.Result data2 = list.get(getAdapterPosition());
+                            Intent intent2 = new Intent(context, NotificationHolderActivity.class);
+                            intent2.putExtra("holder", "follow");
+                            intent2.putExtra("RelativId", data2.getRelativeUserID());
+                            intent2.putExtra("GroupId", data2.getGroupID());
+                            context.startActivity(intent2);
+
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                        }
                         break;
                     case R.id.imageView16:
-                        list.remove(getAdapterPosition());
-                        notifyItemRemoved(getAdapterPosition());
+                        if (AppUtils.isInternetAvailable(context)) {
+                            presenter.deleteNotification(list.get(getAdapterPosition()).getID());
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                        }
+//                        list.remove(getAdapterPosition());
+//                        notifyItemRemoved(getAdapterPosition());
                         break;
                 }
             }
 
+
+            @Override
+            public void loadData(List<NoficationData.Result> list) {
+
+            }
+
+            @Override
+            public void afterConnectSuccess() {
+                int position = getAdapterPosition();
+                list.remove(position);
+                notifyItemRemoved(position);
+            }
+
+            @Override
+            public void afterFail() {
+
+            }
 
             @Override
             public void showToast(String msg) {
@@ -606,14 +758,15 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
             }
 
             @Override
-            public void viewProfile() {
+            public void showLoading() {
 
             }
 
             @Override
-            public void dismiss() {
+            public void dismissLoad() {
 
             }
+
         }
 
         public class GroupViewHolder extends RecyclerView.ViewHolder implements FollowView, View.OnClickListener {
@@ -641,11 +794,16 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                 switch (v.getId()) {
 
                     case R.id.viewTv:
-                        Intent intent = new Intent(context, HomeActivity.class);
-                        intent.putExtra("holder", "groupTimeLine");
-                        intent.putExtra("selectedCategory", list.get(getAdapterPosition()).getGroupID());
-                        Globals.CAME_FROM_NOTIFICATION_TO_GROUP = true;
-                        context.startActivity(intent);
+                        if (AppUtils.isInternetAvailable(context)) {
+                            Intent intent = new Intent(context, HomeActivity.class);
+                            intent.putExtra("holder", "groupTimeLine");
+                            intent.putExtra("selectedCategory", list.get(getAdapterPosition()).getGroupID());
+                            Globals.CAME_FROM_NOTIFICATION_TO_GROUP = true;
+                            context.startActivity(intent);
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                        }
+
                         break;
 //                    case R.id.imageView16:
 //                        list.remove(getAdapterPosition());
@@ -674,7 +832,7 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
         public class ChatViewHolder extends RecyclerView.ViewHolder implements FollowView, View.OnClickListener {
 
             TextView descriptionTv, messageTv, viewPost;
-
+            ImageView imageView15;
 //            LikesPresenter presenter;
 
             public ChatViewHolder(View itemView) {
@@ -686,8 +844,10 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                 descriptionTv = itemView.findViewById(R.id.descriptionTv);
                 messageTv = itemView.findViewById(R.id.messageTv);
                 viewPost = itemView.findViewById(R.id.viewTv);
+                imageView15 = itemView.findViewById(R.id.imageView15);
 
                 viewPost.setOnClickListener(this);
+                imageView15.setOnClickListener(this);
             }
 
             @Override
@@ -696,12 +856,29 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                 switch (v.getId()) {
 
                     case R.id.viewTv:
-                        Toast.makeText(context, "chat", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(context, ChatActivity.class);
-                        intent.putExtra("RelativeID", list.get(getAdapterPosition()).getRelativeUserID());
-                        intent.putExtra("ReciverName", list.get(getAdapterPosition()).getRelativeUserName());
-                        intent.putExtra("ReciverPhoto", list.get(getAdapterPosition()).getIcon().toString());
-                        context.startActivity(intent);
+//                        Log.e("POSITION", getAdapterPosition() + "         " + list.get(getAdapterPosition()).getID());
+                        if (AppUtils.isInternetAvailable(context)) {
+                            Intent intent = new Intent(context, ChatActivity.class);
+                            intent.putExtra("RelativeID", list.get(getAdapterPosition()).getRelativeUserID());
+                            intent.putExtra("ReciverName", list.get(getAdapterPosition()).getRelativeUserName());
+                            intent.putExtra("ReciverPhoto", list.get(getAdapterPosition()).getIcon().toString());
+                            context.startActivity(intent);
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                        }
+
+                        break;
+                    case R.id.imageView15:
+                        if (AppUtils.isInternetAvailable(context)) {
+                            Intent intent2 = new Intent(context, ChatActivity.class);
+                            intent2.putExtra("RelativeID", list.get(getAdapterPosition()).getRelativeUserID());
+                            intent2.putExtra("ReciverName", list.get(getAdapterPosition()).getRelativeUserName());
+                            intent2.putExtra("ReciverPhoto", list.get(getAdapterPosition()).getIcon().toString());
+                            context.startActivity(intent2);
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+
+                        }
                         break;
 //                    case R.id.imageView16:
 //                        list.remove(getAdapterPosition());

@@ -18,6 +18,7 @@ import com.a700apps.techmart.data.model.UserGroupData;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.login.LoginActivity;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
+import com.a700apps.techmart.ui.screens.notification.NotificationFragment;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -58,8 +59,10 @@ public class MyGroubListActivity extends AppCompatActivity implements GroupView 
             @Override
             public void onClick(View v) {
                 ActivityUtils.openActivity(MyGroubListActivity.this, NotificationActivity.class, false);
+//                ((HomeActivity)getActivity()).openFragment(NotificationFragment.class , null);
             }
         });
+
 
         mPresenter.getMyGroup(this);
         rv = (RecyclerView) findViewById(R.id.recyclerView);

@@ -92,7 +92,7 @@ public class MyProfile {
 
     @SerializedName("IsConntectionRequestPending")
     @Expose
-    public boolean IsConntectionRequestPending;
+    public int IsConntectionRequestPending;
 
 }
 

@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.GroupTimeLine;
@@ -25,6 +27,7 @@ import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.CustomTextView;
 import com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView;
 import com.a700apps.techmart.utils.PreferenceHelper;
@@ -47,6 +50,8 @@ public class DetailsGroupActivity extends AppCompatActivity implements View.OnCl
     ImageView iv_slider, mProfileImageView, mNotificationImageView, iv_comment, iv_share, mLikeImageView, iv_share_event, iv_invite, iv_calender;
     LinearLayout mLikeLinearContainer, mEventLinearContainer;
     TextView mTitle, mSlidertype, mSlideTitle, mDescTextView, tv_comment, tv_share, tv_like, tv_going;
+    TextView mLikeCount , mCommentCount , mShareCount ;
+
     String Type;
     int index;
     List<GroupTimeLineData.ResultEntity> mList;
@@ -64,7 +69,12 @@ public class DetailsGroupActivity extends AppCompatActivity implements View.OnCl
         mPresenter = new DetailsPresenter();
         mPresenter.attachView(this);
 
-        Type = getIntent().getStringExtra("Type");
+//        Type = getIntent().getStringExtra("Type");
+        if (mList.get(index).getType() == 1){
+            Type = "Event";
+        }else {
+            Type = "post";
+        }
         index = getIntent().getIntExtra("Index", 0);
         mList = getIntent().getParcelableArrayListExtra("Timeline");
         indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
@@ -79,6 +89,9 @@ public class DetailsGroupActivity extends AppCompatActivity implements View.OnCl
         tv_share = (CustomLightTextView) findViewById(R.id.tv_share);
         tv_like = (CustomLightTextView) findViewById(R.id.tv_like);
         tv_going = (TextView) findViewById(R.id.textView53);
+        mLikeCount = (TextView) findViewById(R.id.tv_like_count);
+        mCommentCount = (TextView) findViewById(R.id.tv_comment_count);
+        mShareCount = (TextView) findViewById(R.id.tv_share_count);
 
         imageView4 = (ImageView) findViewById(R.id.imageView4);
         iv_comment = (ImageView) findViewById(R.id.iv_comment);
@@ -102,23 +115,35 @@ public class DetailsGroupActivity extends AppCompatActivity implements View.OnCl
         mGoing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mGoing.setClickable(false);
-                mGoing.setText("Attending");
-                mPresenter.attendee(String.valueOf(mList.get(index).getID()), PreferenceHelper.getUserId(DetailsGroupActivity.this), "true", DetailsGroupActivity.this);
+                if (AppUtils.isInternetAvailable(DetailsGroupActivity.this)){
+                    mGoing.setClickable(false);
+                    mGoing.setText("Attending");
+                    mPresenter.attendee(String.valueOf(mList.get(index).getID()), PreferenceHelper.getUserId(DetailsGroupActivity.this), "true", DetailsGroupActivity.this);
+
+                }else {
+                    Toast.makeText(DetailsGroupActivity.this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         iv_invite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mGoing.setClickable(false);
-                mGoing.setText("Attending");
-                mPresenter.attendee(String.valueOf(mList.get(index).getID()), PreferenceHelper.getUserId(DetailsGroupActivity.this), "true", DetailsGroupActivity.this);
+                if (AppUtils.isInternetAvailable(DetailsGroupActivity.this)){
+                    mGoing.setClickable(false);
+                    mGoing.setText("Attending");
+                    mPresenter.attendee(String.valueOf(mList.get(index).getID()), PreferenceHelper.getUserId(DetailsGroupActivity.this), "true", DetailsGroupActivity.this);
+
+                }else {
+                    Toast.makeText(DetailsGroupActivity.this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         mTitle = (CustomLightTextView) findViewById(R.id.tv_event_title);
         mDescTextView = (CustomLightTextView) findViewById(R.id.tv_events_desc);
+        mDescTextView.setMovementMethod(new ScrollingMovementMethod());
+
         mSlideTitle = (CustomTextView) findViewById(R.id.tv_events_title);
         mSlidertype = (CustomTextView) findViewById(R.id.tv_events);
 
@@ -137,22 +162,25 @@ public class DetailsGroupActivity extends AppCompatActivity implements View.OnCl
             mLikeImageView.setImageResource(R.drawable.ic_like_active);
         } else {
             mLikeImageView.setImageResource(R.drawable.ic_like);
-
         }
         tv_like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (AppUtils.isInternetAvailable(DetailsGroupActivity.this)){
+                    if (mList.get(index).getIsLike()) {
+                        mList.get(index).setIsLike(false);
+                        isLike = "false";
+                        mLikeImageView.setImageResource(R.drawable.ic_like);
+                    } else {
+                        isLike = "true";
+                        mList.get(index).setIsLike(true);
+                        mLikeImageView.setImageResource(R.drawable.ic_like_active);
+                    }
+                    getLike(mList.get(index));
 
-                if (mList.get(index).getIsLike()) {
-                    mList.get(index).setIsLike(false);
-                    isLike = "false";
-                    mLikeImageView.setImageResource(R.drawable.ic_like);
-                } else {
-                    isLike = "true";
-                    mList.get(index).setIsLike(true);
-                    mLikeImageView.setImageResource(R.drawable.ic_like_active);
+                }else {
+                    Toast.makeText(DetailsGroupActivity.this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                 }
-                getLike(mList.get(index));
 
             }
         });
@@ -160,17 +188,21 @@ public class DetailsGroupActivity extends AppCompatActivity implements View.OnCl
         mLikeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (AppUtils.isInternetAvailable(DetailsGroupActivity.this)){
+                    if (mList.get(index).getIsLike()) {
+                        mList.get(index).setIsLike(false);
+                        isLike = "false";
+                        mLikeImageView.setImageResource(R.drawable.ic_like);
+                    } else {
+                        isLike = "true";
+                        mList.get(index).setIsLike(true);
+                        mLikeImageView.setImageResource(R.drawable.ic_like_active);
+                    }
+                    getLike(mList.get(index));
 
-                if (mList.get(index).getIsLike()) {
-                    mList.get(index).setIsLike(false);
-                    isLike = "false";
-                    mLikeImageView.setImageResource(R.drawable.ic_like);
-                } else {
-                    isLike = "true";
-                    mList.get(index).setIsLike(true);
-                    mLikeImageView.setImageResource(R.drawable.ic_like_active);
+                }else {
+                    Toast.makeText(DetailsGroupActivity.this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                 }
-                getLike(mList.get(index));
 
             }
         });
@@ -179,11 +211,11 @@ public class DetailsGroupActivity extends AppCompatActivity implements View.OnCl
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (index <= mList.size()) {
+                if (++index < mList.size()) {
                     finish();
                     Intent intent = new Intent(DetailsGroupActivity.this, DetailsGroupActivity.class);
                     intent.putExtra("Type", Type);
-                    intent.putExtra("Index", index + 1);
+                    intent.putExtra("Index", index);
                     intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mList);
                     startActivity(intent);
                 } else {
@@ -210,16 +242,17 @@ public class DetailsGroupActivity extends AppCompatActivity implements View.OnCl
         imageView4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ActivityUtils.openActivity(DetailsGroupActivity.this, HomeActivity.class, true);
-
+                onBackPressed();
             }
         });
         mTitle.setText(mList.get(index).getTitle());
+        mLikeCount.setText(""+mList.get(index).getLikeCount());
+        mCommentCount.setText(""+mList.get(index).getCommentCount());
         mDescTextView.setText(mList.get(index).getDescr());
         mProfileImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtils.openActivity(DetailsGroupActivity.this, EditProfileActivity.class, false);
+//                ActivityUtils.openActivity(DetailsGroupActivity.this, EditProfileActivity.class, false);
             }
         });
 
@@ -277,10 +310,26 @@ public class DetailsGroupActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_comment:
+                if (AppUtils.isInternetAvailable(this)){
+                    Intent intent2 = new Intent(DetailsGroupActivity.this, CommentActivity.class);
+                    intent2.putExtra("string_key", mList.get(index).getID());
+                    intent2.putExtra("likes_number",  mList.get(index).getLikeCount());
+                    startActivity(intent2);
+                }else {
+                    Toast.makeText(this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                }
+
+                break;
             case R.id.iv_comment:
-                Intent intent = new Intent(DetailsGroupActivity.this, CommentActivity.class);
-                intent.putExtra("string_key", mList.get(index).getID());
-                startActivity(intent);
+                if (AppUtils.isInternetAvailable(this)){
+                    Intent intent = new Intent(DetailsGroupActivity.this, CommentActivity.class);
+                    intent.putExtra("string_key", mList.get(index).getID());
+                    intent.putExtra("likes_number",  mList.get(index).getLikeCount());
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             case R.id.tv_share:
             case R.id.iv_share:
@@ -313,8 +362,12 @@ public class DetailsGroupActivity extends AppCompatActivity implements View.OnCl
                 startActivity(addcalender);
                 break;
             case R.id.iv_invite:
-                mPresenter.attendee(String.valueOf(mList.get(index).getID()),
-                        PreferenceHelper.getUserId(DetailsGroupActivity.this), "true", DetailsGroupActivity.this);
+                if (AppUtils.isInternetAvailable(this)){
+                    mPresenter.attendee(String.valueOf(mList.get(index).getID()),
+                            PreferenceHelper.getUserId(DetailsGroupActivity.this), "true", DetailsGroupActivity.this);
+                }else {
+                    Toast.makeText(this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }

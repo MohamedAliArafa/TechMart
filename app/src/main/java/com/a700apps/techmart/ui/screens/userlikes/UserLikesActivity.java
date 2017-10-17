@@ -20,6 +20,7 @@ import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.ui.screens.groupmemberdetails.GroupActivity;
 import com.a700apps.techmart.ui.screens.groupmemberdetails.GroupMemberPresenter;
 import com.a700apps.techmart.ui.screens.grouptimeline.GroupsTimLineActivity;
+import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.profile.MemberProfile;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.PreferenceHelper;
@@ -110,9 +111,8 @@ public class UserLikesActivity extends AppCompatActivity implements UserLikeView
             viewHolder.Details.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, MemberProfile.class);
-                    intent.putExtra("RelativId", timeLineItem.UserID);
-                    intent.putExtra("GroupId", GroupId);
+                    Intent intent = new Intent(context, HomeActivity.class);
+                    intent.putExtra("profileHolder", timeLineItem.UserID);
                     context.startActivity(intent);
                 }
             });

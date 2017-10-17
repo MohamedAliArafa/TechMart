@@ -138,7 +138,6 @@
                 android:layout_weight="1"
                 android:text="Timeline"
                 android:textSize="12sp"
-
                 android:textColor="@color/button_light_text" />
 
             <!--<View-->

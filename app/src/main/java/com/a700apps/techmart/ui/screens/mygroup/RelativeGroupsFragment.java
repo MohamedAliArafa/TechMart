@@ -34,6 +34,7 @@ import com.a700apps.techmart.ui.screens.grouptimeline.GroupsTimeLineFragment;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.login.LoginActivity;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
+import com.a700apps.techmart.ui.screens.notification.NotificationFragment;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.Globals;
@@ -85,7 +86,8 @@ public class RelativeGroupsFragment extends Fragment implements GroupView {
         mNotificationImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
+//                ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
+                ((HomeActivity)getActivity()).openFragment(NotificationFragment.class , null);
             }
         });
 

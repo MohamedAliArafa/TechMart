@@ -46,7 +46,6 @@
                     android:layout_height="70dp"
                     android:background="@color/logo_color"
                     android:hint="short description about the post"
-
                     android:padding="8dp"
                     android:scaleType="centerCrop" />
 

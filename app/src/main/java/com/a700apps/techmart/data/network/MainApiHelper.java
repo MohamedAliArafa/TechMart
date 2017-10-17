@@ -404,5 +404,11 @@ public class MainApiHelper {
         return jsonObject;
     }
 
+    public static JSONObject deleteNotification(int id) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("NotificationID", id);
+        return jsonObject;
+    }
+
 
 }

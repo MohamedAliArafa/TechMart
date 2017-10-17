@@ -7,6 +7,8 @@ import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.NoficationData;
 import com.a700apps.techmart.ui.screens.notification.Ui.Follow.ViewUserProfile;
 import com.a700apps.techmart.ui.screens.notification.Ui.PostLikes.PostDetailsNotificationFragment;
+import com.a700apps.techmart.ui.screens.profile.MemberProfile;
+import com.a700apps.techmart.ui.screens.profile.MemberProfileFragment;
 
 public class NotificationHolderActivity extends AppCompatActivity {
 
@@ -27,7 +29,7 @@ public class NotificationHolderActivity extends AppCompatActivity {
             Bundle bundle = new Bundle();
             bundle.putString("RelativId" , getIntent().getStringExtra("RelativId"));
             bundle.putString("GroupId" , getIntent().getStringExtra("GroupId" ));
-            ViewUserProfile fragment = new ViewUserProfile();
+            MemberProfileFragment fragment = new MemberProfileFragment();
             fragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.holder , fragment).commit();
         }

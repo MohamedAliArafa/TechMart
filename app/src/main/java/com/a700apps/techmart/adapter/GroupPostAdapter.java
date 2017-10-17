@@ -210,7 +210,6 @@ public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.View
 
     void changeLike() {
         setValues(new GroupPostAdapter.ViewHolderPost(noteView), noteView);
-
     }
 
     void setValues(GroupPostAdapter.ViewHolderPost viewholder, View item) {

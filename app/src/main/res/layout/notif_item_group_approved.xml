@@ -59,7 +59,7 @@
         android:id="@+id/viewTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter Group"
+        android:text="View Group"
         android:textColor="@android:color/white"
         android:textSize="8sp"
         android:layout_marginEnd="10dp"
@@ -75,7 +75,7 @@
         android:layout_height="1dp"
         android:layout_marginTop="10dp"
         android:background="@color/separator"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_below="@id/messageTv" />
 </RelativeLayout>

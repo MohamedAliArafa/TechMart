@@ -159,8 +159,6 @@ public class PostDetailsNotificationFragment extends Fragment implements View.On
                         mDescTextView.setText(networkResponse.data.getResult().getDescr());
 
                         mSlideTitle.setText(networkResponse.data.getResult().getTitle());
-                        Toast.makeText(getActivity(), "-->" + networkResponse.data.getResult().getTitle() + "    " +
-                                networkResponse.data.getResult().getDescr(), Toast.LENGTH_SHORT).show();
                         if (eventResult.getResult().getIsGoing()) {
                             mGoing.setText("Attending");
                             mGoing.setEnabled(false);

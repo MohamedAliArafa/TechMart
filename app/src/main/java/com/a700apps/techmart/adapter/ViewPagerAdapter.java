@@ -38,7 +38,7 @@ public class ViewPagerAdapter extends PagerAdapter  {
     private LayoutInflater inflater;
     private Context context;
     Button mGoing;
-    ProgressDialog progressDialog;
+//    ProgressDialog progressDialog;
     int positionItem;
     public ViewPagerAdapter(Context context, List<TimeLineData.ResultEntity> imageModelArrayList) {
         this.context = context;
@@ -78,11 +78,6 @@ public class ViewPagerAdapter extends PagerAdapter  {
         CustomTextView mDesc = (CustomTextView) imageLayout.findViewById(R.id.tv_events_title);
         TextView mAttendees = (TextView) imageLayout.findViewById(R.id.tv_attendee);
          mGoing =(Button)imageLayout.findViewById(R.id.button7);
-        progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage("Uploading...");
-
-
-//
 
 
         mDesc.setText(timelineItem.getTitle());

@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +66,7 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
     void getExtra() {
         Bundle bundle = getArguments();
         intValue = bundle.getInt("selectedCategory", 0);
-
+        Log.e("KhaledInt" , ""+intValue);
 //        String.valueOf(intValue)
 //        presenter.getGroupCategory(String.valueOf(intValue), "1f443dc9-43f7-4f92-9e3f-76805cd0823c");
         presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), intValue, "0");

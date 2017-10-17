@@ -113,12 +113,34 @@ public class PostActivity extends AppCompatActivity implements PostView {
         linearLayout_post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDialog(editTextTitle, editTextDesc);
+                if (validate(editTextTitle, editTextDesc)){
+                    openDialog(editTextTitle, editTextDesc);
+                }
             }
         });
 
     }
 
+    private boolean validate(EditText title , EditText Desc){
+        boolean isValid = true;
+        if (title.getText().toString().isEmpty()) {
+            title.setError(getString(R.string.select_title));
+            isValid = false;
+        }
+
+        if (Desc.getText().toString().isEmpty()) {
+            Desc.setError(getString(R.string.enter_description));
+            isValid = false;
+        }
+
+
+        if (selectedImagePath == null) {
+            Toast.makeText(PostActivity.this, R.string.not_image, Toast.LENGTH_LONG).show();
+            isValid = false;
+        }
+
+        return isValid;
+    }
     void selectImage() {
         if (AppConst.checkPermission(PostActivity.this)) {
             selectedImagePath = null;
@@ -161,7 +183,6 @@ public class PostActivity extends AppCompatActivity implements PostView {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.my_dialog);
         dialog.show();
-
 
         TextView tv_public = (TextView) dialog.findViewById(R.id.tv_public);
         TextView tv_group = (TextView) dialog.findViewById(R.id.tv_group);

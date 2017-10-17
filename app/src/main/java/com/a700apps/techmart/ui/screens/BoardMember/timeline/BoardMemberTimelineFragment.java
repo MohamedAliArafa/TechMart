@@ -24,6 +24,7 @@ import com.a700apps.techmart.ui.screens.BoardMember.timeline.bordmemberpost.Boar
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.mygroup.GroupPagerFragment;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
+import com.a700apps.techmart.ui.screens.notification.NotificationFragment;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
 
@@ -117,7 +118,8 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
         mNotificationImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
+//                ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
+                ((HomeActivity)getActivity()).openFragment(NotificationFragment.class , null);
             }
         });
 

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.TimelineAdapter;
@@ -25,6 +26,7 @@ import com.a700apps.techmart.ui.screens.mygroup.MyGroubListActivity;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.CustomTextView;
 import com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView;
 import com.a700apps.techmart.utils.PreferenceHelper;
@@ -55,7 +57,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     DetailsPresenter mPresenter;
     public AVLoadingIndicatorView indicatorView;
     TextView mGoing;
-
+    TextView mLikeCount , mCommentCount , mShareCount ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,9 +66,16 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         mPresenter = new DetailsPresenter();
         mPresenter.attachView(this);
 
-        Type = getIntent().getStringExtra("Type");
+//        Type = getIntent().getStringExtra("Type");
         index = getIntent().getIntExtra("Index", 0);
         mList = getIntent().getParcelableArrayListExtra("Timeline");
+
+        if (mList.get(index).getType() == 1){
+            Type = "Event";
+        }else {
+            Type = "post";
+        }
+
         indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
         mGoing = (TextView) findViewById(R.id.textView53);
         iv_invite=(ImageView)findViewById(R.id.iv_invite);
@@ -74,6 +83,9 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         iv_slider = (ImageView) findViewById(R.id.iv_slider);
         mNotificationImageView = (ImageView) findViewById(R.id.new_profile);
         mEventTitle=(CustomLightTextView)findViewById(R.id.tv_event_title);
+        mLikeCount = (TextView) findViewById(R.id.tv_like_count);
+        mCommentCount = (TextView) findViewById(R.id.tv_comment_count);
+        mShareCount = (TextView) findViewById(R.id.tv_share_count);
 
         next = (CustomTextView) findViewById(R.id.next);
         back = (CustomTextView) findViewById(R.id.back);
@@ -105,18 +117,28 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         mGoing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mGoing.setClickable(false);
-                mGoing.setText("Attending");
-                mPresenter.attendee(String.valueOf(mList.get(index).getID()), PreferenceHelper.getUserId(DetailsActivity.this), "true", DetailsActivity.this);
+                if (AppUtils.isInternetAvailable(DetailsActivity.this)){
+                    mGoing.setClickable(false);
+                    mGoing.setText("Attending");
+                    mPresenter.attendee(String.valueOf(mList.get(index).getID()), PreferenceHelper.getUserId(DetailsActivity.this), "true", DetailsActivity.this);
+
+                }else {
+                    Toast.makeText(DetailsActivity.this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         iv_invite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mGoing.setClickable(false);
-                mGoing.setText("Attending");
-                mPresenter.attendee(String.valueOf(mList.get(index).getID()), PreferenceHelper.getUserId(DetailsActivity.this), "true", DetailsActivity.this);
+                if (AppUtils.isInternetAvailable(DetailsActivity.this)){
+                    mGoing.setClickable(false);
+                    mGoing.setText("Attending");
+                    mPresenter.attendee(String.valueOf(mList.get(index).getID()), PreferenceHelper.getUserId(DetailsActivity.this), "true", DetailsActivity.this);
+
+                }else {
+                    Toast.makeText(DetailsActivity.this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -182,11 +204,11 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (index <= mList.size()) {
+                if (++index < mList.size()) {
                     finish();
                     Intent intent = new Intent(DetailsActivity.this, DetailsActivity.class);
                     intent.putExtra("Type", Type);
-                    intent.putExtra("Index", index + 1);
+                    intent.putExtra("Index", index);
                     intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mList);
                     startActivity(intent);
                 } else {
@@ -220,10 +242,14 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         mTitle.setText(mList.get(index).getPostedByName());
         mDescTextView.setText(mList.get(index).getDescr());
         mEventTitle.setText(mList.get(index).getTitle());
+
+        mLikeCount.setText(""+mList.get(index).getLikeCount());
+        mCommentCount.setText(""+mList.get(index).getCommentCount());
+
         mProfileImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtils.openActivity(DetailsActivity.this, EditProfileActivity.class, false);
+//                ActivityUtils.openActivity(DetailsActivity.this, EditProfileActivity.class, false);
             }
         });
 
@@ -273,7 +299,6 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        ActivityUtils.openActivity(DetailsActivity.this, HomeActivity.class, true);
 
     }
 
@@ -281,10 +306,25 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_comment:
+                if (AppUtils.isInternetAvailable(DetailsActivity.this)){
+                    Intent intent2 = new Intent(DetailsActivity.this, CommentActivity.class);
+                    intent2.putExtra("string_key", mList.get(index).getID());
+                    intent2.putExtra("likes_number",  mList.get(index).getLikeCount());
+                    startActivity(intent2);
+                }else {
+                    Toast.makeText(DetailsActivity.this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                }
+
+                break;
             case R.id.iv_comment:
-                Intent intent = new Intent(DetailsActivity.this, CommentActivity.class);
-                intent.putExtra("string_key", mList.get(index).getID());
-                startActivity(intent);
+                if (AppUtils.isInternetAvailable(DetailsActivity.this)){
+                    Intent intent = new Intent(DetailsActivity.this, CommentActivity.class);
+                    intent.putExtra("string_key", mList.get(index).getID());
+                    intent.putExtra("likes_number",  mList.get(index).getLikeCount());
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(DetailsActivity.this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.tv_share:
             case R.id.iv_share:
@@ -317,8 +357,13 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(addcalender);
                 break;
             case R.id.iv_invite:
-                mPresenter.attendee(String.valueOf(mList.get(index).getID()),
-                        PreferenceHelper.getUserId(DetailsActivity.this), "true", DetailsActivity.this);
+                if (AppUtils.isInternetAvailable(DetailsActivity.this)){
+                    mPresenter.attendee(String.valueOf(mList.get(index).getID()),
+                            PreferenceHelper.getUserId(DetailsActivity.this), "true", DetailsActivity.this);
+
+                }else {
+                    Toast.makeText(DetailsActivity.this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }

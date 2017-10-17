@@ -23,6 +23,7 @@ import com.a700apps.techmart.data.model.NotificationDataLike;
 import com.a700apps.techmart.data.model.PostData;
 import com.a700apps.techmart.data.model.PredifinedData;
 import com.a700apps.techmart.data.model.SendMessageResponse;
+import com.a700apps.techmart.data.model.ServerResponse;
 import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.data.model.UserData;
 import com.a700apps.techmart.data.model.UserGroupData;
@@ -673,6 +674,29 @@ public class MainApi {
             @Override
             public void onNext(MyConnectionList userNetworkData) {
                 NetworkResponse<MyConnectionList> networkResponse = new NetworkResponse<>();
+                networkResponse.data = userNetworkData;
+                responseListener.networkOperationSuccess(networkResponse);
+            }
+        });
+    }
+
+    public static void deleteNotification(JSONObject body, final NetworkResponseListener<ServerResponse> responseListener) {
+        getApi().deleteNotification(getRequestBody(body)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ServerResponse>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                responseListener.networkOperationFail(e);
+                Log.e("error", e.toString());
+            }
+
+            @Override
+            public void onNext(ServerResponse userNetworkData) {
+                NetworkResponse<ServerResponse> networkResponse = new NetworkResponse<>();
                 networkResponse.data = userNetworkData;
                 responseListener.networkOperationSuccess(networkResponse);
             }

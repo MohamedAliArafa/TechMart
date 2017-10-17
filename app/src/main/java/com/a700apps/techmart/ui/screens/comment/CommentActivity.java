@@ -12,18 +12,28 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.Comment;
 import com.a700apps.techmart.data.model.CommentData;
 import com.a700apps.techmart.data.model.GroupUsersData;
+import com.a700apps.techmart.data.model.LikeData;
 import com.a700apps.techmart.data.network.MainApi;
+import com.a700apps.techmart.data.network.MainApiHelper;
+import com.a700apps.techmart.data.network.NetworkResponse;
+import com.a700apps.techmart.data.network.NetworkResponseListener;
 import com.a700apps.techmart.ui.screens.groupmemberdetails.GroupActivity;
 import com.a700apps.techmart.ui.screens.groupmemberdetails.GroupMemberPresenter;
 import com.a700apps.techmart.ui.screens.profile.MemberProfile;
+import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.ui.screens.userlikes.UserLikesActivity;
+import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -38,7 +48,7 @@ public class CommentActivity extends AppCompatActivity implements commentView {
     ImageView mSend, mLikeImageView;
     TextView mLikes;
 
-    int mId,mNumberLikes;
+    int mId, mNumberLikes;
     ImageView mBackButton;
 
     @Override
@@ -56,38 +66,67 @@ public class CommentActivity extends AppCompatActivity implements commentView {
         mSend = (ImageView) findViewById(R.id.imageView5);
         mLikes = (TextView) findViewById(R.id.textView2);
         mLikeImageView = (ImageView) findViewById(R.id.imageView3);
-        mBackButton=(ImageView)findViewById(R.id.imageView2);
+        mBackButton = (ImageView) findViewById(R.id.imageView2);
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-        if (mNumberLikes==0){
+        if (mNumberLikes == 0) {
             mLikes.setText("Be first to like this");
-        }else {
-            mLikes.setText(mNumberLikes+" "+"Users like this post");
+        } else {
+            mLikes.setText(mNumberLikes + " " + "Users like this post");
         }
         mLikes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(CommentActivity.this, UserLikesActivity.class);
-                intent.putExtra("string_key" ,mId);
-                 startActivity(intent);
+                if (mNumberLikes == 0) {
+                    JSONObject registerBody = null;
+                    try {
+                        registerBody = MainApiHelper.getUserLike(PreferenceHelper.getUserId(CommentActivity.this), mId, "true");
+                        MainApi.getLikeTimeLine(registerBody, new NetworkResponseListener<LikeData>() {
+                            @Override
+                            public void networkOperationSuccess(NetworkResponse<LikeData> networkResponse) {
+                                if (networkResponse.data.ISResultHasData == 1 && networkResponse.data.likeData.success){
+                                    mNumberLikes = 1;
+                                    mLikes.setText(1 + " " + "Users like this post");
+                                }
+                            }
+
+                            @Override
+                            public void networkOperationFail(Throwable throwable) {
+                                Toast.makeText(CommentActivity.this, "" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                } else {
+                    Intent intent = new Intent(CommentActivity.this, UserLikesActivity.class);
+                    intent.putExtra("string_key", mId);
+                    startActivity(intent);
+                }
+
             }
         });
         mLikeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(CommentActivity.this, UserLikesActivity.class);
-                intent.putExtra("string_key" ,mId);
+                intent.putExtra("string_key", mId);
                 startActivity(intent);
             }
         });
         mSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.postComment(PreferenceHelper.getUserId(CommentActivity.this), mId, editText.getText().toString());
+                if (AppUtils.isInternetAvailable(CommentActivity.this)){
+                    presenter.postComment(PreferenceHelper.getUserId(CommentActivity.this), mId, editText.getText().toString());
+                }else {
+                    Toast.makeText(CommentActivity.this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

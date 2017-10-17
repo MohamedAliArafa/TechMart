@@ -23,8 +23,7 @@ import com.a700apps.techmart.ui.screens.PredefinedMessage.PredifinedMessageActiv
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.message.ChatActivity;
 import com.a700apps.techmart.ui.screens.mygroup.RelativeGroupsFragment;
-import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
-import com.a700apps.techmart.ui.screens.notification.Ui.Activity.NotificationHolderActivity;
+import com.a700apps.techmart.ui.screens.notification.NotificationFragment;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
 import com.a700apps.techmart.ui.screens.profile.ProfileView;
 import com.a700apps.techmart.ui.screens.timeline.EventFragment;
@@ -86,8 +85,8 @@ public class ViewUserProfile extends Fragment implements ProfileView, View.OnCli
         mNotificationImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
-
+//                ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
+                ((HomeActivity)getActivity()).openFragment(NotificationFragment.class , null);
 
             }
         });

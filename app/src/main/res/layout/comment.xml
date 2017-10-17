@@ -66,7 +66,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view"
-        app:srcCompat="@drawable/ic_like"
+        app:srcCompat="@drawable/ic_like_active"
         android:layout_marginStart="8dp" />
 
     <TextView

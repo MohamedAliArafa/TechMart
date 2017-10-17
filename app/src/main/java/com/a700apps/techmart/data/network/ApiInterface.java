@@ -166,6 +166,12 @@ public interface ApiInterface {
     @POST("Notification/GetUserNotification")
     Observable<NoficationData> getNotifications(@Body RequestBody body);
 
+
+    @POST("Notification/Delete")
+    Observable<ServerResponse> deleteNotification(@Body RequestBody body);
+
+
+
     @POST("TimeLine/GetTimeLineItemByID")
     Observable<NotificationDataLike> getTimeLineById(@Body RequestBody body);
 

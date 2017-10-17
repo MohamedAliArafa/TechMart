@@ -37,6 +37,7 @@ import com.a700apps.techmart.data.network.ApiInterface;
 import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
+import com.a700apps.techmart.ui.screens.notification.NotificationFragment;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.ApiClient;
 import com.a700apps.techmart.utils.AppConst;
@@ -64,7 +65,7 @@ import retrofit2.Response;
 import static android.app.Activity.RESULT_OK;
 
 public class EditProfileFragment extends Fragment implements ProfileView, View.OnClickListener {
-    ImageView mNotificationImageView, mProfileUserImageView;//mProfileImageView
+    ImageView mNotificationImageView, mProfileUserImageView , mAddImageView;//mProfileImageView
     ImageView imageView4;
     TextView mFriend, mFollowers, mPosts, mEmail;
     private ProfilePresenter presenter;
@@ -78,6 +79,7 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
     Dialog dialogsLoading;
 
     String returnedImage = "/UploadedImages/";
+    changeSideMenuData changeSideMenuData;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -119,11 +121,20 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
         mNotificationImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
+//                ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
+                ((HomeActivity)getActivity()).openFragment(NotificationFragment.class , null);
             }
         });
 
         mProfileUserImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isEnabled)
+                    selectImage();
+            }
+        });
+
+        mAddImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (isEnabled)
@@ -137,6 +148,8 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
     void init(View view) {
 
         mProfileUserImageView = (ImageView) view.findViewById(R.id.iv_user);
+        mAddImageView = (ImageView) view.findViewById(R.id.iv_add);
+        changeSideMenuData = (changeSideMenuData) getActivity();
         mName = (EditText) view.findViewById(R.id.tv_name);
         mPosts = (TextView) view.findViewById(R.id.tv_post);
         mEmail = (TextView) view.findViewById(R.id.textView28);
@@ -159,7 +172,7 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
 
     @Override
     public void showLoadingProgress() {
-
+        dialogsLoading = new loadingDialog().showDialog(getActivity());
 //        indicatorView.setVisibility(View.VISIBLE);
 //        indicatorView.show();
     }
@@ -167,6 +180,7 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
     @Override
     public void dismissLoadingProgress() {
 //        indicatorView.hide();
+        dialogsLoading.dismiss();
     }
 
     //    void openSelectIntent() {
@@ -252,9 +266,12 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
     public void updateUiUpdate(post success) {
         User user = PreferenceHelper.getSavedUser(getActivity());
         user.Name = mName.getText().toString();
-        user.Photo = returnedImage;
+        if (!returnedImage.equals("/UploadedImages/")){
+            user.Photo = returnedImage;
+        }
         PreferenceHelper.saveUser(getActivity(), user);
         Toast.makeText(getActivity(), "Profile updated successfully", Toast.LENGTH_SHORT).show();
+        changeSideMenuData.changeData();
     }
     private byte[] bitmapToByte(Bitmap bitmap){
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -526,6 +543,11 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
 
         return  isValid;
     }
+
+    public interface changeSideMenuData{
+        void changeData();
+    }
+
 
     public class LoggingListener<T, R> implements RequestListener<T, R> {
         @Override

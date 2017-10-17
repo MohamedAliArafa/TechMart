@@ -1,20 +1,12 @@
 package com.a700apps.techmart.ui.screens.profile;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.a700apps.techmart.R;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,26 +18,20 @@ import com.a700apps.techmart.data.model.MyProfile;
 import com.a700apps.techmart.data.model.post;
 import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.ui.screens.PredefinedMessage.PredifinedMessageActivity;
-import com.a700apps.techmart.ui.screens.groupmemberdetails.GroupFragment;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.message.ChatActivity;
-import com.a700apps.techmart.ui.screens.mygroup.MyGroupFragment;
 import com.a700apps.techmart.ui.screens.mygroup.RelativeGroupsFragment;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
-import com.a700apps.techmart.ui.screens.timeline.EventFragment;
+import com.a700apps.techmart.ui.screens.notification.NotificationFragment;
 import com.a700apps.techmart.ui.screens.timeline.RelativeEventFragment;
-import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.ImageDetailsActivity;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.a700apps.techmart.utils.RoundedCornersTransformation;
-import com.a700apps.techmart.utils.loadingDialog;
 import com.bumptech.glide.Glide;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import java.util.ArrayList;
 
 /**
  * Created by samir salah on 9/13/2017.
@@ -54,7 +40,7 @@ import java.util.ArrayList;
 public class MemberProfileFragment extends Fragment implements ProfileView, View.OnClickListener {
     ImageView mNotificationImageView, mProfileUserImageView;//mProfileImageView
     ImageView imageView4;
-    TextView mName, mFriend, mFollowers, mPosts, mCompany, mGroupCount, mEventCount, mEmail , mPhone , mlinkedin , mPosition;
+    TextView mName, mFriend, mFollowers, mPosts, mCompany, mGroupCount, mEventCount, mEmail, mPhone, mlinkedin, mPosition;
     private MemberPresenter presenter;
     public AVLoadingIndicatorView indicatorView;
     String mRelId;
@@ -62,8 +48,8 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
     LinearLayout mContainerLinearLayout;
     String ImageLink;
     Button mFollowButton, mConnectButton, mMessageButton;
-    boolean isFollowing, isConnect , isConnectPending;
-    View eventLayout , groupLayout;
+    boolean isFollowing, isConnect, isConnectPending , isApprove;
+    View eventLayout, groupLayout;
 
     MyProfile myProfile;
 
@@ -92,7 +78,7 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
         imageView4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((HomeActivity)getActivity()).openDrawer();
+                ((HomeActivity) getActivity()).openDrawer();
             }
         });
 
@@ -114,9 +100,10 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
         mNotificationImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AppUtils.isInternetAvailable(getActivity())){
-                    ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
-                }else {
+                if (AppUtils.isInternetAvailable(getActivity())) {
+//                    ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
+                    ((HomeActivity) getActivity()).openFragment(NotificationFragment.class, null);
+                } else {
                     Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                 }
 
@@ -166,8 +153,7 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
     }
 
     @Override
-    public void dismissLoadingProgress()
-    {
+    public void dismissLoadingProgress() {
 //        indicatorView.hide();
     }
 
@@ -216,18 +202,18 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
             mFollowButton.setText(R.string.unfollow);
             mConnectButton.setText(R.string.disconnect);
             mContainerLinearLayout.setVisibility(View.VISIBLE);
-        } else {
-//            isFollowing = false;
-            isConnect = false;
-            mMessageButton.setVisibility(View.GONE);
-//            mFollowButton.setText(R.string.follow);
-            mConnectButton.setText(R.string.connect);
-            mContainerLinearLayout.setVisibility(View.GONE);
-        }
-
-        if (MyProfile.IsConntectionRequestPending){
+        } else if (MyProfile.IsConntectionRequestPending == 1) {
             isConnectPending = true;
             mConnectButton.setText(getString(R.string.canecl_connect));
+        } else if (MyProfile.IsConntectionRequestPending == 2) {
+            isConnectPending = true;
+            isApprove = true;
+            mConnectButton.setText(getString(R.string.approve_connect));
+        } else {
+            isConnect = false;
+            mMessageButton.setVisibility(View.GONE);
+            mConnectButton.setText(R.string.connect);
+            mContainerLinearLayout.setVisibility(View.GONE);
         }
     }
 
@@ -246,9 +232,9 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
     public void updateUiUnFollow(post success) {
         mMessageButton.setVisibility(View.GONE);
         mFollowButton.setText(R.string.follow);
-            int count = Integer.parseInt(mFollowers.getText().toString());
-            mFollowers.setText(String.valueOf(--count));
-            isFollowing = false;
+        int count = Integer.parseInt(mFollowers.getText().toString());
+        mFollowers.setText(String.valueOf(--count));
+        isFollowing = false;
 
         if (isConnect) {
             mContainerLinearLayout.setVisibility(View.VISIBLE);
@@ -291,7 +277,7 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_follow:
-                if (AppUtils.isInternetAvailable(getActivity())){
+                if (AppUtils.isInternetAvailable(getActivity())) {
                     if (isFollowing) {
                         presenter.sendFollow(mRelId, PreferenceHelper.getUserId(getActivity()), "false");
                         isFollowing = false;
@@ -299,26 +285,32 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
                         isFollowing = true;
                         presenter.sendFollow(mRelId, PreferenceHelper.getUserId(getActivity()), "true");
 
-                    }                }else {
+                    }
+                } else {
                     Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                 }
-
 
 
                 break;
             case R.id.btn_edit:
 
-                if (AppUtils.isInternetAvailable(getActivity())){
-                    if (isConnect ) {
-                        isConnect = false;
-                        presenter.sendConnect(mRelId, PreferenceHelper.getUserId(getActivity()), "false");
-                    } else if (isConnectPending){
-                        isConnectPending = false;
-                        presenter.sendConnect(mRelId, PreferenceHelper.getUserId(getActivity()), "false");
-                    } else {
-//                    isConnect = true;
+                if (AppUtils.isInternetAvailable(getActivity())) {
+                    if (isApprove){
                         presenter.sendConnect(mRelId, PreferenceHelper.getUserId(getActivity()), "true");
-                    }                }else {
+                    }else {
+                        if (isConnect) {
+                            isConnect = false;
+                            presenter.sendConnect(mRelId, PreferenceHelper.getUserId(getActivity()), "false");
+                        } else if (isConnectPending) {
+                            isConnectPending = false;
+                            presenter.sendConnect(mRelId, PreferenceHelper.getUserId(getActivity()), "false");
+                        } else {
+//                    isConnect = true;
+                            presenter.sendConnect(mRelId, PreferenceHelper.getUserId(getActivity()), "true");
+                        }
+                    }
+
+                } else {
                     Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                 }
 
@@ -328,37 +320,37 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
 //                if (isConnect && myProfile.HaveSharedEventWithMe){
 //                    openPredifinedActivity();
 //                }else
-                if (AppUtils.isInternetAvailable(getActivity())){
-                    if (isFollowing &&  myProfile.HaveSharedEventWithMe ){
+                if (AppUtils.isInternetAvailable(getActivity())) {
+                    if (isFollowing && myProfile.HaveSharedEventWithMe) {
                         openPredifinedActivity();
-                    }else if (isConnect){
+                    } else if (isConnect) {
                         openChatActivity();
-                    }                }else {
+                    }
+                } else {
                     Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                 }
-
 
                 break;
 
             case R.id.iv_user:
-                if (AppUtils.isInternetAvailable(getActivity())){
+                if (AppUtils.isInternetAvailable(getActivity())) {
                     Intent intentDetails = new Intent(getActivity(), ImageDetailsActivity.class);
                     intentDetails.putExtra("ImageUrl", ImageLink);
                     startActivity(intentDetails);
-                }else {
+                } else {
                     Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                 }
 
                 break;
             case R.id.eventLayout:
-                if (AppUtils.isInternetAvailable(getActivity())){
+                if (AppUtils.isInternetAvailable(getActivity())) {
                     Bundle bundle = new Bundle();
-                    bundle.putString("RelativId" , mRelId);
+                    bundle.putString("RelativId", mRelId);
                     Globals.groupId = GroupId;
                     Globals.relativeId = mRelId;
 
-                    ((HomeActivity) getActivity()).openFragment(RelativeEventFragment.class ,bundle);
-                }else {
+                    ((HomeActivity) getActivity()).openFragment(RelativeEventFragment.class, bundle);
+                } else {
                     Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                 }
 
@@ -369,14 +361,14 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
 //                Toast.makeText(getActivity(), "123", Toast.LENGTH_SHORT).show();
 //                RelativeGroupsFragment relativeGroupsFragment = new RelativeGroupsFragment();
 
-                if (AppUtils.isInternetAvailable(getActivity())){
+                if (AppUtils.isInternetAvailable(getActivity())) {
                     Bundle bundle2 = new Bundle();
-                    bundle2.putString("RelativId" , mRelId);
+                    bundle2.putString("RelativId", mRelId);
                     Globals.groupId = GroupId;
                     Globals.relativeId = mRelId;
 //                relativeGroupsFragment.setArguments(bundle2);
-                    ((HomeActivity) getActivity()).openFragment(RelativeGroupsFragment.class ,bundle2);
-                }else {
+                    ((HomeActivity) getActivity()).openFragment(RelativeGroupsFragment.class, bundle2);
+                } else {
                     Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                 }
 
@@ -386,7 +378,7 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
         }
     }
 
-    private void openPredifinedActivity(){
+    private void openPredifinedActivity() {
         Intent intent = new Intent(getActivity(), PredifinedMessageActivity.class);
         intent.putExtra("RelativeID", mRelId);
         intent.putExtra("ReciverName", mName.getText().toString());
@@ -394,7 +386,7 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
         startActivity(intent);
     }
 
-    private void openChatActivity(){
+    private void openChatActivity() {
         Intent intent = new Intent(getActivity(), ChatActivity.class);
         intent.putExtra("RelativeID", mRelId);
         intent.putExtra("ReciverName", mName.getText().toString());

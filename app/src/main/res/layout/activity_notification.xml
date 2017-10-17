@@ -4,19 +4,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
- >
+    android:background="@drawable/ic_bg_list"
 
-    <ImageView
-        android:id="@+id/imageView12"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_bg_list" />
+ >
+    <!--<LinearLayout-->
+        <!--android:id="@+id/linearLayout6"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="@dimen/general_margin"-->
+        <!--android:orientation="horizontal">-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/imageView4"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="36dp"-->
+            <!--app:srcCompat="@drawable/ic_side_menu_logo" />-->
+
+        <!--<EditText-->
+            <!--android:id="@+id/textView41"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="left"-->
+            <!--android:text="@string/search_name"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--android:textSize="@dimen/time_text"-->
+            <!--android:visibility="invisible" />-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/new_message"-->
+            <!--android:layout_width="24dp"-->
+            <!--android:layout_height="24dp"-->
+            <!--app:srcCompat="@drawable/ic_stat_ic_user" />-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/new_profile"-->
+            <!--android:layout_width="24dp"-->
+            <!--android:layout_height="24dp"-->
+            <!--app:srcCompat="@drawable/ic_stat_ic_notification" />-->
+    <!--</LinearLayout>-->
+
 
     <View
         android:id="@+id/view"
@@ -33,7 +61,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp" />
 
-    <TextView
+    <com.a700apps.techmart.utils.CustomTextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,15 +69,15 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:text="Notification"
+        android:layout_marginTop="50dp"
+        android:text="Notifications"
         android:textAllCaps="true"
         android:textColor="@android:color/white"
         android:textSize="18sp"
-        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout6"/>
 
     <ImageView
         android:id="@+id/imageView19"

@@ -37,6 +37,7 @@ import com.a700apps.techmart.ui.screens.message.MessageFragment;
 import com.a700apps.techmart.ui.screens.mygroup.MyGroupsListFragment;
 import com.a700apps.techmart.ui.screens.mygroup.RelativeGroupsFragment;
 import com.a700apps.techmart.ui.screens.profile.EditProfileFragment;
+import com.a700apps.techmart.ui.screens.profile.EditProfileFragment.changeSideMenuData;
 import com.a700apps.techmart.ui.screens.profile.MemberProfileFragment;
 import com.a700apps.techmart.ui.screens.setting.SettingFragment;
 import com.a700apps.techmart.ui.screens.timeline.EventFragment;
@@ -63,7 +64,7 @@ import timber.log.Timber;
  * Created by samir salah on 8/15/2017.
  */
 
-public class HomeActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, HomeView {
+public class HomeActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, HomeView, changeSideMenuData {
 
     public DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
@@ -105,30 +106,27 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
 
 //            GroupsTimeLineFragment fragment = new GroupsTimeLineFragment();
             Bundle bundle = new Bundle();
-            bundle.putString("selectedCategory", getIntent().getStringExtra("selectedCategory"));
+            bundle.putInt("selectedCategory", getIntent().getIntExtra("selectedCategory", 0));
 //            fragment.setArguments(bundle);
 
             openFragment(GroupsTimeLineFragment.class, bundle);
 //            addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, fragment, false
 //                    , true);
 
-        }
+            // came from user like activity to view users who like particular post
+        } else if (getIntent().getStringExtra("profileHolder") != null) {
+            String userId = getIntent().getStringExtra("profileHolder");
 
-//        else if (getIntent().getStringExtra("RelativId") != null) {
-//
-//            MemberProfileFragment fragment = new MemberProfileFragment();
-//            Bundle bundle = new Bundle();
-//
-//            bundle.putString("RelativId", getIntent().getStringExtra("RelativId"));
-//            bundle.putString("GroupId", getIntent().getStringExtra("GroupId"));
-//            fragment.setArguments(bundle);
-//
-//            addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, fragment, false
-//                    , true);
-//
-//        }
-
-        else {
+            if (userId.equals(PreferenceHelper.getUserId(this))) {
+                openFragmentNoStack(EditProfileFragment.class, null);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("RelativId", userId);
+                bundle.putInt("GroupId", Globals.GROUP_ID);
+                Globals.userId = userId;
+                openFragmentNoStack(MemberProfileFragment.class, bundle );
+            }
+        } else {
             openTimeLine();
 //            openFragment(TimelineFragment.class, null);
 
@@ -210,6 +208,22 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
+    }
+
+    @Override
+    public void changeData() {
+        mUserProfileName.setText(PreferenceHelper.getSavedUser(this).Name);
+        String image = MainApi.IMAGE_IP + PreferenceHelper.getSavedUser(this).Photo;
+//
+//        Glide.with(HomeActivity.this)
+//                .load("https://camo.mybb.com/e01de90be6012adc1b1701dba899491a9348ae79/687474703a2f2f7777772e6a71756572797363726970742e6e65742f696d616765732f53696d706c6573742d526573706f6e736976652d6a51756572792d496d6167652d4c69676874626f782d506c7567696e2d73696d706c652d6c69676874626f782e6a7067").placeholder(R.drawable.ic_profile)
+//                .into(mUserProfile);
+
+
+        Glide.with(HomeActivity.this)
+                .load(image).placeholder(R.drawable.ic_profile)
+                .listener(new LoggingListener<String, GlideDrawable>())
+                .into(mUserProfile);
     }
 
 
@@ -480,7 +494,6 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
             openFragment(BoardMemberTimelineFragment.class, bundle);
         } else {
             openTimeLine();
-//            openFragment(TimelineFragment.class, null);
         }
 //
     }
@@ -565,7 +578,23 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         transaction.addToBackStack(null);
         transaction.commit();
         mDrawerLayout.closeDrawer(GravityCompat.START);
+    }
 
+    public void openFragmentNoStack(Class fragmentClass, Bundle bundle) {
+        Fragment fragment = null;
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        if (bundle != null) {
+            fragment.setArguments(bundle);
+        }
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
+        mDrawerLayout.closeDrawer(GravityCompat.START);
     }
 
 }

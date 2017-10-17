@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.GroupViewPagerAdapter;
@@ -73,9 +74,6 @@ public class GroupsTimLineActivity  extends AppCompatActivity implements View.On
     void getExtra() {
         Intent mIntent = getIntent();
          intValue = mIntent.getIntExtra("selectedCategory",0);
-
-//        String.valueOf(intValue)
-//        presenter.getGroupCategory(String.valueOf(intValue), "1f443dc9-43f7-4f92-9e3f-76805cd0823c");
         presenter.getTimeline(PreferenceHelper.getUserId(this),intValue, "0");
 
     }
