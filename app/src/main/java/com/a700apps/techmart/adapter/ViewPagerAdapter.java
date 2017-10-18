@@ -2,6 +2,8 @@ package com.a700apps.techmart.adapter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.data.network.MainApiHelper;
 import com.a700apps.techmart.data.network.NetworkResponse;
 import com.a700apps.techmart.data.network.NetworkResponseListener;
+import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.utils.CustomTextView;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
@@ -25,6 +28,7 @@ import com.bumptech.glide.Glide;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -62,7 +66,7 @@ public class ViewPagerAdapter extends PagerAdapter  {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup view, int position) {
+    public Object instantiateItem(ViewGroup view,final int position) {
         positionItem = position;
         View imageLayout = inflater.inflate(R.layout.sliding_image_viewpager, view, false);
         final TimeLineData.ResultEntity timelineItem = imageModelArrayList.get(positionItem);
@@ -102,6 +106,12 @@ public class ViewPagerAdapter extends PagerAdapter  {
         Glide.with(context)
                 .load(MainApi.IMAGE_IP + timelineItem.getImage())
                 .into(mSlideImageView);
+        mSlideImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDetails(context,String.valueOf( timelineItem.getType()), imageModelArrayList, positionItem);
+            }
+        });
 
         view.addView(imageLayout, 0);
 
@@ -113,7 +123,16 @@ public class ViewPagerAdapter extends PagerAdapter  {
         return view.equals(object);
 }
 
+    static void openDetails(Context context, String type, List<TimeLineData.ResultEntity> mTimeLineList, int index) {
+//        ActivityUtils.openActivity(context, DetailsActivity.class, false);
+        Intent intent = new Intent(context, DetailsActivity.class);
+        intent.putExtra("Type", type);
+        intent.putExtra("Index", index);
+        intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mTimeLineList);
+        context.startActivity(intent);
 
+
+    }
 
 
 //

@@ -432,6 +432,7 @@ public class AppUtils {
         Date convertedDate = new Date();
         try {
             convertedDate = dateFormat.parse(date);
+
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

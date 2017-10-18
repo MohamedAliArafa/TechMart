@@ -450,6 +450,8 @@ public class CreatEventActivity extends AppCompatActivity implements
                         now.get(Calendar.DAY_OF_MONTH)
                 );
                 dpd.setAutoHighlight(true);
+                dpd.isThemeDark();
+                dpd.setAccentColor(getResources().getColor(R.color.blackGreenColor));
                 dpd.show(getFragmentManager(), "Datepickerdialog");
                 break;
             case R.id.iv_date:
@@ -462,6 +464,9 @@ public class CreatEventActivity extends AppCompatActivity implements
                         now2.get(Calendar.DAY_OF_MONTH)
                 );
                 dpd2.setAutoHighlight(true);
+                dpd2.isThemeDark();
+                dpd2.setAccentColor(getResources().getColor(R.color.blackGreenColor));
+
                 dpd2.show(getFragmentManager(), "Datepickerdialog");
                 break;
         }
@@ -490,6 +495,8 @@ public class CreatEventActivity extends AppCompatActivity implements
                 Log.d("TimePicker", "Dialog was cancelled");
             }
         });
+        tpd.isThemeDark();
+        tpd.setAccentColor(getResources().getColor(R.color.blackGreenColor));
         tpd.show(getFragmentManager(), "Timepickerdialog");
     }
 

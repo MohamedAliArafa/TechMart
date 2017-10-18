@@ -20,7 +20,7 @@ public class TimeLineData implements Parcelable {
      */
 
     private int ISResultHasData;
-    private List<ResultEntity> result;
+    public List<ResultEntity> result;
 
     protected TimeLineData(Parcel in) {
         ISResultHasData = in.readInt();

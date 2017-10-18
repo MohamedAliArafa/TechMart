@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/message_item"
 
     android:layout_width="match_parent"
@@ -18,12 +17,13 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <com.a700apps.techmart.utils.CustomTextView
         android:id="@+id/name_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+
         android:textColor="@android:color/white"
         android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@+id/user_image_view"
@@ -43,21 +43,22 @@
         app:layout_constraintVertical_bias="0.666"
         app:srcCompat="@drawable/ic_delivered" />
 
-    <TextView
+    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
         android:id="@+id/chat_text_text_view"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="7dp"
-
+        android:maxLines="2"
+        android:ellipsize="end"
         android:textColor="@android:color/white"
-        app:layout_constraintLeft_toRightOf="@+id/seen_image"
-        app:layout_constraintRight_toLeftOf="@+id/last_seen_text_view"
-        app:layout_constraintTop_toBottomOf="@+id/name_text_view"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        android:layout_marginBottom="8dp" />
+        app:layout_constraintLeft_toRightOf="@+id/seen_image"
+        app:layout_constraintRight_toLeftOf="@+id/last_seen_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/name_text_view" />
 
     <TextView
         android:id="@+id/last_seen_text_view"

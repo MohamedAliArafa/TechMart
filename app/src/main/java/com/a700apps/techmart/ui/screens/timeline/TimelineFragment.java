@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +22,8 @@ import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.mygroup.GroupPagerFragment;
 import com.a700apps.techmart.ui.screens.mygroup.MyGroupsListFragment;
-import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
 import com.a700apps.techmart.ui.screens.notification.NotificationFragment;
-import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
 import com.a700apps.techmart.ui.screens.profile.EditProfileFragment;
-import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.DialogCreator;
 import com.a700apps.techmart.utils.PreferenceHelper;
@@ -64,8 +60,6 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private LinearLayout mTabContainer;
-
-
 
 
     @Override
@@ -132,7 +126,7 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void onClick(View v) {
 //                ActivityUtils.openActivity(getActivity(), EditProfileActivity.class, false);
-                ((HomeActivity)getActivity()).openFragment(EditProfileFragment.class, null);
+                ((HomeActivity) getActivity()).openFragment(EditProfileFragment.class, null);
             }
         });
 
@@ -140,7 +134,7 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void onClick(View v) {
 //                ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
-                ((HomeActivity)getActivity()).openFragment(NotificationFragment.class , null);
+                ((HomeActivity) getActivity()).openFragment(NotificationFragment.class, null);
             }
         });
 
@@ -182,7 +176,6 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
             public void onPageSelected(int position) {
 
                 if (position == 3) {
-//                    ActivityUtils.openActivity(getActivity(), MyGroubListActivity.class, false);
 
                     ((HomeActivity) getActivity()).addFragmentToBackStack(getFragmentManager(), R.id.fragment_container, new MyGroupsListFragment(), false, false);
                 }
@@ -262,9 +255,9 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
         indicator.setRadius(3 * density);
 
 //        NUM_PAGES = TimelineList.size();
-        if (TimelineList.size()>5){
+        if (TimelineList.size() > 5) {
             NUM_PAGES = 5;
-        }else {
+        } else {
             NUM_PAGES = TimelineList.size();
         }
 

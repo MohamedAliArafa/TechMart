@@ -8,6 +8,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -146,7 +147,7 @@ public class MessageFragment extends Fragment implements MessageView  {
 
         @Override
         public void onBindViewHolder(MessagesAdapter.ViewHolder viewHolder, final int position) {
-            viewHolder.nameTextView.setText(responser.get(position).getSenderName());
+            viewHolder.nameTextView.setText(responser.get(position).getReciverName());
             viewHolder.chatTextTextView.setText(responser.get(position).getMessage());
             viewHolder.lastSeenTextView.setText(responser.get(position).getReadingDateTimeST());
             Glide.with(context).load(MainApi.IMAGE_IP + responser.get(position).getReciverPhoto()).placeholder(R.drawable.placeholder)

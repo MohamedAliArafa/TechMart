@@ -65,14 +65,14 @@ public class MessagePresenter extends MainPresenter<MessageView> {
 
     void getFriendMessage(Context context, String userID, String relativeID) {
         mContext = context;
-        final Dialog dialogsLoading = new loadingDialog().showDialog(context);
+//        final Dialog dialogsLoading = new loadingDialog().showDialog(context);
         try {
             JSONObject body = MainApiHelper.getFriendMessage(userID, relativeID);
             MainApi.getFriendMessage(body, new NetworkResponseListener<FriendMessage>() {
                 @Override
                 public void networkOperationSuccess(NetworkResponse<FriendMessage> networkResponse) {
 //                    view.dismissProgress();
-                    dialogsLoading.dismiss();
+//                    dialogsLoading.dismiss();
                     FriendMessage userNetworkData = networkResponse.data;
                     int errorCode = userNetworkData.getISResultHasData();
                     if (errorCode == 1) {
@@ -95,13 +95,13 @@ public class MessagePresenter extends MainPresenter<MessageView> {
 
     void sendMessage(Context context, String userID, String relativeID, String Message) {
         mContext = context;
-        view.showProgress();
+//        view.showProgress();
         try {
             JSONObject body = MainApiHelper.sendMessage(userID, relativeID, Message);
             MainApi.sendMessage(body, new NetworkResponseListener<SendMessageResponse>() {
                 @Override
                 public void networkOperationSuccess(NetworkResponse<SendMessageResponse> networkResponse) {
-                    view.dismissProgress();
+//                    view.dismissProgress();
                     SendMessageResponse userNetworkData = networkResponse.data;
                     int errorCode = userNetworkData.getISResultHasData();
                     if (errorCode == 1) {
