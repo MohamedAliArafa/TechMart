@@ -494,7 +494,6 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         } else {
             openTimeLine();
         }
-//
     }
 
 

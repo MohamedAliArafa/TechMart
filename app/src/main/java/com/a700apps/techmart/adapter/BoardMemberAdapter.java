@@ -37,7 +37,6 @@ public class BoardMemberAdapter extends RecyclerView.Adapter<BoardMemberAdapter.
     public BoardMemberAdapter(Context context, List<GroupTimeLineData.ResultEntity> TimeLineList) {
         this.context = context;
         this.mTimeLineList = TimeLineList;
-
     }
 
 
@@ -54,9 +53,6 @@ public class BoardMemberAdapter extends RecyclerView.Adapter<BoardMemberAdapter.
                 viewHolderEvent.mDescribtionTextView.setText(timeLineItem.getDescr());
                 viewHolderEvent.mTitleTextView.setText(timeLineItem.getTitle());
                 viewHolderEvent.mGroupNameTextView.setText(timeLineItem.getGroupName());
-
-
-
 
 
                 if (timeLineItem.getStatus() == 0) {

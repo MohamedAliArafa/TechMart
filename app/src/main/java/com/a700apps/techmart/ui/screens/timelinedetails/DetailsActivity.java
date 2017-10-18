@@ -7,12 +7,14 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Scroller;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,20 +56,21 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     ImageView iv_slider, mProfileImageView, mNotificationImageView, iv_comment, iv_share, mLikeImageView, iv_share_event, iv_invite, iv_calender;
     LinearLayout mLikeLinearContainer;
     RelativeLayout mEventLinearContainer;
-    TextView mTitle, mSlidertype, mSlideTitle, mDescTextView, mEventTitle, tv_comment, tv_share, tv_like,
+    TextView mTitle, mDescTextView, mEventTitle, tv_comment, tv_share, tv_like,
             tv_going, tv_calender, tv_tie, tvTime;
+    CustomTextView mSlidertype, mSlideTitle;
     String Type;
     int mTypeFromPager;
     int index;
     List<TimeLineData.ResultEntity> mList;
-    TextView next, back;
+    CustomTextView next, back;
     String isLike;
     DetailsPresenter mPresenter;
     public AVLoadingIndicatorView indicatorView;
     TextView mGoing;
     TextView mLikeCount, mCommentCount, mShareCount;
 
-    LinearLayout ll_events_time_container ;
+    LinearLayout ll_events_time_container;
     TextView tvTmieSlider;
 
 //    TextView sliderNumGoing;
@@ -106,7 +109,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         mProfileImageView = (ImageView) findViewById(R.id.new_message);
         iv_slider = (ImageView) findViewById(R.id.iv_slider);
         mNotificationImageView = (ImageView) findViewById(R.id.new_profile);
-        mEventTitle=(CustomLightTextView)findViewById(R.id.tv_event_title);
+        mEventTitle = (CustomLightTextView) findViewById(R.id.tv_event_title);
         mLikeCount = (CustomLightTextView) findViewById(R.id.tv_like_count);
         mCommentCount = (CustomLightTextView) findViewById(R.id.tv_comment_count);
         mShareCount = (CustomLightTextView) findViewById(R.id.tv_share_count);
@@ -174,6 +177,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
 
         mTitle = (CustomLightTextView) findViewById(R.id.tv_event_name);
         mDescTextView = (CustomLightTextView) findViewById(R.id.tv_events_desc);
+        mDescTextView.setMovementMethod(new ScrollingMovementMethod());
         mSlideTitle = (CustomTextView) findViewById(R.id.tv_events_title);
         mSlidertype = (CustomTextView) findViewById(R.id.tv_events);
 
@@ -276,7 +280,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         mEventTitle.setText(mList.get(index).getTitle());
         tvTime.setText("Starts: " + mList.get(index).getStartDate());
         mSlideTitle.setText(mList.get(index).getTitle());
-        Log.e("StartDate" , "Date : "+mList.get(index).getStartDate());
+        Log.e("StartDate", "Date : " + mList.get(index).getStartDate());
         mLikeCount.setText("" + mList.get(index).getLikeCount());
         mCommentCount.setText("" + mList.get(index).getCommentCount());
         tv_tie.setText("Location: " + getCompleteAddressString(mList.get(index).getLatitude(), mList.get(index).getLongtude()));
@@ -319,7 +323,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
                 tv_going.setText("Attending");
 //                going.setBackground(getResources().getDrawable(R.drawable.bg_blueish));
 //                notGoing.setBackground(getResources().getDrawable(R.drawable.bg_transparent_rounded_small));
-            }else {
+            } else {
 //                notGoing.setBackground(getResources().getDrawable(R.drawable.bg_blueish));
 //                going.setBackground(getResources().getDrawable(R.drawable.bg_transparent_rounded_small));
             }

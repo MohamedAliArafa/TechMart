@@ -61,7 +61,6 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
 
     EdittPresenter presenter;
 
-
     EditText headerEditText;
     EditText descriptionEditText;
     LinearLayout saveLinearLayout;

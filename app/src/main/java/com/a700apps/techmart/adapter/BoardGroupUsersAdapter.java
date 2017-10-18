@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.a700apps.techmart.R;
+import com.a700apps.techmart.data.model.AllGroupUsers;
 import com.a700apps.techmart.data.model.User;
 import com.a700apps.techmart.data.model.UserGroup;
 import com.a700apps.techmart.data.network.MainApi;
@@ -85,6 +86,12 @@ public class BoardGroupUsersAdapter extends RecyclerView.Adapter<BoardGroupUsers
 
     @Override
     public void update() {
+        mPresenter.getMyGroupUsers(String.valueOf(Id),context);
+    }
+
+    @Override
+    public void updateUi(AllGroupUsers data) {
+        mUserGroupList = data.userGroup;
         notifyDataSetChanged();
     }
 

@@ -44,7 +44,7 @@ public class BoardEventFragment extends Fragment implements BoardTimlineView {
         Bundle arguments = getArguments();
         mGroupId = arguments.getInt("string_key");
         rv = (EmptyRecyclerView) view.findViewById(R.id.recyclerView);
-        presenter.getTimeline(mGroupId, PreferenceHelper.getUserId(getActivity()),1);
+//        presenter.getTimeline(mGroupId, PreferenceHelper.getUserId(getActivity()),1);
         return view;
     }
 
@@ -62,8 +62,7 @@ public class BoardEventFragment extends Fragment implements BoardTimlineView {
     @Override
     public void onResume() {
         super.onResume();
-        presenter.getTimeline(mGroupId,PreferenceHelper.getUserId(getActivity()),1);
-
+        presenter.getTimeline(mGroupId, PreferenceHelper.getUserId(getActivity()),1);
     }
 
     @Override

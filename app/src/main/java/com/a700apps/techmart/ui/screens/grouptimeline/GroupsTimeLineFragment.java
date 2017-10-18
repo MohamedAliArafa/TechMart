@@ -61,8 +61,8 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
 
     void init(View view) {
         mPager = (ViewPager) view.findViewById(R.id.pager);
-        indicator = (CirclePageIndicator)
-                view.findViewById(R.id.indicator);
+        indicator = (CirclePageIndicator) view.findViewById(R.id.indicator);
+
     }
 
     void getExtra() {
@@ -106,6 +106,7 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
         for (int i = 0; i < mTabContainer.getChildCount(); i += 2) {
             mTabContainer.getChildAt(i).setOnClickListener(this);
         }
+        mTabContainer.getChildAt(0).setBackground(getResources().getDrawable(R.drawable.bt_1));
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

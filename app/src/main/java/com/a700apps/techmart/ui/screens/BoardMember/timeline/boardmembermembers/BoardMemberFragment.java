@@ -47,10 +47,15 @@ public class BoardMemberFragment extends Fragment implements BoardMemberView {
         Bundle arguments = getArguments();
         mGroupId = arguments.getInt("string_key");
         rv = (EmptyRecyclerView) view.findViewById(R.id.recyclerView);
-        mPresenter.getMyGroupUsers(String.valueOf(mGroupId), getActivity());
+
         return view;
     }
 
+    @Override
+    public void onResume() {
+        mPresenter.getMyGroupUsers(String.valueOf(mGroupId), getActivity());
+        super.onResume();
+    }
 
     @Override
     public void showProgress() {

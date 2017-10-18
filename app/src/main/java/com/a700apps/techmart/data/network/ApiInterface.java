@@ -215,7 +215,6 @@ public interface ApiInterface {
     @POST("Group/GetGroupStatistics")
     Observable<StatisticModel> getGroupStatistics(@Body RequestBody body);
 
-
 }
 
 

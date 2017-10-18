@@ -26,13 +26,13 @@ public class BoardRemovePresenter extends MainPresenter<BoardRemoveView> {
     Context mContext;
     Dialog dialogsLoading;
 
-   public void removeMember(String GroupID, String BoardMemberUserID, Context context) {
+    public void removeMember(String GroupID, String BoardMemberUserID, Context context) {
         mContext = context;
         dialogsLoading = new loadingDialog().showDialog(context);
 //        view.showProgress();
 
         try {
-            JSONObject registerBody = MainApiHelper.removeMember(GroupID, PreferenceHelper.getUserId(mContext), BoardMemberUserID);
+            JSONObject registerBody = MainApiHelper.removeMember(GroupID, BoardMemberUserID, PreferenceHelper.getUserId(mContext));
             Log.e("DATA", registerBody.toString());
             MainApi.removeMember(registerBody, new NetworkResponseListener<PostData>() {
                 @Override
@@ -59,5 +59,37 @@ public class BoardRemovePresenter extends MainPresenter<BoardRemoveView> {
         }
 
     }
+    public void getMyGroupUsers(String GroupID,Context context) {
+        mContext = context;
+        dialogsLoading = new loadingDialog().showDialog(context);
+//        view.showProgress();
 
+        try {
+            JSONObject registerBody = MainApiHelper.getAllGroupUsers(GroupID,PreferenceHelper.getUserId(mContext));
+            Log.e("DATA", registerBody.toString());
+            MainApi.getAllGroupUsers(registerBody, new NetworkResponseListener<AllGroupUsers>() {
+                @Override
+                public void networkOperationSuccess(NetworkResponse<AllGroupUsers> networkResponse) {
+                    if (isDetachView()) return;
+                    dialogsLoading.dismiss();
+                    AllGroupUsers userNetworkData = networkResponse.data;
+                    int errorCode = userNetworkData.ISResultHasData;
+                    if (errorCode == 1) {
+                        view.updateUi(userNetworkData);
+                    }
+                }
+
+                @Override
+                public void networkOperationFail(Throwable throwable) {
+                    Log.e("error", throwable.toString());
+                    dialogsLoading.dismiss();
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+//            view.dismissProgress();
+            dialogsLoading.dismiss();
+        }
+
+    }
 }
