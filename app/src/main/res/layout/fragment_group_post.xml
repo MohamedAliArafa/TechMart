@@ -8,20 +8,20 @@
     <include
         android:id="@+id/post"
         layout="@layout/group_post"></include>
-    <!-- TODO: Update blank fragment layout -->
+
     <com.a700apps.techmart.utils.EmptyRecyclerView
         android:id="@+id/recyclerView"
         android:layout_below="@+id/post"
         android:layout_width="match_parent"
+        android:background="@color/white"
         android:layout_height="match_parent" />
 
     <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
         android:id="@+id/tv_nodata"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:gravity="center"
-        android:text="There is no data"
-        android:visibility="gone"
-        tools:layout_editor_absoluteY="8dp" />
+        android:textSize="18sp"
+        android:visibility="invisible"
+        android:text="There is no data" />
 </RelativeLayout>

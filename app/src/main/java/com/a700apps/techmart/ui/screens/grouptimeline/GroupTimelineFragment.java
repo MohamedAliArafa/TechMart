@@ -31,33 +31,36 @@ import java.util.List;
  */
 
 public class GroupTimelineFragment extends Fragment implements GroupTimlineView {
-LinearLayout linContain;
+    LinearLayout linContain;
     private GroupTimeLinePresenter presenter;
+
     public GroupTimelineFragment() {
         // Required empty public constructor
     }
+
     View view;
     EmptyRecyclerView rv;
     int desired_string;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-         view = inflater.inflate(R.layout.fragment_group_post, container, false);
+        view = inflater.inflate(R.layout.fragment_group_post, container, false);
         presenter = new GroupTimeLinePresenter();
         presenter.attachView(this);
-        linContain = (LinearLayout)view.findViewById(R.id.post);
+        linContain = (LinearLayout) view.findViewById(R.id.post);
         Bundle arguments = getArguments();
-         desired_string = arguments.getInt("string_key");
+        desired_string = arguments.getInt("string_key");
         rv = (EmptyRecyclerView) view.findViewById(R.id.recyclerView);
-        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()),desired_string,"0");
+//        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()),desired_string,"0");
 
         linContain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                ActivityUtils.openActivity(getActivity(), PostActivity.class, false);
                 Intent intent = new Intent(getActivity(), PostActivity.class);
-                intent.putExtra("string_key" , desired_string);
+                intent.putExtra("string_key", desired_string);
                 startActivity(intent);
 
             }
@@ -78,7 +81,7 @@ LinearLayout linContain;
     @Override
     public void onResume() {
         super.onResume();
-        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()),desired_string,"0");
+        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), desired_string, "0");
 
     }
 
@@ -87,7 +90,7 @@ LinearLayout linContain;
         if (TimelineList.size() == 0) {
             rv.setEmptyView(view.findViewById(R.id.tv_nodata));
         }
-        rv.setAdapter(new GroupTimeLineAdapter(getActivity(),TimelineList));
+        rv.setAdapter(new GroupTimeLineAdapter(getActivity(), TimelineList));
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 

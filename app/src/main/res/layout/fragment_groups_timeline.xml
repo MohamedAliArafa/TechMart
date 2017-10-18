@@ -37,8 +37,8 @@
 
             <ImageView
                 android:id="@+id/imageView4"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_side_menu_logo" />
 
             <EditText
@@ -57,6 +57,7 @@
                 android:id="@+id/new_message"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:layout_marginEnd="14dp"
                 app:srcCompat="@drawable/ic_stat_ic_user" />
 
             <ImageView
@@ -76,8 +77,8 @@
             android:gravity="bottom"
             android:padding="10dip"
             app:centered="true"
-            app:fillColor="@color/dark_grey"
-            app:pageColor="#fff"
+            app:fillColor="#fff"
+            app:pageColor="@color/dark_grey"
             app:radius="2dp"
             app:snap="false" />
 
@@ -90,6 +91,7 @@
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/fragment_container"
         android:layout_marginLeft="0dp"
+        android:background="@color/white"
         android:layout_marginRight="0dp"
         android:layout_marginTop="35dp" />
 
@@ -135,12 +137,19 @@
                 android:id="@+id/tv_timeline"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
+                android:layout_weight="0.8"
                 android:text="Timeline"
+                android:gravity="center|top"
+                android:paddingTop="10dp"
                 android:textColor="@color/button_light_text"
-
                 android:textSize="12sp" />
+            
+            <TextView
+                android:layout_width="1dp"
+                android:background="@color/white"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="12dp"
+                android:layout_height="match_parent" />
 
             <!--<View-->
             <!--android:layout_width=".5dp"-->
@@ -151,34 +160,53 @@
                 android:id="@+id/tv_posts"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
+                android:layout_weight="0.8"
+                android:gravity="center|top"
+                android:paddingTop="10dp"
                 android:text="@string/posts"
                 android:textColor="@color/button_light_text"
 
                 android:textSize="12sp" />
 
-
+            <TextView
+                android:layout_width="1dp"
+                android:background="@color/white"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="12dp"
+                android:layout_height="match_parent" />
             <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_event"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
+                android:layout_weight="0.8"
+                android:gravity="center|top"
+                android:paddingTop="10dp"
                 android:text="@string/event"
                 android:textColor="@color/button_light_text"
 
                 android:textSize="12sp" />
-
+            <TextView
+                android:layout_width="1dp"
+                android:background="@color/white"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="12dp"
+                android:layout_height="match_parent" />
             <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_group"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
+                android:layout_weight="1.6"
+                android:gravity="left|top"
+                android:paddingTop="10dp"
+                android:paddingStart="20dp"
                 android:text="@string/group_member"
                 android:textColor="@color/button_light_text"
                 android:textSize="12sp" />
+            <TextView
+                android:layout_width="1dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="match_parent" />
         </LinearLayout>
 
 

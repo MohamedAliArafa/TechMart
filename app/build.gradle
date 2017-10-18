@@ -84,5 +84,17 @@ dependencies {
     testCompile 'junit:junit:4.12'
     annotationProcessor 'android.arch.lifecycle:compiler:1.0.0-alpha9'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+    compile 'com.dinuscxj:circleprogressbar:1.1.1'
 }
+
+//configurations.all {
+//    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+//        def requested = details.requested
+//        if (requested.group == 'com.android.support') {
+//            if (!requested.name.startsWith("multidex")) {
+//                details.useVersion '26.0.1'
+//            }
+//        }
+//    }
+//}
 apply plugin: 'com.google.gms.google-services'

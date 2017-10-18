@@ -410,5 +410,20 @@ public class MainApiHelper {
         return jsonObject;
     }
 
+    public static JSONObject approveFriendRequest(String userId , int requestId) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("UserID", userId);
+        jsonObject.put("RequestID", requestId);
+        return jsonObject;
+    }
+
+    public static JSONObject getStatistics(String userId , int groupId , int days) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("GroupID", userId);
+        jsonObject.put("BoardMemberID", groupId);
+        jsonObject.put("Days", days);
+        return jsonObject;
+    }
+
 
 }

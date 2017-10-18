@@ -1,5 +1,6 @@
 package com.a700apps.techmart.ui.screens.BoardMember.timeline;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,8 +14,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.a700apps.techmart.R;
+import com.a700apps.techmart.data.model.StatisticModel;
 import com.a700apps.techmart.ui.screens.BoardMember.JoinRequests.JoinRequestsFragment;
 import com.a700apps.techmart.ui.screens.BoardMember.timeline.boardmemberapproval.BoardApprovalFragment;
 import com.a700apps.techmart.ui.screens.BoardMember.timeline.boardmemberevent.BoardEventFragment;
@@ -27,10 +30,14 @@ import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
 import com.a700apps.techmart.ui.screens.notification.NotificationFragment;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.Globals;
+import com.a700apps.techmart.utils.PreferenceHelper;
+import com.a700apps.techmart.utils.loadingDialog;
+import com.dinuscxj.progressbar.CircleProgressBar;
 
 import butterknife.ButterKnife;
 
-public class BoardMemberTimelineFragment extends Fragment implements View.OnClickListener {
+public class BoardMemberTimelineFragment extends Fragment implements View.OnClickListener, StatisticalView {
 
     ImageView mProfileImageView, mNotificationImageView, mBackImageView;
     TextView mTimline, mPost, mEvent, mMember, mMemberApprove;
@@ -41,8 +48,16 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private LinearLayout mTabContainer;
+    CircleProgressBar postCircleProgressBar, eventCircleProgressBar, memberCircleProgressBar;
+    Dialog dialogsLoading;
 
     int intValue;
+    StatisticPresenter presenter ;
+
+    TextView dayTextView , weekTextView , monthTextView , yearTextView;
+    ImageView dayImageView , weekImageView , monthImageView , yearImageView;
+
+    TextView posts_lbl , events_lbl , member_lbl;
 
     public BoardMemberTimelineFragment() {
         // Required empty public constructor
@@ -69,6 +84,31 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
         mViewPager = (ViewPager) view.findViewById(R.id.vp_timeline);
 
 
+        postCircleProgressBar = (CircleProgressBar) view.findViewById(R.id.postCircleProgressBar);
+//        postCircleProgressBar.setProgress(40);
+
+        eventCircleProgressBar = (CircleProgressBar) view.findViewById(R.id.eventCircleProgressBar);
+//        eventCircleProgressBar.setProgress(40);
+
+        memberCircleProgressBar = (CircleProgressBar) view.findViewById(R.id.memberCircleProgressBar);
+//        memberCircleProgressBar.setProgress(40);
+
+
+        dayTextView  = view.findViewById(R.id.tv_day);
+        monthTextView  = view.findViewById(R.id.tv_month);
+        weekTextView  = view.findViewById(R.id.tv_week);
+        yearTextView  = view.findViewById(R.id.tv_year);
+
+        dayImageView = view.findViewById(R.id.iv_today);
+        weekImageView = view.findViewById(R.id.iv_week);
+        monthImageView = view.findViewById(R.id.iv_month);
+        yearImageView = view.findViewById(R.id.iv_year);
+
+
+        posts_lbl = view.findViewById(R.id.post_lbl);
+        events_lbl = view.findViewById(R.id.events_lbl);
+        member_lbl = view.findViewById(R.id.member_lbl);
+
         mProfileImageView = (ImageView) view.findViewById(R.id.new_message);
         mNotificationImageView = (ImageView) view.findViewById(R.id.new_profile);
         mBackImageView = (ImageView) view.findViewById(R.id.imageView4);
@@ -78,7 +118,10 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
         mTimline = (TextView) view.findViewById(R.id.tv_timeline);
         mPost = (TextView) view.findViewById(R.id.tv_posts);
         mEvent = (TextView) view.findViewById(R.id.tv_event);
+
         mTimline.setBackground(getResources().getDrawable(R.drawable.bt_1));
+        dayImageView.setBackground(getResources().getDrawable(R.drawable.arrow_signup));
+        dayTextView.setTextColor(getResources().getColor(R.color.tab_menu_text_color));
 
     }
 
@@ -92,8 +135,11 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
 //        presenter.attachView(this);
         Log.e("Resume", "on view created");
         init(view);
+        presenter = new StatisticPresenter();
+        presenter.attachView(this);
 
 
+        presenter.getStatistic(PreferenceHelper.getUserId(getActivity()) , Globals.GROUP_ID , 1);
 //        if (!AppUtils.isInternetAvailable(getActivity())) {
 //            Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_LONG).show();
 //        } else {
@@ -119,10 +165,75 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
             @Override
             public void onClick(View v) {
 //                ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
-                ((HomeActivity)getActivity()).openFragment(NotificationFragment.class , null);
+                ((HomeActivity) getActivity()).openFragment(NotificationFragment.class, null);
             }
         });
 
+        dayTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dayTextView.setTextColor(getResources().getColor(R.color.tab_menu_text_color));
+                weekTextView.setTextColor(getResources().getColor(R.color.white));
+                monthTextView.setTextColor(getResources().getColor(R.color.white));
+                yearTextView.setTextColor(getResources().getColor(R.color.white));
+
+                dayImageView.setBackground(getResources().getDrawable(R.drawable.arrow_signup));
+                weekImageView.setBackground(null);
+                monthImageView.setBackground(null);
+                yearImageView.setBackground(null);
+
+                presenter.getStatistic(PreferenceHelper.getUserId(getActivity()) , Globals.GROUP_ID , 1);
+            }
+        });
+
+        weekTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                weekTextView.setTextColor(getResources().getColor(R.color.tab_menu_text_color));
+                dayTextView.setTextColor(getResources().getColor(R.color.white));
+                monthTextView.setTextColor(getResources().getColor(R.color.white));
+                yearTextView.setTextColor(getResources().getColor(R.color.white));
+
+                weekImageView.setBackground(getResources().getDrawable(R.drawable.arrow_signup));
+                dayImageView.setBackground(null);
+                monthImageView.setBackground(null);
+                yearImageView.setBackground(null);
+
+                presenter.getStatistic(PreferenceHelper.getUserId(getActivity()) , Globals.GROUP_ID , 7);
+            }
+        });
+
+        monthTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                monthTextView.setTextColor(getResources().getColor(R.color.tab_menu_text_color));
+                dayTextView.setTextColor(getResources().getColor(R.color.white));
+                weekTextView.setTextColor(getResources().getColor(R.color.white));
+                yearTextView.setTextColor(getResources().getColor(R.color.white));
+
+                monthImageView.setBackground(getResources().getDrawable(R.drawable.arrow_signup));
+                dayImageView.setBackground(null);
+                weekImageView.setBackground(null);
+                yearImageView.setBackground(null);
+                presenter.getStatistic(PreferenceHelper.getUserId(getActivity()) , Globals.GROUP_ID , 30);
+            }
+        });
+
+        yearTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                yearTextView.setTextColor(getResources().getColor(R.color.tab_menu_text_color));
+                dayTextView.setTextColor(getResources().getColor(R.color.white));
+                weekTextView.setTextColor(getResources().getColor(R.color.white));
+                monthTextView.setTextColor(getResources().getColor(R.color.white));
+
+                yearImageView.setBackground(getResources().getDrawable(R.drawable.arrow_signup));
+                dayImageView.setBackground(null);
+                weekImageView.setBackground(null);
+                monthImageView.setBackground(null);
+                presenter.getStatistic(PreferenceHelper.getUserId(getActivity()) , Globals.GROUP_ID , 365);
+            }
+        });
 
     }
 
@@ -156,9 +267,7 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
             public void onPageSelected(int position) {
 
                 if (position == 4) {
-//                    ActivityUtils.openActivity(getActivity(), MyGroubListActivity.class, false);
-//                    ((HomeActivity) getActivity()).addFragmentToBackStack(getFragmentManager(), R.id.fragment_container, new BoardApprovalFragment(), false, false);
-                    ((HomeActivity) getActivity()).openFragment(JoinRequestsFragment.class,null);
+                    ((HomeActivity) getActivity()).openFragment(JoinRequestsFragment.class, null);
                 }
             }
 
@@ -185,10 +294,37 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
                 break;
             case R.id.tv_member:
                 mViewPager.setCurrentItem(3);
+                break;
             case R.id.tv_member_approve:
                 mViewPager.setCurrentItem(4);
                 break;
         }
+    }
+
+    @Override
+    public void showLoadingProgress() {
+        dialogsLoading = new loadingDialog().showDialog(getActivity());
+    }
+
+    @Override
+    public void dismissLoadingProgress() {
+        dialogsLoading.dismiss();
+    }
+
+    @Override
+    public void showToast(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void updateUi(StatisticModel model) {
+        postCircleProgressBar.setProgress(model.getResult().getApprovedPostCount());
+        eventCircleProgressBar.setProgress(model.getResult().getApprovedEventsCount());
+        memberCircleProgressBar.setProgress(model.getResult().getApprovedJoinrequestCount());
+
+        posts_lbl.setText(model.getResult().getApprovedPostCount()+" %");
+        events_lbl.setText(model.getResult().getApprovedEventsCount()+" %");
+        member_lbl.setText(model.getResult().getApprovedJoinrequestCount()+" %");
     }
 
 
@@ -237,13 +373,15 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
                     UsersBoard.setArguments(argumentsusers);
                     return UsersBoard;
                 case 4:
-//                    ActivityUtils.openActivity(getActivity() , JoinRequestsActivity.class , false);
                     JoinRequestsFragment joinRequestsFragment = new JoinRequestsFragment();
-
                     return joinRequestsFragment;
-
                 default:
-                    return new JoinRequestsFragment();
+//                    BoardMemberFragment UsersBoard2 = new BoardMemberFragment();
+//                    Bundle argumentsusers2 = new Bundle();
+//                    argumentsusers2.putInt("string_key", intValue);
+//                    UsersBoard2.setArguments(argumentsusers2);
+//                    return UsersBoard2;
+                    return null;
             }
         }
 

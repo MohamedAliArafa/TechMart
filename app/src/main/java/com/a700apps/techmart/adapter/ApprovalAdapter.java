@@ -72,6 +72,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
         }else if (singleItem.getRequestStatus()==2){
             viewHolder.mStatus.setText("Rejected");
             viewHolder.mStatus.setBackgroundColor(context.getResources().getColor(R.color.btn_reject));
+            viewHolder.manageLayout.setVisibility(View.GONE);
         }else if (singleItem.getRequestStatus()==3){
             viewHolder.mStatus.setText("Defered");
             viewHolder.mStatus.setBackgroundColor(context.getResources().getColor(R.color.btn_defer));

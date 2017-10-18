@@ -122,4 +122,34 @@ public class MemberPresenter extends MainPresenter<ProfileView>  {
         }
     }
 
+
+    void approveRequest(String userid, int requestid){
+        view.showLoadingProgress();
+
+        try {
+            JSONObject registerBody = MainApiHelper.approveFriendRequest(userid,requestid);
+            MainApi.approveFriendRequest(registerBody, new NetworkResponseListener<PostData>() {
+                @Override
+                public void networkOperationSuccess(NetworkResponse<PostData> networkResponse) {
+                    if (isDetachView()) return;
+                    view.dismissLoadingProgress();
+                    PostData userNetworkData = (PostData) networkResponse.data;
+                    int errorCode = userNetworkData.ISResultHasData;
+
+                    if (errorCode==1) {
+                        view.updateUiConnect(userNetworkData.postData);
+                    }
+                }
+
+                @Override
+                public void networkOperationFail(Throwable throwable) {
+
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+            view.dismissLoadingProgress();
+        }
+    }
+
 }

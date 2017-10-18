@@ -9,19 +9,313 @@
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/event_details_header_image_height">
+        android:layout_height="220dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
 
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="200dp"
+            android:layout_height="220dp"
+            android:layout_gravity="center"
+            android:background="@drawable/board_bg"
             android:orientation="vertical">
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/pager"
-                android:layout_width="fill_parent"
+            <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true" />
+                android:layout_gravity="center"
+                android:layout_marginTop="40dp"
+                android:text="Board Member Dashboard"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="180dp"
+                android:layout_height="2dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:background="@color/white" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:orientation="horizontal"
+                android:weightSum="2.5">
+
+                <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="40dp"
+                    android:layout_weight=".8"
+                    android:text="Events overview"
+                    android:textColor="@color/white" />
+
+                <LinearLayout
+                    android:id="@+id/lin_category2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1.7"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:orientation="vertical">
+
+                        <com.a700apps.techmart.utils.CustomTextView
+                            android:id="@+id/tv_day"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="Today"
+                            android:textColor="@color/tab_menu_text_color"
+                            android:textSize="9sp" />
+
+                        <ImageView
+                            android:id="@+id/iv_today"
+                            android:layout_width="25dp"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.a700apps.techmart.utils.CustomTextView
+                            android:id="@+id/tv_week"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="10dp"
+                            android:gravity="center"
+                            android:text="Week"
+                            android:textColor="@color/button_light_text"
+                            android:textSize="9sp" />
+
+                        <ImageView
+                            android:id="@+id/iv_week"
+                            android:layout_width="22dp"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.a700apps.techmart.utils.CustomTextView
+                            android:id="@+id/tv_month"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="10dp"
+                            android:gravity="center"
+                            android:text="Month"
+                            android:textColor="@color/button_light_text"
+                            android:textSize="9sp" />
+
+                        <ImageView
+                            android:id="@+id/iv_month"
+                            android:layout_width="28dp"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.a700apps.techmart.utils.CustomTextView
+                            android:id="@+id/tv_year"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="10dp"
+                            android:gravity="center"
+                            android:text="Year"
+                            android:textColor="@color/button_light_text"
+                            android:textSize="9sp" />
+
+                        <ImageView
+                            android:id="@+id/iv_year"
+                            android:layout_width="18dp"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <com.dinuscxj.progressbar.CircleProgressBar
+                        android:id="@+id/postCircleProgressBar"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+
+
+                        app:background_color="@color/transparent"
+                        app:draw_progress_text="true"
+                        app:line_count="30"
+                        app:line_width="4dp"
+                        app:progress_background_color="@color/post_approved_inactive"
+                        app:progress_end_color="@color/post_approved_active"
+                        app:progress_shader="sweep"
+                        app:progress_start_color="@color/post_approved_active"
+                        app:progress_stroke_cap="round"
+
+                        app:progress_stroke_width="7dp"
+
+                        app:progress_text_color="@color/post_approved_active"
+                        app:progress_text_format_pattern=""
+                        app:progress_text_size="12sp"
+                        app:style="solid_line" />
+
+                    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+                        android:id="@+id/lbl_name1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="25dp"
+                        android:text="no.of posts"
+                        android:textColor="@color/white"
+                        android:textSize="9sp" />
+
+                    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+                        android:id="@+id/post_lbl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/lbl_name1"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp">
+
+                    <com.dinuscxj.progressbar.CircleProgressBar
+                        android:id="@+id/eventCircleProgressBar"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+
+
+                        app:background_color="@color/transparent"
+                        app:draw_progress_text="true"
+                        app:line_count="30"
+                        app:line_width="4dp"
+                        app:progress_background_color="@color/event_approved_inactive"
+                        app:progress_end_color="@color/event_approved_active"
+                        app:progress_shader="sweep"
+                        app:progress_start_color="@color/event_approved_active"
+                        app:progress_stroke_cap="round"
+
+                        app:progress_stroke_width="7dp"
+
+                        app:progress_text_color="@color/event_approved_active"
+                        app:progress_text_format_pattern=""
+                        app:progress_text_size="12sp"
+                        app:style="solid_line" />
+
+                    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+                        android:id="@+id/lbl_name2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="25dp"
+                        android:text="no.of events"
+                        android:textColor="@color/white"
+                        android:textSize="9sp" />
+
+                    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+                        android:layout_width="wrap_content"
+                        android:id="@+id/events_lbl"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/lbl_name2"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp">
+
+                    <com.dinuscxj.progressbar.CircleProgressBar
+                        android:id="@+id/memberCircleProgressBar"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+
+
+                        app:background_color="@color/transparent"
+                        app:draw_progress_text="true"
+                        app:line_count="30"
+                        app:line_width="4dp"
+                        app:progress_background_color="@color/member_approved_inactive"
+                        app:progress_end_color="@color/member_approved_active"
+                        app:progress_shader="sweep"
+                        app:progress_start_color="@color/member_approved_active"
+                        app:progress_stroke_cap="round"
+
+                        app:progress_stroke_width="7dp"
+
+                        app:progress_text_color="@color/member_approved_active"
+                        app:progress_text_format_pattern=""
+                        app:progress_text_size="12sp"
+                        app:style="solid_line" />
+
+                    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+                        android:id="@+id/lbl_name3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="25dp"
+                        android:text="no.of posts"
+                        android:textColor="@color/white"
+                        android:textSize="9sp" />
+
+                    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+                        android:id="@+id/member_lbl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/lbl_name3"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+            </LinearLayout>
+
 
         </LinearLayout>
 
@@ -67,21 +361,22 @@
         </LinearLayout>
 
         <!--<com.viewpagerindicator.CirclePageIndicator-->
-            <!--android:id="@+id/indicator"-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="bottom"-->
-            <!--android:layout_alignParentBottom="true"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:gravity="bottom"-->
-            <!--android:padding="10dip"-->
-            <!--app:radius="2dp"-->
-            <!--app:centered="true"-->
-            <!--app:fillColor="@color/dark_grey"-->
-            <!--app:pageColor="#fff"-->
-            <!--app:snap="false" />-->
+        <!--android:id="@+id/indicator"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:gravity="bottom"-->
+        <!--android:padding="10dip"-->
+        <!--app:radius="2dp"-->
+        <!--app:centered="true"-->
+        <!--app:fillColor="@color/dark_grey"-->
+        <!--app:pageColor="#fff"-->
+        <!--app:snap="false" />-->
 
     </FrameLayout>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_timeline"
         android:layout_width="match_parent"
@@ -91,7 +386,7 @@
         android:layout_below="@+id/fragment_container"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
-        android:layout_marginTop="35dp"/>
+        android:layout_marginTop="35dp" />
 
 
     <RelativeLayout
@@ -104,8 +399,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:background="@color/blue_join_dialog"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+            android:background="@color/blue_join_dialog">
 
         </LinearLayout>
 
@@ -122,17 +417,17 @@
                 android:id="@+id/tv_timeline"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="Timeline"
-                android:textSize="12sp"
+                android:textColor="@color/button_light_text"
 
-                android:textColor="@color/button_light_text" />
+                android:textSize="12sp" />
 
             <!--<View-->
-                <!--android:layout_width="1dp"-->
-                <!--android:layout_height="15dp"-->
-                <!--android:background="@color/card_color" />-->
+            <!--android:layout_width="1dp"-->
+            <!--android:layout_height="15dp"-->
+            <!--android:background="@color/card_color" />-->
 
             <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_posts"
@@ -143,59 +438,59 @@
                 android:text="@string/posts"
                 android:textColor="@color/button_light_text"
 
-                android:textSize="@dimen/time_text"
-                />
+                android:textSize="@dimen/time_text" />
 
             <!--<View-->
-                <!--android:layout_width="1dp"-->
-                <!--android:layout_height="15dp"-->
-                <!--android:background="@color/card_color" />-->
+            <!--android:layout_width="1dp"-->
+            <!--android:layout_height="15dp"-->
+            <!--android:background="@color/card_color" />-->
 
             <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_event"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/event"
-                android:layout_weight="1"
-                android:textSize="@dimen/time_text"
+                android:textColor="@color/button_light_text"
 
 
-                android:textColor="@color/button_light_text" />
+                android:textSize="@dimen/time_text" />
             <!--<View-->
-                <!--android:layout_width="1dp"-->
-                <!--android:layout_height="15dp"-->
-                <!--android:background="@color/card_color" />-->
+            <!--android:layout_width="1dp"-->
+            <!--android:layout_height="15dp"-->
+            <!--android:background="@color/card_color" />-->
 
             <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_member"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="@string/timeline_member"
-                android:textSize="@dimen/time_text"
+                android:textColor="@color/button_light_text"
 
-                android:textColor="@color/button_light_text" />
+                android:textSize="@dimen/time_text" />
 
             <!--<View-->
-                <!--android:layout_width="1dp"-->
-                <!--android:layout_height="15dp"-->
-                <!--android:background="@color/card_color" />-->
+            <!--android:layout_width="1dp"-->
+            <!--android:layout_height="15dp"-->
+            <!--android:background="@color/card_color" />-->
 
             <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_member_approve"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="@string/timeline_member_approve"
-                android:textSize="@dimen/time_text"
-                android:textColor="@color/button_light_text" />
+                android:textColor="@color/button_light_text"
+                android:textSize="@dimen/time_text" />
         </LinearLayout>
 
 
     </RelativeLayout>
+
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/avi"
         style="@style/AVLoadingIndicatorView"

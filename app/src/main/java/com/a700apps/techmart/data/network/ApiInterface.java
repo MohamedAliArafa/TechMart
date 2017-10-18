@@ -21,6 +21,7 @@ import com.a700apps.techmart.data.model.PostData;
 import com.a700apps.techmart.data.model.PredifinedData;
 import com.a700apps.techmart.data.model.SendMessageResponse;
 import com.a700apps.techmart.data.model.ServerResponse;
+import com.a700apps.techmart.data.model.StatisticModel;
 import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.data.model.UploadObject;
 import com.a700apps.techmart.data.model.UserData;
@@ -205,6 +206,14 @@ public interface ApiInterface {
 
     @POST("Group/ChangeRquestStatus")
     Observable<PostData> changeRequestStatus(@Body RequestBody body);
+
+
+    @POST("user/ApproveFriendRequest")
+    Observable<PostData> approveFriendRequest(@Body RequestBody body);
+
+
+    @POST("Group/GetGroupStatistics")
+    Observable<StatisticModel> getGroupStatistics(@Body RequestBody body);
 
 
 }

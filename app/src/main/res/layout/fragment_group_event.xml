@@ -12,6 +12,7 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:layout_below="@+id/post" />
 
     <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
@@ -21,6 +22,6 @@
         android:layout_centerInParent="true"
         android:gravity="center"
         android:text="There is no data"
-        android:visibility="gone"
+        android:visibility="invisible"
         tools:layout_editor_absoluteY="8dp" />
 </RelativeLayout>

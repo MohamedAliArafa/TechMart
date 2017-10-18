@@ -296,14 +296,16 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
 
                 if (AppUtils.isInternetAvailable(getActivity())) {
                     if (isApprove){
-                        presenter.sendConnect(mRelId, PreferenceHelper.getUserId(getActivity()), "true");
+
+                        presenter.approveRequest(mRelId, 1);
+//                        presenter.sendConnect(mRelId, PreferenceHelper.getUserId(getActivity()), "true");
                     }else {
                         if (isConnect) {
-                            isConnect = false;
-                            presenter.sendConnect(mRelId, PreferenceHelper.getUserId(getActivity()), "false");
+//                            isConnect = false;
+//                            presenter.sendConnect(mRelId, PreferenceHelper.getUserId(getActivity()), "false");
                         } else if (isConnectPending) {
-                            isConnectPending = false;
-                            presenter.sendConnect(mRelId, PreferenceHelper.getUserId(getActivity()), "false");
+//                            isConnectPending = false;
+//                            presenter.sendConnect(mRelId, PreferenceHelper.getUserId(getActivity()), "false");
                         } else {
 //                    isConnect = true;
                             presenter.sendConnect(mRelId, PreferenceHelper.getUserId(getActivity()), "true");

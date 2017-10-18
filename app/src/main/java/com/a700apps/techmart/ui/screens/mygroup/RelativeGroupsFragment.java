@@ -102,6 +102,7 @@ public class RelativeGroupsFragment extends Fragment implements GroupView {
                 Bundle bundle = new Bundle();
                 bundle.putInt("selectedCategory" ,group.ID );
                 Globals.GROUP_ID = group.ID;
+
                 ((HomeActivity )getActivity()).openFragment(GroupsTimeLineFragment.class , bundle);
             }
         });

@@ -68,7 +68,7 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
     void getExtra() {
         Bundle bundle = getArguments();
         intValue = bundle.getInt("selectedCategory", 0);
-        Log.e("KhaledInt" , ""+intValue);
+        Log.e("KhaledInt", "" + intValue);
 //        String.valueOf(intValue)
 //        presenter.getGroupCategory(String.valueOf(intValue), "1f443dc9-43f7-4f92-9e3f-76805cd0823c");
         presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), intValue, "0");
@@ -103,7 +103,7 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(4);
         mTabContainer = (LinearLayout) view.findViewById(R.id.lin_category);
-        for (int i = 0; i < mTabContainer.getChildCount(); i++) {
+        for (int i = 0; i < mTabContainer.getChildCount(); i += 2) {
             mTabContainer.getChildAt(i).setOnClickListener(this);
         }
 
@@ -111,11 +111,11 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                mTabContainer.getChildAt(position).setBackground(getResources().getDrawable(R.drawable.bt_1));
-                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
-                    if (i != position)
-                        mTabContainer.getChildAt(i).setBackground(null);
-                }
+//                mTabContainer.getChildAt(position * 2).setBackground(getResources().getDrawable(R.drawable.bt_1));
+//                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
+//                    if (i != position * 2 && i % 2 == 0)
+//                        mTabContainer.getChildAt(i).setBackground(null);
+//                }
             }
 
             @Override
@@ -179,15 +179,40 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
         switch (viewId) {
             case R.id.tv_timeline:
                 mViewPager.setCurrentItem(0);
+                int position = 0;
+                mTabContainer.getChildAt(position * 2).setBackground(getResources().getDrawable(R.drawable.bt_1));
+                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
+                    if (i != position * 2 && i % 2 == 0)
+                        mTabContainer.getChildAt(i).setBackground(null);
+                }
                 break;
             case R.id.tv_posts:
+                int position1 = 1;
                 mViewPager.setCurrentItem(1);
+                mTabContainer.getChildAt(position1 * 2).setBackground(getResources().getDrawable(R.drawable.bt_1));
+                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
+                    if (i != position1 * 2 && i % 2 == 0)
+                        mTabContainer.getChildAt(i).setBackground(null);
+                }
                 break;
             case R.id.tv_event:
                 mViewPager.setCurrentItem(2);
+                int position2 = 2;
+                mTabContainer.getChildAt(position2 * 2).setBackground(getResources().getDrawable(R.drawable.bt_1));
+                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
+                    if (i != position2 * 2 && i % 2 == 0)
+                        mTabContainer.getChildAt(i).setBackground(null);
+                }
                 break;
             case R.id.tv_group:
                 mViewPager.setCurrentItem(3);
+                int position3 = 3;
+                mViewPager.setCurrentItem(1);
+                mTabContainer.getChildAt(position3 * 2).setBackground(getResources().getDrawable(R.drawable.bt_1));
+                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
+                    if (i != position3 * 2 && i % 2 == 0)
+                        mTabContainer.getChildAt(i).setBackground(null);
+                }
                 break;
         }
     }
@@ -216,9 +241,9 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
         indicator.setRadius(3 * density);
 
 
-        if (TimelineList.size()>5){
+        if (TimelineList.size() > 5) {
             NUM_PAGES = 5;
-        }else {
+        } else {
             NUM_PAGES = TimelineList.size();
         }
 
@@ -335,7 +360,7 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
                 case 2:
                     return "Events";
                 case 3:
-                    return "Group Member";
+                    return "Group Members";
             }
             return null;
         }

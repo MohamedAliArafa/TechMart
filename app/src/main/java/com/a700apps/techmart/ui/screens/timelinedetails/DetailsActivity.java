@@ -1,14 +1,18 @@
 package com.a700apps.techmart.ui.screens.timelinedetails;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +43,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by samir salah on 8/17/2017.
@@ -47,8 +52,10 @@ import java.util.List;
 public class DetailsActivity extends AppCompatActivity implements View.OnClickListener, NetworkResponseListener<LikeData>, DetailsView {
     ImageView imageView4;
     ImageView iv_slider, mProfileImageView, mNotificationImageView, iv_comment, iv_share, mLikeImageView, iv_share_event, iv_invite, iv_calender;
-    LinearLayout mLikeLinearContainer, mEventLinearContainer;
-    TextView mTitle, mSlidertype, mSlideTitle, mDescTextView,mEventTitle, tv_comment, tv_share, tv_like, tv_going,tv_calender;
+    LinearLayout mLikeLinearContainer;
+    RelativeLayout mEventLinearContainer;
+    TextView mTitle, mSlidertype, mSlideTitle, mDescTextView, mEventTitle, tv_comment, tv_share, tv_like,
+            tv_going, tv_calender, tv_tie, tvTime;
     String Type;
     int index;
     List<TimeLineData.ResultEntity> mList;
@@ -57,7 +64,15 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     DetailsPresenter mPresenter;
     public AVLoadingIndicatorView indicatorView;
     TextView mGoing;
-    TextView mLikeCount , mCommentCount , mShareCount ;
+    TextView mLikeCount, mCommentCount, mShareCount;
+
+    LinearLayout ll_events_time_container ;
+    TextView tvTmieSlider;
+
+//    TextView sliderNumGoing;
+//    LinearLayout linearCount;
+//    Button going , notGoing;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,22 +85,32 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         index = getIntent().getIntExtra("Index", 0);
         mList = getIntent().getParcelableArrayListExtra("Timeline");
 
-        if (mList.get(index).getType() == 1){
+        if (mList.get(index).getType() == 1) {
             Type = "Event";
-        }else {
+        } else {
             Type = "post";
         }
 
+//        going = findViewById(R.id.btn_go);
+//        notGoing = findViewById(R.id.btn_not_go);
+//        sliderNumGoing = findViewById(R.id.slider_num_attend);
+//        linearCount = findViewById(R.id.linearCount);
+
+        tvTmieSlider = findViewById(R.id.tv_time);
+        ll_events_time_container = findViewById(R.id.ll_events_time_container);
+
         indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
         mGoing = (TextView) findViewById(R.id.textView53);
-        iv_invite=(ImageView)findViewById(R.id.iv_invite);
+        iv_invite = (ImageView) findViewById(R.id.iv_invite);
         mProfileImageView = (ImageView) findViewById(R.id.new_message);
         iv_slider = (ImageView) findViewById(R.id.iv_slider);
         mNotificationImageView = (ImageView) findViewById(R.id.new_profile);
-        mEventTitle=(CustomLightTextView)findViewById(R.id.tv_event_title);
+        mEventTitle = (CustomLightTextView) findViewById(R.id.tv_event_title);
         mLikeCount = (TextView) findViewById(R.id.tv_like_count);
         mCommentCount = (TextView) findViewById(R.id.tv_comment_count);
         mShareCount = (TextView) findViewById(R.id.tv_share_count);
+        tv_tie = (TextView) findViewById(R.id.tv_tie);
+        tvTime = (TextView) findViewById(R.id.tv_3);
 
         next = (CustomTextView) findViewById(R.id.next);
         back = (CustomTextView) findViewById(R.id.back);
@@ -117,12 +142,12 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         mGoing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (AppUtils.isInternetAvailable(DetailsActivity.this)){
+                if (AppUtils.isInternetAvailable(DetailsActivity.this)) {
                     mGoing.setClickable(false);
+//                    going.setClickable(false);
                     mGoing.setText("Attending");
                     mPresenter.attendee(String.valueOf(mList.get(index).getID()), PreferenceHelper.getUserId(DetailsActivity.this), "true", DetailsActivity.this);
-
-                }else {
+                } else {
                     Toast.makeText(DetailsActivity.this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -131,12 +156,12 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         iv_invite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (AppUtils.isInternetAvailable(DetailsActivity.this)){
+                if (AppUtils.isInternetAvailable(DetailsActivity.this)) {
                     mGoing.setClickable(false);
                     mGoing.setText("Attending");
                     mPresenter.attendee(String.valueOf(mList.get(index).getID()), PreferenceHelper.getUserId(DetailsActivity.this), "true", DetailsActivity.this);
 
-                }else {
+                } else {
                     Toast.makeText(DetailsActivity.this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -148,7 +173,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         mSlidertype = (CustomTextView) findViewById(R.id.tv_events);
 
         mLikeLinearContainer = (LinearLayout) findViewById(R.id.container);
-        mEventLinearContainer = (LinearLayout) findViewById(R.id.container_event);
+        mEventLinearContainer = (RelativeLayout) findViewById(R.id.container_event);
 
         iv_comment.setOnClickListener(this);
         tv_comment.setOnClickListener(this);
@@ -235,16 +260,21 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         imageView4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ActivityUtils.openActivity(DetailsActivity.this, HomeActivity.class, true);
-
+//                ActivityUtils.openActivity(DetailsActivity.this, HomeActivity.class, true);
+                onBackPressed();
             }
         });
+
+        tvTmieSlider.setText(mList.get(index).getStartDate());
         mTitle.setText(mList.get(index).getPostedByName());
         mDescTextView.setText(mList.get(index).getDescr());
         mEventTitle.setText(mList.get(index).getTitle());
-
-        mLikeCount.setText(""+mList.get(index).getLikeCount());
-        mCommentCount.setText(""+mList.get(index).getCommentCount());
+        tvTime.setText("Starts: " + mList.get(index).getStartDate());
+        mSlideTitle.setText(mList.get(index).getTitle());
+        Log.e("StartDate" , "Date : "+mList.get(index).getStartDate());
+        mLikeCount.setText("" + mList.get(index).getLikeCount());
+        mCommentCount.setText("" + mList.get(index).getCommentCount());
+        tv_tie.setText("Location: " + getCompleteAddressString(mList.get(index).getLatitude(), mList.get(index).getLongtude()));
 
         mProfileImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -257,23 +287,66 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 ActivityUtils.openActivity(DetailsActivity.this, NotificationActivity.class, false);
-
             }
         });
+
+//        sliderNumGoing.setText(""+mList.get(index).getAttendantCount());
 
 
         if (Type.equals("post")) {
             mLikeLinearContainer.setVisibility(View.VISIBLE);
             mEventLinearContainer.setVisibility(View.GONE);
+//            going.setVisibility(View.GONE);
+//            notGoing .setVisibility(View.GONE);
+//            sliderNumGoing .setVisibility(View.GONE);
+//            linearCount.setVisibility(View.GONE);
             mSlidertype.setText("Post");
         } else {
             mLikeLinearContainer.setVisibility(View.GONE);
             mEventLinearContainer.setVisibility(View.VISIBLE);
+            ll_events_time_container.setVisibility(View.VISIBLE);
+//            going.setVisibility(View.VISIBLE);
+//            notGoing .setVisibility(View.VISIBLE);
+//            sliderNumGoing .setVisibility(View.VISIBLE);
+//            linearCount.setVisibility(View.VISIBLE);
             mSlidertype.setText("Event");
             if (mList.get(index).getIsGoing()) {
                 tv_going.setText("Attending");
+//                going.setBackground(getResources().getDrawable(R.drawable.bg_blueish));
+//                notGoing.setBackground(getResources().getDrawable(R.drawable.bg_transparent_rounded_small));
+            }else {
+//                notGoing.setBackground(getResources().getDrawable(R.drawable.bg_blueish));
+//                going.setBackground(getResources().getDrawable(R.drawable.bg_transparent_rounded_small));
             }
         }
+    }
+
+    private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
+
+        Log.e("Cordinates", "" + LATITUDE + "    " + LONGITUDE);
+        String strAdd = "";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
+            if (addresses != null && addresses.size() > 0) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("");
+
+//                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
+                if (returnedAddress.getAddressLine(0) != null && !returnedAddress.getAddressLine(0).isEmpty()) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(0)).append(",");
+                }
+//                }
+                strAdd = strReturnedAddress.toString();
+                Log.w("Current loction address", "" + strReturnedAddress.toString());
+            } else {
+                Log.w("Current loction address", "No Address returned!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.w("Current loction address", "Canont get Address!");
+        }
+        return strAdd;
     }
 
     void setValues() {
@@ -306,23 +379,23 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_comment:
-                if (AppUtils.isInternetAvailable(DetailsActivity.this)){
+                if (AppUtils.isInternetAvailable(DetailsActivity.this)) {
                     Intent intent2 = new Intent(DetailsActivity.this, CommentActivity.class);
                     intent2.putExtra("string_key", mList.get(index).getID());
-                    intent2.putExtra("likes_number",  mList.get(index).getLikeCount());
+                    intent2.putExtra("likes_number", mList.get(index).getLikeCount());
                     startActivity(intent2);
-                }else {
+                } else {
                     Toast.makeText(DetailsActivity.this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                 }
 
                 break;
             case R.id.iv_comment:
-                if (AppUtils.isInternetAvailable(DetailsActivity.this)){
+                if (AppUtils.isInternetAvailable(DetailsActivity.this)) {
                     Intent intent = new Intent(DetailsActivity.this, CommentActivity.class);
                     intent.putExtra("string_key", mList.get(index).getID());
-                    intent.putExtra("likes_number",  mList.get(index).getLikeCount());
+                    intent.putExtra("likes_number", mList.get(index).getLikeCount());
                     startActivity(intent);
-                }else {
+                } else {
                     Toast.makeText(DetailsActivity.this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -357,11 +430,11 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(addcalender);
                 break;
             case R.id.iv_invite:
-                if (AppUtils.isInternetAvailable(DetailsActivity.this)){
+                if (AppUtils.isInternetAvailable(DetailsActivity.this)) {
                     mPresenter.attendee(String.valueOf(mList.get(index).getID()),
                             PreferenceHelper.getUserId(DetailsActivity.this), "true", DetailsActivity.this);
 
-                }else {
+                } else {
                     Toast.makeText(DetailsActivity.this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                 }
                 break;

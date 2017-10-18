@@ -61,8 +61,8 @@
                 android:layout_below="@+id/rl_image_container"
                 android:layout_marginBottom="@dimen/activity_feeds_footer_margin"
                 android:layout_marginTop="@dimen/activity_feeds_footer_margin"
-                android:orientation="horizontal"
                 android:gravity="center"
+                android:orientation="horizontal"
                 android:weightSum="100">
 
                 <LinearLayout
@@ -90,22 +90,27 @@
                 </LinearLayout>
 
 
-                <View
-                    android:layout_width="@dimen/activity_feeds_comment_like_seperator_width"
-                    android:layout_height="@dimen/activity_feeds_comment_like_seperator_height"
-                    android:layout_gravity="center_vertical"
-                    android:background="@color/icon_color" />
+                <!--<View-->
+                    <!--android:layout_width="@dimen/activity_feeds_comment_like_seperator_width"-->
+                    <!--android:layout_height="@dimen/activity_feeds_comment_like_seperator_height"-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:background="@color/icon_color" />-->
 
                 <LinearLayout
                     android:id="@+id/ll_comment_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-
                     android:background="@color/blackGreenColor"
                     android:gravity="center"
                     android:orientation="horizontal">
 
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginStart="4dp"
+                        android:src="@drawable/ic_post_as" />
 
                     <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
                         android:id="@+id/tv_comment_text"
@@ -114,10 +119,15 @@
                         android:layout_marginLeft="6dp"
                         android:layout_marginRight="6dp"
                         android:gravity="center"
-                        android:text="Creat Post"
-                        android:textSize="@dimen/time_text"
-                        android:textColor="@color/button_light_text" />
+                        android:text="Post as"
+                        android:textColor="@color/button_light_text"
+                        android:textSize="@dimen/time_text" />
 
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginEnd="4dp"
+                        android:src="@drawable/ic_arrow_dropdpwn" />
 
                 </LinearLayout>
 

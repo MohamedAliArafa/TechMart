@@ -46,12 +46,28 @@
                 android:layout_height="15dp"
                 android:background="@color/blue_join_dialog"
                 android:gravity="center"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"
                 android:textSize="12sp"
+                android:text=""
+                android:textColor="@color/button_light_text" />
+
+            <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+                android:id="@+id/tv_username"
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+                android:layout_marginStart="4dp"
+                android:background="@color/blue_join_dialog"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:text=""
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"
                 android:textColor="@color/button_light_text" />
 
             <TextView
                 android:id="@+id/tv_"
-                android:layout_width="3dp"
+                android:layout_width="2dp"
                 android:layout_height="15dp"
                 android:background="@color/red_join_dialog"
                 android:gravity="center"
@@ -85,9 +101,7 @@
             android:ellipsize="end"
             android:textColor="@color/about_row_grey"
             android:textSize="@dimen/greeting_card_text"
-            android:maxLines="1"
-            tools:layout_editor_absoluteX="96dp"
-            tools:layout_editor_absoluteY="60dp" />
+            android:maxLines="1" />
 
         <LinearLayout
             android:layout_width="wrap_content"

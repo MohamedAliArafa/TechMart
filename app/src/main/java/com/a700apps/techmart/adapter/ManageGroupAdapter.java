@@ -50,7 +50,7 @@ public class ManageGroupAdapter extends RecyclerView.Adapter<ManageGroupAdapter.
         UserGroup mUserGroupItem = mUserGroupList.get(position);
         viewHolder.mNameTextView.setText(mUserGroupItem.Name);
 
-        viewHolder.mCreateDate.setText(  String.valueOf(AppUtils.getDate(mUserGroupItem.CreationDate)));
+        viewHolder.mCreateDate.setText(String.valueOf(AppUtils.getDate(mUserGroupItem.CreationDate)));
         viewHolder.mNameTextView.setText(mUserGroupItem.Name);
         viewHolder.mNumber.setText(String.valueOf(mUserGroupItem.MemberCount));
         Glide.with(context)
@@ -90,9 +90,11 @@ public class ManageGroupAdapter extends RecyclerView.Adapter<ManageGroupAdapter.
 //            ((MyGroubListActivity) context).finish();
 
             Bundle bundle = new Bundle();
-            bundle.putInt("selectedCategory" ,mUserGroupList.get(position).ID );
+            bundle.putInt("selectedCategory", mUserGroupList.get(position).ID);
             Globals.GROUP_ID = mUserGroupList.get(position).ID;
-            ((HomeActivity)context).openFragment(BoardMemberTimelineFragment.class , bundle);
+            Globals.CAME_FROM_MANAGE_TO_GROUP = true;
+            ((HomeActivity) context).openFragment(BoardMemberTimelineFragment.class, bundle);
 
         }
-    }}
+    }
+}

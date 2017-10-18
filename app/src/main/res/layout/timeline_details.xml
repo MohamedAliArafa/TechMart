@@ -10,7 +10,8 @@
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/event_details_header_image_height">
+        android:layout_height="@dimen/event_details_header_image_height"
+        android:layout_alignParentTop="true">
 
         <ImageView
             android:id="@+id/iv_slider"
@@ -70,21 +71,18 @@
             </LinearLayout>
 
             <LinearLayout
+                android:visibility="invisible"
                 android:id="@+id/ll_events_time_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:layout_below="@+id/ll_events_title_container"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:weightSum="100">
+                android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/imageView"
-                    android:layout_width="0dp"
+                    android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_weight="10"
-                    android:visibility="invisible"
+                    android:layout_gravity="start"
                     app:srcCompat="@drawable/ic_calender" />
 
                 <TextView
@@ -98,14 +96,13 @@
                     android:maxLines="@integer/events_max_lines"
                     android:text="june 12 2017|Time:10:00 am on wards"
                     android:textSize="10sp"
-                    android:visibility="invisible"
 
                     />
 
 
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/lin_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -121,21 +118,24 @@
                     android:layout_height="30dp"
                     android:background="@drawable/linearlayout_background"
                     android:text="Going"
+                    android:visibility="invisible"
+                    android:layout_alignParentStart="true"
                     android:textColor="@color/button_light_text"
                     android:textSize="@dimen/time_text"
-                    android:visibility="gone"
 
                     />
 
                 <Button
-                    android:id="@+id/button8"
+                    android:id="@+id/btn_not_go"
+                    android:visibility="invisible"
+                    android:layout_toEndOf="@id/btn_go"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:layout_marginLeft="@dimen/general_margin"
-                    android:background="@drawable/linearlayout_background"
-                    android:text="Invite"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/bg_blueish"
+                    android:text="Not going"
                     android:textColor="@color/button_light_text"
-                    android:visibility="invisible" />
+                    android:textSize="@dimen/time_text"/>
 
 
                 <ImageView
@@ -143,20 +143,41 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="24dp"
-                    android:visibility="invisible"
+                    android:visibility="gone"
                     app:srcCompat="@drawable/image" />
 
-                <TextView
-                    android:id="@+id/imageView25"
-                    android:layout_width="50dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/transperant_bg"
-                    android:gravity="center"
-                    android:textColor="@color/button_light_text"
-                    android:textSize="@dimen/time_text"
-                    android:visibility="gone"
-                    app:srcCompat="@drawable/ratring_pic" />
-            </LinearLayout>
+                <LinearLayout
+                    android:visibility="invisible"
+                    android:id="@+id/linearCount"
+                    android:layout_marginEnd="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:padding="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_transparent_rounded_small"
+                    android:orientation="vertical">
+                    <com.a700apps.techmart.utils.CustomTextView
+                        android:text="240"
+                        android:layout_gravity="center"
+                        android:id="@+id/slider_num_attend"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:gravity="center"
+                        android:textColor="@color/button_light_text"
+                        android:textSize="@dimen/time_text" />
+                    <TextView
+                        android:text="Attending"
+                        android:id="@+id/imageView25"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:gravity="center"
+                        android:textColor="@color/button_light_text"
+                        android:textSize="@dimen/time_text" />
+
+                </LinearLayout>
+            </RelativeLayout>
 
 
         </RelativeLayout>
@@ -219,8 +240,10 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
             android:background="@color/blue_join_dialog"
-            android:gravity="center"
+            android:gravity="start"
+            android:maxLines="@integer/events_max_lines"
             android:text="Double women establish"
             android:textColor="@color/button_light_text" />
 
@@ -236,7 +259,6 @@
 
     <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
         android:id="@+id/tv_event_title"
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/lin_category"
@@ -245,7 +267,6 @@
         android:layout_marginRight="24dp"
         android:alpha=".8"
         android:ellipsize="end"
-        android:maxLines="@integer/events_max_lines"
         android:text=""
         android:textColor="@color/black"
         android:textSize="@dimen/post_card_text" />
@@ -260,6 +281,7 @@
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
         android:ellipsize="end"
+        android:gravity="start"
         android:scrollbars="vertical"
         android:textColor="@color/light_color_text"
         android:textSize="@dimen/main_light_text" />
@@ -469,21 +491,28 @@
     </LinearLayout>
 
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/container_event"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_above="@+id/next_con"
         android:background="@color/about_row_grey"
         android:orientation="horizontal"
+
         android:visibility="gone">
 
         <LinearLayout
+            android:layout_marginStart="24dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_events_desc"
-            android:layout_margin="10dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_weight="5"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toLeftOf="@+id/linearLayout13"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
 
             <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
                 android:id="@+id/tv_title"
@@ -495,10 +524,11 @@
 
             <TextView
                 android:id="@+id/tv_tie"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:alpha=".3"
-                android:gravity="center"
+                android:gravity="start"
+                android:maxLines="1"
                 android:text=" Opening:the Rad Trads"
                 android:textColor="@color/background_color"
                 android:textSize="@dimen/time_text" />
@@ -508,7 +538,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:alpha=".3"
-                android:gravity="center"
+                android:gravity="start"
+                android:maxLines="1"
                 android:text="Time: 10am-4pm"
                 android:textColor="@color/background_color"
                 android:textSize="@dimen/time_text" />
@@ -516,11 +547,14 @@
         </LinearLayout>
 
         <LinearLayout
+            android:layout_marginEnd="24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:gravity="right"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:id="@+id/linearLayout13">
 
             <ImageView
                 android:id="@+id/iv_calender"
@@ -528,9 +562,7 @@
                 android:layout_height="18dp"
                 android:layout_marginLeft="@dimen/general_margin"
                 android:layout_marginRight="@dimen/general_margin"
-                app:srcCompat="@drawable/ic_addcalender"
-                tools:layout_editor_absoluteX="106dp"
-                tools:layout_editor_absoluteY="106dp" />
+                app:srcCompat="@drawable/ic_addcalender" />
 
             <TextView
                 android:id="@+id/tv_calender"
@@ -539,9 +571,7 @@
                 android:alpha=".5"
                 android:text="Add to calender"
                 android:textColor="@color/blackGreenColor"
-                android:textSize="10sp"
-                tools:layout_editor_absoluteX="144dp"
-                tools:layout_editor_absoluteY="112dp" />
+                android:textSize="10sp" />
 
             <ImageView
                 android:id="@+id/iv_invite"
@@ -559,9 +589,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".5"
                 android:text="Going"
-                android:textColor="@color/blackGreenColor"
-                tools:layout_editor_absoluteX="256dp"
-                tools:layout_editor_absoluteY="112dp" />
+                android:textColor="@color/blackGreenColor" />
 
             <ImageView
                 android:id="@+id/iv_share_event"
@@ -569,9 +597,7 @@
                 android:layout_height="18dp"
                 android:layout_marginLeft="@dimen/general_margin"
                 android:layout_marginRight="@dimen/general_margin"
-                app:srcCompat="@drawable/ic_share"
-                tools:layout_editor_absoluteX="303dp"
-                tools:layout_editor_absoluteY="106dp" />
+                app:srcCompat="@drawable/ic_share"/>
 
             <TextView
                 android:id="@+id/tv_share_event"
@@ -580,16 +606,13 @@
                 android:alpha=".5"
                 android:text="share"
                 android:textColor="@color/blackGreenColor"
-                android:textSize="10sp"
-
-                tools:layout_editor_absoluteX="335dp"
-                tools:layout_editor_absoluteY="112dp" />
+                android:textSize="10sp" />
 
 
         </LinearLayout>
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/next_con"

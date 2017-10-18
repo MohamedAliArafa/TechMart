@@ -340,7 +340,6 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         switch (resourceId) {
             case R.drawable.ic_timeline:
 
-
                 openTimeLine();
 //                openFragment(TimelineFragment.class, null);
 
@@ -458,8 +457,6 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
             Globals.RETURN_POSITION = true;
             openTimeLine();
 //            openFragment(TimelineFragment.class, null);
-
-
         } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof EventFragment) {
             Bundle bundle = new Bundle();
             bundle.putString("RelativId", Globals.userId);
@@ -474,6 +471,8 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
             Bundle bundle = new Bundle();
             bundle.putInt("selectedCategory", Globals.GROUP_ID);
             openFragment(GroupsTimeLineFragment.class, bundle);
+        } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof BoardMemberTimelineFragment) {
+            openFragment(ManageBoardGroupFragment.class, null);
         } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof MemberProfileFragment) {
             Bundle bundle = new Bundle();
             bundle.putInt("string_key", Globals.GROUP_ID);

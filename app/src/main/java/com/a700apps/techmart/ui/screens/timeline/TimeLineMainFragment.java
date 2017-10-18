@@ -52,7 +52,7 @@ public class TimeLineMainFragment extends Fragment implements TimeLineView {
         indicatorView = (AVLoadingIndicatorView) view.findViewById(R.id.avi);
 
          rv = (EmptyRecyclerView) view.findViewById(R.id.recyclerView);
-        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()),"0",getActivity());
+
 
 
         return view;
@@ -61,7 +61,7 @@ public class TimeLineMainFragment extends Fragment implements TimeLineView {
     @Override
     public void onResume() {
         super.onResume();
-
+        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()),"0",getActivity());
     }
     @Override
     public void showLoadingProgress() {

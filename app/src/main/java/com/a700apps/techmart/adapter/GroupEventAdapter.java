@@ -53,7 +53,7 @@ public class GroupEventAdapter extends RecyclerView.Adapter<GroupEventAdapter.Vi
         switch (itemType) {
             case NOTIF_TYPE_EVENT:
                 ViewHolder viewHolderEvent = (ViewHolder)viewHolder;
-                viewHolderEvent.mDateTextView.setText(timeLineItem.getCreationDate());
+                viewHolderEvent.mDateTextView.setText(timeLineItem.getPostedByName());
                 viewHolderEvent.mDescribtionTextView.setText(timeLineItem.getDescr());
                 viewHolderEvent.mTitleTextView.setText(timeLineItem.getTitle());
 

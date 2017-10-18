@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.GroupTimeLineData;
@@ -88,7 +89,8 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
         switch (itemType) {
             case NOTIF_TYPE_EVENT:
                 GroupTimeLineAdapter.ViewHolder viewHolderEvent = (GroupTimeLineAdapter.ViewHolder)viewHolder;
-                viewHolderEvent.mDateTextView.setText(timeLineItem.getCreationDate());
+                viewHolderEvent.mDateTextView.setText(timeLineItem.getGroupName());
+                viewHolderEvent.tv_username.setText(timeLineItem.getPostedByName());
                 viewHolderEvent.mDescribtionTextView.setText(timeLineItem.getDescr());
                 viewHolderEvent.mTitleTextView.setText(timeLineItem.getTitle());
 
@@ -306,7 +308,7 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView mEventImageView ,shareBtn, addCalenderBtn;
-        TextView mTitleTextView,mDescribtionTextView,mDateTextView,mGroupNameTextView,tv_add_calender;
+        TextView mTitleTextView,mDescribtionTextView,mDateTextView,mGroupNameTextView,tv_add_calender , tv_username;
         RelativeLayout contain;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -317,6 +319,7 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
             mTitleTextView = (TextView) itemView.findViewById(R.id.tv_title);
             mDescribtionTextView = (TextView) itemView.findViewById(R.id.tv_description);
             mDateTextView = (TextView) itemView.findViewById(R.id.tv_date);
+            tv_username = (TextView) itemView.findViewById(R.id.tv_username);
 
             shareBtn = (ImageView) itemView.findViewById(R.id.iv_share);
             addCalenderBtn = (ImageView) itemView.findViewById(R.id.iv_add_calender);

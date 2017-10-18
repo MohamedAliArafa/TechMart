@@ -108,7 +108,7 @@
     <string name="enter_password">Enter your password</string>
     <string name="posts">Posts</string>
     <string name="event">Events</string>
-    <string name="group_member">Group Member</string>
+    <string name="group_member">Group Members</string>
     <string name="group">Groups </string>
     <string name="timeline_member">Members</string>
     <string name="timeline_member_approve">Membership Approvals</string>
@@ -118,6 +118,7 @@
     <string name="unfollow">Unfollow</string>
     <string name="disconnect">Disconnect</string>
     <string name="canecl_connect">Cancel Request</string>
+    <string name="pending">Pending</string>
     <string name="approve_connect">Approve Request</string>
     <string name="connect">Connect</string>
     <string name="thanks_you">Thanks for reaching out.\n Our team will be happy support you</string>

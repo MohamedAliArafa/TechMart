@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="0dp"
-            android:layout_marginTop="@dimen/timeline_margin"
+            android:layout_marginTop="100dp"
             android:paddingBottom="@dimen/events_text_container_bottom_padding"
             android:paddingLeft="@dimen/events_text_container_padding"
             android:paddingRight="@dimen/events_text_container_padding"

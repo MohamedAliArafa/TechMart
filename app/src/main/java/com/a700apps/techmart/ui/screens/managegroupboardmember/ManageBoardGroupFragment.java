@@ -33,7 +33,8 @@ import com.wang.avi.AVLoadingIndicatorView;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ManageBoardGroupFragment extends Fragment implements manageGroupView {
+public class
+ManageBoardGroupFragment extends Fragment implements manageGroupView {
     View view;
     private ManageGroupPresenter mPresenter;
     EmptyRecyclerView rv;

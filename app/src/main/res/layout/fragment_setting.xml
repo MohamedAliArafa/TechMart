@@ -25,17 +25,17 @@
                 android:layout_height="36dp"
                 app:srcCompat="@drawable/ic_side_menu_logo" />
 
-            <!--<TextView-->
-                <!--android:id="@+id/textView41"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center_vertical"-->
-                <!--android:layout_weight="1"-->
-                <!--android:gravity="center"-->
-                <!--android:text="Setting"-->
-                <!--android:textColor="@color/button_light_text"-->
-                <!--android:textSize="@dimen/normal_text_size"-->
-                <!--android:visibility="visible" />-->
+            <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+                android:id="@+id/textView41"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Setting"
+                android:textColor="@color/button_light_text"
+                android:textSize="@dimen/normal_text_size"
+                android:visibility="visible" />
 
             <ImageView
                 android:id="@+id/new_message"
