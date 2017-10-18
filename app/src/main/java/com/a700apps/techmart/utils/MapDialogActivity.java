@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.a700apps.techmart.R;
@@ -52,7 +53,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class MapDialogActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener, GoogleMap.OnMapClickListener {
-    TextView addressTextView;
+    EditText addressTextView;
     Button okButton;
     SupportMapFragment mapFragment;
     private static final String TAG = "MapsActivity";
@@ -78,7 +79,7 @@ public class MapDialogActivity extends FragmentActivity implements OnMapReadyCal
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
-        addressTextView = (TextView) findViewById(R.id.activity_current_address_textview_dialog);
+        addressTextView = (EditText) findViewById(R.id.activity_current_address_textview_dialog);
         okButton = (Button) findViewById(R.id.activity_btn_savemap_dialog);
         innerModle = new InnerModle();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

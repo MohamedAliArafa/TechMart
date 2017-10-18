@@ -50,6 +50,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     LinearLayout mLikeLinearContainer, mEventLinearContainer;
     TextView mTitle, mSlidertype, mSlideTitle, mDescTextView,mEventTitle, tv_comment, tv_share, tv_like, tv_going,tv_calender;
     String Type;
+    int mTypeFromPager;
     int index;
     List<TimeLineData.ResultEntity> mList;
     TextView next, back;
@@ -83,9 +84,9 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         iv_slider = (ImageView) findViewById(R.id.iv_slider);
         mNotificationImageView = (ImageView) findViewById(R.id.new_profile);
         mEventTitle=(CustomLightTextView)findViewById(R.id.tv_event_title);
-        mLikeCount = (TextView) findViewById(R.id.tv_like_count);
-        mCommentCount = (TextView) findViewById(R.id.tv_comment_count);
-        mShareCount = (TextView) findViewById(R.id.tv_share_count);
+        mLikeCount = (CustomLightTextView) findViewById(R.id.tv_like_count);
+        mCommentCount = (CustomLightTextView) findViewById(R.id.tv_comment_count);
+        mShareCount = (CustomLightTextView) findViewById(R.id.tv_share_count);
 
         next = (CustomTextView) findViewById(R.id.next);
         back = (CustomTextView) findViewById(R.id.back);

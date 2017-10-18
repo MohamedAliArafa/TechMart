@@ -2,6 +2,7 @@ package com.a700apps.techmart.ui.screens.message;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,6 +21,8 @@ import com.a700apps.techmart.data.model.AllMessageList;
 import com.a700apps.techmart.data.model.FriendMessage;
 import com.a700apps.techmart.data.model.MyConnectionList;
 import com.a700apps.techmart.data.network.MainApi;
+import com.a700apps.techmart.ui.screens.register.RegisterActivity;
+import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
 
@@ -40,6 +44,8 @@ public class ChatActivity extends AppCompatActivity implements MessageView {
         presenter = new MessagePresenter();
         presenter.attachView(this);
         findViews();
+
+
     }
 
     private void findViews() {
@@ -74,12 +80,20 @@ public class ChatActivity extends AppCompatActivity implements MessageView {
             sendImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (!editComment.getText().toString().isEmpty()) {
-                        presenter.sendMessage(ChatActivity.this, PreferenceHelper.getUserId(ChatActivity.this),
-                                RelativeID, editComment.getText().toString());
+                    if (!AppUtils.isInternetAvailable(ChatActivity.this)) {
+                        Snackbar snackbar1 = Snackbar.make(view, R.string.no_internet_connection, Snackbar.LENGTH_SHORT);
+                        snackbar1.show();
                     } else {
-                        Toast.makeText(ChatActivity.this, "please insert text", Toast.LENGTH_SHORT).show();
+                        if (!editComment.getText().toString().isEmpty()) {
+                            presenter.sendMessage(ChatActivity.this, PreferenceHelper.getUserId(ChatActivity.this),
+                                    RelativeID, editComment.getText().toString());
+                        } else {
+                            Toast.makeText(ChatActivity.this, "please insert text", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
+
+
                 }
 
             });
@@ -104,6 +118,7 @@ public class ChatActivity extends AppCompatActivity implements MessageView {
 
     @Override
     public void updateUi() { // clear edittext and call service again
+
         editComment.setText("");
         presenter.getFriendMessage(ChatActivity.this, PreferenceHelper.getUserId(ChatActivity.this), RelativeID);
 

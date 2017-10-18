@@ -35,6 +35,8 @@ import com.bumptech.glide.Glide;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -184,7 +186,9 @@ public class CommentActivity extends AppCompatActivity implements commentView {
                     .into(viewHolder.profile);
             viewHolder.mName.setText(timeLineItem.Comment);
             viewHolder.mFrom.setText(timeLineItem.UserName);
-            viewHolder.mDate.setText(timeLineItem.CreationDate);
+
+            String DateWithoutTime = String.valueOf(AppUtils.getDate(timeLineItem.CreationDate)).substring(0, 10);
+            viewHolder.mDate.setText(DateWithoutTime);
         }
 
         @Override
