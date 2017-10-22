@@ -114,6 +114,14 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
 //                    , true);
 
             // came from user like activity to view users who like particular post
+        } else if (getIntent().getStringExtra("profilefragment") != null) {
+            String userId = getIntent().getStringExtra("profilefragment");
+            Bundle bundle = new Bundle();
+            bundle.putString("RelativId", userId);
+            bundle.putInt("GroupId", 0);
+//            Globals.userId = userId;
+            openFragmentNoStack(MemberProfileFragment.class, bundle);
+
         } else if (getIntent().getStringExtra("profileHolder") != null) {
             String userId = getIntent().getStringExtra("profileHolder");
 
@@ -124,7 +132,7 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
                 bundle.putString("RelativId", userId);
                 bundle.putInt("GroupId", Globals.GROUP_ID);
                 Globals.userId = userId;
-                openFragmentNoStack(MemberProfileFragment.class, bundle );
+                openFragmentNoStack(MemberProfileFragment.class, bundle);
             }
         } else {
             openTimeLine();

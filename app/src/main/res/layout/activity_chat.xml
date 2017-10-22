@@ -90,14 +90,16 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 
-        <ImageView
+        <Button
             android:id="@+id/send_Image_view"
-            android:layout_width="25dp"
-            android:layout_height="match_parent"
+            android:layout_width="20dp"
+            android:layout_height="25dp"
             android:layout_marginLeft="10dp"
             android:contentDescription="@null"
             android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_send_image" />
+            android:background="@drawable/ic_send_image"
+            android:visibility="invisible"
+          />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

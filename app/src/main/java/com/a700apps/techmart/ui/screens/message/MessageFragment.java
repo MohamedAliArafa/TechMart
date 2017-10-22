@@ -8,7 +8,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,8 @@ import com.a700apps.techmart.data.model.FriendMessage;
 import com.a700apps.techmart.data.model.MyConnectionList;
 import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
-import com.a700apps.techmart.ui.screens.newchat.*;
+import com.a700apps.techmart.ui.screens.newchat.NewChatActivity;
+import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
 
@@ -33,7 +33,7 @@ import butterknife.ButterKnife;
  * Created by samir salah on 8/16/2017.
  */
 
-public class MessageFragment extends Fragment implements MessageView  {
+public class MessageFragment extends Fragment implements MessageView {
     private MessagePresenter presenter;
     private RecyclerView messageList;
     private ImageView backImageView, newMessageImageView;
@@ -63,14 +63,14 @@ public class MessageFragment extends Fragment implements MessageView  {
     }
 
     private void findViews(View view) {
-        newMessageImageView = (ImageView)view. findViewById(R.id.new_message);
+        newMessageImageView = (ImageView) view.findViewById(R.id.new_message);
         newMessageImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), NewChatActivity.class));
             }
         });
-        messageList = (RecyclerView)view. findViewById(R.id.recyclerView);
+        messageList = (RecyclerView) view.findViewById(R.id.recyclerView);
         backImageView = (ImageView) view.findViewById(R.id.back_Image_view);
         messageList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -123,6 +123,7 @@ public class MessageFragment extends Fragment implements MessageView  {
     public void openChatActivity() {
 
     }
+
     private class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHolder> {
 
         Context context;
@@ -149,7 +150,12 @@ public class MessageFragment extends Fragment implements MessageView  {
         public void onBindViewHolder(MessagesAdapter.ViewHolder viewHolder, final int position) {
             viewHolder.nameTextView.setText(responser.get(position).getReciverName());
             viewHolder.chatTextTextView.setText(responser.get(position).getMessage());
-            viewHolder.lastSeenTextView.setText(responser.get(position).getReadingDateTimeST());
+            if (responser.get(position).getIsRead()){
+                viewHolder.seenImage.setVisibility(View.VISIBLE);
+            }
+            String DateWithoutTime = String.valueOf(AppUtils.getDate(responser.get(position).getReadingDateTimeST())).substring(0, 10);
+
+            viewHolder.lastSeenTextView.setText(DateWithoutTime);
             Glide.with(context).load(MainApi.IMAGE_IP + responser.get(position).getReciverPhoto()).placeholder(R.drawable.placeholder)
                     .into(viewHolder.userImageView);
             viewHolder.messageItem.setOnClickListener(new View.OnClickListener() {
@@ -163,6 +169,7 @@ public class MessageFragment extends Fragment implements MessageView  {
                 }
             });
         }
+
 
         @Override
         public int getItemCount() {

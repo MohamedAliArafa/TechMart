@@ -41,7 +41,8 @@
         app:layout_constraintLeft_toRightOf="@+id/user_image_view"
         app:layout_constraintTop_toTopOf="@+id/chat_text_text_view"
         app:layout_constraintVertical_bias="0.666"
-        app:srcCompat="@drawable/ic_delivered" />
+        app:srcCompat="@drawable/ic_delivered"
+        android:visibility="invisible"/>
 
     <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
         android:id="@+id/chat_text_text_view"

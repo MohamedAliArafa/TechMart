@@ -1,16 +1,22 @@
 package com.a700apps.techmart.ui.screens.message;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,8 +27,9 @@ import com.a700apps.techmart.data.model.AllMessageList;
 import com.a700apps.techmart.data.model.FriendMessage;
 import com.a700apps.techmart.data.model.MyConnectionList;
 import com.a700apps.techmart.data.network.MainApi;
-import com.a700apps.techmart.ui.screens.register.RegisterActivity;
+import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.utils.AppUtils;
+import com.a700apps.techmart.utils.ImageDetailsActivity;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
 
@@ -32,10 +39,12 @@ public class ChatActivity extends AppCompatActivity implements MessageView {
 
     private MessagePresenter presenter;
     private RecyclerView messageList;
-    private ImageView backImageView, chatImageView, sendImageView;
+    private ImageView backImageView, chatImageView;
+    Button sendImageView;
     private TextView chatNameTextView;
     public EditText editComment;
     private String ReciverName, ReciverPhoto, RelativeID;
+    boolean mIsConnected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +62,57 @@ public class ChatActivity extends AppCompatActivity implements MessageView {
         editComment = (EditText) findViewById(R.id.message_edit_text);
         messageList = (RecyclerView) findViewById(R.id.recyclerView);
         backImageView = (ImageView) findViewById(R.id.back_Image_view);
-        sendImageView = (ImageView) findViewById(R.id.send_Image_view);
+        sendImageView = (Button) findViewById(R.id.send_Image_view);
         chatImageView = (ImageView) findViewById(R.id.image_chat);
         chatNameTextView = (TextView) findViewById(R.id.chat_name_text_view);
         messageList.setLayoutManager(new LinearLayoutManager(this));
+
+        final int tintColor = ContextCompat.getColor(ChatActivity.this, android.R.color.darker_gray);
+        final int wightColor = ContextCompat.getColor(ChatActivity.this, android.R.color.white);
+
+        editComment.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if (s.toString().trim().length() == 0) {
+                    sendImageView.setEnabled(false);
+                    Drawable drawable = ContextCompat.getDrawable(ChatActivity.this, R.drawable.ic_send_image);
+                    drawable = DrawableCompat.wrap(drawable);
+                    DrawableCompat.setTint(drawable.mutate(), tintColor);
+
+                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+
+                    sendImageView.setCompoundDrawables(drawable, null, null, null);
+
+                } else {
+                    Drawable drawable = ContextCompat.getDrawable(ChatActivity.this, R.drawable.ic_send_image);
+                    drawable = DrawableCompat.wrap(drawable);
+                    DrawableCompat.setTint(drawable.mutate(), wightColor);
+
+                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+
+                    sendImageView.setCompoundDrawables(drawable, null, null, null);
+                    sendImageView.setEnabled(true);
+                }
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+
+            }
+
+
+        });
 
         backImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +120,7 @@ public class ChatActivity extends AppCompatActivity implements MessageView {
                 onBackPressed();
             }
         });
+
 
         if (getIntent().hasExtra("RelativeID")) {
             RelativeID = getIntent().getStringExtra("RelativeID");
@@ -85,8 +142,17 @@ public class ChatActivity extends AppCompatActivity implements MessageView {
                         snackbar1.show();
                     } else {
                         if (!editComment.getText().toString().isEmpty()) {
-                            presenter.sendMessage(ChatActivity.this, PreferenceHelper.getUserId(ChatActivity.this),
-                                    RelativeID, editComment.getText().toString());
+                            if (editComment.getText().toString().trim().matches("")) {
+                                Snackbar snackbar1 = Snackbar.make(view, "please insert text", Snackbar.LENGTH_SHORT);
+                                snackbar1.show();
+                            } else if (!mIsConnected) {
+                                Snackbar snackbar1 = Snackbar.make(view, "Connect first to send message ", Snackbar.LENGTH_SHORT);
+                                snackbar1.show();
+                            } else {
+                                sendImageView.setEnabled(false);
+                                presenter.sendMessage(ChatActivity.this, PreferenceHelper.getUserId(ChatActivity.this),
+                                        RelativeID, editComment.getText().toString());
+                            }
                         } else {
                             Toast.makeText(ChatActivity.this, "please insert text", Toast.LENGTH_SHORT).show();
                         }
@@ -98,6 +164,27 @@ public class ChatActivity extends AppCompatActivity implements MessageView {
 
             });
         }
+        chatImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intentDetails = new Intent(ChatActivity.this, ImageDetailsActivity.class);
+                intentDetails.putExtra("ImageUrl", MainApi.IMAGE_IP + ReciverPhoto);
+                startActivity(intentDetails);
+
+            }
+        });
+
+        chatNameTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(ChatActivity.this, HomeActivity.class);
+                intent.putExtra("profilefragment", getIntent().getStringExtra("RelativeID"));
+                startActivity(intent);
+
+            }
+        });
 
     }
 
@@ -118,7 +205,7 @@ public class ChatActivity extends AppCompatActivity implements MessageView {
 
     @Override
     public void updateUi() { // clear edittext and call service again
-
+        sendImageView.setEnabled(true);
         editComment.setText("");
         presenter.getFriendMessage(ChatActivity.this, PreferenceHelper.getUserId(ChatActivity.this), RelativeID);
 
@@ -137,6 +224,16 @@ public class ChatActivity extends AppCompatActivity implements MessageView {
 
     @Override
     public void fillFriendChatList(List<FriendMessage.ResultEntity> responser) {
+        if (responser.size() == 0) {
+            sendImageView.setVisibility(View.VISIBLE);
+            mIsConnected =true;
+        }else {
+            mIsConnected = responser.get(responser.size() - 1).ISConnected();
+            if (mIsConnected ==true){
+                sendImageView.setVisibility(View.VISIBLE);
+            }
+        }
+
         ChatAdapter chatAdapter = new ChatAdapter(this, responser);
         messageList.setAdapter(chatAdapter);
         messageList.scrollToPosition(responser.size() - 1); // to scroll to last item
@@ -192,6 +289,9 @@ public class ChatActivity extends AppCompatActivity implements MessageView {
                     viewHolderMe.tvText.setText(responser.get(position).getMessage());
                     Glide.with(context).load(MainApi.IMAGE_IP + responser.get(position).getSenderPhoto()).placeholder(R.drawable.placeholder)
                             .into(viewHolderMe.myImage);
+                    if (responser.get(position).getIsRead()) {
+                        viewHolderMe.showText.setVisibility(View.VISIBLE);
+                    }
                     break;
                 case CHAT_TYPE_OTHER:
                     ViewHolderOther viewHolderOther = (ViewHolderOther) holder;

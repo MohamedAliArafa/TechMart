@@ -76,9 +76,9 @@ public class MessagePresenter extends MainPresenter<MessageView> {
                     FriendMessage userNetworkData = networkResponse.data;
                     int errorCode = userNetworkData.getISResultHasData();
                     if (errorCode == 1) {
-                        if (userNetworkData.getResult().size() >= 1) {
+//                        if (userNetworkData.getResult().size() >= 1) {
                             view.fillFriendChatList(userNetworkData.getResult());
-                        }
+//                        }
                     }
                 }
 

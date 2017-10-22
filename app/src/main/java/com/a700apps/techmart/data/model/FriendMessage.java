@@ -74,6 +74,23 @@ public class FriendMessage {
         private boolean ReciverDeleted;
         private String ReciverDeleteDate;
         private String ReciverDeleteDateST;
+        private boolean ISConnected;
+
+        public boolean isRead() {
+            return IsRead;
+        }
+
+        public void setRead(boolean read) {
+            IsRead = read;
+        }
+
+        public boolean ISConnected() {
+            return ISConnected;
+        }
+
+        public void setISConnected(boolean ISConnected) {
+            this.ISConnected = ISConnected;
+        }
 
         public void setID(int ID) {
             this.ID = ID;
