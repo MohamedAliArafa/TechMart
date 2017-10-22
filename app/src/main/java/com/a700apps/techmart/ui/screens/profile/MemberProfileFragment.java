@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,7 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
     LinearLayout mContainerLinearLayout;
     String ImageLink;
     Button mFollowButton, mConnectButton, mMessageButton;
-    boolean isFollowing, isConnect, isConnectPending , isApprove;
+    boolean isFollowing = false, isConnect = false, isConnectPending = false, isApprove = false, hasSharedEvents = false;
     View eventLayout, groupLayout;
 
     MyProfile myProfile;
@@ -159,6 +160,7 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
 
     @Override
     public void updateUi(MyProfile MyProfile) {
+
         myProfile = MyProfile;
         ImageLink = MainApi.IMAGE_IP + MyProfile.Photo;
 
@@ -178,20 +180,27 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
         mlinkedin.setText(MyProfile.LinkedInProfile);
         mPosition.setText(MyProfile.Position);
 
+        if (MyProfile.HaveSharedEventWithMe) {
+            hasSharedEvents = true;
+        }
+
         if (MyProfile.IsFollowed) {
             isFollowing = true;
-//            isConnect = true;
-            mMessageButton.setVisibility(View.VISIBLE);
             mFollowButton.setText(R.string.unfollow);
-//            mConnectButton.setText(R.string.disconnect);
             mContainerLinearLayout.setVisibility(View.VISIBLE);
+//            isConnect = true;
+//            mMessageButton.setVisibility(View.VISIBLE);
+//            mConnectButton.setText(R.string.disconnect);
+
         } else {
             isFollowing = false;
-//            isConnect = false;
-            mMessageButton.setVisibility(View.GONE);
             mFollowButton.setText(R.string.follow);
-//            mConnectButton.setText(R.string.connect);
             mContainerLinearLayout.setVisibility(View.GONE);
+
+//            isConnect = false;
+//            mMessageButton.setVisibility(View.GONE);
+//            mConnectButton.setText(R.string.connect);
+
         }
 
 
@@ -204,13 +213,13 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
             mContainerLinearLayout.setVisibility(View.VISIBLE);
         } else if (MyProfile.IsConntectionRequestPending == 1) {
             isConnectPending = true;
-            mConnectButton.setText(getString(R.string.canecl_connect));
+            mConnectButton.setText(getString(R.string.pending));
         } else if (MyProfile.IsConntectionRequestPending == 2) {
-            isConnectPending = true;
+//            isConnectPending = true;
             isApprove = true;
             mConnectButton.setText(getString(R.string.approve_connect));
         } else {
-            isConnect = false;
+//            isConnect = false;
             mMessageButton.setVisibility(View.GONE);
             mConnectButton.setText(R.string.connect);
             mContainerLinearLayout.setVisibility(View.GONE);
@@ -220,51 +229,106 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
     @Override
     public void updateUiFollow(post success) {
 
-        mMessageButton.setVisibility(View.VISIBLE);
+        isFollowing = true;
+
+        if (hasSharedEvents)
+            mMessageButton.setVisibility(View.VISIBLE);
+
+
         mFollowButton.setText(R.string.unfollow);
         mContainerLinearLayout.setVisibility(View.VISIBLE);
+
         int count = Integer.parseInt(mFollowers.getText().toString());
         mFollowers.setText(String.valueOf(++count));
-
     }
 
     @Override
     public void updateUiUnFollow(post success) {
-        mMessageButton.setVisibility(View.GONE);
+        isFollowing = false;
+
+        if (!isConnect){
+            mMessageButton.setVisibility(View.GONE);
+        }
+
         mFollowButton.setText(R.string.follow);
         int count = Integer.parseInt(mFollowers.getText().toString());
         mFollowers.setText(String.valueOf(--count));
-        isFollowing = false;
 
         if (isConnect) {
             mContainerLinearLayout.setVisibility(View.VISIBLE);
         } else {
             mContainerLinearLayout.setVisibility(View.GONE);
-
         }
     }
 
     @Override
     public void updateUiConnect(post success) {
+        isFollowing = true;
+        isConnectPending = true;
+
+        if (hasSharedEvents) {
+            mMessageButton.setVisibility(View.VISIBLE);
+            mMessageButton.setText("Send Predefined");
+        }
+
+        mFollowButton.setText(R.string.unfollow);
+        mConnectButton.setText(R.string.pending);
+        mContainerLinearLayout.setVisibility(View.VISIBLE);
+
+//        int count = Integer.parseInt(mFriend.getText().toString());
+//        mFriend.setText(String.valueOf(++count));
+    }
+
+    @Override
+    public void updateUiApprove() {
+
+        isFollowing = true;
+        isConnect = true;
+        isConnectPending = false;
+        isApprove = false;
+
         mMessageButton.setVisibility(View.VISIBLE);
         mFollowButton.setText(R.string.unfollow);
-        mConnectButton.setText(R.string.canecl_connect);
-        mConnectButton.setText(R.string.canecl_connect);
+        mConnectButton.setText(R.string.disconnect);
 //        mContainerLinearLayout.setVisibility(View.VISIBLE);
 
         int count = Integer.parseInt(mFriend.getText().toString());
         mFriend.setText(String.valueOf(++count));
+
+    }
+
+    @Override
+    public void updateUiCancelApprove() {
+
+        isFollowing = false;
+        isConnect = false;
+        isConnectPending = false;
+        isApprove = false;
+
+//        mMessageButton.setVisibility(View.VISIBLE);
+//        mFollowButton.setText(R.string.unfollow);
+        mConnectButton.setText(R.string.connect);
+        mContainerLinearLayout.setVisibility(View.GONE);
+
+//        int count = Integer.parseInt(mFriend.getText().toString());
+//        mFriend.setText(String.valueOf(++count));
     }
 
     @Override
     public void updateUiDisConnect(post success) {
-//        mFollowButton.setText(R.string.follow);
+        isConnect = false;
+        isFollowing = false;
+
+        mFollowButton.setText(R.string.follow);
         mMessageButton.setVisibility(View.GONE);
         mConnectButton.setText(R.string.connect);
         mContainerLinearLayout.setVisibility(View.GONE);
 
         int count = Integer.parseInt(mFriend.getText().toString());
         mFriend.setText(String.valueOf(--count));
+
+        int count2 = Integer.parseInt(mFollowers.getText().toString());
+        mFollowers.setText(String.valueOf(--count2));
 
     }
 
@@ -290,20 +354,19 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
                     Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                 }
 
-
                 break;
             case R.id.btn_edit:
-
                 if (AppUtils.isInternetAvailable(getActivity())) {
-                    if (isApprove){
+                    if (isApprove) {
 
-                        presenter.approveRequest(mRelId, 1);
-//                        presenter.sendConnect(mRelId, PreferenceHelper.getUserId(getActivity()), "true");
-                    }else {
+                        presenter.respondRequest(PreferenceHelper.getUserId(getActivity()), mRelId, "true");
+//                        presenter.approveRequest(mRelId, 1);
+                    } else {
                         if (isConnect) {
 //                            isConnect = false;
-//                            presenter.sendConnect(mRelId, PreferenceHelper.getUserId(getActivity()), "false");
+                            presenter.sendConnect(mRelId, PreferenceHelper.getUserId(getActivity()), "false");
                         } else if (isConnectPending) {
+                            Log.e("Connect", "Request pending , No Action");
 //                            isConnectPending = false;
 //                            presenter.sendConnect(mRelId, PreferenceHelper.getUserId(getActivity()), "false");
                         } else {
@@ -319,14 +382,14 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
 
                 break;
             case R.id.btn_message:
-//                if (isConnect && myProfile.HaveSharedEventWithMe){
-//                    openPredifinedActivity();
-//                }else
+
                 if (AppUtils.isInternetAvailable(getActivity())) {
-                    if (isFollowing && myProfile.HaveSharedEventWithMe) {
-                        openPredifinedActivity();
-                    } else if (isConnect) {
+                    if (isConnect) {
                         openChatActivity();
+                    } else if (isFollowing && myProfile.HaveSharedEventWithMe) {
+                        openPredifinedActivity();
+                    } else {
+                        Log.e("Message", "Not connected , neither dhared Events");
                     }
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_SHORT).show();

@@ -211,6 +211,16 @@ public class MemberProfile extends AppCompatActivity implements ProfileView, Vie
     }
 
     @Override
+    public void updateUiApprove() {
+
+    }
+
+    @Override
+    public void updateUiCancelApprove() {
+
+    }
+
+    @Override
     public void updateUiDisConnect(post success) {
         mFollowButton.setText(R.string.follow);
         mMessageButton.setEnabled(false);

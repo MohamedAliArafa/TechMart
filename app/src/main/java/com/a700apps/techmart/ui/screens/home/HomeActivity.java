@@ -448,6 +448,11 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
             finish();
         }
 
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof EditProfileFragment &&
+                Globals.CAME_FROM_LIKE_TO_GROUP) {
+            finish();
+        }
+
         if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof GroupsTimeLineFragment) {
             openFragment(MyGroupsListFragment.class, null);
         } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof TimelineFragment) {
@@ -474,9 +479,14 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof BoardMemberTimelineFragment) {
             openFragment(ManageBoardGroupFragment.class, null);
         } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof MemberProfileFragment) {
-            Bundle bundle = new Bundle();
-            bundle.putInt("string_key", Globals.GROUP_ID);
-            openFragment(GroupFragment.class, bundle);
+            if (Globals.CAME_FROM_LIKE_TO_GROUP){
+                finish();
+            }else {
+                Bundle bundle = new Bundle();
+                bundle.putInt("string_key", Globals.GROUP_ID);
+                openFragment(GroupFragment.class, bundle);
+            }
+
         } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof RelativeEventFragment) {
             Bundle bundle = new Bundle();
             bundle.putInt("GroupId", Globals.groupId);

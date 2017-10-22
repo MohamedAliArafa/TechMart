@@ -217,6 +217,16 @@ public class ViewUserProfile extends Fragment implements ProfileView, View.OnCli
     }
 
     @Override
+    public void updateUiApprove() {
+
+    }
+
+    @Override
+    public void updateUiCancelApprove() {
+
+    }
+
+    @Override
     public void updateUiDisConnect(post success) {
         mFollowButton.setText(R.string.follow);
         mMessageButton.setVisibility(View.GONE);

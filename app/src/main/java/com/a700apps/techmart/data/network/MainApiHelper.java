@@ -426,4 +426,14 @@ public class MainApiHelper {
     }
 
 
+
+    public static JSONObject respondFriendRequest(String userId , String relativeId , String connect) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("RelativeID", relativeId);
+        jsonObject.put("UserID", userId);
+        jsonObject.put("Connect", connect);
+        return jsonObject;
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package com.a700apps.techmart.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,13 +22,19 @@ public class AutoCompleteGroupAdapter extends ArrayAdapter<UserGroup> {
     private List<UserGroup> itemsAll;
     private List<UserGroup> suggestions;
     private int viewResourceId;
+    RecyclerView recyclerView;
+    Context context;
 
-    public AutoCompleteGroupAdapter(Context context, int viewResourceId, List<UserGroup> items) {
+
+    public AutoCompleteGroupAdapter(Context context, int viewResourceId, List<UserGroup> items , RecyclerView recyclerView) {
         super(context, viewResourceId, items);
+        this.context = context;
         this.items = items;
         this.itemsAll = items;
         this.suggestions = new ArrayList<UserGroup>();
         this.viewResourceId = viewResourceId;
+        this.recyclerView  =recyclerView;
+
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -71,25 +78,27 @@ public class AutoCompleteGroupAdapter extends ArrayAdapter<UserGroup> {
                 }
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = suggestions;
-                filterResults.count = suggestions.size();
+//                filterResults.count = suggestions.size();
+                filterResults.count = 0;
                 return filterResults;
             } else {
                 return new FilterResults();
             }
         }
+
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             ArrayList<UserGroup> filteredList = (ArrayList<UserGroup>) results.values;
-            if(results != null && results.count > 0) {
-                clear();
-                for (UserGroup c : filteredList) {
-                    add(c);
-                }
+            if(results != null ) {//&& results.count > 0
+//                clear();
+//                for (UserGroup c : filteredList) {
+//                    add(c);
+//                }
+                recyclerView.setAdapter(new GroupsAdapter(context, filteredList));
                 notifyDataSetChanged();
             }
         }
     };
-
 }
 
 

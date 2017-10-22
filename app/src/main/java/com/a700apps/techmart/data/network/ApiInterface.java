@@ -154,8 +154,6 @@ public interface ApiInterface {
     @POST("TimeLine/GetRelativeEventByUserID")
     Observable<TimeLineData> GetRelativeEventByUserID(@Body RequestBody body);
 
-
-
     @POST("Group/GetRelativeGroupByUserID")
     Observable<UserGroupData> GetRelativeGroupByUserID(@Body RequestBody body);
 
@@ -215,6 +213,8 @@ public interface ApiInterface {
     @POST("Group/GetGroupStatistics")
     Observable<StatisticModel> getGroupStatistics(@Body RequestBody body);
 
+    @POST("user/RespondFriendRequest")
+    Observable<PostData> respondFriendRequest(@Body RequestBody body);
 }
 
 

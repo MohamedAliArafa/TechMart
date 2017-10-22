@@ -23,6 +23,7 @@ import java.util.List;
 public class AutoCompleteMessagesAdapter extends ArrayAdapter<MyConnectionList.ResultEntity> {
     Context context;
     int resource;
+
     List<MyConnectionList.ResultEntity> items, tempItems, suggestions;
 
     public AutoCompleteMessagesAdapter(Context context, int resource, List<MyConnectionList.ResultEntity> items) {

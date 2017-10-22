@@ -70,12 +70,13 @@ public class PostActivity extends AppCompatActivity implements PostView {
     Dialog dialog;
     int desired_string;
     File file;
+
     public AVLoadingIndicatorView indicatorView;
     private static final int PERMISSION_REQUEST_CODE = 786;
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 101;
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     ImageView imageView;
-
+    private static final int Permission_storage_code = 787;
     ProgressDialog progressDialog;
 
     Dialog dialogsLoading;
@@ -146,42 +147,7 @@ public class PostActivity extends AppCompatActivity implements PostView {
 
         return isValid;
     }
-    void selectImage() {
-        if (AppConst.checkPermission(PostActivity.this)) {
-            selectedImagePath = null;
-            selectedImageSize = 0;
-            // select a file
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent,
-                    "Select Picture"), SELECT_PICTURE);
-        } else {
-            AppConst.requestPermission(PostActivity.this, PERMISSION_REQUEST_CODE);
-        }
-
-    }
-
-    private void openChooseMethodDialog() {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_choose_media_file);
-        dialog.findViewById(R.id.tv_gallery).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectImage();
-                dialog.dismiss();
-            }
-        });
-        dialog.findViewById(R.id.tv_camera).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                captureImage();
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
+    
 
     void openDialog(final EditText title, final EditText Desc) {
         dialog = new Dialog(this);
@@ -346,6 +312,77 @@ public class PostActivity extends AppCompatActivity implements PostView {
             }
         }
     }
+    
+    
+
+    // Uploading Image/Video
+    private void uploadFile(final EditText title, final EditText Desc, final boolean check) {
+//        progressDialog.show();
+        dialogsLoading = new loadingDialog().showDialog(this);
+        // Map is used to multipart the file using okhttp3.RequestBody
+        File file = new File(selectedImagePath);
+
+        // Parsing any Media type file
+        RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), file);
+        MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
+        RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), file.getName());
+
+        ApiInterface getResponse = ApiClient.getClient().create(ApiInterface.class);
+        Call<ServerResponse> call = getResponse.uploadFile(fileToUpload, filename);
+        call.enqueue(new Callback<ServerResponse>() {
+            @Override
+            public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+                ServerResponse serverResponse = response.body();
+                if (serverResponse != null) {
+                    if (serverResponse.postData.success) {
+                        mImagePath = serverResponse.postData.message;
+                        if (check) {
+                            presenter.sendPost(desired_string, PreferenceHelper.getUserId(PostActivity.this),
+                                    title.getText().toString(), Desc.getText().toString(), mImagePath, "", "", true, PostActivity.this);
+
+                        } else {
+                            presenter.sendPost(desired_string, PreferenceHelper.getUserId(PostActivity.this),
+                                    title.getText().toString(), Desc.getText().toString(), mImagePath, "", "", false, PostActivity.this);
+                        }
+
+
+                    }
+
+                } else {
+                    assert serverResponse != null;
+                    Log.v("Response", serverResponse.toString());
+                }
+//                progressDialog.dismiss();
+//                dialogsLoading.dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<ServerResponse> call, Throwable t) {
+//                progressDialog.dismiss();
+                dialogsLoading.dismiss();
+                Toast.makeText(PostActivity.this, getString(R.string.check_internet), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        switch (requestCode) {
+            case CAMERA_CAPTURE_IMAGE_REQUEST_CODE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    captureImage();
+                } else {
+                    Toast.makeText(this, "permission denied", Toast.LENGTH_SHORT).show();
+                }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -359,13 +396,6 @@ public class PostActivity extends AppCompatActivity implements PostView {
         cursor.moveToFirst();
         int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
         return cursor.getString(idx);
-    }
-
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
-        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -466,58 +496,66 @@ public class PostActivity extends AppCompatActivity implements PostView {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
 
-    // Uploading Image/Video
-    private void uploadFile(final EditText title, final EditText Desc, final boolean check) {
-//        progressDialog.show();
-        dialogsLoading = new loadingDialog().showDialog(this);
-        // Map is used to multipart the file using okhttp3.RequestBody
-        File file = new File(selectedImagePath);
 
-        // Parsing any Media type file
-        RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), file);
-        MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
-        RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), file.getName());
-
-        ApiInterface getResponse = ApiClient.getClient().create(ApiInterface.class);
-        Call<ServerResponse> call = getResponse.uploadFile(fileToUpload, filename);
-        call.enqueue(new Callback<ServerResponse>() {
+    private void openChooseMethodDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_choose_media_file);
+        dialog.findViewById(R.id.tv_gallery).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
-                ServerResponse serverResponse = response.body();
-                if (serverResponse != null) {
-                    if (serverResponse.postData.success) {
-                        mImagePath = serverResponse.postData.message;
-                        if (check) {
-                            presenter.sendPost(desired_string, PreferenceHelper.getUserId(PostActivity.this),
-                                    title.getText().toString(), Desc.getText().toString(), mImagePath, "", "", true, PostActivity.this);
-
-                        } else {
-                            presenter.sendPost(desired_string, PreferenceHelper.getUserId(PostActivity.this),
-                                    title.getText().toString(), Desc.getText().toString(), mImagePath, "", "", false, PostActivity.this);
-                        }
-
-
-                    }
-
-                } else {
-                    assert serverResponse != null;
-                    Log.v("Response", serverResponse.toString());
-                }
-//                progressDialog.dismiss();
-//                dialogsLoading.dismiss();
-            }
-
-            @Override
-            public void onFailure(Call<ServerResponse> call, Throwable t) {
-//                progressDialog.dismiss();
-                dialogsLoading.dismiss();
-                Toast.makeText(PostActivity.this, getString(R.string.check_internet), Toast.LENGTH_LONG).show();
+            public void onClick(View view) {
+                selectImage();
+                dialog.dismiss();
             }
         });
+        dialog.findViewById(R.id.tv_camera).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                captureImage();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
-    private boolean checkPermission() {
-        int result = ContextCompat.checkSelfPermission(PostActivity.this, android.Manifest.permission.CAMERA);
+    void selectImage() {
+        if (AppConst.checkPermission(PostActivity.this)) {
+            selectedImagePath = null;
+            selectedImageSize = 0;
+            // select a file
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent,
+                    "Select Picture"), SELECT_PICTURE);
+        } else {
+            AppConst.requestPermission(PostActivity.this, PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    void captureImage() {
+        if (checkPermission(android.Manifest.permission.CAMERA)) {
+//            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//            startActivityForResult(cameraIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+            if (AppConst.checkPermission(PostActivity.this)) {
+                dispatchTakePictureIntent();
+            } else {
+                AppConst.requestPermission(PostActivity.this, Permission_storage_code);
+            }
+
+        } else {
+            requestPermission(android.Manifest.permission.CAMERA);
+        }
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+        }
+    }
+    private boolean checkPermission(String permission) {//android.Manifest.permission.CAMERA
+        int result = ContextCompat.checkSelfPermission(PostActivity.this, permission);
         if (result == PackageManager.PERMISSION_GRANTED) {
             return true;
         } else {
@@ -525,37 +563,12 @@ public class PostActivity extends AppCompatActivity implements PostView {
         }
     }
 
-    private void requestPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(PostActivity.this, android.Manifest.permission.CAMERA)) {
-            Toast.makeText(PostActivity.this, "Camera permission allows us take images throught camera. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
+    private void requestPermission(String permission) {//android.Manifest.permission.CAMERA
+        if (ActivityCompat.shouldShowRequestPermissionRationale(PostActivity.this, permission)) {
+            Toast.makeText(PostActivity.this, "Camera permission allows us take images throught camera. " +
+                    "Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
         } else {
-            ActivityCompat.requestPermissions(PostActivity.this, new String[]{android.Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
+            ActivityCompat.requestPermissions(PostActivity.this, new String[]{permission}, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
         }
-    }
-
-    void captureImage() {
-        if (checkPermission()) {
-//            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//            startActivityForResult(cameraIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
-
-            dispatchTakePictureIntent();
-        } else {
-            requestPermission();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
-        switch (requestCode) {
-            case CAMERA_CAPTURE_IMAGE_REQUEST_CODE:
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    captureImage();
-                } else {
-                    Toast.makeText(this, "permission denied", Toast.LENGTH_SHORT).show();
-                }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

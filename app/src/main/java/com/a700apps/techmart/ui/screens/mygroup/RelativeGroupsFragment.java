@@ -132,14 +132,14 @@ public class RelativeGroupsFragment extends Fragment implements GroupView {
     public void updateUi(UserGroupData data) {
         rv.setAdapter(new GroupsAdapter(getActivity(), data.userGroup));
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        searchAutoCompleteTextView.setAdapter(new AutoCompleteGroupAdapter(getActivity() , R.layout.custom_text_view , data.userGroup));
+        searchAutoCompleteTextView.setAdapter(new AutoCompleteGroupAdapter(getActivity() , R.layout.custom_text_view , data.userGroup , rv));
     }
 
     @Override
     public void updateRelativeUi(UserGroupData data) {
         rv.setAdapter(new RelativeGroupAadpter(getActivity(), data.userGroup));
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        searchAutoCompleteTextView.setAdapter(new AutoCompleteGroupAdapter(getActivity() , R.layout.custom_text_view , data.userGroup));
+        searchAutoCompleteTextView.setAdapter(new AutoCompleteGroupAdapter(getActivity() , R.layout.custom_text_view , data.userGroup ,rv));
     }
 }
 

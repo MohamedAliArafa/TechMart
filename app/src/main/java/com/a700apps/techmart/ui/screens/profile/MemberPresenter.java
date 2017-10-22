@@ -20,12 +20,12 @@ import org.json.JSONObject;
  * Created by samir salah on 9/13/2017.
  */
 
-public class MemberPresenter extends MainPresenter<ProfileView>  {
+public class MemberPresenter extends MainPresenter<ProfileView> {
 
 
     Context mContext;
 
-    void profileData(String UserId,String RelId,int GroupId, Context context) {
+    void profileData(String UserId, String RelId, int GroupId, Context context) {
 
         mContext = context;
 //        view.showLoadingProgress();
@@ -33,7 +33,7 @@ public class MemberPresenter extends MainPresenter<ProfileView>  {
 
 
         try {
-            JSONObject registerBody = MainApiHelper.getMemberProfile(UserId,RelId,GroupId);
+            JSONObject registerBody = MainApiHelper.getMemberProfile(UserId, RelId, GroupId);
             MainApi.getMyProfileMember(registerBody, new NetworkResponseListener<MyProfileData>() {
                 @Override
                 public void networkOperationSuccess(NetworkResponse<MyProfileData> networkResponse) {
@@ -60,11 +60,11 @@ public class MemberPresenter extends MainPresenter<ProfileView>  {
 
     }
 
-    void sendFollow(String RelativeID, String UserID,final String follow){
+    void sendFollow(String RelativeID, String UserID, final String follow) {
         view.showLoadingProgress();
 
         try {
-            JSONObject registerBody = MainApiHelper.follow(RelativeID,UserID,follow);
+            JSONObject registerBody = MainApiHelper.follow(RelativeID, UserID, follow);
             MainApi.sendFollow(registerBody, new NetworkResponseListener<PostData>() {
                 @Override
                 public void networkOperationSuccess(NetworkResponse<PostData> networkResponse) {
@@ -75,14 +75,14 @@ public class MemberPresenter extends MainPresenter<ProfileView>  {
 
                     if (follow.equals("true")) {
                         view.updateUiFollow(userNetworkData.postData);
-                    }else {
+                    } else {
                         view.updateUiUnFollow(userNetworkData.postData);
                     }
                 }
 
                 @Override
                 public void networkOperationFail(Throwable throwable) {
-                    Log.e("error",throwable.getMessage());
+                    Log.e("error", throwable.getMessage());
                 }
             });
         } catch (JSONException e) {
@@ -91,11 +91,11 @@ public class MemberPresenter extends MainPresenter<ProfileView>  {
         }
     }
 
-    void sendConnect(String RelativeID, String UserID, final String connect){
+    void sendConnect(String RelativeID, String UserID, final String connect) {
         view.showLoadingProgress();
 
         try {
-            JSONObject registerBody = MainApiHelper.connect(RelativeID,UserID,connect);
+            JSONObject registerBody = MainApiHelper.connect(RelativeID, UserID, connect);
             MainApi.sendConnect(registerBody, new NetworkResponseListener<PostData>() {
                 @Override
                 public void networkOperationSuccess(NetworkResponse<PostData> networkResponse) {
@@ -104,9 +104,9 @@ public class MemberPresenter extends MainPresenter<ProfileView>  {
                     PostData userNetworkData = (PostData) networkResponse.data;
                     int errorCode = userNetworkData.ISResultHasData;
 
-                    if (connect .equals("true")) {
+                    if (connect.equals("true")) {
                         view.updateUiConnect(userNetworkData.postData);
-                    }else {
+                    } else {
                         view.updateUiDisConnect(userNetworkData.postData);
                     }
                 }
@@ -123,11 +123,11 @@ public class MemberPresenter extends MainPresenter<ProfileView>  {
     }
 
 
-    void approveRequest(String userid, int requestid){
+    void approveRequest(String userid, int requestid) {
         view.showLoadingProgress();
 
         try {
-            JSONObject registerBody = MainApiHelper.approveFriendRequest(userid,requestid);
+            JSONObject registerBody = MainApiHelper.approveFriendRequest(userid, requestid);
             MainApi.approveFriendRequest(registerBody, new NetworkResponseListener<PostData>() {
                 @Override
                 public void networkOperationSuccess(NetworkResponse<PostData> networkResponse) {
@@ -136,8 +136,41 @@ public class MemberPresenter extends MainPresenter<ProfileView>  {
                     PostData userNetworkData = (PostData) networkResponse.data;
                     int errorCode = userNetworkData.ISResultHasData;
 
-                    if (errorCode==1) {
+                    if (errorCode == 1) {
                         view.updateUiConnect(userNetworkData.postData);
+                    }
+                }
+
+                @Override
+                public void networkOperationFail(Throwable throwable) {
+
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+            view.dismissLoadingProgress();
+        }
+    }
+
+
+    void respondRequest(String userid, String relatveId, final String connect) {
+        view.showLoadingProgress();
+
+        try {
+            JSONObject registerBody = MainApiHelper.respondFriendRequest(userid, relatveId, connect);
+            MainApi.respondFriendRequest(registerBody, new NetworkResponseListener<PostData>() {
+                @Override
+                public void networkOperationSuccess(NetworkResponse<PostData> networkResponse) {
+                    if (isDetachView()) return;
+                    view.dismissLoadingProgress();
+                    PostData userNetworkData = (PostData) networkResponse.data;
+                    int errorCode = userNetworkData.ISResultHasData;
+
+                    if (errorCode == 1) {
+                        if (connect.equals("true"))
+                            view.updateUiApprove();
+                        else
+                            view.updateUiCancelApprove();
                     }
                 }
 

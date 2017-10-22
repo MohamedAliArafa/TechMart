@@ -134,6 +134,16 @@ public class EditProfileActivity extends AppCompatActivity implements ProfileVie
     }
 
     @Override
+    public void updateUiApprove() {
+
+    }
+
+    @Override
+    public void updateUiCancelApprove() {
+
+    }
+
+    @Override
     public void updateUiDisConnect(post success) {
 
     }

@@ -68,6 +68,9 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
 
     private static final int PERMISSION_REQUEST_CODE = 786;
     private static final int Permission_storage_code = 787;
+    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+
+
     EditText mFullNameEditText, mPhoneNumberEditText, mEmailEditText, mPasswordEditText, mCompanyEditText, mPositionEditText;
     private static final int SELECT_PICTURE = 1;
     private long selectedImageSize;
@@ -82,7 +85,7 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
     private int mRequestCode;
     private static final int SIGN_IN_CODE = 0;
     ImageView mLikedinImageView, mSignInImageView;
-    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+
     Dialog dialogsLoading;
     Button SignButton;
 

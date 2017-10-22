@@ -90,7 +90,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
 
-    <AutoCompleteTextView
+    <EditText
         android:id="@+id/auto_complete_text"
         android:layout_width="0dp"
         android:layout_height="30dp"

@@ -7,19 +7,24 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.AutoCompleteMessagesAdapter;
+import com.a700apps.techmart.adapter.GroupsAdapter;
 import com.a700apps.techmart.data.model.AllMessageList;
 import com.a700apps.techmart.data.model.FriendMessage;
 import com.a700apps.techmart.data.model.MyConnectionList;
+import com.a700apps.techmart.data.model.UserGroup;
 import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.ui.screens.message.ChatActivity;
 import com.a700apps.techmart.ui.screens.message.MessagePresenter;
@@ -30,15 +35,18 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.R.attr.data;
+
 public class NewChatActivity extends AppCompatActivity implements MessageView {
     private MessagePresenter presenter;
     private RecyclerView connectionList;
-    private AutoCompleteTextView autoCompleteText;
+    private EditText autoCompleteText;
     private ArrayList<String> namesArrayList;
     private List<MyConnectionList.ResultEntity> connectionListResult;
     private ArrayList<String> UserIDsArrayList;
     private ImageView mBackImageView;
     private TextView mCancel;
+    private List<MyConnectionList.ResultEntity> suggestions = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +63,8 @@ public class NewChatActivity extends AppCompatActivity implements MessageView {
         namesArrayList = new ArrayList<>();
         UserIDsArrayList = new ArrayList<>();
         connectionList = (RecyclerView) findViewById(R.id.recyclerView);
-        autoCompleteText = (AutoCompleteTextView) findViewById(R.id.auto_complete_text);
-        autoCompleteText.setThreshold(1);
+        autoCompleteText = (EditText) findViewById(R.id.auto_complete_text);
+//        autoCompleteText.setThreshold(1);
 
         mCancel = (TextView) findViewById(R.id.tv_cancel);
         mBackImageView = (ImageView) findViewById(R.id.iv_back);
@@ -102,27 +110,55 @@ public class NewChatActivity extends AppCompatActivity implements MessageView {
     }
 
     @Override
-    public void fillConectionList(List<MyConnectionList.ResultEntity> responser) {
+    public void fillConectionList(final List<MyConnectionList.ResultEntity> responser) {
         MessagesAdapter messagesAdapter = new MessagesAdapter(this, responser);
         connectionListResult = responser;
         connectionList.setAdapter(messagesAdapter);
+
         for (int i = 0; i < responser.size(); i++) {
             namesArrayList.add(responser.get(i).getName());
             UserIDsArrayList.add(responser.get(i).getUserID());
         }
-        autoCompleteText.setAdapter(new AutoCompleteMessagesAdapter(this, R.layout.notif_item_group_approved, responser));
-        autoCompleteText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                MyConnectionList.ResultEntity resultEntity = (MyConnectionList.ResultEntity) adapterView.getItemAtPosition(i);
-                Intent intent = new Intent(NewChatActivity.this, ChatActivity.class);
-                intent.putExtra("RelativeID", resultEntity.getUserID());
-                intent.putExtra("ReciverName", resultEntity.getName());
-                intent.putExtra("ReciverPhoto", resultEntity.getPhoto());
-                startActivity(intent);
+
+        autoCompleteText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                suggestions.clear();
+                for (int i = 0; i < responser.size(); i++) {
+                    if (responser.get(i).getName().toLowerCase().startsWith(s.toString().toLowerCase())) {
+                        suggestions.add(responser.get(i));
+                    }
+                }
+//                if (suggestions.size() > 0)
+
+                connectionList.setAdapter(new MessagesAdapter(NewChatActivity.this, suggestions));
             }
         });
+//        autoCompleteText.setAdapter(new AutoCompleteMessagesAdapter(this, R.layout.notif_item_group_approved, responser));
+//        autoCompleteText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//
+//                MyConnectionList.ResultEntity resultEntity = (MyConnectionList.ResultEntity) adapterView.getItemAtPosition(i);
+//                Intent intent = new Intent(NewChatActivity.this, ChatActivity.class);
+//                intent.putExtra("RelativeID", resultEntity.getUserID());
+//                intent.putExtra("ReciverName", resultEntity.getName());
+//                intent.putExtra("ReciverPhoto", resultEntity.getPhoto());
+//                startActivity(intent);
+//            }
+//        });
     }
 
 

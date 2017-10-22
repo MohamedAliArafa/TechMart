@@ -130,14 +130,8 @@
                         android:src="@drawable/ic_arrow_dropdpwn" />
 
                 </LinearLayout>
-
-
             </LinearLayout>
-
-
         </RelativeLayout>
-
-
     </android.support.v7.widget.CardView>
 
 

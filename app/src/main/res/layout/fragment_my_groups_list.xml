@@ -94,7 +94,7 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_side_menu" />
 
-        <AutoCompleteTextView
+        <EditText
             android:id="@+id/edt_search"
             android:layout_width="wrap_content"
             android:layout_height="36dp"

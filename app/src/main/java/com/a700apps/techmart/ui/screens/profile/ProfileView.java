@@ -20,6 +20,8 @@ public interface ProfileView {
     void updateUiFollow(post success);
     void updateUiUnFollow(post success);
     void updateUiConnect(post success);
+    void updateUiApprove();
+    void updateUiCancelApprove();
     void updateUiDisConnect(post success);
     void updateUiUpdate(post success);
 

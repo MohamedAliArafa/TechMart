@@ -15,6 +15,7 @@ public class Globals {
     public static String userId = "";
     public static boolean CAME_FROM_NOTIFICATION_TO_GROUP = false;
     public static boolean CAME_FROM_MANAGE_TO_GROUP = false;
+    public static boolean CAME_FROM_LIKE_TO_GROUP = false;
 
 
     public static int SELECTED_ID = -1;

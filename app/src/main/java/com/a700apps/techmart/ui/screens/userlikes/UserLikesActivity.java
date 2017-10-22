@@ -23,6 +23,7 @@ import com.a700apps.techmart.ui.screens.grouptimeline.GroupsTimLineActivity;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.profile.MemberProfile;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
 
@@ -112,6 +113,7 @@ public class UserLikesActivity extends AppCompatActivity implements UserLikeView
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, HomeActivity.class);
+                    Globals.CAME_FROM_LIKE_TO_GROUP = true;
                     intent.putExtra("profileHolder", timeLineItem.UserID);
                     context.startActivity(intent);
                 }

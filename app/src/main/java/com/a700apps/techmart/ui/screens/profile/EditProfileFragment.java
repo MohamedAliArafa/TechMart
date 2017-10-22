@@ -258,6 +258,16 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
     }
 
     @Override
+    public void updateUiApprove() {
+
+    }
+
+    @Override
+    public void updateUiCancelApprove() {
+
+    }
+
+    @Override
     public void updateUiDisConnect(post success) {
 
     }
