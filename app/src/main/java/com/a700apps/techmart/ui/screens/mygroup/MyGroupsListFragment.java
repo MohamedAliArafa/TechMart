@@ -136,7 +136,6 @@ public class MyGroupsListFragment extends Fragment implements GroupView {
                         suggestions.add(data.userGroup.get(i));
                     }
                 }
-//                if (suggestions.size() > 0)
                     rv.setAdapter(new GroupsAdapter(getActivity(), suggestions));
             }
         });

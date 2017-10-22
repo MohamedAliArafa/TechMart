@@ -141,7 +141,6 @@ public class NewChatActivity extends AppCompatActivity implements MessageView {
                         suggestions.add(responser.get(i));
                     }
                 }
-//                if (suggestions.size() > 0)
 
                 connectionList.setAdapter(new MessagesAdapter(NewChatActivity.this, suggestions));
             }

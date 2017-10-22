@@ -97,7 +97,7 @@ public class PreferenceHelper {
 
     public static boolean getNotificationStatus(Context context){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return sharedPreferences.getBoolean(PrefsKeys.NOTIFICATION_KEY , false);
+        return sharedPreferences.getBoolean(PrefsKeys.NOTIFICATION_KEY , true);
     }
 
 

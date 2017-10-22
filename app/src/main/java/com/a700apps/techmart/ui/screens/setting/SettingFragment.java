@@ -1,9 +1,11 @@
 package com.a700apps.techmart.ui.screens.setting;
 
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,14 +15,19 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -36,9 +43,12 @@ import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.ui.screens.creatEvent.CreatEventActivity;
 import com.a700apps.techmart.ui.screens.creatpost.PostActivity;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
+import com.a700apps.techmart.ui.screens.message.ChatActivity;
+import com.a700apps.techmart.ui.screens.register.RegisterActivity;
 import com.a700apps.techmart.utils.ApiClient;
 import com.a700apps.techmart.utils.AppConst;
 import com.a700apps.techmart.utils.AppUtils;
+import com.a700apps.techmart.utils.ImageDetailsActivity;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.a700apps.techmart.utils.Validator;
 import com.a700apps.techmart.utils.loadingDialog;
@@ -47,6 +57,7 @@ import com.suke.widget.SwitchButton;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
 
 import butterknife.BindViews;
 import butterknife.ButterKnife;
@@ -70,13 +81,18 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
     SettingPresenter presenter;
 
     String selectedImagePath;
-    private final int SELECT_PICTURE_CHANGE = 19;
-    private final int PERMISSION_REQUEST_CODE = 10;
-    File selectedFile;
+    //    private final int SELECT_PICTURE_CHANGE = 19;
+//    File selectedFile;
     EditText oldPasswordEditText, newPasswordEditText, repeatPasswordEditText;
-    Button save , bt_cancel;
+    Button save, bt_cancel;
     TextView tv_change;
     Dialog dialogsLoading;
+
+
+    private static final int PERMISSION_REQUEST_CODE = 786;
+    private static final int Permission_storage_code = 787;
+    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+    private static final int SELECT_PICTURE = 1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -149,7 +165,7 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
     public void changeNotificationStatus(String userId, boolean enabled) {
 
         if (AppUtils.isInternetAvailable(getActivity())) {
-            Toast.makeText(getActivity(), "change to : " + enabled, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "change to : " + enabled, Toast.LENGTH_SHORT).show();
             presenter.ChangeNotificationStatus(userId, enabled);
         } else {
             showErrorDialog(R.string.check_internet);
@@ -166,7 +182,7 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
         if (newPasswordEditText.getText() == null || newPasswordEditText.getText().toString().trim().equals("")) {
             newPasswordEditText.setError("new password required");
             return;
-        }else if (!Validator.validPasswordLength(newPasswordEditText.getText().toString().trim())){
+        } else if (!Validator.validPasswordLength(newPasswordEditText.getText().toString().trim())) {
             newPasswordEditText.setError(getString(R.string.invalid_password));
             return;
         }
@@ -198,14 +214,21 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
 
     @Override
     public void showToast(String msg) {
-        Toast.makeText(getActivity(), ""+msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "" + msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void saveNewPic(String name) {
         User user = PreferenceHelper.getSavedUser(getActivity());
         user.Photo = name;
-        PreferenceHelper.saveUser(getActivity() , user);
+        PreferenceHelper.saveUser(getActivity(), user);
+    }
+
+    @Override
+    public void emptyViews() {
+        oldPasswordEditText.setText("");
+        newPasswordEditText.setText("");
+        repeatPasswordEditText.setText("");
     }
 
     @Override
@@ -223,20 +246,23 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
         switch (view.getId()) {
             case R.id.bt_save:
 
-                if (AppUtils.isInternetAvailable(getActivity())){
+                if (AppUtils.isInternetAvailable(getActivity())) {
                     changeLoginPassword();
-                }else {
+                } else {
                     showToast(getString(R.string.check_internet));
                 }
 
                 break;
 
             case R.id.iv_user_nav_image:
-                openSelectIntent();
+                Intent intentDetails = new Intent(getActivity(), ImageDetailsActivity.class);
+                intentDetails.putExtra("ImageUrl", MainApi.IMAGE_IP + PreferenceHelper.getSavedUser(getActivity()).Photo);
+                startActivity(intentDetails);
+
                 break;
             case R.id.bt_cancel:
 
-                if (selectedImagePath!=null && !selectedImagePath.equals("")){
+                if (selectedImagePath != null && !selectedImagePath.equals("")) {
                     mProfileImageView.setImageBitmap(null);
                 }
 
@@ -247,62 +273,136 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
 
             case R.id.tv_change:
 //                presenter.ChangeProfilePicture(PreferenceHelper.getUserId(getActivity()), selectedFile);
+//                openSelectIntent();
 
-                if (AppUtils.isInternetAvailable(getActivity())){
-                    uploadFile(selectedImagePath);
-                }else {
-                    showToast(getString(R.string.check_internet));
-                }
+                openChooseMethodDialog();
+
                 break;
         }
     }
 
 
-    void openSelectIntent() {
-        if (Build.VERSION.SDK_INT >= 21) {
-            if (AppConst.checkPermission(getActivity())) {
-                selectedImagePath = null;
-                // select a file
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent,
-                        "Select Picture"), SELECT_PICTURE_CHANGE);
-
-            } else {
-                AppConst.requestPermission(getActivity(), PERMISSION_REQUEST_CODE);
-            }
-        } else {
-            selectedImagePath = null;
-            // select a file
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent,
-                    "Select Picture"), SELECT_PICTURE_CHANGE);
-        }
-    }
-
-
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            if (requestCode == SELECT_PICTURE_CHANGE) {
-
+            if (requestCode == SELECT_PICTURE) {
+                int dataSize = 0;
+                File f = null;
                 Uri selectedImageUri = data.getData();
-                selectedImagePath = getPathFromURI(getActivity(), selectedImageUri);
-                Glide.with(this).load(bitmapToByte(BitmapFactory.decodeFile(selectedImagePath))).asBitmap().into(mProfileImageView);
-                try {
-                    selectedFile = new File(selectedImagePath);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (selectedImageUri == null) {
+                    Toast.makeText(getActivity(), "Sorry .. please select another image", Toast.LENGTH_SHORT).show();
+                    return;
                 }
+                String scheme = selectedImageUri.getScheme();
+                selectedImagePath = getPathFromURI(getActivity(), selectedImageUri);
+
+                Log.e("ImagePath", "-->" + selectedImagePath);
+
+                if (scheme.equals(ContentResolver.SCHEME_CONTENT)) {
+                    try {
+                        InputStream fileInputStream = getActivity()
+                                .getContentResolver().openInputStream(selectedImageUri);
+                        dataSize = fileInputStream.available();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else if (scheme.equals(ContentResolver.SCHEME_FILE)) {
+                    String path = selectedImagePath;
+                }
+
+                Glide.with(this).load(bitmapToByte(BitmapFactory.decodeFile(selectedImagePath))).asBitmap().into(mProfileImageView);
+                if (AppUtils.isInternetAvailable(getActivity())) {
+                    uploadFile(selectedImagePath);
+                } else {
+                    showToast(getString(R.string.check_internet));
+                }
+
+            } else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
+
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+//                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                Uri tempUri = getImageUri(getActivity(), imageBitmap);
+
+                // CALL THIS METHOD TO GET THE ACTUAL PATH
+                selectedImagePath = getRealPathFromURI(tempUri);
+                Glide.with(this).load(bitmapToByte(BitmapFactory.decodeFile(selectedImagePath))).asBitmap().into(mProfileImageView);
+                if (AppUtils.isInternetAvailable(getActivity())) {
+                    uploadFile(selectedImagePath);
+                } else {
+                    showToast(getString(R.string.check_internet));
+                }
+
             }
         }
     }
 
+
+    private byte[] bitmapToByte(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
+    }
+
+    private void uploadFile(String filePath) {
+        // Map is used to multipart the file using okhttp3.RequestBody
+        if (filePath != null && !filePath.equals("")) {
+            showLoadingProgress();
+            File file = new File(filePath);
+
+            // Parsing any Media type file
+            RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), file);
+            MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
+            RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), file.getName());
+
+            ApiInterface getResponse = ApiClient.getClient().create(ApiInterface.class);
+            Call<ServerResponse> call = getResponse.uploadFile(fileToUpload, filename);
+            call.enqueue(new Callback<ServerResponse>() {
+                @Override
+                public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+                    ServerResponse serverResponse = response.body();
+                    Log.e("Responce", serverResponse.postData.message);
+                    if (serverResponse != null) {
+                        if (serverResponse.postData.success) {
+                            dismissLoadingProgress();
+                            String mImagePath = serverResponse.postData.message;
+                            presenter.ChangeProfilePicture(PreferenceHelper.getUserId(getActivity()), mImagePath);
+                        }
+                    } else {
+                        assert serverResponse != null;
+                        Log.v("Response", serverResponse.toString());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ServerResponse> call, Throwable t) {
+                    Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
+    }
+
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    public String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String getPathFromURI(final Context context, final Uri uri) {
 
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
@@ -401,49 +501,90 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
     }
 
 
-    private byte[] bitmapToByte(Bitmap bitmap){
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
-        return byteArray;
+    private void openChooseMethodDialog() {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_choose_media_file);
+        dialog.findViewById(R.id.tv_gallery).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectImage();
+                dialog.dismiss();
+            }
+        });
+        dialog.findViewById(R.id.tv_camera).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                captureImage();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
-    private void uploadFile(String filePath) {
-        // Map is used to multipart the file using okhttp3.RequestBody
-        if (filePath!=null && !filePath.equals("")){
-            showLoadingProgress();
-            File file = new File(filePath);
 
-            // Parsing any Media type file
-            RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), file);
-            MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
-            RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), file.getName());
-
-            ApiInterface getResponse = ApiClient.getClient().create(ApiInterface.class);
-            Call<ServerResponse> call = getResponse.uploadFile(fileToUpload, filename);
-            call.enqueue(new Callback<ServerResponse>() {
-                @Override
-                public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
-                    ServerResponse serverResponse = response.body();
-                    Log.e("Responce", serverResponse.postData.message);
-                    if (serverResponse != null) {
-                        if (serverResponse.postData.success) {
-                            dismissLoadingProgress();
-                            String mImagePath = serverResponse.postData.message;
-                            presenter.ChangeProfilePicture(PreferenceHelper.getUserId(getActivity()), mImagePath);
-                        }
-                    } else {
-                        assert serverResponse != null;
-                        Log.v("Response", serverResponse.toString());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ServerResponse> call, Throwable t) {
-                    Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_LONG).show();
-                }
-            });
+    void selectImage() {
+        if (AppConst.checkPermission(getActivity())) {
+            selectedImagePath = null;
+            // select a file
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent,
+                    "Select Picture"), SELECT_PICTURE);
+        } else {
+            AppConst.requestPermission(getActivity(), PERMISSION_REQUEST_CODE);
         }
-
     }
 
+    void captureImage() {
+        if (checkPermission(android.Manifest.permission.CAMERA)) {
+//            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//            startActivityForResult(cameraIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+            if (AppConst.checkPermission(getActivity())) {
+                dispatchTakePictureIntent();
+            } else {
+                AppConst.requestPermission(getActivity(), Permission_storage_code);
+            }
+
+        } else {
+            requestPermission(android.Manifest.permission.CAMERA);
+        }
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+        }
+    }
+
+    private boolean checkPermission(String permission) {//android.Manifest.permission.CAMERA
+        int result = ContextCompat.checkSelfPermission(getActivity(), permission);
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void requestPermission(String permission) {//android.Manifest.permission.CAMERA
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), permission)) {
+            Toast.makeText(getActivity(), "Camera permission allows us take images throught camera. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
+        } else {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case CAMERA_CAPTURE_IMAGE_REQUEST_CODE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    captureImage();
+                } else {
+                    Toast.makeText(getActivity(), "permission denied", Toast.LENGTH_SHORT).show();
+                }
+        }
+    }
 }

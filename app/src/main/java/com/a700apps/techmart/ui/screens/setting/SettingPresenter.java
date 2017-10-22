@@ -65,6 +65,7 @@ public class SettingPresenter extends MainPresenter<SettingView> implements Netw
 //                        view.showErrorDialog(R.string.error_happened); //networkResponse.data.getResult().getMessage()
                     }else {
                         view.showToast("Password changed successfully");
+                        view.emptyViews();
                     }
                 }
 

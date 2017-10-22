@@ -17,4 +17,5 @@ public interface SettingView {
     void addNotificationStatus(boolean eanbled);
     void showToast(String msg);
     void saveNewPic(String name);
+    void emptyViews();
 }
