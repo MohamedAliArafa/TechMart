@@ -451,10 +451,10 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
 //
 
 
-        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof GroupsTimeLineFragment &&
-                Globals.CAME_FROM_NOTIFICATION_TO_GROUP) {
-            finish();
-        }
+//        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof GroupsTimeLineFragment &&
+//                Globals.CAME_FROM_NOTIFICATION_TO_GROUP) {
+//            finish();
+//        }
 
         if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof EditProfileFragment &&
                 Globals.CAME_FROM_LIKE_TO_GROUP) {
@@ -487,7 +487,8 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof BoardMemberTimelineFragment) {
             openFragment(ManageBoardGroupFragment.class, null);
         } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof MemberProfileFragment) {
-            if (Globals.CAME_FROM_LIKE_TO_GROUP){
+            if (Globals.CAME_FROM_NOTIFICATION_TO_GROUP){
+                Globals.CAME_FROM_NOTIFICATION_TO_GROUP = false;
                 finish();
             }else {
                 Bundle bundle = new Bundle();

@@ -102,13 +102,11 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
             @Override
             public void onClick(View v) {
                 if (AppUtils.isInternetAvailable(getActivity())) {
-//                    ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
-                    ((HomeActivity) getActivity()).openFragment(NotificationFragment.class, null);
+                    ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
+//                    ((HomeActivity) getActivity()).openFragment(NotificationFragment.class, null);
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
 
@@ -188,25 +186,17 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
             isFollowing = true;
             mFollowButton.setText(R.string.unfollow);
             mContainerLinearLayout.setVisibility(View.VISIBLE);
-//            isConnect = true;
-//            mMessageButton.setVisibility(View.VISIBLE);
-//            mConnectButton.setText(R.string.disconnect);
-
         } else {
             isFollowing = false;
             mFollowButton.setText(R.string.follow);
             mContainerLinearLayout.setVisibility(View.GONE);
-
-//            isConnect = false;
-//            mMessageButton.setVisibility(View.GONE);
-//            mConnectButton.setText(R.string.connect);
-
         }
 
 
         if (MyProfile.IsConntected) {
             isFollowing = true;
             isConnect = true;
+            mMessageButton.setText("Send Message");
             mMessageButton.setVisibility(View.VISIBLE);
             mFollowButton.setText(R.string.unfollow);
             mConnectButton.setText(R.string.disconnect);
@@ -215,15 +205,32 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
             isConnectPending = true;
             mConnectButton.setText(getString(R.string.pending));
         } else if (MyProfile.IsConntectionRequestPending == 2) {
-//            isConnectPending = true;
             isApprove = true;
             mConnectButton.setText(getString(R.string.approve_connect));
         } else {
-//            isConnect = false;
-            mMessageButton.setVisibility(View.GONE);
+            if (!isFollowing){
+                mContainerLinearLayout.setVisibility(View.GONE);
+            }
+            if (!isFollowing&&!hasSharedEvents){
+                mMessageButton.setVisibility(View.GONE);
+            }
+            if (isFollowing && hasSharedEvents) {
+                mMessageButton.setVisibility(View.VISIBLE);
+                mMessageButton.setText("Send Predefined");
+            }
             mConnectButton.setText(R.string.connect);
-            mContainerLinearLayout.setVisibility(View.GONE);
+
         }
+
+//        if (isConnect) {
+//            mMessageButton.setText("Send Message");
+//        } else {
+//            if (isFollowing && hasSharedEvents) {
+//                mMessageButton.setVisibility(View.VISIBLE);
+//                mMessageButton.setText("Send Predefined");
+//            }
+//        }
+
     }
 
     @Override
@@ -246,7 +253,7 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
     public void updateUiUnFollow(post success) {
         isFollowing = false;
 
-        if (!isConnect){
+        if (!isConnect) {
             mMessageButton.setVisibility(View.GONE);
         }
 

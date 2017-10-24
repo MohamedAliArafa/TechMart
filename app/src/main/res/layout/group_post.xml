@@ -18,7 +18,7 @@
             android:id="@+id/rl_post_card_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/card_color">
+            android:background="@color/logo_color">
 
             <!--Body-->
             <com.a700apps.techmart.utils.CustomTextView
@@ -44,7 +44,7 @@
                     android:id="@+id/iv_post_image"
                     android:layout_width="match_parent"
                     android:layout_height="70dp"
-                    android:background="@color/logo_color"
+
                     android:hint="Short Description About The Post"
 
                     android:padding="8dp"

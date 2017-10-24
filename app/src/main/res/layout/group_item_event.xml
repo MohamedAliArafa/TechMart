@@ -14,10 +14,10 @@
         android:padding="@dimen/activity_feeds_card_padding">
 
         <RelativeLayout
+            android:background="@color/logo_color"
             android:id="@+id/rl_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/card_color">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/lin_con"
@@ -59,8 +59,7 @@
                 android:id="@+id/rl_post_card_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/lin_con"
-                android:background="@color/card_color">
+                android:layout_below="@+id/lin_con">
 
                 <!--Body-->
                 <com.a700apps.techmart.utils.CustomTextView
@@ -194,7 +193,7 @@
                             android:layout_marginLeft="14dp"
                             android:layout_marginRight="6dp"
                             android:gravity="center"
-                            android:text="Creat Event"
+                            android:text="Create Event"
                             android:textColor="@color/button_light_text"
                             android:textSize="@dimen/time_text" />
 

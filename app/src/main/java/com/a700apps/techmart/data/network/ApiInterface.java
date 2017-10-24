@@ -72,7 +72,7 @@ public interface ApiInterface {
     Observable<TimeLineData> getTimeLine(@Body RequestBody body);
 
     @POST("timeline/GetGroupTimeLine")
-    Observable<GroupTimeLineData> getGroupTimeLine(@Body RequestBody body);
+    Observable<TimeLineData> getGroupTimeLine(@Body RequestBody body);
 
     @POST("Group/GetUserGroups")
     Observable<UserGroupData> getUserGroup(@Body RequestBody body);

@@ -1,7 +1,10 @@
 package com.a700apps.techmart.ui.screens.timeline;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,14 +25,19 @@ import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.mygroup.GroupPagerFragment;
 import com.a700apps.techmart.ui.screens.mygroup.MyGroupsListFragment;
+import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
 import com.a700apps.techmart.ui.screens.notification.NotificationFragment;
 import com.a700apps.techmart.ui.screens.profile.EditProfileFragment;
+import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
+import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.AppUtils;
+import com.a700apps.techmart.utils.ClickableViewPager;
 import com.a700apps.techmart.utils.DialogCreator;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -48,7 +56,7 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
     public AVLoadingIndicatorView indicatorView;
 
 
-    private static ViewPager mPager;
+    private static ClickableViewPager mPager;
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
     CirclePageIndicator indicator;
@@ -77,7 +85,8 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
     }
 
     void init(View view) {
-        mPager = (ViewPager) view.findViewById(R.id.pager);
+        mPager = (ClickableViewPager) view.findViewById(R.id.pager);
+
         indicator = (CirclePageIndicator)
                 view.findViewById(R.id.indicator);
         indicatorView = (AVLoadingIndicatorView) view.findViewById(R.id.avi);
@@ -133,8 +142,8 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
         mNotificationImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
-                ((HomeActivity) getActivity()).openFragment(NotificationFragment.class, null);
+                ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
+//                ((HomeActivity) getActivity()).openFragment(NotificationFragment.class, null);
             }
         });
 
@@ -165,11 +174,11 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-//                mTabContainer.getChildAt(position).setBackground(getResources().getDrawable(R.drawable.bt_1));
-//                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
-//                    if (i != position)
-//                        mTabContainer.getChildAt(i).setBackground(null);
-//                }
+                mTabContainer.getChildAt(position).setBackground(getResources().getDrawable(R.drawable.bt_1));
+                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
+                    if (i != position)
+                        mTabContainer.getChildAt(i).setBackground(null);
+                }
             }
 
             @Override
@@ -299,6 +308,22 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
 
             }
         });
+
+        mPager.setOnItemClickListener(new ClickableViewPager.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                openDetails(getActivity(), String.valueOf(TimelineList.get(currentPage).getType()), TimelineList, currentPage);
+            }
+        });
+    }
+
+    static void openDetails(Context context, String type, List<TimeLineData.ResultEntity> mTimeLineList, int index) {
+//        ActivityUtils.openActivity(context, DetailsActivity.class, false);
+        Intent intent = new Intent(context, DetailsActivity.class);
+        intent.putExtra("Type", type);
+        intent.putExtra("Index", index);
+        intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mTimeLineList);
+        context.startActivity(intent);
     }
 
     @Override

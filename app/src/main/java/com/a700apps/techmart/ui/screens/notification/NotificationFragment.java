@@ -40,6 +40,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
+
 public class NotificationFragment extends Fragment implements NotificationView {
 
     NotificationPresenter presenter;
@@ -412,16 +413,14 @@ public class NotificationFragment extends Fragment implements NotificationView {
                     case R.id.connectBtn:
                         if (AppUtils.isInternetAvailable(context)) {
                             position = getAdapterPosition();
-                            presenter.sendConnect(list.get(getAdapterPosition()).getRelativeUserID(), PreferenceHelper.getUserId(context), "true");
-                        } else {
+                            presenter.respondRequest( PreferenceHelper.getUserId(context),list.get(getAdapterPosition()).getRelativeUserID(), "true");                        } else {
                             Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                         }
                         break;
                     case R.id.ignoreBtn:
                         if (AppUtils.isInternetAvailable(context)) {
 //                        position = getAdapterPosition();
-                            presenter.sendConnect(list.get(getAdapterPosition()).getRelativeUserID(), PreferenceHelper.getUserId(context), "false");
-                            presenter.deleteNotification(list.get(getAdapterPosition()).getID());
+                            presenter.respondRequest( PreferenceHelper.getUserId(context),list.get(getAdapterPosition()).getRelativeUserID(), "false");                            presenter.deleteNotification(list.get(getAdapterPosition()).getID());
 //                        list.remove(position);
 //                        afterConnectSuccess();
 

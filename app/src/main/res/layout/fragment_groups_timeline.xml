@@ -9,7 +9,10 @@
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/event_details_header_image_height">
+        android:layout_height="@dimen/event_details_header_image_height"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
 
         <LinearLayout
@@ -17,7 +20,7 @@
             android:layout_height="200dp"
             android:orientation="vertical">
 
-            <android.support.v4.view.ViewPager
+            <com.a700apps.techmart.utils.ClickableViewPager
                 android:id="@+id/pager"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -57,7 +60,7 @@
                 android:id="@+id/new_message"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_marginEnd="14dp"
+                android:layout_marginEnd="18dp"
                 app:srcCompat="@drawable/ic_stat_ic_user" />
 
             <ImageView
@@ -77,8 +80,8 @@
             android:gravity="bottom"
             android:padding="10dip"
             app:centered="true"
-            app:fillColor="#fff"
-            app:pageColor="@color/dark_grey"
+            app:fillColor="@color/dark_grey"
+            app:pageColor="#fff"
             app:radius="2dp"
             app:snap="false" />
 
@@ -91,9 +94,9 @@
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/fragment_container"
         android:layout_marginLeft="0dp"
-        android:background="@color/white"
         android:layout_marginRight="0dp"
-        android:layout_marginTop="35dp" />
+        android:layout_marginTop="35dp"
+        android:background="@color/white" />
 
 
     <RelativeLayout
@@ -107,9 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_alignParentStart="true"
-            android:background="@color/blue_join_dialog">
-
-        </LinearLayout>
+            android:background="@color/blue_join_dialog"/>
 
 
         <LinearLayout
@@ -118,43 +119,25 @@
             android:layout_height="40dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
-            <!--<FrameLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:background="@drawable/bt_1"-->
-            <!--android:layout_height="56dp">-->
-
-            <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:gravity="center"-->
-            <!--android:text="Timeline"-->
-            <!--android:textColor="@color/button_light_text" />-->
-
-
-            <!--</FrameLayout>-->
 
             <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_timeline"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.8"
-                android:text="Timeline"
                 android:gravity="center|top"
                 android:paddingTop="10dp"
+                android:text="Timeline"
                 android:textColor="@color/button_light_text"
                 android:textSize="12sp" />
-            
-            <TextView
-                android:layout_width="1dp"
-                android:background="@color/white"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="12dp"
-                android:layout_height="match_parent" />
 
-            <!--<View-->
-            <!--android:layout_width=".5dp"-->
-            <!--android:layout_height="15dp"-->
-            <!--android:background="@color/button_light_text"/>-->
+            <TextView
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="14dp"
+                android:background="@color/white" />
+
 
             <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_posts"
@@ -165,15 +148,17 @@
                 android:paddingTop="10dp"
                 android:text="@string/posts"
                 android:textColor="@color/button_light_text"
-
                 android:textSize="12sp" />
 
+
             <TextView
-                android:layout_width="1dp"
-                android:background="@color/white"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="12dp"
-                android:layout_height="match_parent" />
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="14dp"
+                android:background="@color/white" />
+
+
             <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_event"
                 android:layout_width="0dp"
@@ -185,40 +170,30 @@
                 android:textColor="@color/button_light_text"
 
                 android:textSize="12sp" />
+
             <TextView
-                android:layout_width="1dp"
-                android:background="@color/white"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="12dp"
-                android:layout_height="match_parent" />
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="14dp"
+                android:background="@color/white" />
+
+
             <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_group"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1.6"
                 android:gravity="left|top"
-                android:paddingTop="10dp"
                 android:paddingStart="20dp"
+                android:paddingTop="10dp"
                 android:text="@string/group_member"
                 android:textColor="@color/button_light_text"
                 android:textSize="12sp" />
-            <TextView
-                android:layout_width="1dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="10dp"
-                android:layout_height="match_parent" />
-        </LinearLayout>
 
+        </LinearLayout>
 
     </RelativeLayout>
 
-    <com.wang.avi.AVLoadingIndicatorView
-        android:id="@+id/avi"
-        style="@style/AVLoadingIndicatorView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="invisible"
-        app:indicatorName="BallSpinFadeLoaderIndicator" />
 
 </RelativeLayout>

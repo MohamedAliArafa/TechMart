@@ -27,6 +27,7 @@ import com.a700apps.techmart.ui.screens.mygroup.MyGroupsListFragment;
 import com.a700apps.techmart.ui.screens.profile.MemberProfile;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.utils.AppUtils;
+import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
 
@@ -103,7 +104,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     public void onClick(View view) {
                         Intent sendIntent = new Intent();
                         sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
+
                         sendIntent.setType("text/plain");
                         context.startActivity(sendIntent);
                     }
@@ -162,7 +164,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 viewHolderPost.mPostedByTextView.setText(timeLineItem.getPostedByName());
                 viewHolderPost.mTitleTextView.setText(timeLineItem.getTitle());
                 viewHolderPost.mGroupNameTextView.setText(timeLineItem.getGroupName());
-
+                viewHolderPost.tv_like.setText(timeLineItem.getLikeCount() + " Likes");
+                viewHolderPost.tv_comment.setText(timeLineItem.getCommentCount() + " Comments");
 
                 viewHolderPost.moreImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -221,18 +224,16 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 viewHolderPost.tv_like.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (AppUtils.isInternetAvailable(context)){
+                        if (AppUtils.isInternetAvailable(context)) {
+                            positionItem = position;
+
                             if (timeLineItem.getIsLike()) {
-                                timeLineItem.setIsLike(false);
                                 isLike = "false";
-                                viewHolderPost.mLikeImageView.setImageResource(R.drawable.ic_like);
                             } else {
                                 isLike = "true";
-                                timeLineItem.setIsLike(true);
-                                viewHolderPost.mLikeImageView.setImageResource(R.drawable.ic_like_active);
                             }
                             getLike(timeLineItem);
-                        }else {
+                        } else {
                             Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                         }
 
@@ -274,22 +275,18 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     @Override
                     public void onClick(View view) {
 
-                        if (AppUtils.isInternetAvailable(context)){
+                        if (AppUtils.isInternetAvailable(context)) {
+                            positionItem = position;
                             if (timeLineItem.getIsLike()) {
-                                timeLineItem.setIsLike(false);
                                 isLike = "false";
-                                viewHolderPost.mLikeImageView.setImageResource(R.drawable.ic_like);
                             } else {
                                 isLike = "true";
-                                timeLineItem.setIsLike(true);
-                                viewHolderPost.mLikeImageView.setImageResource(R.drawable.ic_like_active);
                             }
                             getLike(timeLineItem);
 
-                        }else {
+                        } else {
                             Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 });
 
@@ -318,14 +315,21 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void networkOperationSuccess(NetworkResponse<LikeData> networkResponse) {
         LikeData userNetworkData = (LikeData) networkResponse.data;
-        int errorCode = userNetworkData.ISResultHasData;
+        boolean success = userNetworkData.likeData.success;
 
-        changeLike();
+        if (!success) {
+            networkOperationFail(new Throwable(userNetworkData.likeData.message));
+        } else {
+            changeLike();
+        }
+
     }
+
 
     @Override
     public void networkOperationFail(Throwable throwable) {
 
+        Toast.makeText(context, "" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -382,7 +386,6 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public void onClick(View v) {
             int position = getAdapterPosition();
             int viewId = v.getId();
-//
         }
     }
 
@@ -398,21 +401,29 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     void changeLike() {
-        setValues(new ViewHolderPost(noteView), noteView);
-
+        setValues();
     }
 
-    void setValues(ViewHolderPost viewholder, View item) {
+    void setValues() {
+        int count = mTimeLineList.get(positionItem).getLikeCount();
+
         if (mTimeLineList.get(positionItem).getIsLike()) {
             mTimeLineList.get(positionItem).setIsLike(false);
+            mTimeLineList.get(positionItem).setLikeCount(--count);
             notifyDataSetChanged();
         } else {
             mTimeLineList.get(positionItem).setIsLike(true);
+            mTimeLineList.get(positionItem).setLikeCount(++count);
             notifyDataSetChanged();
         }
     }
 
     void getLike(TimeLineData.ResultEntity timeLine) {
+        if (timeLine.getIsLike()) {
+            isLike = "false";
+        } else {
+            isLike = "true";
+        }
         try {
             JSONObject registerBody = MainApiHelper.getUserLike(PreferenceHelper.getUserId(context), timeLine.getID(), isLike
             );

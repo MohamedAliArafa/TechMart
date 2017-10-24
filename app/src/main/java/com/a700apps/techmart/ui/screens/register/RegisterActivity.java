@@ -425,17 +425,31 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                     isValid = false;
                 }
 
-                boolean validMobileNumber = Validator.validMobileNumber(mobile.replaceFirst("\\+", ""));
-                if (!validMobileNumber) {
+//                boolean validMobileNumber = Validator.validMobileNumber(mobile.replaceFirst("\\+", ""));
+//                if (!validMobileNumber) {
+//                    mPhoneNumberEditText.setError(getResources().getString(R.string.invalid_mobile_number));
+//                    isValid = false;
+//                } else if (!mobile.startsWith("97")) {
+//                    mPhoneNumberEditText.setError(getResources().getString(R.string.invalid_mobile_number_97));
+//                    isValid = false;
+//                }else if (mobile.length()!=14){
+//                    mPhoneNumberEditText.setError(getResources().getString(R.string.invalid_mobile_number_size));
+//                    isValid = false;
+//                }
+//
+
+                if (mobile.startsWith("01") ||mobile.startsWith("096") ||mobile.startsWith("+97")){
+                    boolean validMobileNumber = Validator.validMobileNumber(mobile);
+                    if (!validMobileNumber) {
+                        mPhoneNumberEditText.setError(getResources().getString(R.string.invalid_mobile_number));
+                        isValid = false;
+                    }
+                }else {
                     mPhoneNumberEditText.setError(getResources().getString(R.string.invalid_mobile_number));
                     isValid = false;
-                } else if (!mobile.startsWith("97")) {
-                    mPhoneNumberEditText.setError(getResources().getString(R.string.invalid_mobile_number_97));
-                    isValid = false;
-                }else if (mobile.length()!=14){
-                    mPhoneNumberEditText.setError(getResources().getString(R.string.invalid_mobile_number_size));
-                    isValid = false;
                 }
+
+
 
 
                 boolean validEmail = Validator.validEmail(email);

@@ -77,6 +77,11 @@ public class Validator {
         return number.length() <= 14 && number.length() >= 11 && number.matches("^[0-9]+$");
     }
 
+    public static boolean validMobileNumberNew(String number) {
+//        number = number.replaceFirst("\\+","");
+        return number.length() <= 14 && number.length() >= 11 && number.matches("^((\\+))[0-9]{11,14}$");
+    }
+
     public static boolean isMobileNumber(String data) {
         String expr = "^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
         return data.matches(expr);

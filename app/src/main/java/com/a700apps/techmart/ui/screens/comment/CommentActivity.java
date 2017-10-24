@@ -113,14 +113,14 @@ public class CommentActivity extends AppCompatActivity implements commentView {
 
             }
         });
-        mLikeImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(CommentActivity.this, UserLikesActivity.class);
-                intent.putExtra("string_key", mId);
-                startActivity(intent);
-            }
-        });
+//        mLikeImageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(CommentActivity.this, UserLikesActivity.class);
+//                intent.putExtra("string_key", mId);
+//                startActivity(intent);
+//            }
+//        });
         mSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

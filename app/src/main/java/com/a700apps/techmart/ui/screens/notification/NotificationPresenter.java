@@ -29,7 +29,7 @@ public class NotificationPresenter extends MainPresenter<NotificationView> imple
             view.dismissLoad();
         }
     }
-
+/*
     void sendConnect(String RelativeID, String UserID, final String connect) {
 
         view.showLoading();
@@ -57,6 +57,39 @@ public class NotificationPresenter extends MainPresenter<NotificationView> imple
             });
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+*/
+    void respondRequest(String userid, String relatveId, final String connect) {
+        view.showLoading();
+
+        try {
+            JSONObject registerBody = MainApiHelper.respondFriendRequest(userid, relatveId, connect);
+            MainApi.respondFriendRequest(registerBody, new NetworkResponseListener<PostData>() {
+                @Override
+                public void networkOperationSuccess(NetworkResponse<PostData> networkResponse) {
+                    if (isDetachView()) return;
+                    view.dismissLoad();
+                    PostData userNetworkData = (PostData) networkResponse.data;
+                    int errorCode = userNetworkData.ISResultHasData;
+
+                    if (errorCode == 1) {
+                        if (connect.equals("true")){
+                            view.showToast("You are now connected");
+                            view.afterConnectSuccess();
+                        }else
+                            view.afterFail();
+                    }
+                }
+
+                @Override
+                public void networkOperationFail(Throwable throwable) {
+                    view.dismissLoad();
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+            view.dismissLoad();
         }
     }
 

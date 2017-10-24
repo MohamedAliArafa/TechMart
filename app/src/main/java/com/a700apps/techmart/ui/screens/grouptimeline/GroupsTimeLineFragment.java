@@ -2,8 +2,11 @@ package com.a700apps.techmart.ui.screens.grouptimeline;
 
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -19,19 +22,22 @@ import android.widget.LinearLayout;
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.GroupViewPagerAdapter;
 import com.a700apps.techmart.data.model.GroupTimeLineData;
+import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.ui.screens.groupmemberdetails.GroupFragment;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.mygroup.GroupPagerFragment;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
 import com.a700apps.techmart.ui.screens.timeline.GroupTimeLineFragment;
+import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.ClickableViewPager;
 import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.a700apps.techmart.utils.loadingDialog;
 import com.viewpagerindicator.CirclePageIndicator;
-import com.wang.avi.AVLoadingIndicatorView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -43,9 +49,8 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
 
     ImageView imageView4;
     ImageView mProfileImageView, mNotificationImageView;
-    public AVLoadingIndicatorView indicatorView;
 
-    private static ViewPager mPager;
+    private static ClickableViewPager mPager;
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
     CirclePageIndicator indicator;
@@ -60,7 +65,7 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
     Dialog dialogsLoading;
 
     void init(View view) {
-        mPager = (ViewPager) view.findViewById(R.id.pager);
+        mPager = (ClickableViewPager) view.findViewById(R.id.pager);
         indicator = (CirclePageIndicator) view.findViewById(R.id.indicator);
 
     }
@@ -94,7 +99,6 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
         presenter = new GroupTimeLinePresenter();
         presenter.attachView(this);
         init(view);
-        indicatorView = (AVLoadingIndicatorView) view.findViewById(R.id.avi);
         getExtra();
 
         // Set up the ViewPager with the sections adapter.
@@ -107,15 +111,34 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
             mTabContainer.getChildAt(i).setOnClickListener(this);
         }
         mTabContainer.getChildAt(0).setBackground(getResources().getDrawable(R.drawable.bt_1));
+        mTabContainer.getChildAt(1).setVisibility(View.INVISIBLE);
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-//                mTabContainer.getChildAt(position * 2).setBackground(getResources().getDrawable(R.drawable.bt_1));
-//                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
-//                    if (i != position * 2 && i % 2 == 0)
-//                        mTabContainer.getChildAt(i).setBackground(null);
+                mTabContainer.getChildAt(position * 2).setBackground(getResources().getDrawable(R.drawable.bt_1));
+                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
+                    if (i != position * 2 && i % 2 == 0)
+                        mTabContainer.getChildAt(i).setBackground(null);
+
+//                    mTabContainer.getChildAt(1).setVisibility(View.VISIBLE);
+//                    mTabContainer.getChildAt(3).setVisibility(View.INVISIBLE);
+//                    mTabContainer.getChildAt(5).setVisibility(View.INVISIBLE);
+                }
+
+//                if (position == 1) {
+//                    mTabContainer.getChildAt(1).setVisibility(View.INVISIBLE);
+//                    mTabContainer.getChildAt(3).setVisibility(View.VISIBLE);
+//                    mTabContainer.getChildAt(5).setVisibility(View.VISIBLE);
+//                } else if (position == 2) {
+//                    mTabContainer.getChildAt(1).setVisibility(View.INVISIBLE);
+//                    mTabContainer.getChildAt(3).setVisibility(View.INVISIBLE);
+//                    mTabContainer.getChildAt(5).setVisibility(View.VISIBLE);
+//                } else if (position == 3) {
+//                    mTabContainer.getChildAt(1).setVisibility(View.VISIBLE);
+//                    mTabContainer.getChildAt(3).setVisibility(View.INVISIBLE);
+//                    mTabContainer.getChildAt(5).setVisibility(View.INVISIBLE);
 //                }
             }
 
@@ -181,6 +204,9 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
             case R.id.tv_timeline:
                 mViewPager.setCurrentItem(0);
                 int position = 0;
+                mTabContainer.getChildAt(1).setVisibility(View.INVISIBLE);
+                mTabContainer.getChildAt(3).setVisibility(View.VISIBLE);
+                mTabContainer.getChildAt(5).setVisibility(View.VISIBLE);
                 mTabContainer.getChildAt(position * 2).setBackground(getResources().getDrawable(R.drawable.bt_1));
                 for (int i = 0; i < mTabContainer.getChildCount(); i++) {
                     if (i != position * 2 && i % 2 == 0)
@@ -189,6 +215,9 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
                 break;
             case R.id.tv_posts:
                 int position1 = 1;
+                mTabContainer.getChildAt(1).setVisibility(View.INVISIBLE);
+                mTabContainer.getChildAt(3).setVisibility(View.INVISIBLE);
+                mTabContainer.getChildAt(5).setVisibility(View.VISIBLE);
                 mViewPager.setCurrentItem(1);
                 mTabContainer.getChildAt(position1 * 2).setBackground(getResources().getDrawable(R.drawable.bt_1));
                 for (int i = 0; i < mTabContainer.getChildCount(); i++) {
@@ -199,6 +228,11 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
             case R.id.tv_event:
                 mViewPager.setCurrentItem(2);
                 int position2 = 2;
+                mTabContainer.getChildAt(1).setVisibility(View.VISIBLE);
+                mTabContainer.getChildAt(3).setVisibility(View.INVISIBLE);
+                mTabContainer.getChildAt(5).setVisibility(View.INVISIBLE);
+
+
                 mTabContainer.getChildAt(position2 * 2).setBackground(getResources().getDrawable(R.drawable.bt_1));
                 for (int i = 0; i < mTabContainer.getChildCount(); i++) {
                     if (i != position2 * 2 && i % 2 == 0)
@@ -232,9 +266,31 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
 //        indicatorView.hide();
     }
 
+
+    static void openDetails(Context context, String type, List<TimeLineData.ResultEntity> mTimeLineList, int index) {
+//        ActivityUtils.openActivity(context, DetailsActivity.class, false);
+        Intent intent = new Intent(context, DetailsActivity.class);
+        intent.putExtra("Type", type);
+        intent.putExtra("Index", index);
+        intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mTimeLineList);
+        context.startActivity(intent);
+    }
+
+
     @Override
-    public void updateUi(List<GroupTimeLineData.ResultEntity> TimelineList) {
+    public void updateUi(final List<TimeLineData.ResultEntity> TimelineList) {
         mPager.setAdapter(new GroupViewPagerAdapter(getActivity(), TimelineList));
+
+
+
+
+        mPager.setOnItemClickListener(new ClickableViewPager.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                openDetails(getActivity(), String.valueOf(TimelineList.get(currentPage).getType()), TimelineList, currentPage);
+            }
+        });
+
 
         final float density = getResources().getDisplayMetrics().density;
         indicator.setViewPager(mPager);
@@ -247,6 +303,7 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
         } else {
             NUM_PAGES = TimelineList.size();
         }
+
 
         // Auto start of viewpager
         final Handler handler;

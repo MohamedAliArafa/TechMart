@@ -16,5 +16,5 @@ public interface GroupTimlineView {
 
     void dismissLoadingProgress();
 
-    void updateUi(List<GroupTimeLineData.ResultEntity> TimelineList);
+    void updateUi(List<TimeLineData.ResultEntity> TimelineList);
 }

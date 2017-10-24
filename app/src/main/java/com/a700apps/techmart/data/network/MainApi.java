@@ -52,9 +52,9 @@ import rx.schedulers.Schedulers;
 public class MainApi {
 
 //    public static final String API_LINK = "http://108.179.204.213:8073/api/";
-    public static final String API_LINK = "http://23.236.154.106:8085/api/"; // for development
+    public static final String API_LINK = "http://23.236.154.106:8084/api/"; // for development
     public static final String JSON_TYPE = "application/json";
-    public static final String IMAGE_IP = "http://23.236.154.106:8085";
+    public static final String IMAGE_IP = "http://23.236.154.106:8084";
 //    public static final String IMAGE_IP = "http://108.179.204.213:8073";
     public static final String TAG_DATE_PICKER = "datepicker";
 
@@ -243,9 +243,9 @@ public class MainApi {
     }
 
 
-    public static void getGroupTimeLine(JSONObject body, final NetworkResponseListener<GroupTimeLineData> responseListener) {
+    public static void getGroupTimeLine(JSONObject body, final NetworkResponseListener<TimeLineData> responseListener) {
         getApi().getGroupTimeLine(getRequestBody(body)).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<GroupTimeLineData>() {
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<TimeLineData>() {
             @Override
             public void onCompleted() {
 
@@ -257,8 +257,8 @@ public class MainApi {
             }
 
             @Override
-            public void onNext(GroupTimeLineData userNetworkData) {
-                NetworkResponse<GroupTimeLineData> networkResponse = new NetworkResponse<>();
+            public void onNext(TimeLineData userNetworkData) {
+                NetworkResponse<TimeLineData> networkResponse = new NetworkResponse<>();
                 networkResponse.data = userNetworkData;
                 responseListener.networkOperationSuccess(networkResponse);
             }

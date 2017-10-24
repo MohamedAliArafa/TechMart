@@ -1,6 +1,8 @@
 package com.a700apps.techmart.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +15,11 @@ import com.a700apps.techmart.data.model.GroupTimeLine;
 import com.a700apps.techmart.data.model.GroupTimeLineData;
 import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.data.network.MainApi;
+import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.utils.CustomTextView;
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,12 +29,12 @@ import java.util.List;
 public class GroupViewPagerAdapter extends PagerAdapter {
 
 
-    private List<GroupTimeLineData.ResultEntity> imageModelArrayList;
+    private List<TimeLineData.ResultEntity> imageModelArrayList;
     private LayoutInflater inflater;
     private Context context;
+    int positionItem;
 
-
-    public GroupViewPagerAdapter(Context context, List<GroupTimeLineData.ResultEntity> imageModelArrayList) {
+    public GroupViewPagerAdapter(Context context, List<TimeLineData.ResultEntity> imageModelArrayList) {
         this.context = context;
         this.imageModelArrayList = imageModelArrayList;
         inflater = LayoutInflater.from(context);
@@ -53,7 +57,9 @@ public class GroupViewPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup view, int position) {
         View imageLayout = inflater.inflate(R.layout.sliding_image_viewpager, view, false);
-        GroupTimeLineData.ResultEntity timelineItem = imageModelArrayList.get(position);
+        positionItem = position;
+
+        final TimeLineData.ResultEntity timelineItem = imageModelArrayList.get(position);
         assert imageLayout != null;
         final ImageView mSlideImageView = (ImageView) imageLayout
                 .findViewById(R.id.iv_slider);
@@ -95,6 +101,8 @@ public class GroupViewPagerAdapter extends PagerAdapter {
 
         return imageLayout;
     }
+
+
 
     @Override
     public boolean isViewFromObject(View view, Object object) {

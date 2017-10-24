@@ -395,7 +395,8 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                     case R.id.connectBtn:
                         if (AppUtils.isInternetAvailable(context)) {
                             position = getAdapterPosition();
-                            presenter.sendConnect(list.get(getAdapterPosition()).getRelativeUserID(), PreferenceHelper.getUserId(context), "true");
+//                            presenter.sendConnect(list.get(getAdapterPosition()).getRelativeUserID(), PreferenceHelper.getUserId(context), "true");
+                            presenter.respondRequest( PreferenceHelper.getUserId(context),list.get(getAdapterPosition()).getRelativeUserID(), "true");
                         } else {
                             Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                         }
@@ -403,7 +404,8 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                     case R.id.ignoreBtn:
                         if (AppUtils.isInternetAvailable(context)) {
 //                        position = getAdapterPosition();
-                            presenter.sendConnect(list.get(getAdapterPosition()).getRelativeUserID(), PreferenceHelper.getUserId(context), "false");
+                            presenter.respondRequest( PreferenceHelper.getUserId(context),list.get(getAdapterPosition()).getRelativeUserID(), "false");
+//                            presenter.sendConnect(list.get(getAdapterPosition()).getRelativeUserID(), PreferenceHelper.getUserId(context), "false");
                             presenter.deleteNotification(list.get(getAdapterPosition()).getID());
 //                        list.remove(position);
 //                        afterConnectSuccess();
@@ -490,7 +492,7 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                             Intent intent = new Intent(context, NotificationHolderActivity.class);
                             intent.putExtra("holder", "like");
                             intent.putExtra("data", data);
-                            intent.putExtra("type", list.get(getAdapterPosition()).getTypeID());
+                            intent.putExtra("type", 2);
                             context.startActivity(intent);
 
                         } else {
@@ -503,7 +505,7 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                             Intent intent2 = new Intent(context, NotificationHolderActivity.class);
                             intent2.putExtra("holder", "like");
                             intent2.putExtra("data", data2);
-                            intent2.putExtra("type", list.get(getAdapterPosition()).getTypeID());
+                            intent2.putExtra("type", 2);
                             context.startActivity(intent2);
                         } else {
                             Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
@@ -593,7 +595,12 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                             Intent intent = new Intent(context, NotificationHolderActivity.class);
                             intent.putExtra("holder", "like");
                             intent.putExtra("data", data);
-                            intent.putExtra("type", list.get(getAdapterPosition()).getTypeID());
+                            if (list.get(getAdapterPosition()).getTypeID()==3 ||
+                                    list.get(getAdapterPosition()).getTypeID()==1){//one to one meeting
+                                intent.putExtra("type", 1);
+                            }else {
+                                intent.putExtra("type", 2);
+                            }
                             context.startActivity(intent);
 
                         } else {
@@ -698,12 +705,20 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
 
                     case R.id.textView37:
                         if (AppUtils.isInternetAvailable(context)) {
+                            //profileHolder
                             NoficationData.Result data = list.get(getAdapterPosition());
-                            Intent intent = new Intent(context, NotificationHolderActivity.class);
-                            intent.putExtra("holder", "follow");
-                            intent.putExtra("RelativId", data.getRelativeUserID());
-                            intent.putExtra("GroupId", data.getGroupID());
+                            Intent intent = new Intent(context , HomeActivity.class);
+                            intent.putExtra("profileHolder"  , data.getRelativeUserID());
+                            Globals.CAME_FROM_NOTIFICATION_TO_GROUP = true;
+
                             context.startActivity(intent);
+
+//                            NoficationData.Result data = list.get(getAdapterPosition());
+//                            Intent intent = new Intent(context, NotificationHolderActivity.class);
+//                            intent.putExtra("holder", "follow");
+//                            intent.putExtra("RelativId", data.getRelativeUserID());
+//                            intent.putExtra("GroupId", data.getGroupID());
+//                            context.startActivity(intent);
                         } else {
                             Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                         }

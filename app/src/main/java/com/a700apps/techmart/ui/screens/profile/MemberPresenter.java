@@ -176,7 +176,7 @@ public class MemberPresenter extends MainPresenter<ProfileView> {
 
                 @Override
                 public void networkOperationFail(Throwable throwable) {
-
+                    view.dismissLoadingProgress();
                 }
             });
         } catch (JSONException e) {

@@ -87,7 +87,7 @@ public class GroupEventFragment extends Fragment implements GroupTimlineView {
     }
 
     @Override
-    public void updateUi(List<GroupTimeLineData.ResultEntity> TimelineList) {
+    public void updateUi(List<TimeLineData.ResultEntity> TimelineList) {
         if (TimelineList.size() == 0) {
             rv.setEmptyView(view.findViewById(R.id.tv_nodata));
         }

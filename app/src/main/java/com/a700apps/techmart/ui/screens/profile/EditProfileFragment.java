@@ -65,11 +65,11 @@ import retrofit2.Response;
 import static android.app.Activity.RESULT_OK;
 
 public class EditProfileFragment extends Fragment implements ProfileView, View.OnClickListener {
-    ImageView mNotificationImageView, mProfileUserImageView , mAddImageView;//mProfileImageView
+    ImageView mNotificationImageView, mProfileUserImageView, mAddImageView;//mProfileImageView
     ImageView imageView4;
     TextView mFriend, mFollowers, mPosts, mEmail;
     private ProfilePresenter presenter;
-//    public AVLoadingIndicatorView indicatorView;
+    //    public AVLoadingIndicatorView indicatorView;
     EditText mCompany, mPhone, mPosition, mLinkedin, mName;
     Button btn_edit, btn_save;
     final int SELECT_PICTURE_CHANGE = 321, PERMISSION_REQUEST_CODE = 322;
@@ -121,8 +121,8 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
         mNotificationImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
-                ((HomeActivity)getActivity()).openFragment(NotificationFragment.class , null);
+                ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
+//                ((HomeActivity) getActivity()).openFragment(NotificationFragment.class, null);
             }
         });
 
@@ -276,19 +276,21 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
     public void updateUiUpdate(post success) {
         User user = PreferenceHelper.getSavedUser(getActivity());
         user.Name = mName.getText().toString();
-        if (!returnedImage.equals("/UploadedImages/")){
+        if (!returnedImage.equals("/UploadedImages/")) {
             user.Photo = returnedImage;
         }
         PreferenceHelper.saveUser(getActivity(), user);
         Toast.makeText(getActivity(), "Profile updated successfully", Toast.LENGTH_SHORT).show();
         changeSideMenuData.changeData();
     }
-    private byte[] bitmapToByte(Bitmap bitmap){
+
+    private byte[] bitmapToByte(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] byteArray = stream.toByteArray();
         return byteArray;
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        super.onActivityResult(requestCode, resultCode, data);
@@ -479,11 +481,11 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
                     if (AppUtils.isInternetAvailable(getActivity())) {
 
                         if (selectedImagePath != null) {
-                            if (validate(true)){
+                            if (validate(true)) {
                                 uploadFile(selectedImagePath);
                             }
                         } else {
-                            if (validate(false)){
+                            if (validate(false)) {
                                 presenter.updateProfileData(getActivity(), PreferenceHelper.getUserId(getActivity()),
                                         mName.getText().toString(), mLinkedin.getText().toString(), "", mCompany.getText().toString(),
                                         mPosition.getText().toString(), mPhone.getText().toString());
@@ -514,17 +516,21 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
         }
 
         String mobile = mPhone.getText().toString().trim();
-        boolean validMobileNumber = Validator.validMobileNumber(mobile.replaceFirst("\\+", ""));
+        boolean validMobileNumber = Validator.validMobileNumberNew(mobile);
         if (!validMobileNumber) {
             mPhone.setError(getResources().getString(R.string.invalid_mobile_number));
             isValid = false;
-        } else if (!mobile.startsWith("97")) {
-            mPhone.setError(getResources().getString(R.string.invalid_mobile_number_97));
-            isValid = false;
-        } else if (mobile.length() != 14) {
-            mPhone.setError(getResources().getString(R.string.invalid_mobile_number_size));
-            isValid = false;
         }
+//        if (!validMobileNumber) {
+//            mPhone.setError(getResources().getString(R.string.invalid_mobile_number));
+//            isValid = false;
+//        } else if (!mobile.startsWith("97")) {
+//            mPhone.setError(getResources().getString(R.string.invalid_mobile_number_97));
+//            isValid = false;
+//        } else if (mobile.length() != 14) {
+//            mPhone.setError(getResources().getString(R.string.invalid_mobile_number_size));
+//            isValid = false;
+//        }
 
         boolean validCompanyName = Validator.isTextEmpty(mCompany.getText().toString().trim());
         if (validCompanyName) {
@@ -532,8 +538,8 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
             isValid = false;
         }
 
-        if (mLinkedin.getText()!=null && !mLinkedin.getText().toString().trim()
-                .matches("((http(s?)://)*([a-zA-Z0-9\\-])*\\.|[linkedin])[linkedin/~\\-]+\\.[a-zA-Z0-9/~\\-_,&=\\?\\.;]+[^\\.,\\s<]")){
+        if (mLinkedin.getText() != null && !mLinkedin.getText().toString().trim()
+                .matches("((http(s?)://)*([a-zA-Z0-9\\-])*\\.|[linkedin])[linkedin/~\\-]+\\.[a-zA-Z0-9/~\\-_,&=\\?\\.;]+[^\\.,\\s<]")) {
             mLinkedin.setError(getResources().getString(R.string.invalid_url));
             isValid = false;
         }
@@ -551,10 +557,10 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
             }
         }
 
-        return  isValid;
+        return isValid;
     }
 
-    public interface changeSideMenuData{
+    public interface changeSideMenuData {
         void changeData();
     }
 

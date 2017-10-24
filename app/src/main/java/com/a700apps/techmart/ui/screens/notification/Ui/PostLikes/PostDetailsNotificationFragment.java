@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ import com.a700apps.techmart.ui.screens.comment.CommentActivity;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsPresenter;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsView;
+import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.a700apps.techmart.utils.loadingDialog;
 import com.bumptech.glide.Glide;
@@ -46,17 +48,19 @@ public class PostDetailsNotificationFragment extends Fragment implements View.On
 
     ImageView imageView4;
     ImageView iv_slider, mProfileImageView, mNotificationImageView, iv_comment, iv_share, mLikeImageView, iv_share_event, iv_invite, iv_calender;
-    LinearLayout mLikeLinearContainer, mEventLinearContainer;
+    LinearLayout mLikeLinearContainer;
+    RelativeLayout mEventLinearContainer;
     TextView mTitle, mSlidertype, mSlideTitle, mDescTextView, tv_comment, tv_share, tv_like, tv_going, tv_calender;
     String Type;
     int index;
     //    List<TimeLineData.ResultEntity> mList;
     String isLike;
     NotificationDataLike eventResult;
-
+    Dialog dialogsLoading;
     DetailsPresenter mPresenter;
     public AVLoadingIndicatorView indicatorView;
     TextView mGoing;
+    TextView tv_like_count,tv_comment_count;
 
     Dialog dialog;
 
@@ -81,6 +85,8 @@ public class PostDetailsNotificationFragment extends Fragment implements View.On
         tv_like = (TextView) view.findViewById(R.id.tv_like);
         tv_going = (TextView) view.findViewById(R.id.textView53);
         tv_calender = (TextView) view.findViewById(R.id.tv_calender);
+        tv_like_count = (TextView) view.findViewById(R.id.tv_like_count);
+        tv_comment_count = (TextView) view.findViewById(R.id.tv_comment_count);
 
         imageView4 = (ImageView) view.findViewById(R.id.imageView4);
         iv_comment = (ImageView) view.findViewById(R.id.iv_comment);
@@ -98,7 +104,7 @@ public class PostDetailsNotificationFragment extends Fragment implements View.On
         mSlidertype = (TextView) view.findViewById(R.id.tv_events);
 
         mLikeLinearContainer = (LinearLayout) view.findViewById(R.id.container);
-        mEventLinearContainer = (LinearLayout) view.findViewById(R.id.container_event);
+        mEventLinearContainer = (RelativeLayout) view.findViewById(R.id.container_event);
 
         iv_comment.setOnClickListener(this);
         tv_comment.setOnClickListener(this);
@@ -149,6 +155,8 @@ public class PostDetailsNotificationFragment extends Fragment implements View.On
 
     void getPostData(int postid, int type, String userId) {
         try {
+            dialog = new loadingDialog().showDialog(getActivity());
+
             JSONObject body = MainApiHelper.getTimeLineById(postid, type, userId);
             MainApi.getTimeLineById(body, new NetworkResponseListener<NotificationDataLike>() {
                 @Override
@@ -157,6 +165,9 @@ public class PostDetailsNotificationFragment extends Fragment implements View.On
                         eventResult = networkResponse.data;
                         mTitle.setText(networkResponse.data.getResult().getTitle());
                         mDescTextView.setText(networkResponse.data.getResult().getDescr());
+
+                        tv_comment_count.setText(networkResponse.data.getResult().getCommentCount()+"");
+                        tv_like_count.setText(networkResponse.data.getResult().getLikeCount()+"");
 
                         mSlideTitle.setText(networkResponse.data.getResult().getTitle());
                         if (eventResult.getResult().getIsGoing()) {
@@ -190,18 +201,17 @@ public class PostDetailsNotificationFragment extends Fragment implements View.On
                             mLikeImageView.setImageResource(R.drawable.ic_like);
 
                         }
+
+
+
+
                         tv_like.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-
                                 if (eventResult.getResult().getIsLike()) {
-                                    eventResult.getResult().setIsLike(false);
                                     isLike = "false";
-                                    mLikeImageView.setImageResource(R.drawable.ic_like);
                                 } else {
                                     isLike = "true";
-                                    eventResult.getResult().setIsLike(true);
-                                    mLikeImageView.setImageResource(R.drawable.ic_like_active);
                                 }
                                 getLike();
 
@@ -213,31 +223,31 @@ public class PostDetailsNotificationFragment extends Fragment implements View.On
                             public void onClick(View view) {
 
                                 if (eventResult.getResult().getIsLike()) {
-                                    eventResult.getResult().setIsLike(false);
                                     isLike = "false";
-                                    mLikeImageView.setImageResource(R.drawable.ic_like);
                                 } else {
                                     isLike = "true";
-                                    eventResult.getResult().setIsLike(true);
-                                    mLikeImageView.setImageResource(R.drawable.ic_like_active);
                                 }
+
                                 getLike();
 
                             }
                         });
-
+                        dialog.dismiss();
                     } else {
+                        dialog.dismiss();
                         networkOperationFail(new Throwable("Error happened while getting your data .. please try again"));
                     }
                 }
 
                 @Override
                 public void networkOperationFail(Throwable throwable) {
+                    dialog.dismiss();
                     Toast.makeText(getActivity(), "Error happened  " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                     throwable.printStackTrace();
                 }
             });
         } catch (JSONException e) {
+            dialog.dismiss();
             e.printStackTrace();
         }
     }
@@ -306,22 +316,23 @@ public class PostDetailsNotificationFragment extends Fragment implements View.On
             case R.id.iv_comment:
                 Intent intent = new Intent(getActivity(), CommentActivity.class);
                 intent.putExtra("string_key", eventResult.getResult().getID());
+                intent.putExtra("likes_number", eventResult.getResult().getLikeCount());
                 startActivity(intent);
                 break;
             case R.id.tv_share:
             case R.id.iv_share:
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
                 sendIntent.setType("text/plain");
-                startActivity(sendIntent);
+                startActivity(Intent.createChooser(sendIntent, "Select"));
                 break;
             case R.id.iv_share_event:
                 Intent seIntent = new Intent();
                 seIntent.setAction(Intent.ACTION_SEND);
-                seIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                seIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
                 seIntent.setType("text/plain");
-                startActivity(seIntent);
+                startActivity(Intent.createChooser(seIntent, "Select"));
                 break;
             case R.id.tv_calender:
             case R.id.iv_calender:
@@ -360,14 +371,20 @@ public class PostDetailsNotificationFragment extends Fragment implements View.On
     @Override
     public void networkOperationSuccess(NetworkResponse<LikeData> networkResponse) {
         LikeData userNetworkData = (LikeData) networkResponse.data;
-        int errorCode = userNetworkData.ISResultHasData;
+        boolean success = userNetworkData.likeData.success;
 
-        changeLike();
+        if (!success) {
+            networkOperationFail(new Throwable(userNetworkData.likeData.message));
+        } else {
+            changeLike();
+        }
+
     }
+
 
     @Override
     public void networkOperationFail(Throwable throwable) {
-
+        Toast.makeText(getActivity(), "" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     void changeLike() {
@@ -376,12 +393,17 @@ public class PostDetailsNotificationFragment extends Fragment implements View.On
     }
 
     void setValues() {
+        int count = Integer.parseInt(tv_like_count.getText().toString());
+
         if (eventResult.getResult().getIsLike()) {
             eventResult.getResult().setIsLike(false);
-
+            mLikeImageView.setImageResource(R.drawable.ic_like);
+            tv_like_count.setText(--count + "");
         } else {
             eventResult.getResult().setIsLike(true);
-
+            mLikeImageView.setImageResource(R.drawable.ic_like_active);
+            tv_like_count.setText(++count + "");
         }
+        eventResult.getResult().setLikeCount(count);
     }
 }

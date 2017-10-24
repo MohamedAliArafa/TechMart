@@ -1,5 +1,6 @@
 package com.a700apps.techmart.ui.screens.timelinedetails;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -35,7 +36,9 @@ import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.CustomTextView;
 import com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView;
+import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
+import com.a700apps.techmart.utils.loadingDialog;
 import com.bumptech.glide.Glide;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -66,7 +69,8 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     CustomTextView next, back;
     String isLike;
     DetailsPresenter mPresenter;
-    public AVLoadingIndicatorView indicatorView;
+    Dialog dialogsLoading;
+
     TextView mGoing;
     TextView mLikeCount, mCommentCount, mShareCount;
 
@@ -85,15 +89,9 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         mPresenter = new DetailsPresenter();
         mPresenter.attachView(this);
 
-//        Type = getIntent().getStringExtra("Type");
         index = getIntent().getIntExtra("Index", 0);
         mList = getIntent().getParcelableArrayListExtra("Timeline");
 
-        if (mList.get(index).getType() == 1) {
-            Type = "Event";
-        } else {
-            Type = "post";
-        }
 
 //        going = findViewById(R.id.btn_go);
 //        notGoing = findViewById(R.id.btn_not_go);
@@ -103,7 +101,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         tvTmieSlider = findViewById(R.id.tv_time);
         ll_events_time_container = findViewById(R.id.ll_events_time_container);
 
-        indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
+//        indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
         mGoing = (TextView) findViewById(R.id.textView53);
         iv_invite = (ImageView) findViewById(R.id.iv_invite);
         mProfileImageView = (ImageView) findViewById(R.id.new_message);
@@ -137,15 +135,6 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
 
         mLikeImageView = (ImageView) findViewById(R.id.iv_like);
 
-        Glide.with(this)
-                .load(MainApi.IMAGE_IP + mList.get(index).getImage()).placeholder(R.drawable.placeholder)
-                .into(iv_slider);
-
-        if (mList.get(index).getIsGoing()) {
-            mGoing.setText("Attending");
-            mGoing.setEnabled(false);
-            mGoing.setClickable(false);
-        }
 
         mGoing.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,7 +142,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
                 if (AppUtils.isInternetAvailable(DetailsActivity.this)) {
                     mGoing.setClickable(false);
 //                    going.setClickable(false);
-                    mGoing.setText("Attending");
+                    mGoing.setText("Joined");
                     mPresenter.attendee(String.valueOf(mList.get(index).getID()), PreferenceHelper.getUserId(DetailsActivity.this), "true", DetailsActivity.this);
                 } else {
                     Toast.makeText(DetailsActivity.this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
@@ -166,7 +155,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
             public void onClick(View view) {
                 if (AppUtils.isInternetAvailable(DetailsActivity.this)) {
                     mGoing.setClickable(false);
-                    mGoing.setText("Attending");
+                    mGoing.setText("Joined");
                     mPresenter.attendee(String.valueOf(mList.get(index).getID()), PreferenceHelper.getUserId(DetailsActivity.this), "true", DetailsActivity.this);
 
                 } else {
@@ -192,24 +181,15 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         iv_calender.setOnClickListener(this);
         iv_share_event.setOnClickListener(this);
         iv_invite.setOnClickListener(this);
-        if (mList.get(index).getIsLike()) {
-            mLikeImageView.setImageResource(R.drawable.ic_like_active);
-        } else {
-            mLikeImageView.setImageResource(R.drawable.ic_like);
 
-        }
+
         tv_like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (mList.get(index).getIsLike()) {
-                    mList.get(index).setIsLike(false);
                     isLike = "false";
-                    mLikeImageView.setImageResource(R.drawable.ic_like);
                 } else {
                     isLike = "true";
-                    mList.get(index).setIsLike(true);
-                    mLikeImageView.setImageResource(R.drawable.ic_like_active);
                 }
                 getLike(mList.get(index));
 
@@ -221,14 +201,11 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
             public void onClick(View view) {
 
                 if (mList.get(index).getIsLike()) {
-                    mList.get(index).setIsLike(false);
                     isLike = "false";
-                    mLikeImageView.setImageResource(R.drawable.ic_like);
                 } else {
                     isLike = "true";
-                    mList.get(index).setIsLike(true);
-                    mLikeImageView.setImageResource(R.drawable.ic_like_active);
                 }
+
                 getLike(mList.get(index));
 
             }
@@ -239,12 +216,17 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(View view) {
                 if (++index < mList.size()) {
-                    finish();
-                    Intent intent = new Intent(DetailsActivity.this, DetailsActivity.class);
-                    intent.putExtra("Type", Type);
-                    intent.putExtra("Index", index);
-                    intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mList);
-                    startActivity(intent);
+//                    finish();
+//                    Intent intent = new Intent(DetailsActivity.this, DetailsActivity.class);
+//                    intent.putExtra("Type", Type);
+//                    intent.putExtra("Index", index);
+//                    intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mList);
+//                    startActivity(intent);
+
+
+
+
+                    fillData();
                 } else {
                     finish();
                 }
@@ -254,13 +236,15 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (index > 0) {
-                    finish();
-                    Intent intent = new Intent(DetailsActivity.this, DetailsActivity.class);
-                    intent.putExtra("Type", Type);
-                    intent.putExtra("Index", index - 1);
-                    intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mList);
-                    startActivity(intent);
+                if (--index >= 0) {
+//                    finish();
+//                    Intent intent = new Intent(DetailsActivity.this, DetailsActivity.class);
+//                    intent.putExtra("Type", Type);
+//                    intent.putExtra("Index", index - 1);
+//                    intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mList);
+//                    startActivity(intent);
+
+                    fillData();
                 } else {
                     finish();
                 }
@@ -274,16 +258,6 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
-        tvTmieSlider.setText(mList.get(index).getStartDate());
-        mTitle.setText(mList.get(index).getPostedByName());
-        mDescTextView.setText(mList.get(index).getDescr());
-        mEventTitle.setText(mList.get(index).getTitle());
-        tvTime.setText("Starts: " + mList.get(index).getStartDate());
-        mSlideTitle.setText(mList.get(index).getTitle());
-        Log.e("StartDate", "Date : " + mList.get(index).getStartDate());
-        mLikeCount.setText("" + mList.get(index).getLikeCount());
-        mCommentCount.setText("" + mList.get(index).getCommentCount());
-        tv_tie.setText("Location: " + getCompleteAddressString(mList.get(index).getLatitude(), mList.get(index).getLongtude()));
 
         mProfileImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -300,7 +274,44 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         });
 
 //        sliderNumGoing.setText(""+mList.get(index).getAttendantCount());
+        fillData();
 
+    }
+
+    private void fillData(){
+        if (mList.get(index).getType() == 1) {
+            Type = "Event";
+        } else {
+            Type = "post";
+        }
+
+        Glide.with(DetailsActivity.this)
+                .load(MainApi.IMAGE_IP + mList.get(index).getImage()).placeholder(R.drawable.placeholder)
+                .into(iv_slider);
+
+
+        if (mList.get(index).getIsGoing()) {
+            mGoing.setText("Joined");
+            mGoing.setEnabled(false);
+            mGoing.setClickable(false);
+        }
+
+        if (mList.get(index).getIsLike()) {
+            mLikeImageView.setImageResource(R.drawable.ic_like_active);
+        } else {
+            mLikeImageView.setImageResource(R.drawable.ic_like);
+        }
+
+        tvTmieSlider.setText(mList.get(index).getStartDate());
+        mTitle.setText(mList.get(index).getPostedByName());
+        mDescTextView.setText(mList.get(index).getDescr());
+        mEventTitle.setText(mList.get(index).getTitle());
+        tvTime.setText("Starts: " + mList.get(index).getStartDate());
+        mSlideTitle.setText(mList.get(index).getTitle());
+        Log.e("StartDate", "Date : " + mList.get(index).getStartDate());
+        mLikeCount.setText("" + mList.get(index).getLikeCount());
+        mCommentCount.setText("" + mList.get(index).getCommentCount());
+        tv_tie.setText("Location: " + getCompleteAddressString(mList.get(index).getLatitude(), mList.get(index).getLongtude()));
 
         if (Type.equals("post")) {
             mLikeLinearContainer.setVisibility(View.VISIBLE);
@@ -320,7 +331,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
 //            linearCount.setVisibility(View.VISIBLE);
             mSlidertype.setText("Event");
             if (mList.get(index).getIsGoing()) {
-                tv_going.setText("Attending");
+                tv_going.setText("Joined");
 //                going.setBackground(getResources().getDrawable(R.drawable.bg_blueish));
 //                notGoing.setBackground(getResources().getDrawable(R.drawable.bg_transparent_rounded_small));
             } else {
@@ -359,13 +370,18 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     void setValues() {
+        int count = Integer.parseInt(mLikeCount.getText().toString());
+
         if (mList.get(index).getIsLike()) {
             mList.get(index).setIsLike(false);
-
+            mLikeImageView.setImageResource(R.drawable.ic_like);
+            mLikeCount.setText(--count + "");
         } else {
             mList.get(index).setIsLike(true);
-
+            mLikeImageView.setImageResource(R.drawable.ic_like_active);
+            mLikeCount.setText(++count + "");
         }
+        mList.get(index).setLikeCount(count);
     }
 
     void getLike(TimeLineData.ResultEntity timeLine) {
@@ -412,16 +428,17 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.iv_share:
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
                 sendIntent.setType("text/plain");
-                startActivity(sendIntent);
+                startActivity(Intent.createChooser(sendIntent, "Select"));
                 break;
             case R.id.iv_share_event:
                 Intent seIntent = new Intent();
                 seIntent.setAction(Intent.ACTION_SEND);
-                seIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                seIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
+
                 seIntent.setType("text/plain");
-                startActivity(seIntent);
+                startActivity(Intent.createChooser(seIntent, "Select"));
                 break;
             case R.id.tv_calender:
             case R.id.iv_calender:
@@ -453,15 +470,20 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void networkOperationSuccess(NetworkResponse<LikeData> networkResponse) {
         LikeData userNetworkData = (LikeData) networkResponse.data;
-        int errorCode = userNetworkData.ISResultHasData;
+        boolean success = userNetworkData.likeData.success;
 
-        changeLike();
+        if (!success) {
+            networkOperationFail(new Throwable(userNetworkData.likeData.message));
+        } else {
+            changeLike();
+        }
+
     }
 
 
     @Override
     public void networkOperationFail(Throwable throwable) {
-
+        Toast.makeText(this, "" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     void changeLike() {
@@ -471,13 +493,12 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void showProgress() {
-        indicatorView.setVisibility(View.VISIBLE);
-        indicatorView.show();
+        dialogsLoading = new loadingDialog().showDialog(this);
     }
 
     @Override
     public void hideProgress() {
-        indicatorView.hide();
+        dialogsLoading.dismiss();
     }
 
     @Override
@@ -490,7 +511,8 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
 
         }
 
-        mGoing.setText("Attending");
+        Toast.makeText(this, "You joined event  " + mList.get(index).getTitle() + " Successfully", Toast.LENGTH_SHORT).show();
+        mGoing.setText("Joined");
         mGoing.setClickable(false);
         mGoing.setEnabled(false);
     }

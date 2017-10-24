@@ -106,12 +106,7 @@ public class ViewPagerAdapter extends PagerAdapter  {
         Glide.with(context)
                 .load(MainApi.IMAGE_IP + timelineItem.getImage())
                 .into(mSlideImageView);
-        mSlideImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openDetails(context,String.valueOf( timelineItem.getType()), imageModelArrayList, positionItem);
-            }
-        });
+
 
         view.addView(imageLayout, 0);
 
@@ -122,18 +117,6 @@ public class ViewPagerAdapter extends PagerAdapter  {
     public boolean isViewFromObject(View view, Object object) {
         return view.equals(object);
 }
-
-    static void openDetails(Context context, String type, List<TimeLineData.ResultEntity> mTimeLineList, int index) {
-//        ActivityUtils.openActivity(context, DetailsActivity.class, false);
-        Intent intent = new Intent(context, DetailsActivity.class);
-        intent.putExtra("Type", type);
-        intent.putExtra("Index", index);
-        intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mTimeLineList);
-        context.startActivity(intent);
-
-
-    }
-
 
 //
 }

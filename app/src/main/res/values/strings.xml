@@ -19,7 +19,8 @@
     <string name="large_image">Please select image less than 1MB in size.</string>
     <string name="no_image">Please select an attach image.</string>
     <string name="mobile_number">Mobile Number</string>
-    <string name="hint_mobile">mobile number Ex(+97xxxxxxxxxxxx)</string>
+    <!--<string name="hint_mobile">mobile number Ex(+97xxxxxxxxxxxx)</string>-->
+    <string name="hint_mobile">please enter phone number</string>
     <string name="email">Email</string>
     <string name="hint_email">Your email goes here</string>
     <string name="passord">Password</string>

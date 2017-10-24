@@ -6,7 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.LikeData;
@@ -43,8 +46,13 @@ public class PredifinedAdapter extends RecyclerView.Adapter<PredifinedAdapter.Vi
     @Override
     public void onBindViewHolder(final ViewHolderPost viewHolder, final int position) {
         final PredifinedData.Result item = mTimeLineList.get(position);
-        viewHolder.radioButton.setText(item.getText());
-        viewHolder.radioButton.setChecked(position == lastCheckedPosition);
+        viewHolder.message.setText(item.getText());
+        if (lastCheckedPosition  == position){
+            viewHolder.indicator.setBackground(context.getResources().getDrawable(R.drawable.round_red_dot_predifined));
+        }else {
+            viewHolder.indicator.setBackground(context.getResources().getDrawable(R.drawable.round_white_shape));
+        }
+//        viewHolder.radioButton.setChecked(position == lastCheckedPosition);
     }
 
     @Override
@@ -67,13 +75,20 @@ public class PredifinedAdapter extends RecyclerView.Adapter<PredifinedAdapter.Vi
 
     public class ViewHolderPost extends RecyclerView.ViewHolder {
 
-        RadioButton radioButton;
+//        RadioButton radioButton;
+
+        TextView message , indicator ;
+        RelativeLayout layout;
 
         public ViewHolderPost(View itemView) {
             super(itemView);
-            radioButton = itemView.findViewById(R.id.cb_predifined);
 
-            radioButton.setOnClickListener(new View.OnClickListener() {
+//            radioButton = itemView.findViewById(R.id.cb_predifined);
+            message = itemView.findViewById(R.id.predifined_message);
+            indicator = itemView.findViewById(R.id.predifined_indicator);
+            layout = itemView.findViewById(R.id.predifined_layout);
+
+            layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     lastCheckedPosition = getAdapterPosition();

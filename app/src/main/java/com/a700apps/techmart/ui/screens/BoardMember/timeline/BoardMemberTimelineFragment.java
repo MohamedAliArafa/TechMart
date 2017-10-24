@@ -164,8 +164,8 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
         mNotificationImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
-                ((HomeActivity) getActivity()).openFragment(NotificationFragment.class, null);
+                ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
+//                ((HomeActivity) getActivity()).openFragment(NotificationFragment.class, null);
             }
         });
 

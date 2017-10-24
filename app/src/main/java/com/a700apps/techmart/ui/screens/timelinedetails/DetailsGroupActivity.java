@@ -34,6 +34,7 @@ import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.CustomTextView;
 import com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView;
+import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -63,7 +64,7 @@ public class DetailsGroupActivity extends AppCompatActivity implements View.OnCl
     TextView tvTmieSlider;
     String Type;
     int index;
-    List<GroupTimeLineData.ResultEntity> mList;
+    List<TimeLineData.ResultEntity> mList;
     TextView next, back;
     String isLike;
     DetailsPresenter mPresenter;
@@ -181,21 +182,18 @@ public class DetailsGroupActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onClick(View view) {
                 if (AppUtils.isInternetAvailable(DetailsGroupActivity.this)){
+
                     if (mList.get(index).getIsLike()) {
-                        mList.get(index).setIsLike(false);
                         isLike = "false";
-                        mLikeImageView.setImageResource(R.drawable.ic_like);
                     } else {
                         isLike = "true";
-                        mList.get(index).setIsLike(true);
-                        mLikeImageView.setImageResource(R.drawable.ic_like_active);
                     }
+
                     getLike(mList.get(index));
 
                 }else {
                     Toast.makeText(DetailsGroupActivity.this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
@@ -203,14 +201,11 @@ public class DetailsGroupActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onClick(View view) {
                 if (AppUtils.isInternetAvailable(DetailsGroupActivity.this)){
+
                     if (mList.get(index).getIsLike()) {
-                        mList.get(index).setIsLike(false);
                         isLike = "false";
-                        mLikeImageView.setImageResource(R.drawable.ic_like);
                     } else {
                         isLike = "true";
-                        mList.get(index).setIsLike(true);
-                        mLikeImageView.setImageResource(R.drawable.ic_like_active);
                     }
                     getLike(mList.get(index));
 
@@ -324,16 +319,21 @@ public class DetailsGroupActivity extends AppCompatActivity implements View.OnCl
 
 
     void setValues() {
+        int count = Integer.parseInt(mLikeCount.getText().toString());
+
         if (mList.get(index).getIsLike()) {
             mList.get(index).setIsLike(false);
+            mLikeImageView.setImageResource(R.drawable.ic_like);
+            mLikeCount.setText(--count+"");
 
         } else {
             mList.get(index).setIsLike(true);
-
+            mLikeImageView.setImageResource(R.drawable.ic_like_active);
+            mLikeCount.setText(++count+"");
         }
     }
 
-    void getLike(GroupTimeLineData.ResultEntity timeLine) {
+    void getLike(TimeLineData.ResultEntity timeLine) {
         try {
             JSONObject registerBody = MainApiHelper.getUserLike(PreferenceHelper.getUserId(this), timeLine.getID(), isLike
             );
@@ -379,16 +379,16 @@ public class DetailsGroupActivity extends AppCompatActivity implements View.OnCl
             case R.id.iv_share:
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
                 sendIntent.setType("text/plain");
-                startActivity(sendIntent);
+                startActivity(Intent.createChooser(sendIntent, "Select"));
                 break;
             case R.id.iv_share_event:
                 Intent seIntent = new Intent();
                 seIntent.setAction(Intent.ACTION_SEND);
-                seIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                seIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
                 seIntent.setType("text/plain");
-                startActivity(seIntent);
+                startActivity(Intent.createChooser(seIntent, "Select"));
                 break;
 
             case R.id.iv_add_calender:
@@ -419,15 +419,20 @@ public class DetailsGroupActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void networkOperationSuccess(NetworkResponse<LikeData> networkResponse) {
         LikeData userNetworkData = (LikeData) networkResponse.data;
-        int errorCode = userNetworkData.ISResultHasData;
+        boolean success = userNetworkData.likeData.success;
 
-        changeLike();
+        if (!success){
+            networkOperationFail(new Throwable(userNetworkData.likeData.message));
+        }else {
+            changeLike();
+        }
+
     }
 
 
     @Override
     public void networkOperationFail(Throwable throwable) {
-
+        Toast.makeText(this, ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     void changeLike() {

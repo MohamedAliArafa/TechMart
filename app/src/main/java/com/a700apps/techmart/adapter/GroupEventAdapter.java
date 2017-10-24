@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.GroupTimeLine;
-import com.a700apps.techmart.data.model.GroupTimeLineData;
+import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
@@ -32,12 +32,12 @@ import java.util.List;
  */
 
 public class GroupEventAdapter extends RecyclerView.Adapter<GroupEventAdapter.ViewHolder> {
-    private List<GroupTimeLineData.ResultEntity> mTimeLineList;
+    private List<TimeLineData.ResultEntity> mTimeLineList;
     Context context;
     private static final int NOTIF_TYPE_EVENT= 1;
 
 
-    public GroupEventAdapter(Context context,List<GroupTimeLineData.ResultEntity> TimeLineList) {
+    public GroupEventAdapter(Context context,List<TimeLineData.ResultEntity> TimeLineList) {
         this.context = context;
         this.mTimeLineList =TimeLineList;
 
@@ -46,16 +46,17 @@ public class GroupEventAdapter extends RecyclerView.Adapter<GroupEventAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        GroupTimeLineData.ResultEntity timeLineItem = mTimeLineList.get(position);
+        TimeLineData.ResultEntity timeLineItem = mTimeLineList.get(position);
         final int itemType = getItemViewType(position);
         Log.e("timeLineItem.getType()",timeLineItem.getType()+"");
 
         switch (itemType) {
             case NOTIF_TYPE_EVENT:
                 ViewHolder viewHolderEvent = (ViewHolder)viewHolder;
-                viewHolderEvent.mDateTextView.setText(timeLineItem.getPostedByName());
+                viewHolderEvent.mDateTextView.setText(timeLineItem.getGroupName());
                 viewHolderEvent.mDescribtionTextView.setText(timeLineItem.getDescr());
                 viewHolderEvent.mTitleTextView.setText(timeLineItem.getTitle());
+                viewHolderEvent.tv_username.setText(timeLineItem.getPostedByName());
 
                 Glide.with(context)
                         .load(MainApi.IMAGE_IP+timeLineItem.getImage()).placeholder(R.drawable.placeholder)
@@ -145,7 +146,7 @@ public class GroupEventAdapter extends RecyclerView.Adapter<GroupEventAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView mEventImageView ,shareBtn, addCalenderBtn;
-        TextView mTitleTextView,mDescribtionTextView,mDateTextView,mGroupNameTextView,tv_add_calender;
+        TextView mTitleTextView,mDescribtionTextView,mDateTextView,mGroupNameTextView,tv_add_calender,tv_username;
         RelativeLayout contain;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -155,6 +156,7 @@ public class GroupEventAdapter extends RecyclerView.Adapter<GroupEventAdapter.Vi
             mTitleTextView = (TextView) itemView.findViewById(R.id.tv_title);
             mDescribtionTextView = (TextView) itemView.findViewById(R.id.tv_description);
             mDateTextView = (TextView) itemView.findViewById(R.id.tv_date);
+            tv_username = (TextView) itemView.findViewById(R.id.tv_username);
             contain = (RelativeLayout) itemView.findViewById(R.id.contain);
 
             shareBtn = (ImageView) itemView.findViewById(R.id.iv_share);
@@ -195,8 +197,8 @@ public class GroupEventAdapter extends RecyclerView.Adapter<GroupEventAdapter.Vi
         }
     }
 
-    static void openDetails(Context context, String type, List<GroupTimeLineData.ResultEntity> mTimeLineList, int index) {
-        Intent intent = new Intent(context, DetailsGroupActivity.class);
+    static void openDetails(Context context, String type, List<TimeLineData.ResultEntity> mTimeLineList, int index) {
+        Intent intent = new Intent(context, DetailsActivity.class);
         intent.putExtra("Type", type);
         intent.putExtra("Index", index);
         intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mTimeLineList);

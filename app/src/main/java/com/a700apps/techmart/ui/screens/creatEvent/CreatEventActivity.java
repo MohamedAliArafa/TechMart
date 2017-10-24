@@ -159,7 +159,9 @@ public class CreatEventActivity extends AppCompatActivity implements
         tv_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ActivityCompat.checkSelfPermission(CreatEventActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(CreatEventActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                tv_location.setEnabled(false);
+                if (ActivityCompat.checkSelfPermission(CreatEventActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(CreatEventActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(CreatEventActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
                     return;
                 } else {
@@ -184,6 +186,7 @@ public class CreatEventActivity extends AppCompatActivity implements
     @Override
     public void onResume() {
         super.onResume();
+        tv_location.setEnabled(true);
         DatePickerDialog dpd = (DatePickerDialog) getFragmentManager().findFragmentByTag("Datepickerdialog");
         if (dpd != null) dpd.setOnDateSetListener(this);
     }

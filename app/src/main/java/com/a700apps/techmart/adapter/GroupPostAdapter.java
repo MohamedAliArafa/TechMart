@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.GroupTimeLine;
@@ -25,6 +26,7 @@ import com.a700apps.techmart.ui.screens.comment.CommentActivity;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsGroupActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
 
@@ -39,13 +41,13 @@ import java.util.List;
  */
 
 public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.ViewHolderPost> implements NetworkResponseListener<LikeData> {
-    private List<GroupTimeLineData.ResultEntity> mTimeLineList;
+    private List<TimeLineData.ResultEntity> mTimeLineList;
     Context context;
     String isLike;
     View noteView;
     int positionItem;
 
-    public GroupPostAdapter(Context context, List<GroupTimeLineData.ResultEntity> TimeLineList) {
+    public GroupPostAdapter(Context context, List<TimeLineData.ResultEntity> TimeLineList) {
         this.context = context;
         this.mTimeLineList = TimeLineList;
     }
@@ -65,7 +67,7 @@ public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.View
     @Override
     public void onBindViewHolder(final GroupPostAdapter.ViewHolderPost viewHolder, final int position) {
         positionItem = position;
-        final GroupTimeLineData.ResultEntity timeLineItem = mTimeLineList.get(positionItem);
+        final TimeLineData.ResultEntity timeLineItem = mTimeLineList.get(positionItem);
         final int itemType = getItemViewType(positionItem);
         Log.e("timeLineItem.getType()", timeLineItem.getType() + "");
 
@@ -76,6 +78,10 @@ public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.View
                 viewHolder.mPostedByTextView.setText(timeLineItem.getPostedByName());
                 viewHolder.mTitleTextView.setText(timeLineItem.getTitle());
                 viewHolder.mGroupNameTextView.setText(timeLineItem.getGroupName());
+                viewHolder.tv_like.setText(timeLineItem.getLikeCount() + " Likes");
+                viewHolder.tv_comment.setText(timeLineItem.getCommentCount() + " Comments");
+
+
                 Glide.with(context)
                         .load(MainApi.IMAGE_IP + timeLineItem.getImage()).placeholder(R.drawable.placeholder)
                         .into(viewHolder.mPostImageView);
@@ -113,20 +119,39 @@ public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.View
                     }
                 });
 
+                viewHolder.tv_like.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (AppUtils.isInternetAvailable(context)) {
+                            positionItem = position;
+
+                            if (timeLineItem.getIsLike()) {
+                                isLike = "false";
+                            } else {
+                                isLike = "true";
+                            }
+                            getLike(timeLineItem);
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
                 viewHolder.mLikeImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (timeLineItem.getIsLike()) {
-                            timeLineItem.setIsLike(false);
-                            isLike = "false";
-                            viewHolder.mLikeImageView.setImageResource(R.drawable.ic_like);
-                        } else {
-                            isLike = "true";
-                            timeLineItem.setIsLike(true);
-                            viewHolder.mLikeImageView.setImageResource(R.drawable.ic_like_active);
-                        }
-                        getLike(timeLineItem);
+                        if (AppUtils.isInternetAvailable(context)) {
+                            positionItem = position;
+                            if (timeLineItem.getIsLike()) {
+                                isLike = "false";
+                            } else {
+                                isLike = "true";
+                            }
+                            getLike(timeLineItem);
 
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 
@@ -165,23 +190,26 @@ public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.View
 
     @Override
     public void networkOperationSuccess(NetworkResponse<LikeData> networkResponse) {
-
         LikeData userNetworkData = (LikeData) networkResponse.data;
-        int errorCode = userNetworkData.ISResultHasData;
+        boolean success = userNetworkData.likeData.success;
 
-        changeLike();
-
+        if (!success) {
+            networkOperationFail(new Throwable(userNetworkData.likeData.message));
+        } else {
+            changeLike();
+        }
     }
+
 
     @Override
     public void networkOperationFail(Throwable throwable) {
-
+        Toast.makeText(context, "" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
 
     public class ViewHolderPost extends RecyclerView.ViewHolder {
         ImageView mPostImageView, addCalenderBtn, mLikeImageView,mComment,shareBtn;
-        TextView mTitleTextView, mDescribtionTextView, mPostedByTextView, mGroupNameTextView,tv_comment;
+        TextView mTitleTextView, mDescribtionTextView, mPostedByTextView, mGroupNameTextView,tv_comment,tv_like;
         ConstraintLayout contain;
 
         public ViewHolderPost(View itemView) {
@@ -192,6 +220,7 @@ public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.View
             mDescribtionTextView = (TextView) itemView.findViewById(R.id.tv_desc);
             mPostedByTextView = (TextView) itemView.findViewById(R.id.tv_postedby);
             mGroupNameTextView = (TextView) itemView.findViewById(R.id.tv_group_name);
+            tv_like = (TextView) itemView.findViewById(R.id.tv_like);
             contain = (ConstraintLayout) itemView.findViewById(R.id.contain);
             mComment = (ImageView) itemView.findViewById(R.id.iv_comment);
             tv_comment = (TextView) itemView.findViewById(R.id.tv_comment);
@@ -200,8 +229,8 @@ public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.View
         }
     }
 
-    static void openDetails(Context context,String type,List<GroupTimeLineData.ResultEntity> mTimeLineList,int index) {
-        Intent intent = new Intent(context, DetailsGroupActivity.class);
+    static void openDetails(Context context,String type,List<TimeLineData.ResultEntity> mTimeLineList,int index) {
+        Intent intent = new Intent(context, DetailsActivity.class);
         intent.putExtra("Type", type);
         intent.putExtra("Index", index);
         intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mTimeLineList);
@@ -209,22 +238,30 @@ public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.View
     }
 
     void changeLike() {
-        setValues(new GroupPostAdapter.ViewHolderPost(noteView), noteView);
+        setValues();
     }
 
-    void setValues(GroupPostAdapter.ViewHolderPost viewholder, View item) {
-        if (isLike.equals("true")) {
+    void setValues() {
+        int count = mTimeLineList.get(positionItem).getLikeCount();
+
+        if (mTimeLineList.get(positionItem).getIsLike()) {
             mTimeLineList.get(positionItem).setIsLike(false);
+            mTimeLineList.get(positionItem).setLikeCount(--count);
             notifyDataSetChanged();
-//          viewholder.mLikeImageView.setImageResource(R.drawable.ic_like_active);
-//          isLike = "false";
         } else {
             mTimeLineList.get(positionItem).setIsLike(true);
+            mTimeLineList.get(positionItem).setLikeCount(++count);
             notifyDataSetChanged();
         }
     }
 
-    void getLike(GroupTimeLineData.ResultEntity timeLine) {
+
+    void getLike(TimeLineData.ResultEntity timeLine) {
+        if (timeLine.getIsLike()) {
+            isLike = "false";
+        } else {
+            isLike = "true";
+        }
         try {
             JSONObject registerBody = MainApiHelper.getUserLike(PreferenceHelper.getUserId(context), timeLine.getID(), isLike
             );

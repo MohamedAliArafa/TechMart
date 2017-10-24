@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.AllMessageList;
@@ -80,7 +81,11 @@ public class MessageFragment extends Fragment implements MessageView {
                 ((HomeActivity) getActivity()).openDrawer();
             }
         });
-        presenter.userInbox(getActivity(), PreferenceHelper.getUserId(getActivity()));
+        if (AppUtils.isInternetAvailable(getActivity())){
+            presenter.userInbox(getActivity(), PreferenceHelper.getUserId(getActivity()));
+        }else {
+            Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -161,11 +166,15 @@ public class MessageFragment extends Fragment implements MessageView {
             viewHolder.messageItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, ChatActivity.class);
-                    intent.putExtra("RelativeID", responser.get(position).getReciverUserID());
-                    intent.putExtra("ReciverName", responser.get(position).getReciverName());
-                    intent.putExtra("ReciverPhoto", responser.get(position).getReciverPhoto());
-                    context.startActivity(intent);
+                    if (AppUtils.isInternetAvailable(getActivity())){
+                        Intent intent = new Intent(context, ChatActivity.class);
+                        intent.putExtra("RelativeID", responser.get(position).getReciverUserID());
+                        intent.putExtra("ReciverName", responser.get(position).getReciverName());
+                        intent.putExtra("ReciverPhoto", responser.get(position).getReciverPhoto());
+                        context.startActivity(intent);
+                    }else {
+                        Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }

@@ -71,7 +71,6 @@
                     android:textColor="@color/main_light_text"
                     android:layout_weight="60"
                     android:ellipsize="end"
-
                     android:maxLines="@integer/events_max_lines"
                     android:text="@string/description"
                     android:textSize="@dimen/time_text" />
@@ -83,7 +82,6 @@
                 android:id="@+id/ll_events_time_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:layout_below="@+id/ll_events_title_container"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -93,7 +91,8 @@
                     android:id="@+id/imageView"
                     android:layout_width="0dp"
                     android:layout_height="20dp"
-                    android:layout_weight="10"
+                    android:layout_weight="7"
+                    android:padding="2dp"
                     android:visibility="invisible"
                     app:srcCompat="@drawable/ic_calender" />
 

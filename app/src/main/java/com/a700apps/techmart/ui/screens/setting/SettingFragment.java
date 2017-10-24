@@ -214,7 +214,7 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
 
     @Override
     public void showToast(String msg) {
-        Toast.makeText(getActivity(), "" + msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), " " + msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override

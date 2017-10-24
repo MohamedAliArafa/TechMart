@@ -24,6 +24,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.InnerModle;
@@ -76,6 +77,8 @@ public class MapDialogActivity extends FragmentActivity implements OnMapReadyCal
         setContentView(R.layout.activity_map_dialog);
 
 
+        setFinishOnTouchOutside(false);
+
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
@@ -89,6 +92,10 @@ public class MapDialogActivity extends FragmentActivity implements OnMapReadyCal
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (innerModle.getLatitude()==null || innerModle.getLongitude() ==null){
+                    Toast.makeText(MapDialogActivity.this, "Please wait till get your location", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra(URLS.EXTRA_PARCELABLE, innerModle);
                 setResult(RESULT_OK, returnIntent);

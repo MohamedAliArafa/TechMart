@@ -22,6 +22,7 @@ import com.a700apps.techmart.adapter.GroupViewPagerAdapter;
 import com.a700apps.techmart.adapter.ViewPagerAdapter;
 import com.a700apps.techmart.data.model.GroupTimeLine;
 import com.a700apps.techmart.data.model.GroupTimeLineData;
+import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.ui.screens.groupmemberdetails.GroupActivity;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.mygroup.GroupPagerFragment;
@@ -198,7 +199,7 @@ public class GroupsTimLineActivity  extends AppCompatActivity implements View.On
     }
 
     @Override
-    public void updateUi(List<GroupTimeLineData.ResultEntity> TimelineList) {
+    public void updateUi(List<TimeLineData.ResultEntity> TimelineList) {
         mPager.setAdapter(new GroupViewPagerAdapter(GroupsTimLineActivity.this, TimelineList));
 
         final float density = getResources().getDisplayMetrics().density;
