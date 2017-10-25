@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +17,10 @@ import android.widget.TextView;
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.GroupUsersData;
 import com.a700apps.techmart.data.network.MainApi;
-import com.a700apps.techmart.ui.screens.comment.CommentActivity;
 import com.a700apps.techmart.ui.screens.grouptimeline.GroupsTimLineActivity;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
-import com.a700apps.techmart.ui.screens.mygroup.MyGroubListActivity;
-import com.a700apps.techmart.ui.screens.profile.MemberProfile;
+import com.a700apps.techmart.ui.screens.profile.EditProfileFragment;
 import com.a700apps.techmart.ui.screens.profile.MemberProfileFragment;
-import com.a700apps.techmart.ui.screens.userlikes.UserLikesActivity;
-import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.CustomButton;
 import com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
@@ -40,7 +37,7 @@ public class GroupActivity extends AppCompatActivity implements GroupMemberView 
     EmptyRecyclerView rv, rv2;
     ImageView Icon;
     int mId;
-    TextView mNoData,tv_admin,tv_member;
+    TextView mNoData, tv_admin, tv_member;
     public AVLoadingIndicatorView indicatorView;
 
 
@@ -51,7 +48,7 @@ public class GroupActivity extends AppCompatActivity implements GroupMemberView 
 
         presenter = new GroupMemberPresenter();
         presenter.attachView(this);
-        indicatorView= (AVLoadingIndicatorView) findViewById(R.id.avi);
+        indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
 
 //        AppUtils.hideSoftKeyboard(this);
         mId = getIntent().getIntExtra("string_key", 0);
@@ -107,7 +104,7 @@ public class GroupActivity extends AppCompatActivity implements GroupMemberView 
                 .load(MainApi.IMAGE_IP + groupusers.getIcon())
                 .into(Icon);
 
-        if (groupusers.getBoardMemebes().size()==0){
+        if (groupusers.getBoardMemebes().size() == 0) {
 //            mNoData.setVisibility(View.VISIBLE);
             rv.setEmptyView(findViewById(R.id.tv_nodata));
         }
@@ -115,7 +112,7 @@ public class GroupActivity extends AppCompatActivity implements GroupMemberView 
         tv_admin.setText(String.valueOf(groupusers.getOtheMemebes().size()));
         rv.setAdapter(new AdminAdapter(this, groupusers.getBoardMemebes(), mId));
         rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        if (groupusers.getOtheMemebes().size()==0){
+        if (groupusers.getOtheMemebes().size() == 0) {
             rv2.setEmptyView(findViewById(R.id.tv_nodata));
 
         }
@@ -161,12 +158,6 @@ public class GroupActivity extends AppCompatActivity implements GroupMemberView 
                     intent.putExtra("RelativId", timeLineItem.getUserID());
                     intent.putExtra("GroupId", GroupId);
                     context.startActivity(intent);
-
-//                    Intent intent = new Intent(context, MemberProfile.class);
-//                    intent.putExtra("RelativId", timeLineItem.getUserID());
-//                    intent.putExtra("GroupId", GroupId);
-//                    context.startActivity(intent);
-
 
                 }
             });
@@ -229,21 +220,19 @@ public class GroupActivity extends AppCompatActivity implements GroupMemberView 
             viewHolder.profile_pic.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    Intent intent = new Intent(context, MemberProfile.class);
-//                    intent.putExtra("RelativId", timeLineItem.getUserID());
-//                    intent.putExtra("GroupId", GroupId);
-//                    context.startActivity(intent);
+//
+                    Log.e("relative",timeLineItem.getUserID());
+                    Log.e("userIds",PreferenceHelper.getUserId(context));
+                    if (timeLineItem.getUserID().equals(PreferenceHelper.getUserId(context))) {
+                        ((HomeActivity) context). openFragment(EditProfileFragment.class, null);
+                    } else {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("RelativId", timeLineItem.getUserID());
+                        bundle.putInt("GroupId", GroupId);
+                        Globals.userId = timeLineItem.getUserID();
+                        ((HomeActivity) context).openFragment(MemberProfileFragment.class, bundle);
 
-//                    Intent intent = new Intent(context, HomeActivity.class);
-//                    intent.putExtra("RelativId", timeLineItem.getUserID());
-//                    intent.putExtra("GroupId", GroupId);
-//                    context.startActivity(intent);
-
-                    Bundle bundle = new Bundle();
-                    bundle.putString("RelativId", timeLineItem.getUserID());
-                    bundle.putInt("GroupId", GroupId);
-                    Globals.userId = timeLineItem.getUserID();
-                    ((HomeActivity) context).openFragment(MemberProfileFragment.class, bundle);
+                    }
                 }
             });
         }

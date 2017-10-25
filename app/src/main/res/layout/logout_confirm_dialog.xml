@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="350dp"
-    android:background="@color/red_join_dialog"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/card_color"
     android:layout_height="wrap_content">
 
 
-    <com.a700apps.techmart.utils.CustomTextView
+    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
         android:layout_width="match_parent"
         android:text="@string/logout"
         android:id="@+id/logout_title"
         android:textSize="14sp"
         android:textColor="@color/white"
-        android:layout_marginStart="24dp"
+        android:paddingLeft="@dimen/about_end_padding"
+        android:background="@color/gray_join_dialog"
         android:gravity="start|center"
         android:layout_height="40dp" />
 
@@ -29,9 +31,9 @@
         android:id="@+id/logout_desc"
         android:textSize="14sp"
         android:layout_below="@id/seperator"
-        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
         android:gravity="start|center"
-        android:textColor="@color/white"
+        android:textColor="@color/gray_join_dialog"
         android:layout_height="wrap_content"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"/>
@@ -53,9 +55,10 @@
             android:textSize="15sp"
             android:gravity="center"
             android:textColor="@color/white"
-            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
             android:id="@+id/cancel"
-            android:background="@drawable/button_background"
+
+            android:background="@color/red_join_dialog"
             android:text="@string/cancel"
             android:layout_weight="1"/>
 
@@ -66,7 +69,7 @@
             android:gravity="center"
             android:textColor="@color/white"
             android:text="@string/logout"
-            android:background="@drawable/button_background"
+            android:background="@color/blue_join_dialog"
             android:id="@+id/logout"
             android:layout_weight="1"/>
     </LinearLayout>

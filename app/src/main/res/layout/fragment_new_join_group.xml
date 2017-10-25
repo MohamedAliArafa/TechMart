@@ -9,6 +9,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/lin_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
@@ -51,8 +52,9 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="64dp"
+        android:layout_below="@+id/lin_toolbar"
         android:gravity="center"
+        android:layout_marginTop="30dp"
         android:fontFamily="sans-serif-condensed"
         android:text="@string/select_your_category"
         android:textColor="@android:color/white"
@@ -64,25 +66,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_below="@+id/textView7"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="100dp"/>
+        android:layout_marginEnd="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginStart="10dp"
+        />
 
     <com.a700apps.techmart.utils.CustomButton
         android:id="@+id/nextBtn"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_below="@+id/recyclerView"
+        android:layout_height="30dp"
         android:layout_centerInParent="true"
         android:layout_marginLeft="8dp"
+android:layout_below="@+id/recyclerView"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
         android:background="@drawable/bg_transparent"
-
         android:gravity="center"
         android:text="@string/next"
         android:textColor="@android:color/white"

@@ -183,31 +183,7 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
         dialogsLoading.dismiss();
     }
 
-    //    void openSelectIntent() {
-//        if (Build.VERSION.SDK_INT >= 21) {
-//            if (AppConst.checkPermission(getActivity())) {
-//                // select a file
-//                selectedImagePath = null;
-//                Intent intent = new Intent();
-//                intent.setType("image/*");
-//                intent.setAction(Intent.ACTION_GET_CONTENT);
-//                startActivityForResult(Intent.createChooser(intent,
-//                        "Select Picture"), SELECT_PICTURE_CHANGE);
-//
-//            } else {
-//                AppConst.requestPermission(getActivity(), PERMISSION_REQUEST_CODE);
-//            }
-//        } else {
-//            selectedImagePath = null;
-//
-//            // select a file
-//            Intent intent = new Intent();
-//            intent.setType("image/*");
-//            intent.setAction(Intent.ACTION_GET_CONTENT);
-//            startActivityForResult(Intent.createChooser(intent,
-//                    "Select Picture"), SELECT_PICTURE_CHANGE);
-//        }
-//    }
+
     void selectImage() {
         if (AppConst.checkPermission(getActivity())) {
             selectedImagePath = null;

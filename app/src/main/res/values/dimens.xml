@@ -38,7 +38,7 @@
     <!--Toolbar-->
     <dimen name="about_toolbar_text_size">20sp</dimen>
     <dimen name="about_start_padding">18dp</dimen>
-    <dimen name="about_end_padding">18dp</dimen>
+    <dimen name="about_end_padding">24dp</dimen>
 
 
     <dimen name="about_toolbar_text_start_margin">36dp</dimen>

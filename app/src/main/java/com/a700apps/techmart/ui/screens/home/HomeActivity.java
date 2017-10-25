@@ -390,8 +390,7 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
                 break;
             case R.drawable.ic_logout:
                 showConfirmDialog();
-//                ATCPrefManager.setIsUserLoggedIn(HomeActivity.this, false);
-//                ActivityUtils.openActivity(HomeActivity.this, LoginActivity.class, true);
+
                 break;
             default:
                 break;
