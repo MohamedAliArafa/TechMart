@@ -43,6 +43,7 @@ import com.a700apps.techmart.utils.LinkedinLogin;
 import com.a700apps.techmart.utils.Social;
 import com.a700apps.techmart.utils.Validator;
 import com.a700apps.techmart.utils.loadingDialog;
+import com.bumptech.glide.Glide;
 import com.linkedin.platform.LISessionManager;
 import com.linkedin.platform.errors.LIApiError;
 import com.linkedin.platform.listeners.ApiResponse;
@@ -70,7 +71,7 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
     private static final int Permission_storage_code = 787;
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
 
-
+    boolean mIsLinkedIn;
     EditText mFullNameEditText, mPhoneNumberEditText, mEmailEditText, mPasswordEditText, mCompanyEditText, mPositionEditText;
     private static final int SELECT_PICTURE = 1;
     private long selectedImageSize;
@@ -88,6 +89,7 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
 
     Dialog dialogsLoading;
     Button SignButton;
+    ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +150,7 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                 String scheme = selectedImageUri.getScheme();
                 selectedImagePath = getPathFromURI(RegisterActivity.this, selectedImageUri);
 
-                ImageView imageView = (ImageView) findViewById(R.id.iv_post);
+                imageView = (ImageView) findViewById(R.id.iv_post);
                 imageView.setImageBitmap(BitmapFactory.decodeFile(selectedImagePath));
                 imageView.setVisibility(View.VISIBLE);
                 Log.e("ImagePath", "-->" + selectedImagePath);
@@ -489,7 +491,13 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                     snackbar1.show();
                 } else {
                     if (isValid) {
-                        uploadFile();
+                        if (mIsLinkedIn) {
+                            presenter.register(fullName, password, email, mobile, selectedImagePath, company, position, RegisterActivity.this);
+
+                        } else {
+                            uploadFile();
+                        }
+
                     }
 
                 }
@@ -618,8 +626,20 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                 Log.e("name", mLinkedInModel.name);
                 Log.e("photo", mLinkedInModel.photo);
                 Log.e("id", mLinkedInModel.id);
-                presenter.registerLinkedin(mLinkedInModel.name, mLinkedInModel.email,
-                        mLinkedInModel.id, mLinkedInModel.work, mLinkedInModel.work, mLinkedInModel.photo, RegisterActivity.this);
+//                presenter.registerLinkedin(mLinkedInModel.name, mLinkedInModel.email,
+//                        mLinkedInModel.id, mLinkedInModel.work, mLinkedInModel.work, mLinkedInModel.photo, RegisterActivity.this);
+                mIsLinkedIn = true;
+                mFullNameEditText.setText(mLinkedInModel.name);
+                mEmailEditText.setText(mLinkedInModel.email);
+                mCompanyEditText.setText(mLinkedInModel.work);
+                mPositionEditText.setText(mLinkedInModel.work);
+                selectedImagePath = mLinkedInModel.photo;
+                imageView = (ImageView) findViewById(R.id.iv_post);
+                Glide.with(RegisterActivity.this)
+                        .load(selectedImagePath).placeholder(R.drawable.placeholder)
+                        .into(imageView);
+                imageView.setVisibility(View.VISIBLE);
+
             }
 
             @Override

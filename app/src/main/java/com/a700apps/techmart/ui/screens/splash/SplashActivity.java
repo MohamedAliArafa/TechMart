@@ -21,6 +21,7 @@ import com.a700apps.techmart.utils.AppUtils;
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.FirebaseApp;
 
+import butterknife.BindView;
 import io.fabric.sdk.android.Fabric;
 
 /**

@@ -36,7 +36,7 @@
     <string name="messages">Messages</string>
     <string name="schedule">Schedule</string>
     <string name="setting">Settings</string>
-    <string name="logout">Logout</string>
+    <string name="logout">Log out</string>
     <string name="menu_name">Abdul Rahman</string>
     <string name="password_hint">************</string>
 
@@ -74,7 +74,7 @@
     <string name="view_details">View Details</string>
     <string name="view_profile">View Profile</string>
     <string name="view_remove">Remove</string>
-    <string name="member">Member</string>
+    <string name="member">Members</string>
 
     <color name="colorPrimary">#3f51b5</color>
     <color name="colorPrimaryDark">#303F9F</color>

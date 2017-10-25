@@ -20,6 +20,7 @@ import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.data.network.MainApiHelper;
 import com.a700apps.techmart.data.network.NetworkResponse;
 import com.a700apps.techmart.data.network.NetworkResponseListener;
+import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.meeting.MeetingActivity;
 import com.a700apps.techmart.ui.screens.meetingone.MeetingonetooneActivity;
 import com.a700apps.techmart.ui.screens.profile.MemberProfile;
@@ -73,9 +74,14 @@ public class OneToneAdapter extends RecyclerView.Adapter<OneToneAdapter.ViewHold
         viewHolder.Details.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, MemberProfile.class);
-                intent.putExtra("RelativId", timeLineItem.getUserID());
-                intent.putExtra("GroupId", GroupId);
+//                Intent intent = new Intent(context, MemberProfile.class);
+//                intent.putExtra("RelativId", timeLineItem.getUserID());
+//                intent.putExtra("GroupId", GroupId);
+//                context.startActivity(intent);
+
+                Intent intent = new Intent(context, HomeActivity.class);
+                Globals.CAME_FROM_LIKE_TO_GROUP = true;
+                intent.putExtra("profileHolder", timeLineItem.getUserID());
                 context.startActivity(intent);
             }
         });

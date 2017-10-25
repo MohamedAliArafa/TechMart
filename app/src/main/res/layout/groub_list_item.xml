@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/transparent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/container">
 
     <ImageView
         android:id="@+id/iv_icon"
@@ -106,7 +107,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Enrol as"
+            android:text="Enroll as"
             android:textColor="@android:color/white"
             android:textSize="14sp"/>
 

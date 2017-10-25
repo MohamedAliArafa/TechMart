@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,15 +19,12 @@ import android.widget.TextView;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.CategoryGroups;
-import com.a700apps.techmart.data.model.CategoryGroupsData;
 import com.a700apps.techmart.data.model.JoinGroupData;
 import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.data.network.MainApiHelper;
 import com.a700apps.techmart.data.network.NetworkResponse;
 import com.a700apps.techmart.data.network.NetworkResponseListener;
-import com.a700apps.techmart.ui.screens.category.CategoryPresenter;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
-import com.a700apps.techmart.ui.screens.mygroup.MyGroubListActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.AppConst;
 import com.a700apps.techmart.utils.AppUtils;
@@ -45,13 +43,14 @@ public class GroubListActivity extends AppCompatActivity implements GroubView {
     private GroupPresenter presenter;
     EmptyRecyclerView rv;
     public AVLoadingIndicatorView indicatorView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_groub_list);
         presenter = new GroupPresenter();
         presenter.attachView(this);
-        indicatorView= (AVLoadingIndicatorView) findViewById(R.id.avi);
+        indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
 
 
         getExtra();
@@ -62,7 +61,7 @@ public class GroubListActivity extends AppCompatActivity implements GroubView {
 
     void getExtra() {
         Intent mIntent = getIntent();
-        int intValue = mIntent.getIntExtra("selectedCategory",0);
+        int intValue = mIntent.getIntExtra("selectedCategory", 0);
 
 //        String.valueOf(intValue)
         presenter.getGroupCategory(String.valueOf(intValue), PreferenceHelper.getUserId(GroubListActivity.this));
@@ -86,7 +85,7 @@ public class GroubListActivity extends AppCompatActivity implements GroubView {
 //            mNoData.setVisibility(View.VISIBLE);
             rv.setEmptyView(findViewById(R.id.tv_nodata));
         }
-        rv.setAdapter(new GroupsAdapter(GroubListActivity.this,CategoryGroups));
+        rv.setAdapter(new GroupsAdapter(GroubListActivity.this, CategoryGroups));
         rv.setLayoutManager(new LinearLayoutManager(this));
     }
 
@@ -94,7 +93,7 @@ public class GroubListActivity extends AppCompatActivity implements GroubView {
         private List<CategoryGroups> mCategoryGroupList;
         Context context;
 
-        public GroupsAdapter(Context context,List<CategoryGroups> CategoryGroups) {
+        public GroupsAdapter(Context context, List<CategoryGroups> CategoryGroups) {
             this.context = context;
             this.mCategoryGroupList = CategoryGroups;
         }
@@ -111,12 +110,12 @@ public class GroubListActivity extends AppCompatActivity implements GroubView {
         public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
             CategoryGroups categoryGroupItem = mCategoryGroupList.get(position);
 
-            viewHolder. mMemberNumberTextView.setText(String.valueOf(categoryGroupItem.MemberCount));
-            viewHolder. mCreationDateTextView.setText(String.valueOf(AppUtils.getDate(categoryGroupItem.CreationDate)));
-            viewHolder. mNameTextView.setText(categoryGroupItem.Name);
+            viewHolder.mMemberNumberTextView.setText(String.valueOf(categoryGroupItem.MemberCount));
+            viewHolder.mCreationDateTextView.setText(String.valueOf(AppUtils.getDate(categoryGroupItem.CreationDate)));
+            viewHolder.mNameTextView.setText(categoryGroupItem.Name);
             Glide.with(context)
                     .load(MainApi.IMAGE_IP + mCategoryGroupList.get(position).Icon).placeholder(R.drawable.ic_profile)
-                    .into(  viewHolder.mIconImageView);
+                    .into(viewHolder.mIconImageView);
 
             Button enrollBtn = (Button) viewHolder.itemView.findViewById(R.id.button);
             enrollBtn.setOnClickListener(new View.OnClickListener() {
@@ -134,7 +133,7 @@ public class GroubListActivity extends AppCompatActivity implements GroubView {
                     indLinear.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            getJoinGroup(String.valueOf(mCategoryGroupList.get(position).ID),PreferenceHelper.getUserId(context), AppConst.BoardMember);
+                            getJoinGroup(String.valueOf(mCategoryGroupList.get(position).ID), PreferenceHelper.getUserId(context), AppConst.BoardMember);
                             dialog.dismiss();
                         }
                     });
@@ -148,11 +147,51 @@ public class GroubListActivity extends AppCompatActivity implements GroubView {
                     individualLinear.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            getJoinGroup(String.valueOf(mCategoryGroupList.get(position).ID),PreferenceHelper.getUserId(context),AppConst.InDividual);
+                            getJoinGroup(String.valueOf(mCategoryGroupList.get(position).ID), PreferenceHelper.getUserId(context), AppConst.InDividual);
                             dialog.dismiss();
                         }
                     });
 
+
+                    // set the layout for the Dialogr
+                    dialog.setContentView(root);
+                    dialog.show();
+                }
+            });
+
+            viewHolder.mEnrollConstrainLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // create an instance of Dialog
+                    final Dialog dialog = new Dialog(context);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    //inflate a layout
+                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+                    View root = inflater.inflate(R.layout.group_join_dialog, null);
+                    LinearLayout indLinear = (LinearLayout) root.findViewById(R.id.lin_board);
+                    LinearLayout individualLinear = (LinearLayout) root.findViewById(R.id.lin_individual);
+                    ImageView close = (ImageView) root.findViewById(R.id.imageView8);
+                    indLinear.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            getJoinGroup(String.valueOf(mCategoryGroupList.get(position).ID), PreferenceHelper.getUserId(context), AppConst.BoardMember);
+                            dialog.dismiss();
+                        }
+                    });
+
+                    close.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
+                        }
+                    });
+                    individualLinear.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            getJoinGroup(String.valueOf(mCategoryGroupList.get(position).ID), PreferenceHelper.getUserId(context), AppConst.InDividual);
+                            dialog.dismiss();
+                        }
+                    });
 
 
                     // set the layout for the Dialogr
@@ -171,7 +210,7 @@ public class GroubListActivity extends AppCompatActivity implements GroubView {
         public void networkOperationSuccess(NetworkResponse<JoinGroupData> networkResponse) {
             JoinGroupData userNetworkData = (JoinGroupData) networkResponse.data;
             int errorCode = userNetworkData.ISResultHasData;
-            if (errorCode==1){
+            if (errorCode == 1) {
                 ActivityUtils.openActivity(context, HomeActivity.class, true);
 
             }
@@ -184,12 +223,11 @@ public class GroubListActivity extends AppCompatActivity implements GroubView {
         }
 
 
-        public void getJoinGroup(String ID,String UserId,String role) {
-
+        public void getJoinGroup(String ID, String UserId, String role) {
 
 
             try {
-                JSONObject registerBody = MainApiHelper.joinGroups(ID,UserId,role);
+                JSONObject registerBody = MainApiHelper.joinGroups(ID, UserId, role);
                 MainApi.joinGroup(registerBody, this);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -200,9 +238,11 @@ public class GroubListActivity extends AppCompatActivity implements GroubView {
 
             public ImageView mIconImageView;
             public TextView mMemberNumberTextView, mNameTextView, mCreationDateTextView;
+            ConstraintLayout mEnrollConstrainLayout;
 
             public ViewHolder(View itemView) {
                 super(itemView);
+                mEnrollConstrainLayout = (ConstraintLayout) itemView.findViewById(R.id.container);
                 mIconImageView = (ImageView) itemView.findViewById(R.id.iv_icon);
                 mMemberNumberTextView = (TextView) itemView.findViewById(R.id.tv_member_number);
                 mNameTextView = (TextView) itemView.findViewById(R.id.tv_name);
