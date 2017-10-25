@@ -1,18 +1,23 @@
 package com.a700apps.techmart.ui.screens.home;
 
 import android.app.Dialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -20,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.a700apps.techmart.R;
@@ -613,5 +619,34 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         transaction.commit();
         mDrawerLayout.closeDrawer(GravityCompat.START);
     }
+
+
+//    private void launchNotification(){
+//
+//        NotificationCompat.Builder builder =
+//                new NotificationCompat.Builder(this)
+//                        .setSmallIcon(R.drawable.ic_view_profile)
+//                        .setContentTitle("My notification")
+//                        .setAutoCancel(true)
+//                        .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, HomeActivity.class), 0))
+//                        .setContentText("Hello World!");
+//
+//
+//        RemoteViews expandedView = new RemoteViews(getPackageName(), R.layout.expanded_notification);
+//        RemoteViews collapsedView = new RemoteViews(getPackageName(), R.layout.collapsed_notification);
+//
+//
+//        expandedView.setImageViewResource(R.id.big_icon, R.drawable.profile_pic);
+//        expandedView.setTextViewText(R.id.timestamp, DateUtils.formatDateTime(this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME));
+//        expandedView.setTextViewText(R.id.notification_message, "Message");
+//
+//        collapsedView.setImageViewResource(R.id.big_icon, R.drawable.arrow_signup);
+//        collapsedView.setTextViewText(R.id.timestamp, DateUtils.formatDateTime(this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME));
+//
+//        Intent leftIntent = new Intent(this, NotificationIntentService.class);
+//        leftIntent.setAction("left");
+//        expandedView.setOnClickPendingIntent(R.id.left_button, PendingIntent.getService(this, 0, leftIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+//    }
+
 
 }

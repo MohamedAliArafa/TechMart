@@ -104,7 +104,6 @@ public class CommentActivity extends AppCompatActivity implements commentView {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 } else {
                     Intent intent = new Intent(CommentActivity.this, UserLikesActivity.class);
                     intent.putExtra("string_key", mId);

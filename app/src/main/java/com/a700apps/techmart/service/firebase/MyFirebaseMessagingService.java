@@ -1,13 +1,20 @@
 package com.a700apps.techmart.service.firebase;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.util.Log;
+import android.widget.RemoteViews;
 
+import com.a700apps.techmart.R;
 import com.a700apps.techmart.TechMartApp;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
+import com.a700apps.techmart.ui.screens.home.NotificationIntentService;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
 import com.a700apps.techmart.utils.Config;
 import com.a700apps.techmart.utils.NotificationUtils;
@@ -57,16 +64,58 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         pushNotification.putExtra("message", message);
         LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
 
-        // play notification sound
-        Intent intent = new Intent(TechMartApp.getAppContext(), NotificationActivity.class);
+        sendNotification();
 
-        NotificationUtils notificationUtils = new NotificationUtils(TechMartApp.getAppContext());
-        notificationUtils.showNotificationMessage("TechMart", message, "", intent);
+
+        // play notification sound
+//        Intent intent = new Intent(TechMartApp.getAppContext(), NotificationActivity.class);
+//        NotificationUtils notificationUtils = new NotificationUtils(TechMartApp.getAppContext());
+//        notificationUtils.showNotificationMessage("TechMart", message, "", intent);
 //            notificationUtils.playNotificationSound();
 //        }else{
         // If the app is in background, firebase itself handles the notification
 //        }
     }
+
+
+    private void sendNotification() {
+
+        RemoteViews expandedView = new RemoteViews(getPackageName(), R.layout.expanded_notification);
+        expandedView.setTextViewText(R.id.timestamp, DateUtils.formatDateTime(this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME));
+        expandedView.setTextViewText(R.id.notification_message, "Message");
+        // adding action to left button
+        Intent leftIntent = new Intent(this, NotificationIntentService.class);
+        leftIntent.setAction("left");
+        expandedView.setOnClickPendingIntent(R.id.left_button, PendingIntent.getService(this, 0, leftIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+        // adding action to right button
+        Intent rightIntent = new Intent(this, NotificationIntentService.class);
+        rightIntent.setAction("right");
+        expandedView.setOnClickPendingIntent(R.id.right_button, PendingIntent.getService(this, 1, rightIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+        RemoteViews collapsedView = new RemoteViews(getPackageName(), R.layout.collapsed_notification);
+        collapsedView.setTextViewText(R.id.timestamp, DateUtils.formatDateTime(this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME));
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                // these are the three things a NotificationCompat.Builder object requires at a minimum
+                .setSmallIcon(R.drawable.profile_pic)
+                .setContentTitle("Title")
+                .setContentText("Context title text")
+                // notification will be dismissed when tapped
+                .setAutoCancel(true)
+                // tapping notification will open MainActivity
+                .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, HomeActivity.class), 0))
+                // setting the custom collapsed and expanded views
+                .setCustomContentView(collapsedView)
+                .setCustomBigContentView(expandedView)
+                // setting style to DecoratedCustomViewStyle() is necessary for custom views to display
+                .setStyle(new android.support.v7.app.NotificationCompat.DecoratedCustomViewStyle());
+
+        // retrieves android.app.NotificationManager
+        NotificationManager notificationManager = (android.app.NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(0, builder.build());
+    }
+
+
 
     private void handleDataMessage(JSONObject json) {
         Log.e(TAG, "push json: " + json.toString());
