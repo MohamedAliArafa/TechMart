@@ -213,6 +213,7 @@
                     android:background="@drawable/transperant_bg"
                     android:gravity="center"
                     android:paddingLeft="@dimen/general_margin"
+                    android:paddingRight="@dimen/general_margin"
                     android:text="Sign in with linkedin"
                     android:textColor="@color/light_color_text"
                     android:textSize="@dimen/button_light_text" />

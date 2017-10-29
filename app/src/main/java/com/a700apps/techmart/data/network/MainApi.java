@@ -108,7 +108,7 @@ public class MainApi {
 
     public static void registerLinkedUser(JSONObject jsonBody, final NetworkResponseListener<UserData> responseListener) {
         RequestBody requestBody = getRequestBody(jsonBody);
-        getApi().registerLinkedUser(requestBody).subscribeOn(Schedulers.io())
+        getApi().linkedRegisterUser(requestBody).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<UserData>() {
 
@@ -134,6 +134,28 @@ public class MainApi {
 
     public static void loginUser(JSONObject body, final NetworkResponseListener<UserData> responseListener) {
         getApi().loginUser(getRequestBody(body)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<UserData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                responseListener.networkOperationFail(e);
+            }
+
+            @Override
+            public void onNext(UserData userNetworkData) {
+                NetworkResponse<UserData> networkResponse = new NetworkResponse<>();
+                networkResponse.data = userNetworkData;
+                responseListener.networkOperationSuccess(networkResponse);
+            }
+        });
+    }
+
+    public static void loginLinkedUser(JSONObject body, final NetworkResponseListener<UserData> responseListener) {
+        getApi().loginLinkedUser(getRequestBody(body)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<UserData>() {
             @Override
             public void onCompleted() {

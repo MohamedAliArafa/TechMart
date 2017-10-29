@@ -31,6 +31,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.a700apps.techmart.R;
@@ -85,7 +86,7 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
     //    private String selectedImagePath;
     private RegisterPresenter presenter;
     public AVLoadingIndicatorView indicatorView;
-    Button mLinkedInButton,mSelectNormalButton;
+    Button mLinkedInButton, mSelectNormalButton;
     private String selectedImagePath, mImagePath;
     ProgressDialog progressDialog;
     String fullName, password, email, mobile, company, position;
@@ -93,7 +94,7 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
     private int mRequestCode;
     private static final int SIGN_IN_CODE = 0;
     ImageView mLikedinImageView, mSignInImageView;
-
+    LinearLayout lin_pass;
     Dialog dialogsLoading;
     Button SignButton;
     ImageView imageView;
@@ -109,6 +110,7 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
     }
 
     private void findViews() {
+        lin_pass = (LinearLayout) findViewById(R.id.lin_pass);
         SignButton = ActivityUtils.findView(this, R.id.bt_register, Button.class);
         Button attachButton = ActivityUtils.findView(this, R.id.bt_upload, Button.class);
         mFullNameEditText = ActivityUtils.findView(this, R.id.et_name, EditText.class);
@@ -489,6 +491,7 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
         int viewId = v.getId();
         switch (viewId) {
             case R.id.btn_sign_in:
+                lin_pass.setVisibility(View.VISIBLE);
                 mLikedinImageView.setVisibility(View.GONE);
                 mSignInImageView.setVisibility(View.VISIBLE);
                 mFullNameEditText.setText("");
@@ -545,11 +548,14 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                     mEmailEditText.setError(getResources().getString(R.string.invalid_email));
                     isValid = false;
                 }
+                if (!mIsLinkedIn) {
 
-                boolean validPassword = Validator.validPasswordLength(password);
-                if (!validPassword) {
-                    mPasswordEditText.setError(getResources().getString(R.string.invalid_password));
-                    isValid = false;
+                    boolean validPassword = Validator.validPasswordLength(password);
+                    if (!validPassword) {
+                        mPasswordEditText.setError(getResources().getString(R.string.invalid_password));
+                        isValid = false;
+                    }
+
                 }
 
                 boolean validCompanyName = Validator.isTextEmpty(company);
@@ -578,8 +584,11 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                 } else {
                     if (isValid) {
                         if (mIsLinkedIn) {
-                            mIsLinkedIn=false;
-                            presenter.register(fullName, password, email, mobile, selectedImagePath, company, position, RegisterActivity.this);
+                            mIsLinkedIn = false;
+//                            presenter.register(fullName, password, email, mobile, selectedImagePath, company, position, RegisterActivity.this);//
+
+                            presenter.registerLinkedin(fullName, email,
+                                    mLinkedInModel.id, company, company, selectedImagePath, RegisterActivity.this);
 
                         } else {
                             uploadFile();
@@ -714,6 +723,8 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
 //                presenter.registerLinkedin(mLinkedInModel.name, mLinkedInModel.email,
 //                        mLinkedInModel.id, mLinkedInModel.work, mLinkedInModel.work, mLinkedInModel.photo, RegisterActivity.this);
                 mIsLinkedIn = true;
+                lin_pass.setVisibility(View.GONE);
+
                 mFullNameEditText.setText(mLinkedInModel.name);
                 mEmailEditText.setText(mLinkedInModel.email);
                 mCompanyEditText.setText(mLinkedInModel.work);
