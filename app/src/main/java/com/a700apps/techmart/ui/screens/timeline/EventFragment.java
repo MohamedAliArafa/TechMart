@@ -12,6 +12,7 @@ import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.EventAdapter;
 import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.utils.DialogCreator;
+import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -61,7 +62,11 @@ public class EventFragment extends Fragment implements TimeLineView {
     public void updateUi(List<TimeLineData.ResultEntity> TimelineList) {
 
         rv.setAdapter(new EventAdapter(getActivity(), TimelineList));
-        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+//        linearLayoutManager.setReverseLayout(true);
+//        linearLayoutManager.setStackFromEnd(true);
+        rv.setLayoutManager(linearLayoutManager);
+        rv.scrollToPosition(Globals.R_Index);
     }
 
     @Override

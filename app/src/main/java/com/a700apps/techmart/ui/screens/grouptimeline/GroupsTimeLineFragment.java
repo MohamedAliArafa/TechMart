@@ -28,6 +28,7 @@ import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.mygroup.GroupPagerFragment;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
+import com.a700apps.techmart.ui.screens.profile.EditProfileFragment;
 import com.a700apps.techmart.ui.screens.timeline.GroupTimeLineFragment;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
@@ -89,6 +90,7 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
     public void onDestroy() {
         super.onDestroy();
         Globals.mIndex = -1;
+        Globals.R_Index_group=0;
     }
 
     @Override
@@ -171,7 +173,8 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
         mProfileImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtils.openActivity(getActivity(), EditProfileActivity.class, false);
+//                ActivityUtils.openActivity(getActivity(), EditProfileActivity.class, false);
+                ((HomeActivity) getActivity()).openFragment(EditProfileFragment.class , null);
             }
         });
 
@@ -362,6 +365,7 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
+
 
 
         @Override

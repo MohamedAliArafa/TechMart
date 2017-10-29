@@ -9,8 +9,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.a700apps.techmart.R;
+import com.a700apps.techmart.data.model.GroupTimeLineData;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.a700apps.techmart.utils.loadingDialog;
+
+import java.util.List;
 
 public class DialogActivity extends AppCompatActivity implements approvalView {
 
@@ -120,5 +123,10 @@ public class DialogActivity extends AppCompatActivity implements approvalView {
     @Override
     public void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void updateUi(List<GroupTimeLineData.ResultEntity> TimelineList) {
+        
     }
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.a700apps.techmart.data.model.AllGroupUsers;
+import com.a700apps.techmart.data.model.Group;
 import com.a700apps.techmart.data.model.PostData;
 import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.data.network.MainApiHelper;
@@ -26,13 +27,11 @@ public class BoardRemovePresenter extends MainPresenter<BoardRemoveView> {
     Context mContext;
     Dialog dialogsLoading;
 
-    public void removeMember(String GroupID, String BoardMemberUserID, Context context) {
+    public void removeMember(String GroupID, String usrid, Context context) {
         mContext = context;
         dialogsLoading = new loadingDialog().showDialog(context);
-//        view.showProgress();
-
         try {
-            JSONObject registerBody = MainApiHelper.removeMember(GroupID, BoardMemberUserID, PreferenceHelper.getUserId(mContext));
+            JSONObject registerBody = MainApiHelper.removeMember(GroupID, usrid, PreferenceHelper.getUserId(mContext));
             Log.e("DATA", registerBody.toString());
             MainApi.removeMember(registerBody, new NetworkResponseListener<PostData>() {
                 @Override
@@ -67,13 +66,13 @@ public class BoardRemovePresenter extends MainPresenter<BoardRemoveView> {
         try {
             JSONObject registerBody = MainApiHelper.getAllGroupUsers(GroupID,PreferenceHelper.getUserId(mContext));
             Log.e("DATA", registerBody.toString());
-            MainApi.getAllGroupUsers(registerBody, new NetworkResponseListener<AllGroupUsers>() {
+            MainApi.getAllGroupUsers(registerBody, new NetworkResponseListener<Group>() {
                 @Override
-                public void networkOperationSuccess(NetworkResponse<AllGroupUsers> networkResponse) {
+                public void networkOperationSuccess(NetworkResponse<Group> networkResponse) {
                     if (isDetachView()) return;
                     dialogsLoading.dismiss();
-                    AllGroupUsers userNetworkData = networkResponse.data;
-                    int errorCode = userNetworkData.ISResultHasData;
+                    Group userNetworkData = networkResponse.data;
+                    int errorCode = userNetworkData.getISResultHasData();
                     if (errorCode == 1) {
                         view.updateUi(userNetworkData);
                     }

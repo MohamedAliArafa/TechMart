@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class JoinRequestsFragment extends Fragment implements RequestsView{
+public class JoinRequestsFragment extends Fragment implements RequestsView {
 
 
     RecyclerView rv;
@@ -51,9 +52,14 @@ public class JoinRequestsFragment extends Fragment implements RequestsView{
                 getActivity().onBackPressed();
             }
         });
-
         presenter.getGroupRequests(""+Globals.GROUP_ID, PreferenceHelper.getUserId(getActivity()));
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -72,6 +78,8 @@ public class JoinRequestsFragment extends Fragment implements RequestsView{
 
     @Override
     public void updateData(List<JoinGroupRequestsData.Result> list) {
-        rv.setAdapter(new ApprovalAdapter(getActivity() , list));
+        rv.setAdapter(new ApprovalAdapter(getActivity() , list , rv));
     }
+
+
 }

@@ -50,6 +50,7 @@ public class MainApiHelper {
         jsonObject.put("Email", email);
         jsonObject.put("DeviceID", deviceId);
         jsonObject.put("DeviceToken", firebaseToken);
+        jsonObject.put("DeviceType", "android");
         return jsonObject;
     }
 
@@ -419,13 +420,11 @@ public class MainApiHelper {
 
     public static JSONObject getStatistics(String userId , int groupId , int days) throws JSONException {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("GroupID", userId);
-        jsonObject.put("BoardMemberID", groupId);
+        jsonObject.put("GroupID", groupId);
+        jsonObject.put("BoardMemberID", userId);
         jsonObject.put("Days", days);
         return jsonObject;
     }
-
-
 
     public static JSONObject respondFriendRequest(String userId , String relativeId , String connect) throws JSONException {
         JSONObject jsonObject = new JSONObject();

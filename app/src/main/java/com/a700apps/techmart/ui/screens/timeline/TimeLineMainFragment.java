@@ -24,6 +24,7 @@ import com.a700apps.techmart.ui.screens.category.CategoryPresenter;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
+import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -80,7 +81,13 @@ public class TimeLineMainFragment extends Fragment implements TimeLineView {
             rv.setEmptyView(view.findViewById(R.id.tv_nodata));
         }
         rv.setAdapter(new TimelineAdapter(getActivity(),TimelineList));
-        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+//        linearLayoutManager.setReverseLayout(true);
+//        linearLayoutManager.setStackFromEnd(true);
+        rv.setLayoutManager(linearLayoutManager);
+
+        rv.scrollToPosition(Globals.R_Index);
     }
 
     @Override

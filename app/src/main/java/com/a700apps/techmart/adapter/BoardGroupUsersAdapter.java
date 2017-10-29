@@ -3,14 +3,17 @@ package com.a700apps.techmart.adapter;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.AllGroupUsers;
+import com.a700apps.techmart.data.model.Group;
 import com.a700apps.techmart.data.model.User;
 import com.a700apps.techmart.data.model.UserGroup;
 import com.a700apps.techmart.data.network.MainApi;
@@ -35,15 +38,15 @@ import java.util.List;
 
 public class BoardGroupUsersAdapter extends RecyclerView.Adapter<BoardGroupUsersAdapter.ViewHolder> implements BoardRemoveView {
 
-    private List<User> mUserGroupList;
+    private List<Group.Result> mUserGroupList;
     private final Context context;
     int Id;
     BoardRemovePresenter mPresenter;
-    public BoardGroupUsersAdapter(Context context, List<User> UserGroupList,int mGroupId) {
+
+    public BoardGroupUsersAdapter(Context context, List<Group.Result> UserGroupList, int mGroupId) {
         this.context = context;
         this.mUserGroupList = UserGroupList;
-        this.Id=mGroupId;
-
+        this.Id = mGroupId;
     }
 
     @Override
@@ -57,16 +60,21 @@ public class BoardGroupUsersAdapter extends RecyclerView.Adapter<BoardGroupUsers
 
     @Override
     public void onBindViewHolder(BoardGroupUsersAdapter.ViewHolder viewHolder, int position) {
-        User mUserGroupItem = mUserGroupList.get(position);
-        viewHolder.mNameTextView.setText(mUserGroupItem.Name);
+        Group.Result mUserGroupItem = mUserGroupList.get(position);
+        viewHolder.mNameTextView.setText(mUserGroupItem.getName());
         mPresenter = new BoardRemovePresenter();
         mPresenter.attachView(this);
-        viewHolder.mCreateDate.setText(String.valueOf((mUserGroupItem.Company)));
-        viewHolder.mNameTextView.setText(mUserGroupItem.Name);
-        viewHolder.mPosition.setText(String.valueOf(mUserGroupItem.Position));
+        viewHolder.mCreateDate.setText(String.valueOf((mUserGroupItem.getCompany())));
+        viewHolder.mNameTextView.setText(mUserGroupItem.getName());
+        viewHolder.mPosition.setText(String.valueOf(mUserGroupItem.getPosition()));
         Glide.with(context)
-                .load(MainApi.IMAGE_IP + mUserGroupItem.Photo).placeholder(R.drawable.placeholder)
+                .load(MainApi.IMAGE_IP + mUserGroupItem.getPhoto()).placeholder(R.drawable.placeholder)
                 .into(viewHolder.mGroupImageView);
+
+        if (mUserGroupItem.getRoleInGroup() != 1) {
+            viewHolder.view_remove_btn.setEnabled(false);
+            viewHolder.view_remove_btn.setText("Admin");
+        }
     }
 
     @Override
@@ -86,12 +94,12 @@ public class BoardGroupUsersAdapter extends RecyclerView.Adapter<BoardGroupUsers
 
     @Override
     public void update() {
-        mPresenter.getMyGroupUsers(String.valueOf(Id),context);
+        mPresenter.getMyGroupUsers(String.valueOf(Id), context);
     }
 
     @Override
-    public void updateUi(AllGroupUsers data) {
-        mUserGroupList = data.userGroup;
+    public void updateUi(Group data) {
+        mUserGroupList = data.getResult();
         notifyDataSetChanged();
     }
 
@@ -99,12 +107,15 @@ public class BoardGroupUsersAdapter extends RecyclerView.Adapter<BoardGroupUsers
         ImageView mGroupImageView;
         TextView mNameTextView, mCreateDate, mPosition;
 
+        Button view_remove_btn;
+
         public ViewHolder(View itemView) {
             super(itemView);
             mGroupImageView = (ImageView) itemView.findViewById(R.id.iv_group);
             mNameTextView = (TextView) itemView.findViewById(R.id.tv_name);
             mCreateDate = (TextView) itemView.findViewById(R.id.tv_creat_date);
             mPosition = (TextView) itemView.findViewById(R.id.tv_position);
+            view_remove_btn = itemView.findViewById(R.id.view_remove_btn);
 //            mNumber = (TextView) itemView.findViewById(R.id.tv_member_number);
 
             itemView.findViewById(R.id.view_detail_btn).setOnClickListener(this);
@@ -115,16 +126,22 @@ public class BoardGroupUsersAdapter extends RecyclerView.Adapter<BoardGroupUsers
         public void onClick(View v) {
 
             int position = getAdapterPosition();
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.view_detail_btn:
                     Bundle bundle = new Bundle();
-                    bundle.putString("RelativId", mUserGroupList.get(position).UserID);
+                    bundle.putString("RelativId", mUserGroupList.get(position).getUserID());
                     bundle.putInt("GroupId", Id);
 
                     ((HomeActivity) context).openFragment(MemberProfileFragment.class, bundle);
                     break;
                 case R.id.view_remove_btn:
-                    mPresenter.removeMember(String.valueOf(Id), mUserGroupList.get(position).UserID,context);
+
+                    Log.e("AmbId" , ""+Id);
+
+                    mPresenter.removeMember(
+                            "" + Id,
+                            mUserGroupList.get(position).getUserID(), context);
+//                    mPresenter.removeMember(String.valueOf(Id), mUserGroupList.get(position).UserID,context);
                     break;
             }
 

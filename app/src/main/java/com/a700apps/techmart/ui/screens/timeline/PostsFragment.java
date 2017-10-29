@@ -14,6 +14,7 @@ import com.a700apps.techmart.adapter.TimelineAdapter;
 import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.utils.DialogCreator;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
+import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 
 import java.util.List;
@@ -62,7 +63,11 @@ public class PostsFragment extends Fragment implements TimeLineView {
             rv.setEmptyView(view.findViewById(R.id.tv_nodata));
         }
         rv.setAdapter(new PostAdapter(getActivity(),TimelineList));
-        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+//        linearLayoutManager.setReverseLayout(true);
+//        linearLayoutManager.setStackFromEnd(true);
+        rv.setLayoutManager(linearLayoutManager);
+        rv.scrollToPosition(Globals.R_Index);
     }
 
     @Override

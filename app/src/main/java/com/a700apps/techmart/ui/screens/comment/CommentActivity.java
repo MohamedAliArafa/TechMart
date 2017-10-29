@@ -1,5 +1,6 @@
 package com.a700apps.techmart.ui.screens.comment;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.ui.screens.userlikes.UserLikesActivity;
 import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.PreferenceHelper;
+import com.a700apps.techmart.utils.loadingDialog;
 import com.bumptech.glide.Glide;
 
 import org.json.JSONException;
@@ -49,6 +51,7 @@ public class CommentActivity extends AppCompatActivity implements commentView {
     RecyclerView rv;
     ImageView mSend, mLikeImageView;
     TextView mLikes;
+    Dialog dialogsLoading;
 
     int mId, mNumberLikes;
     ImageView mBackButton;
@@ -85,6 +88,7 @@ public class CommentActivity extends AppCompatActivity implements commentView {
             public void onClick(View view) {
                 if (mNumberLikes == 0) {
                     JSONObject registerBody = null;
+                    dialogsLoading = new loadingDialog().showDialog(CommentActivity.this);
                     try {
                         registerBody = MainApiHelper.getUserLike(PreferenceHelper.getUserId(CommentActivity.this), mId, "true");
                         MainApi.getLikeTimeLine(registerBody, new NetworkResponseListener<LikeData>() {
@@ -92,16 +96,21 @@ public class CommentActivity extends AppCompatActivity implements commentView {
                             public void networkOperationSuccess(NetworkResponse<LikeData> networkResponse) {
                                 if (networkResponse.data.ISResultHasData == 1 && networkResponse.data.likeData.success){
                                     mNumberLikes = 1;
-                                    mLikes.setText(1 + " " + "Users like this post");
+                                    mLikes.setText("You like this post");
+                                    mLikeImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_like_active));
+                                    dialogsLoading.dismiss();
                                 }
                             }
 
                             @Override
                             public void networkOperationFail(Throwable throwable) {
+                                dialogsLoading.dismiss();
                                 Toast.makeText(CommentActivity.this, "" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+
                             }
                         });
                     } catch (JSONException e) {
+                        dialogsLoading.dismiss();
                         e.printStackTrace();
                     }
                 } else {
@@ -164,7 +173,6 @@ public class CommentActivity extends AppCompatActivity implements commentView {
         public AdminAdapter(Context context, List<Comment> TimeLineList) {
             this.context = context;
             this.mGroupUsersList = TimeLineList;
-
         }
 
         @Override

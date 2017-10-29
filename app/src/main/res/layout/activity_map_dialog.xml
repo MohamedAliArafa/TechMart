@@ -24,7 +24,6 @@
             android:background="@drawable/box2"
             android:ellipsize="end"
             android:gravity="center"
-            android:lines="1"
             android:textColor="@color/button_light_text" />
 
         <!--<fragment-->

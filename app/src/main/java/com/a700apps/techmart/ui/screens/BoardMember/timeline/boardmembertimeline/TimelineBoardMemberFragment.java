@@ -72,7 +72,7 @@ public class TimelineBoardMemberFragment extends Fragment implements BoardTimlin
         if (TimelineList.size() == 0) {
             rv.setEmptyView(view.findViewById(R.id.tv_nodata));
         }
-        rv.setAdapter(new BoardMemberAdapter(getActivity(),TimelineList));
+        rv.setAdapter(new BoardMemberAdapter(getActivity(),TimelineList , rv));
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
     }

@@ -32,6 +32,7 @@ import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.mygroup.MyGroubListActivity;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
+import com.a700apps.techmart.ui.screens.userlikes.UserLikesActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.CustomTextView;
@@ -116,6 +117,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         mCommentCount = (TextView) findViewById(R.id.tv_comment_count);
         mShareCount = (TextView) findViewById(R.id.tv_share_count);
         tv_tie = (TextView) findViewById(R.id.tv_tie);
+        tv_tie.setSelected(true);
         tvTime = (TextView) findViewById(R.id.tv_3);
 
         next = (CustomTextView) findViewById(R.id.next);
@@ -141,6 +143,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
             public void onClick(View view) {
                 if (AppUtils.isInternetAvailable(DetailsActivity.this)) {
                     mGoing.setClickable(false);
+                    iv_invite.setClickable(false);
 //                    going.setClickable(false);
                     mGoing.setText("Joined");
                     mPresenter.attendee(String.valueOf(mList.get(index).getID()), PreferenceHelper.getUserId(DetailsActivity.this), "true", DetailsActivity.this);
@@ -155,6 +158,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
             public void onClick(View view) {
                 if (AppUtils.isInternetAvailable(DetailsActivity.this)) {
                     mGoing.setClickable(false);
+                    iv_invite.setClickable(false);
                     mGoing.setText("Joined");
                     mPresenter.attendee(String.valueOf(mList.get(index).getID()), PreferenceHelper.getUserId(DetailsActivity.this), "true", DetailsActivity.this);
 
@@ -181,7 +185,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         iv_calender.setOnClickListener(this);
         iv_share_event.setOnClickListener(this);
         iv_invite.setOnClickListener(this);
-
+        mLikeCount.setOnClickListener(this);
 
         tv_like.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,6 +199,14 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
 
             }
         });
+
+        if (index==0){
+            back.setVisibility(View.INVISIBLE);
+        }
+
+        if (index==mList.size()-1){
+            next.setVisibility(View.INVISIBLE);
+        }
 
         mLikeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -216,16 +228,13 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(View view) {
                 if (++index < mList.size()) {
-//                    finish();
-//                    Intent intent = new Intent(DetailsActivity.this, DetailsActivity.class);
-//                    intent.putExtra("Type", Type);
-//                    intent.putExtra("Index", index);
-//                    intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mList);
-//                    startActivity(intent);
-
-
-
-
+                    if (index==mList.size()-1){
+                        next.setVisibility(View.INVISIBLE);
+                        back.setVisibility(View.VISIBLE);
+                    }else {
+                        next.setVisibility(View.VISIBLE);
+                        back.setVisibility(View.VISIBLE);
+                    }
                     fillData();
                 } else {
                     finish();
@@ -237,19 +246,20 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(View view) {
                 if (--index >= 0) {
-//                    finish();
-//                    Intent intent = new Intent(DetailsActivity.this, DetailsActivity.class);
-//                    intent.putExtra("Type", Type);
-//                    intent.putExtra("Index", index - 1);
-//                    intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mList);
-//                    startActivity(intent);
-
+                    if (index==0){
+                        back.setVisibility(View.INVISIBLE);
+                        next.setVisibility(View.VISIBLE);
+                    }else {
+                        back.setVisibility(View.VISIBLE);
+                        next.setVisibility(View.VISIBLE);
+                    }
                     fillData();
                 } else {
                     finish();
                 }
             }
         });
+
         imageView4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -294,6 +304,12 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
             mGoing.setText("Joined");
             mGoing.setEnabled(false);
             mGoing.setClickable(false);
+            iv_invite.setClickable(false);
+        }else {
+            mGoing.setText("Going");
+            mGoing.setEnabled(true);
+            mGoing.setClickable(true);
+            iv_invite.setClickable(true);
         }
 
         if (mList.get(index).getIsLike()) {
@@ -306,12 +322,13 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         mTitle.setText(mList.get(index).getPostedByName());
         mDescTextView.setText(mList.get(index).getDescr());
         mEventTitle.setText(mList.get(index).getTitle());
-        tvTime.setText("Starts: " + mList.get(index).getStartDate());
+        tvTime.setText(mList.get(index).getStartDate());
         mSlideTitle.setText(mList.get(index).getTitle());
         Log.e("StartDate", "Date : " + mList.get(index).getStartDate());
         mLikeCount.setText("" + mList.get(index).getLikeCount());
         mCommentCount.setText("" + mList.get(index).getCommentCount());
-        tv_tie.setText("Location: " + getCompleteAddressString(mList.get(index).getLatitude(), mList.get(index).getLongtude()));
+        tv_tie.setText(mList.get(index).getLocationName());
+//        tv_tie.setText("Location: " + getCompleteAddressString(mList.get(index).getLatitude(), mList.get(index).getLongtude()));
 
         if (Type.equals("post")) {
             mLikeLinearContainer.setVisibility(View.VISIBLE);
@@ -464,6 +481,11 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
                     Toast.makeText(DetailsActivity.this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case R.id.tv_like_count:
+                Intent intent = new Intent(DetailsActivity.this, UserLikesActivity.class);
+                intent.putExtra("string_key", mList.get(index).getID());
+                startActivity(intent);
+                break;
         }
     }
 
@@ -505,15 +527,14 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     public void updateUi() {
         if (mList.get(index).getIsGoing()) {
             mList.get(index).setIsGoing(false);
-
         } else {
             mList.get(index).setIsGoing(true);
-
         }
 
-        Toast.makeText(this, "You joined event  " + mList.get(index).getTitle() + " Successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "You joined this event Successfully", Toast.LENGTH_SHORT).show();
         mGoing.setText("Joined");
         mGoing.setClickable(false);
+        iv_invite.setClickable(false);
         mGoing.setEnabled(false);
     }
 }

@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.PredifinedAdapter;
 import com.a700apps.techmart.data.model.PredifinedData;
+import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
@@ -26,7 +27,7 @@ public class PredifinedMessageActivity extends AppCompatActivity implements Pred
     PredifiednPresenter presenter;
     Button send_predifined;
 
-    TextView memberName , tvSendTo;
+    TextView memberName, tvSendTo;
     ImageView memberImage;
 
     @Override
@@ -59,15 +60,18 @@ public class PredifinedMessageActivity extends AppCompatActivity implements Pred
             }
         });
         Glide.with(this).load(image).placeholder(R.drawable.profile_pic).into(memberImage);
-        memberName.setText(""+name);
-        tvSendTo.setText("Send "+name+ " a contact request");
+        memberName.setText("" + name);
+        tvSendTo.setText("Send " + name + " a contact request");
         presenter.LoadData();
-        Log.e("RelativeID" , relativeId);
+        Log.e("RelativeID", relativeId);
 
         send_predifined.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.sendMessage(PreferenceHelper.getUserId(PredifinedMessageActivity.this) , relativeId , Globals.MESSAGE);
+                if (AppUtils.isInternetAvailable(PredifinedMessageActivity.this))
+                    presenter.sendMessage(PreferenceHelper.getUserId(PredifinedMessageActivity.this), relativeId, Globals.MESSAGE);
+                else
+                    Toast.makeText(PredifinedMessageActivity.this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -95,6 +99,11 @@ public class PredifinedMessageActivity extends AppCompatActivity implements Pred
 
     @Override
     public void updateUi(List<PredifinedData.Result> list) {
-        recyclerView.setAdapter(new PredifinedAdapter(this , list));
+        recyclerView.setAdapter(new PredifinedAdapter(this, list));
+    }
+
+    @Override
+    public void back() {
+        onBackPressed();
     }
 }

@@ -2,6 +2,7 @@ package com.a700apps.techmart.ui.screens.BoardMember.timeline;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.renderscript.Double2;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -29,6 +30,7 @@ import com.a700apps.techmart.ui.screens.mygroup.GroupPagerFragment;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
 import com.a700apps.techmart.ui.screens.notification.NotificationFragment;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
+import com.a700apps.techmart.ui.screens.profile.EditProfileFragment;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
@@ -52,12 +54,12 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
     Dialog dialogsLoading;
 
     int intValue;
-    StatisticPresenter presenter ;
+    StatisticPresenter presenter;
 
-    TextView dayTextView , weekTextView , monthTextView , yearTextView;
-    ImageView dayImageView , weekImageView , monthImageView , yearImageView;
+    TextView dayTextView, weekTextView, monthTextView, yearTextView;
+    ImageView dayImageView, weekImageView, monthImageView, yearImageView;
 
-    TextView posts_lbl , events_lbl , member_lbl;
+    TextView posts_lbl, events_lbl, member_lbl;
 
     public BoardMemberTimelineFragment() {
         // Required empty public constructor
@@ -94,10 +96,10 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
 //        memberCircleProgressBar.setProgress(40);
 
 
-        dayTextView  = view.findViewById(R.id.tv_day);
-        monthTextView  = view.findViewById(R.id.tv_month);
-        weekTextView  = view.findViewById(R.id.tv_week);
-        yearTextView  = view.findViewById(R.id.tv_year);
+        dayTextView = view.findViewById(R.id.tv_day);
+        monthTextView = view.findViewById(R.id.tv_month);
+        weekTextView = view.findViewById(R.id.tv_week);
+        yearTextView = view.findViewById(R.id.tv_year);
 
         dayImageView = view.findViewById(R.id.iv_today);
         weekImageView = view.findViewById(R.id.iv_week);
@@ -139,7 +141,7 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
         presenter.attachView(this);
 
 
-        presenter.getStatistic(PreferenceHelper.getUserId(getActivity()) , Globals.GROUP_ID , 1);
+        presenter.getStatistic(PreferenceHelper.getUserId(getActivity()), Globals.GROUP_ID, 1);
 //        if (!AppUtils.isInternetAvailable(getActivity())) {
 //            Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_LONG).show();
 //        } else {
@@ -157,9 +159,11 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
         mProfileImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtils.openActivity(getActivity(), EditProfileActivity.class, false);
+//                ActivityUtils.openActivity(getActivity(), EditProfileActivity.class, false);
+                ((HomeActivity) getActivity()).openFragment(EditProfileFragment.class , null);
             }
         });
+
 
         mNotificationImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,7 +186,7 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
                 monthImageView.setBackground(null);
                 yearImageView.setBackground(null);
 
-                presenter.getStatistic(PreferenceHelper.getUserId(getActivity()) , Globals.GROUP_ID , 1);
+                presenter.getStatistic(PreferenceHelper.getUserId(getActivity()), Globals.GROUP_ID, 1);
             }
         });
 
@@ -199,7 +203,7 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
                 monthImageView.setBackground(null);
                 yearImageView.setBackground(null);
 
-                presenter.getStatistic(PreferenceHelper.getUserId(getActivity()) , Globals.GROUP_ID , 7);
+                presenter.getStatistic(PreferenceHelper.getUserId(getActivity()), Globals.GROUP_ID, 7);
             }
         });
 
@@ -215,7 +219,7 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
                 dayImageView.setBackground(null);
                 weekImageView.setBackground(null);
                 yearImageView.setBackground(null);
-                presenter.getStatistic(PreferenceHelper.getUserId(getActivity()) , Globals.GROUP_ID , 30);
+                presenter.getStatistic(PreferenceHelper.getUserId(getActivity()), Globals.GROUP_ID, 30);
             }
         });
 
@@ -231,7 +235,7 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
                 dayImageView.setBackground(null);
                 weekImageView.setBackground(null);
                 monthImageView.setBackground(null);
-                presenter.getStatistic(PreferenceHelper.getUserId(getActivity()) , Globals.GROUP_ID , 365);
+                presenter.getStatistic(PreferenceHelper.getUserId(getActivity()), Globals.GROUP_ID, 365);
             }
         });
 
@@ -316,15 +320,46 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
+    }
+
     @Override
     public void updateUi(StatisticModel model) {
-        postCircleProgressBar.setProgress(model.getResult().getApprovedPostCount());
-        eventCircleProgressBar.setProgress(model.getResult().getApprovedEventsCount());
-        memberCircleProgressBar.setProgress(model.getResult().getApprovedJoinrequestCount());
 
-        posts_lbl.setText(model.getResult().getApprovedPostCount()+" %");
-        events_lbl.setText(model.getResult().getApprovedEventsCount()+" %");
-        member_lbl.setText(model.getResult().getApprovedJoinrequestCount()+" %");
+        if (model.getResult().getTotalPostCount() > 0) {
+            double percentage = (double) model.getResult().getApprovedPostCount() / (double) model.getResult().getTotalPostCount() * 100;
+            posts_lbl.setText(round(percentage  ,2) + " %");
+            postCircleProgressBar.setProgress((int) percentage);
+            Log.e("percentage", "" + percentage);
+        } else {
+            postCircleProgressBar.setProgress(0);
+            posts_lbl.setText(0 + " %");
+        }
+
+        if (model.getResult().getTotalEventCount() > 0) {
+            double percentage = (double) model.getResult().getApprovedEventsCount() / (double) model.getResult().getTotalEventCount() * 100;
+            events_lbl.setText(round(percentage  ,2) + " %");
+            eventCircleProgressBar.setProgress((int) percentage);
+        } else {
+            eventCircleProgressBar.setProgress(0);
+            events_lbl.setText(0 + " %");
+        }
+
+        if (model.getResult().getTotalJoinRequestCount() > 0) {
+            double percentage = (double) model.getResult().getApprovedJoinrequestCount() / (double) model.getResult().getTotalJoinRequestCount() * 100;
+            member_lbl.setText(round(percentage  ,2) + " %");
+            memberCircleProgressBar.setProgress((int) percentage);
+        } else {
+            memberCircleProgressBar.setProgress(0);
+            member_lbl.setText(0 + " %");
+        }
+
     }
 
 

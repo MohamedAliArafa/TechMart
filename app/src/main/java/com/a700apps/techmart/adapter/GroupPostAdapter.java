@@ -27,6 +27,7 @@ import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsGroupActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.AppUtils;
+import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
 
@@ -78,10 +79,24 @@ public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.View
                 viewHolder.mPostedByTextView.setText(timeLineItem.getPostedByName());
                 viewHolder.mTitleTextView.setText(timeLineItem.getTitle());
                 viewHolder.mGroupNameTextView.setText(timeLineItem.getGroupName());
-                viewHolder.tv_like.setText(timeLineItem.getLikeCount() + " Likes");
-                viewHolder.tv_comment.setText(timeLineItem.getCommentCount() + " Comments");
 
 
+                if (timeLineItem.getLikeCount()==0){
+                    viewHolder.tv_like.setText("Like");
+                }else if (timeLineItem.getLikeCount()==1){
+                    viewHolder.tv_like.setText("1 Like");
+                }else {
+                    viewHolder.tv_like.setText(timeLineItem.getLikeCount() + " Likes");
+                }
+
+
+                if (timeLineItem.getCommentCount()==0){
+                    viewHolder.tv_comment.setText("Comment");
+                }else if (timeLineItem.getCommentCount()==1){
+                    viewHolder.tv_comment.setText("1 Comment");
+                }else {
+                    viewHolder.tv_comment.setText(timeLineItem.getCommentCount() + " Comments");
+                }
                 Glide.with(context)
                         .load(MainApi.IMAGE_IP + timeLineItem.getImage()).placeholder(R.drawable.placeholder)
                         .into(viewHolder.mPostImageView);
@@ -115,6 +130,7 @@ public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.View
                 viewHolder.contain.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        Globals.R_Index_group=position;
                         openDetails(context, "post", mTimeLineList, position);
                     }
                 });
@@ -160,11 +176,23 @@ public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.View
                     public void onClick(View view) {
                         Intent sendIntent = new Intent();
                         sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
                         sendIntent.setType("text/plain");
-                        context.startActivity(sendIntent);
+                        context.startActivity(Intent.createChooser(sendIntent, "Select"));
                     }
                 });
+
+                viewHolder.tv_share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
+                        sendIntent.setType("text/plain");
+                        context.startActivity(Intent.createChooser(sendIntent, "Select"));
+                    }
+                });
+
                 break;
 
         }
@@ -209,7 +237,7 @@ public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.View
 
     public class ViewHolderPost extends RecyclerView.ViewHolder {
         ImageView mPostImageView, addCalenderBtn, mLikeImageView,mComment,shareBtn;
-        TextView mTitleTextView, mDescribtionTextView, mPostedByTextView, mGroupNameTextView,tv_comment,tv_like;
+        TextView mTitleTextView, mDescribtionTextView, mPostedByTextView, mGroupNameTextView,tv_comment,tv_like,tv_share;
         ConstraintLayout contain;
 
         public ViewHolderPost(View itemView) {
@@ -224,6 +252,7 @@ public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.View
             contain = (ConstraintLayout) itemView.findViewById(R.id.contain);
             mComment = (ImageView) itemView.findViewById(R.id.iv_comment);
             tv_comment = (TextView) itemView.findViewById(R.id.tv_comment);
+            tv_share = (TextView) itemView.findViewById(R.id.tv_share);
             shareBtn = (ImageView) itemView.findViewById(R.id.iv_share);
 
         }

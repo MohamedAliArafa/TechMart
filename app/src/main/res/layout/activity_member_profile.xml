@@ -576,5 +576,39 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp" />
 
+
+
+
+        <com.a700apps.techmart.utils.CustomButton
+            android:id="@+id/btn_approve"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:background="@drawable/bg_transparent"
+            android:padding="5dp"
+            android:text="@string/approve_connect"
+            android:textColor="@android:color/white"
+android:visibility="invisible"
+            android:textSize="@dimen/time_text"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_edit" />
+
+        <com.a700apps.techmart.utils.CustomButton
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:background="@drawable/bg_transparent"
+            android:padding="5dp"
+            android:text="Cancel request"
+            android:textColor="@android:color/white"
+            android:visibility="invisible"
+            android:textSize="@dimen/time_text"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_approve" />
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

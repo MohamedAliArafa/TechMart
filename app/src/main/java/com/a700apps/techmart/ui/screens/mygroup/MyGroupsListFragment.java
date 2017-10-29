@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.AutoCompleteGroupAdapter;
@@ -24,6 +25,7 @@ import com.a700apps.techmart.ui.screens.grouptimeline.GroupsTimeLineFragment;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
+import com.a700apps.techmart.ui.screens.profile.EditProfileFragment;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
 import com.a700apps.techmart.utils.Globals;
@@ -44,6 +46,7 @@ public class MyGroupsListFragment extends Fragment implements GroupView {
     public AVLoadingIndicatorView indicatorView;
     UserGroupData data;
     private List<UserGroup> suggestions = new ArrayList<>();
+    TextView empty;
 
     public MyGroupsListFragment() {
         // Required empty public constructor
@@ -61,14 +64,13 @@ public class MyGroupsListFragment extends Fragment implements GroupView {
         mProfileImageView = (ImageView) view.findViewById(R.id.new_message);
         mNotificationImageView = (ImageView) view.findViewById(R.id.new_profile);
         mSideMenuImageView = (ImageView) view.findViewById(R.id.imageView4);
+        empty = (TextView) view.findViewById(R.id.empty);
         searchCompleteTextView = view.findViewById(R.id.edt_search);
 //        searchCompleteTextView.setThreshold(2);
 
         mSideMenuImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                ActivityUtils.openActivity(getActivity(), HomeActivity.class, true);
-                //open drawer here
                 ((HomeActivity) getActivity()).openDrawer();
 
             }
@@ -77,7 +79,8 @@ public class MyGroupsListFragment extends Fragment implements GroupView {
         mProfileImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtils.openActivity(getActivity(), EditProfileActivity.class, false);
+//                ActivityUtils.openActivity(getActivity(), EditProfileActivity.class, false);
+                ((HomeActivity) getActivity()).openFragment(EditProfileFragment.class , null);
             }
         });
 
@@ -136,7 +139,14 @@ public class MyGroupsListFragment extends Fragment implements GroupView {
                         suggestions.add(data.userGroup.get(i));
                     }
                 }
-                    rv.setAdapter(new GroupsAdapter(getActivity(), suggestions));
+
+                if (suggestions.size() >0){
+                    empty.setVisibility(View.GONE);
+                }else {
+                    empty.setVisibility(View.VISIBLE);
+                }
+
+                rv.setAdapter(new GroupsAdapter(getActivity(), suggestions));
             }
         });
 //        searchCompleteTextView.setAdapter(new AutoCompleteGroupAdapter(getActivity() ,R.layout.custom_text_view, data.userGroup ,rv));

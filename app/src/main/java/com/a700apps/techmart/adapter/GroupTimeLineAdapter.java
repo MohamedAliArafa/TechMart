@@ -23,8 +23,10 @@ import com.a700apps.techmart.data.network.MainApiHelper;
 import com.a700apps.techmart.data.network.NetworkResponse;
 import com.a700apps.techmart.data.network.NetworkResponseListener;
 import com.a700apps.techmart.ui.screens.comment.CommentActivity;
+import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.mygroup.MyGroubListActivity;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
+import com.a700apps.techmart.ui.screens.profile.EditProfileFragment;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsGroupActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
@@ -47,9 +49,9 @@ import java.util.List;
 public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements NetworkResponseListener<LikeData> {
     private List<TimeLineData.ResultEntity> mTimeLineList;
     Context context;
-    private static final int NOTIF_TYPE_EVENT= 1;
+    private static final int NOTIF_TYPE_EVENT = 1;
     private static final int NOTIF_TYPE_POST = 2;
-    private  int mType;
+    private int mType;
 
     String isLike;
     View noteView;
@@ -57,9 +59,9 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
     int positionItem;
 
 
-    public GroupTimeLineAdapter(Context context,List<TimeLineData.ResultEntity> TimeLineList) {
+    public GroupTimeLineAdapter(Context context, List<TimeLineData.ResultEntity> TimeLineList) {
         this.context = context;
-        this.mTimeLineList =TimeLineList;
+        this.mTimeLineList = TimeLineList;
     }
 
     @Override
@@ -83,13 +85,13 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
 
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder,final int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
         final TimeLineData.ResultEntity timeLineItem = mTimeLineList.get(position);
         final int itemType = getItemViewType(position);
 
         switch (itemType) {
             case NOTIF_TYPE_EVENT:
-                GroupTimeLineAdapter.ViewHolder viewHolderEvent = (GroupTimeLineAdapter.ViewHolder)viewHolder;
+                GroupTimeLineAdapter.ViewHolder viewHolderEvent = (GroupTimeLineAdapter.ViewHolder) viewHolder;
                 viewHolderEvent.mDateTextView.setText(timeLineItem.getGroupName());
                 viewHolderEvent.tv_username.setText(timeLineItem.getPostedByName());
                 viewHolderEvent.mDescribtionTextView.setText(timeLineItem.getDescr());
@@ -98,6 +100,7 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
                 viewHolderEvent.contain.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        Globals.R_Index_group=position;
                         openDetails(context, "Event", mTimeLineList, position);
                     }
                 });
@@ -140,28 +143,43 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
                         intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
                                 timeLineItem.getEndDate());
                         intent.putExtra(CalendarContract.Events.ALL_DAY, false);// periodicity
-                        intent.putExtra(CalendarContract.Events.DESCRIPTION,timeLineItem.getDescr());
+                        intent.putExtra(CalendarContract.Events.DESCRIPTION, timeLineItem.getDescr());
                         context.startActivity(intent);
                     }
                 });
 
                 Glide.with(context)
-                        .load(MainApi.IMAGE_IP+timeLineItem.getImage()).placeholder(R.drawable.placeholder)
+                        .load(MainApi.IMAGE_IP + timeLineItem.getImage()).placeholder(R.drawable.placeholder)
                         .into(viewHolderEvent.mEventImageView);
                 break;
             case NOTIF_TYPE_POST:
-                final GroupTimeLineAdapter.ViewHolderPost viewHolderPost= (GroupTimeLineAdapter.ViewHolderPost)viewHolder;
+                final GroupTimeLineAdapter.ViewHolderPost viewHolderPost = (GroupTimeLineAdapter.ViewHolderPost) viewHolder;
                 viewHolderPost.mDescribtionTextView.setText(timeLineItem.getDescr());
                 viewHolderPost.mPostedByTextView.setText(timeLineItem.getPostedByName());
                 viewHolderPost.mTitleTextView.setText(timeLineItem.getTitle());
                 viewHolderPost.mGroupNameTextView.setText(timeLineItem.getGroupName());
-                viewHolderPost.tv_like.setText(timeLineItem.getLikeCount() + " Likes");
-                viewHolderPost.tv_comment.setText(timeLineItem.getCommentCount() + " Comments");
 
+                if (timeLineItem.getLikeCount()==0){
+                    viewHolderPost.tv_like.setText("Like");
+                }else if (timeLineItem.getLikeCount()==1){
+                    viewHolderPost.tv_like.setText("1 Like");
+                }else {
+                    viewHolderPost.tv_like.setText(timeLineItem.getLikeCount() + " Likes");
+                }
+
+
+                if (timeLineItem.getCommentCount()==0){
+                    viewHolderPost.tv_comment.setText("Comment");
+                }else if (timeLineItem.getCommentCount()==1){
+                    viewHolderPost.tv_comment.setText("1 Comment");
+                }else {
+                    viewHolderPost.tv_comment.setText(timeLineItem.getCommentCount() + " Comments");
+                }
 
                 viewHolderPost.moreImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        Globals.R_Index_group=position;
                         openDetails(context, "post", mTimeLineList, position);
                     }
                 });
@@ -169,13 +187,15 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
                 viewHolderPost.contain.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        Globals.R_Index_group=position;
                         openDetails(context, "post", mTimeLineList, position);
                     }
                 });
                 viewHolderPost.mPostedByTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ActivityUtils.openActivity(context, EditProfileActivity.class, false);
+//                        ActivityUtils.openActivity(context, EditProfileActivity.class, false);
+                        ((HomeActivity) context).openFragment(EditProfileFragment.class , null);
                     }
                 });
 
@@ -192,13 +212,27 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
                     public void onClick(View view) {
                         Intent sendIntent = new Intent();
                         sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
                         sendIntent.setType("text/plain");
-                        context.startActivity(sendIntent);
+                        context.startActivity(Intent.createChooser(sendIntent, "Select"));
+
                     }
                 });
+
+                viewHolderPost.tv_share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
+                        sendIntent.setType("text/plain");
+                        context.startActivity(Intent.createChooser(sendIntent, "Select"));
+
+                    }
+                });
+
                 Glide.with(context)
-                        .load(MainApi.IMAGE_IP+timeLineItem.getImage()).placeholder(R.drawable.placeholder)
+                        .load(MainApi.IMAGE_IP + timeLineItem.getImage()).placeholder(R.drawable.placeholder)
                         .into(viewHolderPost.mPostImageView);
 
                 viewHolderPost.mComment.setOnClickListener(new View.OnClickListener() {
@@ -309,12 +343,13 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
 
-    public   class ViewHolderPost extends RecyclerView.ViewHolder {
-        ImageView mPostImageView, addCalenderBtn,mLikeImageView, mComment, shareBtn, moreImageView;;
-        TextView mTitleTextView,mDescribtionTextView,mPostedByTextView,mGroupNameTextView,tv_comment,tv_like;
+    public class ViewHolderPost extends RecyclerView.ViewHolder {
+        ImageView mPostImageView, addCalenderBtn, mLikeImageView, mComment, shareBtn, moreImageView;
+        ;
+        TextView mTitleTextView, mDescribtionTextView, mPostedByTextView, mGroupNameTextView, tv_comment, tv_like , tv_share;
         ConstraintLayout contain;
 
-        public ViewHolderPost(View itemView){
+        public ViewHolderPost(View itemView) {
             super(itemView);
             contain = (ConstraintLayout) itemView.findViewById(R.id.contain);
             mLikeImageView = (ImageView) itemView.findViewById(R.id.iv_like);
@@ -325,9 +360,10 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
             mTitleTextView = (TextView) itemView.findViewById(R.id.tv_title);
             mDescribtionTextView = (TextView) itemView.findViewById(R.id.tv_desc);
             mPostedByTextView = (TextView) itemView.findViewById(R.id.tv_postedby);
-            mGroupNameTextView= (TextView) itemView.findViewById(R.id.tv_group_name);
-            tv_like= (TextView) itemView.findViewById(R.id.tv_like);
+            mGroupNameTextView = (TextView) itemView.findViewById(R.id.tv_group_name);
+            tv_like = (TextView) itemView.findViewById(R.id.tv_like);
             shareBtn = (ImageView) itemView.findViewById(R.id.iv_share);
+            tv_share = (TextView) itemView.findViewById(R.id.tv_share);
 
         }
     }
@@ -335,9 +371,10 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ImageView mEventImageView ,shareBtn, addCalenderBtn;
-        TextView mTitleTextView,mDescribtionTextView,mDateTextView,mGroupNameTextView,tv_add_calender , tv_username;
+        ImageView mEventImageView, shareBtn, addCalenderBtn;
+        TextView mTitleTextView, mDescribtionTextView, mDateTextView, mGroupNameTextView, tv_add_calender, tv_username;
         RelativeLayout contain;
+
         public ViewHolder(View itemView) {
             super(itemView);
             contain = (RelativeLayout) itemView.findViewById(R.id.contain);
@@ -352,8 +389,9 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
             shareBtn = (ImageView) itemView.findViewById(R.id.iv_share);
             addCalenderBtn = (ImageView) itemView.findViewById(R.id.iv_add_calender);
             itemView.setOnClickListener(this);
-                shareBtn.setOnClickListener(this);
-                addCalenderBtn.setOnClickListener(this);
+            shareBtn.setOnClickListener(this);
+            addCalenderBtn.setOnClickListener(this);
+            itemView.findViewById(R.id.tv_share).setOnClickListener(this);
         }
 
         @Override

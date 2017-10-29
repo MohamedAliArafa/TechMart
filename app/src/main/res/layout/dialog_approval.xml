@@ -42,6 +42,7 @@
         android:weightSum="3">
 
         <LinearLayout
+            android:id="@+id/acceptLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -63,29 +64,9 @@
                 android:textSize="12sp"
                 android:text="@string/approved" />
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="15dp"
-            android:gravity="center"
-            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/iv_reject"
-                android:src="@drawable/ic_reject" />
-
-            <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin5"
-                android:textSize="12sp"
-                android:id="@+id/tv_reject"
-                android:text="@string/rejected" />
-        </LinearLayout>
         <LinearLayout
+            android:id="@+id/deferLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -106,6 +87,30 @@
                 android:textSize="12sp"
                 android:id="@+id/tv_defer"
                 android:text="@string/defer" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/rejectLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="15dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/iv_reject"
+                android:src="@drawable/ic_reject" />
+
+            <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin5"
+                android:textSize="12sp"
+                android:id="@+id/tv_reject"
+                android:text="@string/rejected" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

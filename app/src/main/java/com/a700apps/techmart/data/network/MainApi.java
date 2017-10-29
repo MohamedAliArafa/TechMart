@@ -11,6 +11,7 @@ import com.a700apps.techmart.data.model.CategoryGroupsData;
 import com.a700apps.techmart.data.model.ChangeReciveNotifcationData;
 import com.a700apps.techmart.data.model.CommentData;
 import com.a700apps.techmart.data.model.FriendMessage;
+import com.a700apps.techmart.data.model.Group;
 import com.a700apps.techmart.data.model.GroupTimeLineData;
 import com.a700apps.techmart.data.model.GroupUsersData;
 import com.a700apps.techmart.data.model.JoinGroupData;
@@ -1057,9 +1058,9 @@ public class MainApi {
         });
     }
 
-    public static void getAllGroupUsers(JSONObject body, final NetworkResponseListener<AllGroupUsers> responseListener) {
+    public static void getAllGroupUsers(JSONObject body, final NetworkResponseListener<Group> responseListener) {
         getApi().getAllGroupUsers(getRequestBody(body)).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<AllGroupUsers>() {
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Group>() {
             @Override
             public void onCompleted() {
 
@@ -1071,8 +1072,8 @@ public class MainApi {
             }
 
             @Override
-            public void onNext(AllGroupUsers userNetworkData) {
-                NetworkResponse<AllGroupUsers> networkResponse = new NetworkResponse<>();
+            public void onNext(Group userNetworkData) {
+                NetworkResponse<Group> networkResponse = new NetworkResponse<>();
                 networkResponse.data = userNetworkData;
                 responseListener.networkOperationSuccess(networkResponse);
             }

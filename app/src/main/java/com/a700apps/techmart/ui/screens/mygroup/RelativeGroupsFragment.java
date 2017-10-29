@@ -36,6 +36,7 @@ import com.a700apps.techmart.ui.screens.login.LoginActivity;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
 import com.a700apps.techmart.ui.screens.notification.NotificationFragment;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
+import com.a700apps.techmart.ui.screens.profile.EditProfileFragment;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.Globals;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -79,7 +80,8 @@ public class RelativeGroupsFragment extends Fragment implements GroupView {
         mProfileImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtils.openActivity(getActivity(), EditProfileActivity.class, false);
+//                ActivityUtils.openActivity(getActivity(), EditProfileActivity.class, false);
+                ((HomeActivity) getActivity()).openFragment(EditProfileFragment.class , null);
             }
         });
 

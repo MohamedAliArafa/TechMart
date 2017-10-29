@@ -7,6 +7,7 @@ import com.a700apps.techmart.data.network.MainApiHelper;
 import com.a700apps.techmart.data.network.NetworkResponse;
 import com.a700apps.techmart.data.network.NetworkResponseListener;
 import com.a700apps.techmart.ui.MainPresenter;
+import com.a700apps.techmart.utils.Globals;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,53 +53,53 @@ public class RequestsPresenter extends MainPresenter<RequestsView> {
 
     }
 
-    public void manageTimeLineItem(int itemId, int type , String userId , final int status) {
+//    public void manageTimeLineItem(int itemId, int type , String userId , final int status) {
+//
+//        view.showLoadingProgress();
+//
+//        try {
+//            JSONObject jsonObject = MainApiHelper.manageTimelineItem(itemId, status , userId ,type);
+//
+//            MainApi.manageTimelineItem(jsonObject, new NetworkResponseListener<PostData>() {
+//
+//                @Override
+//                public void networkOperationSuccess(NetworkResponse<PostData> networkResponse) {
+//                    if (isDetachView()) return;
+//                    view.dismissLoadingProgress();
+//                    PostData userNetworkData = (PostData) networkResponse.data;
+//                    int errorCode = userNetworkData.ISResultHasData;
+//
+//                    if (errorCode == 1) {
+//                        switch (status){
+//                            case 1:
+//                                view.showToast("Item Approved");
+//                                break;
+//                            case 2:
+//                                view.showToast("Item Rejected");
+//                                break;
+//                            case 3:
+//                                view.showToast("Item Defered");
+//                                break;
+//
+//
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void networkOperationFail(Throwable throwable) {
+//                    view.dismissLoadingProgress();
+//                }
+//            });
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//            view.dismissLoadingProgress();
+//        }
+//
+//    }
 
-        view.showLoadingProgress();
 
-        try {
-            JSONObject jsonObject = MainApiHelper.manageTimelineItem(itemId, status , userId ,type);
-
-            MainApi.manageTimelineItem(jsonObject, new NetworkResponseListener<PostData>() {
-
-                @Override
-                public void networkOperationSuccess(NetworkResponse<PostData> networkResponse) {
-                    if (isDetachView()) return;
-                    view.dismissLoadingProgress();
-                    PostData userNetworkData = (PostData) networkResponse.data;
-                    int errorCode = userNetworkData.ISResultHasData;
-
-                    if (errorCode == 1) {
-                        switch (status){
-                            case 1:
-                                view.showToast("Item Approved");
-                                break;
-                            case 2:
-                                view.showToast("Item Rejected");
-                                break;
-                            case 3:
-                                view.showToast("Item Defered");
-                                break;
-
-
-                        }
-                    }
-                }
-
-                @Override
-                public void networkOperationFail(Throwable throwable) {
-                    view.dismissLoadingProgress();
-                }
-            });
-        } catch (JSONException e) {
-            e.printStackTrace();
-            view.dismissLoadingProgress();
-        }
-
-    }
-
-
-    public void manageRequestItem(int itemId, final int requestStatus , int requestRole, String userId ) {
+    public void manageRequestItem(int itemId, final int requestStatus , int requestRole, final String userId ) {
 
         view.showLoadingProgress();
 
@@ -126,6 +127,8 @@ public class RequestsPresenter extends MainPresenter<RequestsView> {
                                 view.showToast("Request Defered");
                                 break;
                         }
+
+                        getGroupRequests(""+Globals.GROUP_ID , userId);
                     }
                 }
 

@@ -22,6 +22,7 @@ import com.a700apps.techmart.ui.screens.timeline.TimeLinePresenter;
 import com.a700apps.techmart.ui.screens.timeline.TimeLineView;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
+import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 
 import java.util.List;
@@ -39,11 +40,12 @@ public class GroupEventFragment extends Fragment implements GroupTimlineView {
     View view;
     EmptyRecyclerView rv;
     int desired_string;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-         view = inflater.inflate(R.layout.fragment_group_event, container, false);
+        view = inflater.inflate(R.layout.fragment_group_event, container, false);
         presenter = new GroupTimeLinePresenter();
         presenter.attachView(this);
         linContain = (LinearLayout)view.findViewById(R.id.post);
@@ -92,7 +94,11 @@ public class GroupEventFragment extends Fragment implements GroupTimlineView {
             rv.setEmptyView(view.findViewById(R.id.tv_nodata));
         }
         rv.setAdapter(new GroupEventAdapter(getActivity(),TimelineList));
-        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+//        linearLayoutManager.setReverseLayout(true);
+//        linearLayoutManager.setStackFromEnd(true);
+        rv.setLayoutManager(linearLayoutManager);
+        rv.scrollToPosition(Globals.R_Index_group);
     }
 
 

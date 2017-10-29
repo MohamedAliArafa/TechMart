@@ -22,6 +22,7 @@ import com.a700apps.techmart.ui.screens.timeline.TimeLinePresenter;
 import com.a700apps.techmart.ui.screens.timeline.TimeLineView;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
+import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 
 import java.util.List;
@@ -90,9 +91,12 @@ public class GroupTimelineFragment extends Fragment implements GroupTimlineView 
         if (TimelineList.size() == 0) {
             rv.setEmptyView(view.findViewById(R.id.tv_nodata));
         }
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+//        linearLayoutManager.setReverseLayout(true);
+//        linearLayoutManager.setStackFromEnd(true);
+        rv.setLayoutManager(linearLayoutManager);
         rv.setAdapter(new GroupTimeLineAdapter(getActivity(), TimelineList));
-        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rv.scrollToPosition(Globals.R_Index_group);
     }
-
-
 }

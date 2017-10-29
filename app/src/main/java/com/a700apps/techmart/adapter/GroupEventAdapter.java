@@ -21,6 +21,7 @@ import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsGroupActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.Globals;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -64,6 +65,7 @@ public class GroupEventAdapter extends RecyclerView.Adapter<GroupEventAdapter.Vi
                 viewHolderEvent.contain.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        Globals.R_Index_group=position;
                         openDetails(context, "Event", mTimeLineList, position);
                     }
                 });
@@ -98,6 +100,27 @@ public class GroupEventAdapter extends RecyclerView.Adapter<GroupEventAdapter.Vi
                         intent.putExtra(CalendarContract.Events.ALL_DAY, false);// periodicity
                         intent.putExtra(CalendarContract.Events.DESCRIPTION, "Tech Mart Event");
                         context.startActivity(intent);
+                    }
+                });
+
+                viewHolder.shareBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
+                        sendIntent.setType("text/plain");
+                        context.startActivity(Intent.createChooser(sendIntent, "Select"));
+                    }
+                });
+                viewHolder.tv_share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
+                        sendIntent.setType("text/plain");
+                        context.startActivity(Intent.createChooser(sendIntent, "Select"));
                     }
                 });
 
@@ -146,7 +169,7 @@ public class GroupEventAdapter extends RecyclerView.Adapter<GroupEventAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView mEventImageView ,shareBtn, addCalenderBtn;
-        TextView mTitleTextView,mDescribtionTextView,mDateTextView,mGroupNameTextView,tv_add_calender,tv_username;
+        TextView mTitleTextView,mDescribtionTextView,mDateTextView,mGroupNameTextView,tv_add_calender,tv_username,tv_share;
         RelativeLayout contain;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -157,6 +180,8 @@ public class GroupEventAdapter extends RecyclerView.Adapter<GroupEventAdapter.Vi
             mDescribtionTextView = (TextView) itemView.findViewById(R.id.tv_description);
             mDateTextView = (TextView) itemView.findViewById(R.id.tv_date);
             tv_username = (TextView) itemView.findViewById(R.id.tv_username);
+            tv_share = (TextView) itemView.findViewById(R.id.tv_share);
+
             contain = (RelativeLayout) itemView.findViewById(R.id.contain);
 
             shareBtn = (ImageView) itemView.findViewById(R.id.iv_share);
@@ -174,9 +199,9 @@ public class GroupEventAdapter extends RecyclerView.Adapter<GroupEventAdapter.Vi
                 case R.id.iv_share:
                     Intent sendIntent = new Intent();
                     sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
                     sendIntent.setType("text/plain");
-                    context.startActivity(sendIntent);
+                    context.startActivity(Intent.createChooser(sendIntent, "Select"));
                     break;
 
                 case R.id.iv_add_calender:
@@ -192,7 +217,6 @@ public class GroupEventAdapter extends RecyclerView.Adapter<GroupEventAdapter.Vi
                     intent.putExtra(CalendarContract.Events.DESCRIPTION, "Tech Mart Event");
                     context.startActivity(intent);
                     break;
-
             }
         }
     }

@@ -344,7 +344,6 @@
         android:background="@color/transparent"
         android:enabled="false"
         android:inputType="textUri"
-        android:nextFocusDown="@+id/tv_company"
         android:textColor="@android:color/white"
         android:textSize="@dimen/time_text"
         app:layout_constraintBottom_toBottomOf="@+id/textView29"

@@ -29,6 +29,7 @@ public class BoardEventFragment extends Fragment implements BoardTimlineView {
     private BoardTimelinePresenter presenter;
     Dialog dialogsLoading;
     int mGroupId;
+
     public BoardEventFragment() {
         // Required empty public constructor
     }
@@ -62,7 +63,7 @@ public class BoardEventFragment extends Fragment implements BoardTimlineView {
     @Override
     public void onResume() {
         super.onResume();
-        presenter.getTimeline(mGroupId, PreferenceHelper.getUserId(getActivity()),1);
+        presenter.getTimeline(mGroupId, PreferenceHelper.getUserId(getActivity()), 1);
     }
 
     @Override
@@ -70,7 +71,7 @@ public class BoardEventFragment extends Fragment implements BoardTimlineView {
         if (TimelineList.size() == 0) {
             rv.setEmptyView(view.findViewById(R.id.tv_nodata));
         }
-        rv.setAdapter(new BoardMemberAdapter(getActivity(),TimelineList));
+        rv.setAdapter(new BoardMemberAdapter(getActivity(), TimelineList, rv));
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
     }

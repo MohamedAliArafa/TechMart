@@ -18,6 +18,7 @@ import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.Globals;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -61,6 +62,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                 viewHolderEvent.contain.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        Globals.R_Index = position;
+
                         openDetails(context, "Event", mTimeLineList, position);
                     }
                 });
@@ -139,9 +142,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                 case R.id.iv_share:
                     Intent sendIntent = new Intent();
                     sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
                     sendIntent.setType("text/plain");
-                    context.startActivity(sendIntent);
+                    context.startActivity(Intent.createChooser(sendIntent, "Select"));
+
                     break;
                 case R.id.tv_add_calender:
                 case R.id.iv_add_calender:

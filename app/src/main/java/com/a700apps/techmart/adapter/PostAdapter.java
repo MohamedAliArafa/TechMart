@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.Like;
@@ -26,6 +27,8 @@ import com.a700apps.techmart.data.network.NetworkResponseListener;
 import com.a700apps.techmart.ui.screens.comment.CommentActivity;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.AppUtils;
+import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
 
@@ -78,10 +81,26 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderPost
                 viewHolder.mPostedByTextView.setText(timeLineItem.getPostedByName());
                 viewHolder.mTitleTextView.setText(timeLineItem.getTitle());
                 viewHolder.mGroupNameTextView.setText(timeLineItem.getGroupName());
+                if (timeLineItem.getLikeCount()==0){
+                    viewHolder.tv_like.setText("Like");
+                }else if (timeLineItem.getLikeCount()==1){
+                    viewHolder.tv_like.setText("1 Like");
+                }else {
+                    viewHolder.tv_like.setText(timeLineItem.getLikeCount() + " Likes");
+                }
 
+
+                if (timeLineItem.getCommentCount()==0){
+                    viewHolder.tv_comment.setText("Comment");
+                }else if (timeLineItem.getCommentCount()==1){
+                    viewHolder.tv_comment.setText("1 Comment");
+                }else {
+                    viewHolder.tv_comment.setText(timeLineItem.getCommentCount() + " Comments");
+                }
                 viewHolder.contain.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        Globals.R_Index = position;
                         openDetails(context, "post", mTimeLineList, position);
                     }
                 });
@@ -103,9 +122,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderPost
                     public void onClick(View view) {
                         Intent sendIntent = new Intent();
                         sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
                         sendIntent.setType("text/plain");
-                        context.startActivity(sendIntent);
+                        context.startActivity(Intent.createChooser(sendIntent, "Select"));
+
                     }
                 });
                 viewHolder.mComment.setOnClickListener(new View.OnClickListener() {
@@ -134,20 +154,39 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderPost
 
                 }
 
+                viewHolder.tv_like.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (AppUtils.isInternetAvailable(context)) {
+                            positionItem = position;
+
+                            if (timeLineItem.getIsLike()) {
+                                isLike = "false";
+                            } else {
+                                isLike = "true";
+                            }
+                            getLike(timeLineItem);
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
                 viewHolder.mLikeImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (timeLineItem.getIsLike()) {
-                            timeLineItem.setIsLike(false);
-                            isLike = "false";
-                            viewHolder.mLikeImageView.setImageResource(R.drawable.ic_like);
-                        } else {
-                            isLike = "true";
-                            timeLineItem.setIsLike(true);
-                            viewHolder.mLikeImageView.setImageResource(R.drawable.ic_like_active);
-                        }
-                        getLike(timeLineItem);
+                        if (AppUtils.isInternetAvailable(context)) {
+                            positionItem = position;
+                            if (timeLineItem.getIsLike()) {
+                                isLike = "false";
+                            } else {
+                                isLike = "true";
+                            }
+                            getLike(timeLineItem);
 
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 break;
@@ -175,17 +214,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderPost
 
     @Override
     public void networkOperationSuccess(NetworkResponse<LikeData> networkResponse) {
-
         LikeData userNetworkData = (LikeData) networkResponse.data;
-        int errorCode = userNetworkData.ISResultHasData;
+        boolean success = userNetworkData.likeData.success;
 
-        changeLike();
-
+        if (!success) {
+            networkOperationFail(new Throwable(userNetworkData.likeData.message));
+        } else {
+            changeLike();
+        }
     }
+
 
     @Override
     public void networkOperationFail(Throwable throwable) {
-
+        Toast.makeText(context, "" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -227,21 +269,31 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderPost
     }
 
     void changeLike() {
-        setValues(new ViewHolderPost(noteView), noteView);
+        setValues();
 
     }
 
-    void setValues(ViewHolderPost viewholder, View item) {
+    void setValues() {
+        int count = mTimeLineList.get(positionItem).getLikeCount();
+
         if (mTimeLineList.get(positionItem).getIsLike()) {
             mTimeLineList.get(positionItem).setIsLike(false);
+            mTimeLineList.get(positionItem).setLikeCount(--count);
             notifyDataSetChanged();
         } else {
             mTimeLineList.get(positionItem).setIsLike(true);
+            mTimeLineList.get(positionItem).setLikeCount(++count);
             notifyDataSetChanged();
         }
     }
 
+
     void getLike(TimeLineData.ResultEntity timeLine) {
+        if (timeLine.getIsLike()) {
+            isLike = "false";
+        } else {
+            isLike = "true";
+        }
         try {
             JSONObject registerBody = MainApiHelper.getUserLike(PreferenceHelper.getUserId(context), timeLine.getID(), isLike
             );

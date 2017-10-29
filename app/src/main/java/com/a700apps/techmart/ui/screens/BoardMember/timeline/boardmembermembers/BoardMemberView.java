@@ -1,6 +1,7 @@
 package com.a700apps.techmart.ui.screens.BoardMember.timeline.boardmembermembers;
 
 import com.a700apps.techmart.data.model.AllGroupUsers;
+import com.a700apps.techmart.data.model.Group;
 import com.a700apps.techmart.data.model.UserData;
 import com.a700apps.techmart.data.model.UserGroupData;
 
@@ -15,5 +16,5 @@ public interface BoardMemberView {
 
     void dismissProgress();
 
-    void updateUi(AllGroupUsers data);
+    void updateUi(Group data);
 }

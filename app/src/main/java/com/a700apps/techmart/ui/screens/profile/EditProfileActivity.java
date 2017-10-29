@@ -62,8 +62,6 @@ public class EditProfileActivity extends AppCompatActivity implements ProfileVie
             @Override
             public void onClick(View v) {
                 ActivityUtils.openActivity(EditProfileActivity.this, NotificationActivity.class, false);
-
-
             }
         });
     }

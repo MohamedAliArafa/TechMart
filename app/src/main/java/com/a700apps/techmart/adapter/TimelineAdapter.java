@@ -96,6 +96,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 viewHolderEvent.contain.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        Globals.R_Index = position;
                         openDetails(context, "Event", mTimeLineList, position);
                     }
                 });
@@ -115,9 +116,9 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     public void onClick(View view) {
                         Intent sendIntent = new Intent();
                         sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
                         sendIntent.setType("text/plain");
-                        context.startActivity(sendIntent);
+                        context.startActivity(Intent.createChooser(sendIntent, "Select"));
                     }
                 });
 
@@ -164,8 +165,24 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 viewHolderPost.mPostedByTextView.setText(timeLineItem.getPostedByName());
                 viewHolderPost.mTitleTextView.setText(timeLineItem.getTitle());
                 viewHolderPost.mGroupNameTextView.setText(timeLineItem.getGroupName());
-                viewHolderPost.tv_like.setText(timeLineItem.getLikeCount() + " Likes");
-                viewHolderPost.tv_comment.setText(timeLineItem.getCommentCount() + " Comments");
+
+                if (timeLineItem.getLikeCount()==0){
+                    viewHolderPost.tv_like.setText("Like");
+                }else if (timeLineItem.getLikeCount()==1){
+                    viewHolderPost.tv_like.setText("1 Like");
+                }else {
+                    viewHolderPost.tv_like.setText(timeLineItem.getLikeCount() + " Likes");
+                }
+
+
+                if (timeLineItem.getCommentCount()==0){
+                    viewHolderPost.tv_comment.setText("Comment");
+                }else if (timeLineItem.getCommentCount()==1){
+                    viewHolderPost.tv_comment.setText("1 Comment");
+                }else {
+                    viewHolderPost.tv_comment.setText(timeLineItem.getCommentCount() + " Comments");
+                }
+
 
                 viewHolderPost.moreImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -176,6 +193,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 viewHolderPost.contain.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        Globals.R_Index = position;
                         openDetails(context, "post", mTimeLineList, position);
                     }
                 });
@@ -205,9 +223,10 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     public void onClick(View view) {
                         Intent sendIntent = new Intent();
                         sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
                         sendIntent.setType("text/plain");
-                        context.startActivity(sendIntent);
+                        context.startActivity(Intent.createChooser(sendIntent, "Select"));
+
                     }
                 });
 
@@ -216,9 +235,10 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     public void onClick(View view) {
                         Intent sendIntent = new Intent();
                         sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
                         sendIntent.setType("text/plain");
-                        context.startActivity(sendIntent);
+                        context.startActivity(Intent.createChooser(sendIntent, "Select"));
+
                     }
                 });
                 viewHolderPost.tv_like.setOnClickListener(new View.OnClickListener() {

@@ -53,6 +53,8 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
     View eventLayout, groupLayout;
 
     MyProfile myProfile;
+    Button btn_approve, btn_cancel;
+
 
     Dialog dialogsLoading;
     public static int sCorner = 10;
@@ -73,6 +75,8 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
         GroupId = getArguments().getInt("GroupId", 0);
 
         imageView4 = (ImageView) view.findViewById(R.id.imageView4);
+
+
         indicatorView = (AVLoadingIndicatorView) view.findViewById(R.id.avi);
 
         presenter.profileData(PreferenceHelper.getUserId(getActivity()), mRelId, GroupId, getActivity());
@@ -134,7 +138,8 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
         mMessageButton = (Button) view.findViewById(R.id.btn_message);
         mEmail = (TextView) view.findViewById(R.id.textView28);
         mPosition = (TextView) view.findViewById(R.id.tv_position);
-
+        btn_approve = view.findViewById(R.id.btn_approve);
+        btn_cancel = view.findViewById(R.id.btn_cancel);
 
         mFollowButton.setOnClickListener(this);
         mConnectButton.setOnClickListener(this);
@@ -142,6 +147,8 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
         mContainerLinearLayout = (LinearLayout) view.findViewById(R.id.line3);
         eventLayout.setOnClickListener(this);
         groupLayout.setOnClickListener(this);
+        btn_approve.setOnClickListener(this);
+        btn_cancel.setOnClickListener(this);
 
     }
 
@@ -208,10 +215,10 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
             isApprove = true;
             mConnectButton.setText(getString(R.string.approve_connect));
         } else {
-            if (!isFollowing){
+            if (!isFollowing) {
                 mContainerLinearLayout.setVisibility(View.GONE);
             }
-            if (!isFollowing&&!hasSharedEvents){
+            if (!isFollowing && !hasSharedEvents) {
                 mMessageButton.setVisibility(View.GONE);
             }
             if (isFollowing && hasSharedEvents) {
@@ -302,6 +309,8 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
         int count = Integer.parseInt(mFriend.getText().toString());
         mFriend.setText(String.valueOf(++count));
 
+        btn_cancel.setVisibility(View.INVISIBLE);
+        btn_approve.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -316,6 +325,9 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
 //        mFollowButton.setText(R.string.unfollow);
         mConnectButton.setText(R.string.connect);
         mContainerLinearLayout.setVisibility(View.GONE);
+
+        btn_cancel.setVisibility(View.INVISIBLE);
+        btn_approve.setVisibility(View.INVISIBLE);
 
 //        int count = Integer.parseInt(mFriend.getText().toString());
 //        mFriend.setText(String.valueOf(++count));
@@ -366,7 +378,14 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
                 if (AppUtils.isInternetAvailable(getActivity())) {
                     if (isApprove) {
 
-                        presenter.respondRequest(PreferenceHelper.getUserId(getActivity()), mRelId, "true");
+                        if (btn_approve.getVisibility()==View.VISIBLE){
+                            btn_cancel.setVisibility(View.INVISIBLE);
+                            btn_approve.setVisibility(View.INVISIBLE);
+                        }else{
+                            btn_cancel.setVisibility(View.VISIBLE);
+                            btn_approve.setVisibility(View.VISIBLE);
+                        }
+
 //                        presenter.approveRequest(mRelId, 1);
                     } else {
                         if (isConnect) {
@@ -386,8 +405,15 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
                     Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                 }
 
-
                 break;
+            case R.id.btn_approve:
+                presenter.respondRequest(PreferenceHelper.getUserId(getActivity()), mRelId, "true");
+                break;
+
+            case R.id.btn_cancel:
+                presenter.respondRequest(PreferenceHelper.getUserId(getActivity()), mRelId, "false");
+                break;
+
             case R.id.btn_message:
 
                 if (AppUtils.isInternetAvailable(getActivity())) {

@@ -16,6 +16,7 @@ import com.a700apps.techmart.data.model.GroupTimeLineData;
 import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.ui.screens.creatpost.PostActivity;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
+import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 
 import java.util.List;
@@ -90,7 +91,11 @@ public class GroupPostFragment extends Fragment implements GroupTimlineView {
             rv.setEmptyView(view.findViewById(R.id.tv_nodata));
         }
         rv.setAdapter(new GroupPostAdapter(getActivity(), TimelineList));
-        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+//        linearLayoutManager.setReverseLayout(true);
+//        linearLayoutManager.setStackFromEnd(true);
+        rv.setLayoutManager(linearLayoutManager);
+        rv.scrollToPosition(Globals.R_Index_group);
     }
 
 //    @Override

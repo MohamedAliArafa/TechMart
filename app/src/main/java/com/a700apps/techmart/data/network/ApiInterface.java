@@ -8,6 +8,7 @@ import com.a700apps.techmart.data.model.CategoryGroupsData;
 import com.a700apps.techmart.data.model.ChangeReciveNotifcationData;
 import com.a700apps.techmart.data.model.CommentData;
 import com.a700apps.techmart.data.model.FriendMessage;
+import com.a700apps.techmart.data.model.Group;
 import com.a700apps.techmart.data.model.GroupTimeLineData;
 import com.a700apps.techmart.data.model.GroupUsersData;
 import com.a700apps.techmart.data.model.JoinGroupData;
@@ -176,7 +177,7 @@ public interface ApiInterface {
 
 
 
-    @POST("TimeLine/GetGroupTimeLine")
+    @POST("TimeLine/GetBoardMemeberGroupTimeLine")
     Observable<GroupTimeLineData> getTimelineMember(@Body RequestBody body);
 
 
@@ -187,7 +188,7 @@ public interface ApiInterface {
     Observable<PostData> removeMember(@Body RequestBody body);
 
     @POST("user/GetAllGroupUsers")
-    Observable<AllGroupUsers> getAllGroupUsers(@Body RequestBody body);
+    Observable<Group> getAllGroupUsers(@Body RequestBody body);
 
     @POST("Group/GetJoinGroupRequests")
     Observable<JoinGroupRequestsData> getJoinGroupRequests(@Body RequestBody body);

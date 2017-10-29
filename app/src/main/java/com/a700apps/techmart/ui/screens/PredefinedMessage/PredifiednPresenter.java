@@ -47,7 +47,10 @@ public class PredifiednPresenter extends MainPresenter<PredifinedView> implement
                     int errorCode = userNetworkData.getISResultHasData();
                     if (errorCode == 1) {
                         if (userNetworkData.getResult().getSuccess()) {
-                            view.showToast("Message Sent+ ");
+                            view.showToast("Message Sent");
+                            view.back();
+                        }else {
+                            view.showToast("Error Sending message please try again later");
                         }
                     }
                 }

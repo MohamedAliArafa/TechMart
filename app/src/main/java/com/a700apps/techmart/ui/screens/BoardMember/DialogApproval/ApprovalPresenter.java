@@ -1,5 +1,8 @@
 package com.a700apps.techmart.ui.screens.BoardMember.DialogApproval;
 
+import android.util.Log;
+
+import com.a700apps.techmart.data.model.GroupTimeLineData;
 import com.a700apps.techmart.data.model.NotificationDataLike;
 import com.a700apps.techmart.data.model.PostData;
 import com.a700apps.techmart.data.network.MainApi;
@@ -7,6 +10,7 @@ import com.a700apps.techmart.data.network.MainApiHelper;
 import com.a700apps.techmart.data.network.NetworkResponse;
 import com.a700apps.techmart.data.network.NetworkResponseListener;
 import com.a700apps.techmart.ui.MainPresenter;
+import com.a700apps.techmart.utils.Globals;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,12 +22,12 @@ import org.json.JSONObject;
 public class ApprovalPresenter extends MainPresenter<approvalView> {
 
 
-    public void manageTimeLineItem(int itemId, int type, String userId, final int status) {
+    public void manageTimeLineItem(int itemId, final int type, final String userId, final int status) {
 
         view.showLoadingProgress();
 
         try {
-            JSONObject jsonObject = MainApiHelper.manageTimelineItem(itemId, status , userId ,type);
+            JSONObject jsonObject = MainApiHelper.manageTimelineItem(itemId, status, userId, type);
 
             MainApi.manageTimelineItem(jsonObject, new NetworkResponseListener<PostData>() {
 
@@ -35,7 +39,7 @@ public class ApprovalPresenter extends MainPresenter<approvalView> {
                     int errorCode = userNetworkData.ISResultHasData;
 
                     if (errorCode == 1) {
-                        switch (status){
+                        switch (status) {
                             case 1:
                                 view.showToast("Item Approved");
                                 break;
@@ -45,15 +49,45 @@ public class ApprovalPresenter extends MainPresenter<approvalView> {
                             case 3:
                                 view.showToast("Item Defered");
                                 break;
-
-
                         }
+
+                        getTimeline(Globals.GROUP_ID , userId , type);
                     }
                 }
 
                 @Override
                 public void networkOperationFail(Throwable throwable) {
                     view.dismissLoadingProgress();
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+            view.dismissLoadingProgress();
+        }
+
+    }
+
+    public void getTimeline(int GroupID, String UserID, int Type) {
+
+        view.showLoadingProgress();
+
+        try {
+            JSONObject registerBody = MainApiHelper.getTimeLineMember(GroupID, UserID, Type);
+            MainApi.getMemberTimeLine(registerBody, new NetworkResponseListener<GroupTimeLineData>() {
+                @Override
+                public void networkOperationSuccess(NetworkResponse<GroupTimeLineData> networkResponse) {
+                    view.dismissLoadingProgress();
+                    if (isDetachView()) return;
+                    GroupTimeLineData userNetworkData = (GroupTimeLineData) networkResponse.data;
+                    int errorCode = userNetworkData.getISResultHasData();
+//        if (!userNetworkData.getResult().isEmpty())
+                    view.updateUi(userNetworkData.getResult());
+                }
+
+                @Override
+                public void networkOperationFail(Throwable throwable) {
+                    view.dismissLoadingProgress();
+                    Log.e("error", throwable.getMessage().toString());
                 }
             });
         } catch (JSONException e) {

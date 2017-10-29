@@ -14,6 +14,7 @@ import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.BoardGroupUsersAdapter;
 import com.a700apps.techmart.adapter.BoardMemberAdapter;
 import com.a700apps.techmart.data.model.AllGroupUsers;
+import com.a700apps.techmart.data.model.Group;
 import com.a700apps.techmart.data.model.UserData;
 import com.a700apps.techmart.ui.screens.BoardMember.timeline.boardmembertimeline.BoardTimelinePresenter;
 import com.a700apps.techmart.ui.screens.BoardMember.timeline.boardmembertimeline.BoardTimlineView;
@@ -40,7 +41,7 @@ public class BoardMemberFragment extends Fragment implements BoardMemberView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view= inflater.inflate(R.layout.fragment_board_member, container, false);
+        view = inflater.inflate(R.layout.fragment_board_member, container, false);
 
         mPresenter = new BoardMemberPresenter();
         mPresenter.attachView(this);
@@ -68,11 +69,11 @@ public class BoardMemberFragment extends Fragment implements BoardMemberView {
     }
 
     @Override
-    public void updateUi(AllGroupUsers data) {
-        if (data.userGroup.size() == 0) {
+    public void updateUi(Group data) {
+        if (data.getResult().size() == 0) {
             rv.setEmptyView(view.findViewById(R.id.tv_nodata));
         }
-        rv.setAdapter(new BoardGroupUsersAdapter(getActivity(),data.userGroup,mGroupId));
+        rv.setAdapter(new BoardGroupUsersAdapter(getActivity(), data.getResult(), mGroupId));
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
     }

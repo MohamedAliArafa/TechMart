@@ -23,4 +23,6 @@ import android.support.v4.app.Fragment;
     void showProgress();
 
     void dismissProgress();
+
+   void showManageLayout(boolean show);
 }

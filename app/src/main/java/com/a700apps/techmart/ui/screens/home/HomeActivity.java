@@ -21,6 +21,8 @@ import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -70,7 +72,7 @@ import timber.log.Timber;
  * Created by samir salah on 8/15/2017.
  */
 
-public class HomeActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, HomeView, changeSideMenuData {
+public class HomeActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, HomeView, changeSideMenuData, SettingFragment.changeHomeImage {
 
     public DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
@@ -96,6 +98,7 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         presenter = new HomePresenter();
         presenter.attachView(this);
 
+        presenter.getMyGroup(this);
 //        startActivity(new Intent(this , JoinRequestsActivity.class));
         if (getIntent().getBooleanExtra("groupLayout", false)) {
             // show group relative
@@ -147,6 +150,9 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         }
         Timber.d("on create");
     }
+
+
+
 
     public void setToolbar(Toolbar toolbar) {
         mToolbar = toolbar;
@@ -206,6 +212,8 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
 
         Glide.with(HomeActivity.this)
                 .load(image).placeholder(R.drawable.ic_profile)
+//                .apply(RequestOptions.option(Option.memory(ConstantUtils.GLIDE_TIMEOUT), 0))
+//                .using(new StreamModelLoaderWrapper<>(new OkHttpUrlLoader(longTimeoutClient)))
                 .listener(new LoggingListener<String, GlideDrawable>())
                 .into(mUserProfile);
 
@@ -236,6 +244,14 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
 
         Glide.with(HomeActivity.this)
                 .load(image).placeholder(R.drawable.ic_profile)
+                .listener(new LoggingListener<String, GlideDrawable>())
+                .into(mUserProfile);
+    }
+
+    @Override
+    public void changeImage(String path) {
+        Glide.with(HomeActivity.this)
+                .load(MainApi.IMAGE_IP + path).placeholder(R.drawable.ic_profile)
                 .listener(new LoggingListener<String, GlideDrawable>())
                 .into(mUserProfile);
     }
@@ -337,6 +353,19 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void dismissProgress() {
 
+    }
+
+    @Override
+    public void showManageLayout(boolean show) {
+        if (show){
+            mDrawerListView.getChildAt(2).setLayoutParams(new AbsListView.LayoutParams
+                    (ViewGroup.LayoutParams.MATCH_PARENT,130));
+            mDrawerListView.getChildAt(2).setVisibility(View.VISIBLE);
+        }else {
+            mDrawerListView.getChildAt(2).setLayoutParams(new AbsListView.LayoutParams
+                    (ViewGroup.LayoutParams.MATCH_PARENT,1));
+            mDrawerListView.getChildAt(2).setVisibility(View.GONE);
+        }
     }
 
 
@@ -461,17 +490,28 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
 //            finish();
 //        }
 
-        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof EditProfileFragment &&
-                Globals.CAME_FROM_LIKE_TO_GROUP) {
-            finish();
-        }
+//        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof EditProfileFragment &&
+//                Globals.CAME_FROM_LIKE_TO_GROUP) {
+//            finish();
+//        }
 
-        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof GroupsTimeLineFragment) {
+
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof EditProfileFragment){
+            if(Globals.CAME_FROM_NOTIFICATION_TO_GROUP) {
+                Globals.CAME_FROM_NOTIFICATION_TO_GROUP = false;
+                finish();
+            }else if (Globals.CAME_FROM_GROUP_MEMBER_TO_MPROFILE){
+                Bundle bundle = new Bundle();
+                bundle.putInt("string_key", Globals.GROUP_ID);
+                openFragment(GroupFragment.class, bundle);
+            }else {
+                openTimeLine();
+            }
+        }else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof GroupsTimeLineFragment) {
             openFragment(MyGroupsListFragment.class, null);
         } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof TimelineFragment) {
             finish();
         } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof MyGroupsListFragment) {
-            Log.e("BACK", "back");
             Globals.RETURN_POSITION = true;
             openTimeLine();
 //            openFragment(TimelineFragment.class, null);
@@ -492,10 +532,10 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof BoardMemberTimelineFragment) {
             openFragment(ManageBoardGroupFragment.class, null);
         } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof MemberProfileFragment) {
-            if (Globals.CAME_FROM_NOTIFICATION_TO_GROUP){
+            if (Globals.CAME_FROM_NOTIFICATION_TO_GROUP) {
                 Globals.CAME_FROM_NOTIFICATION_TO_GROUP = false;
                 finish();
-            }else {
+            } else {
                 Bundle bundle = new Bundle();
                 bundle.putInt("string_key", Globals.GROUP_ID);
                 openFragment(GroupFragment.class, bundle);

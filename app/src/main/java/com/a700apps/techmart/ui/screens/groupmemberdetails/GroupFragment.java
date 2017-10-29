@@ -20,6 +20,7 @@ import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.GroupUsersData;
 import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
+import com.a700apps.techmart.ui.screens.profile.EditProfileFragment;
 import com.a700apps.techmart.ui.screens.profile.MemberProfileFragment;
 import com.a700apps.techmart.utils.CustomButton;
 import com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView;
@@ -113,7 +114,6 @@ public class GroupFragment extends Fragment implements GroupMemberView {
         rv.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         if (groupusers.getOtheMemebes().size() == 0) {
             rv2.setEmptyView(view.findViewById(R.id.tv_memeber));
-
         }
         rv2.setAdapter(new GroupActivity.MemberAdapter(getActivity(), groupusers.getOtheMemebes(), mId));
         int numberOfColumns = 3;
@@ -156,16 +156,22 @@ public class GroupFragment extends Fragment implements GroupMemberView {
                 @Override
                 public void onClick(View view) {
 
-                    Bundle bundle = new Bundle();
-                    bundle.putString("RelativId", timeLineItem.getUserID());
-                    bundle.putInt("GroupId", GroupId);
-                    Globals.userId = timeLineItem.getUserID();
-                    ((HomeActivity) context).openFragment(MemberProfileFragment.class, bundle);
-//                    Intent intent = new Intent(context, HomeActivity.class);
-//                    intent.putExtra("RelativId", timeLineItem.getUserID());
-//                    intent.putExtra("GroupId", GroupId);
-//                    context.startActivity(intent);
+                    if (timeLineItem.getUserID().equals(PreferenceHelper.getUserId(context))) {
+                        Globals.CAME_FROM_GROUP_MEMBER_TO_MPROFILE = true;
+                        ((HomeActivity) context). openFragment(EditProfileFragment.class, null);
+                    } else {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("RelativId", timeLineItem.getUserID());
+                        bundle.putInt("GroupId", GroupId);
+                        Globals.userId = timeLineItem.getUserID();
+                        ((HomeActivity) context).openFragment(MemberProfileFragment.class, bundle);
+                    }
 
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString("RelativId", timeLineItem.getUserID());
+//                    bundle.putInt("GroupId", GroupId);
+//                    Globals.userId = timeLineItem.getUserID();
+//                    ((HomeActivity) context).openFragment(MemberProfileFragment.class, bundle);
                 }
             });
         }
@@ -175,7 +181,7 @@ public class GroupFragment extends Fragment implements GroupMemberView {
             return mGroupUsersList.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public class ViewHolder extends RecyclerView.ViewHolder {
             ImageView profile;
             TextView mName, Company, position;
             Button Details;
@@ -188,77 +194,69 @@ public class GroupFragment extends Fragment implements GroupMemberView {
                 position = (TextView) itemView.findViewById(R.id.textView69);
                 Details = (Button) itemView.findViewById(R.id.button8);
             }
-
-            @Override
-            public void onClick(View v) {
-
-
-            }
         }
     }
 
-    static class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder> {
-        private List<GroupUsersData.ResultEntity.OtheMemebesEntity> mGroupUsersList;
-        Context context;
-        private int GroupId;
-
-        public MemberAdapter(Context context, List<GroupUsersData.ResultEntity.OtheMemebesEntity> TimeLineList, int mId) {
-            this.context = context;
-            this.mGroupUsersList = TimeLineList;
-            this.GroupId = mId;
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            Context context = parent.getContext();
-            LayoutInflater inflater = LayoutInflater.from(context);
-            View noteView = inflater.inflate(R.layout.group_member_item, parent, false);
-            return new ViewHolder(noteView);
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder viewHolder, int position) {
-            final GroupUsersData.ResultEntity.OtheMemebesEntity timeLineItem = mGroupUsersList.get(position);
-//            viewHolder.profile_pic.
-            Glide.with(context)
-                    .load(MainApi.IMAGE_IP + timeLineItem.getPhoto()).placeholder(R.drawable.ic_profile)
-                    .into(viewHolder.profile_pic);
-
-            viewHolder.profile_pic.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-
-                    Bundle bundle = new Bundle();
-                    bundle.putString("RelativId", timeLineItem.getUserID());
-                    bundle.putInt("GroupId", GroupId);
-                    Globals.userId = timeLineItem.getUserID();
-                    ((HomeActivity) context).openFragment(MemberProfileFragment.class, bundle);
-                }
-            });
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return mGroupUsersList.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-            ImageView profile_pic;
-
-            public ViewHolder(View itemView) {
-                super(itemView);
-                itemView.setOnClickListener(this);
-                profile_pic = (ImageView) itemView.findViewById(R.id.imageView27);
-            }
-
-            @Override
-            public void onClick(View v) {
-                int position = getAdapterPosition();
-            }
-        }
-    }
+//    static class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder> {
+//        private List<GroupUsersData.ResultEntity.OtheMemebesEntity> mGroupUsersList;
+//        Context context;
+//        private int GroupId;
+//
+//        public MemberAdapter(Context context, List<GroupUsersData.ResultEntity.OtheMemebesEntity> TimeLineList, int mId) {
+//            this.context = context;
+//            this.mGroupUsersList = TimeLineList;
+//            this.GroupId = mId;
+//        }
+//
+//        @Override
+//        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+//            Context context = parent.getContext();
+//            LayoutInflater inflater = LayoutInflater.from(context);
+//            View noteView = inflater.inflate(R.layout.group_member_item, parent, false);
+//            return new ViewHolder(noteView);
+//        }
+//
+//        @Override
+//        public void onBindViewHolder(ViewHolder viewHolder, int position) {
+//            final GroupUsersData.ResultEntity.OtheMemebesEntity timeLineItem = mGroupUsersList.get(position);
+////            viewHolder.profile_pic.
+//            Glide.with(context)
+//                    .load(MainApi.IMAGE_IP + timeLineItem.getPhoto()).placeholder(R.drawable.ic_profile)
+//                    .into(viewHolder.profile_pic);
+//
+//            viewHolder.profile_pic.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString("RelativId", timeLineItem.getUserID());
+//                    bundle.putInt("GroupId", GroupId);
+//                    Globals.userId = timeLineItem.getUserID();
+//                    ((HomeActivity) context).openFragment(MemberProfileFragment.class, bundle);
+//                }
+//            });
+//
+//        }
+//
+//        @Override
+//        public int getItemCount() {
+//            return mGroupUsersList.size();
+//        }
+//
+//        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+//            ImageView profile_pic;
+//
+//            public ViewHolder(View itemView) {
+//                super(itemView);
+//                itemView.setOnClickListener(this);
+//                profile_pic = (ImageView) itemView.findViewById(R.id.imageView27);
+//            }
+//
+//            @Override
+//            public void onClick(View v) {
+//                int position = getAdapterPosition();
+//            }
+//        }
+//    }
 }
 
 

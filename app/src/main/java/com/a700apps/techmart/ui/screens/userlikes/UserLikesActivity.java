@@ -1,5 +1,6 @@
 package com.a700apps.techmart.ui.screens.userlikes;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.a700apps.techmart.ui.screens.profile.MemberProfile;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
+import com.a700apps.techmart.utils.loadingDialog;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -41,6 +43,8 @@ public class UserLikesActivity extends AppCompatActivity implements UserLikeView
     int mId;
     RecyclerView rv;
     ImageView back;
+    Dialog dialogsLoading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +55,7 @@ public class UserLikesActivity extends AppCompatActivity implements UserLikeView
 //        AppUtils.hideSoftKeyboard(this);
         presenter.getUserLikes(mId, this);
         rv = (RecyclerView) findViewById(R.id.recyclerView);
-        back = (ImageView)findViewById(R.id.imageView2);
+        back = (ImageView) findViewById(R.id.imageView2);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,17 +67,17 @@ public class UserLikesActivity extends AppCompatActivity implements UserLikeView
 
     @Override
     public void showLoadingProgress() {
-
+        dialogsLoading = new loadingDialog().showDialog(this);
     }
 
     @Override
     public void dismissLoadingProgress() {
-
+        dialogsLoading.dismiss();
     }
 
     @Override
     public void update(List<UserLike> userLikes) {
-        rv.setAdapter(new AdminAdapter(this, userLikes,mId));
+        rv.setAdapter(new AdminAdapter(this, userLikes, mId));
         rv.setLayoutManager(new LinearLayoutManager(this));
     }
 
@@ -83,10 +87,10 @@ public class UserLikesActivity extends AppCompatActivity implements UserLikeView
         private int GroupId;
         Context context;
 
-        public AdminAdapter(Context context, List<UserLike> TimeLineList,int mId) {
+        public AdminAdapter(Context context, List<UserLike> TimeLineList, int mId) {
             this.context = context;
             this.mGroupUsersList = TimeLineList;
-            this.GroupId=mId;
+            this.GroupId = mId;
         }
 
         @Override
@@ -113,7 +117,7 @@ public class UserLikesActivity extends AppCompatActivity implements UserLikeView
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, HomeActivity.class);
-                    Globals.CAME_FROM_LIKE_TO_GROUP = true;
+                    Globals.CAME_FROM_NOTIFICATION_TO_GROUP = true;
                     intent.putExtra("profileHolder", timeLineItem.UserID);
                     context.startActivity(intent);
                 }
@@ -129,6 +133,7 @@ public class UserLikesActivity extends AppCompatActivity implements UserLikeView
             ImageView profile;
             TextView mName, Company, position;
             Button Details;
+
             public ViewHolder(View itemView) {
                 super(itemView);
                 profile = (ImageView) itemView.findViewById(R.id.imageView29);

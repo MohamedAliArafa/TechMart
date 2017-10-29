@@ -13,8 +13,10 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.location.Address;
 import android.location.Geocoder;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -46,6 +48,7 @@ import com.a700apps.techmart.data.model.ServerResponse;
 import com.a700apps.techmart.data.model.post;
 import com.a700apps.techmart.data.network.ApiInterface;
 import com.a700apps.techmart.ui.screens.meetingone.MeetingonetooneActivity;
+import com.a700apps.techmart.ui.screens.register.RegisterActivity;
 import com.a700apps.techmart.utils.ApiClient;
 import com.a700apps.techmart.utils.AppConst;
 import com.a700apps.techmart.utils.AppUtils;
@@ -62,7 +65,9 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -107,6 +112,8 @@ public class CreatEventActivity extends AppCompatActivity implements
     List<MyConnectionList.ResultEntity> mUserMeetingList;
     boolean isOpen = false;
     Dialog dialogsLoading;
+    private static final int multy_permission_request = 101;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,7 +169,7 @@ public class CreatEventActivity extends AppCompatActivity implements
                 tv_location.setEnabled(false);
                 if (ActivityCompat.checkSelfPermission(CreatEventActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                         ActivityCompat.checkSelfPermission(CreatEventActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(CreatEventActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                    ActivityCompat.requestPermissions(CreatEventActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PICK_LOCATION_REQUEST);
                     return;
                 } else {
                     // Write you code here if permission already given.
@@ -410,8 +417,11 @@ public class CreatEventActivity extends AppCompatActivity implements
         String hourStringEnd = hourOfDayEnd < 10 ? "0" + hourOfDayEnd : "" + hourOfDayEnd;
         String minuteStringEnd = minuteEnd < 10 ? "0" + minuteEnd : "" + minuteEnd;
         String time = "You picked the following time: From - " + hourString + "h" + minuteString + " To - " + hourStringEnd + "h" + minuteStringEnd;
-        mStartTime = hourString + "h" + minuteString;
-        mEndTime = hourStringEnd + "h" + minuteStringEnd;
+//        mStartTime = hourString + "h" + minuteString;
+//        mEndTime = hourStringEnd + "h" + minuteStringEnd;
+
+        mStartTime = hourString + ":" + minuteString+":00";
+        mEndTime = hourStringEnd + ":" + minuteStringEnd+":00";
     }
 
     void openDialog(final EditText title, final EditText Desc) {
@@ -653,8 +663,95 @@ public class CreatEventActivity extends AppCompatActivity implements
         dialog.show();
     }
 
+    private boolean checkStoragePermissions() {
+
+        boolean havePermission = true;
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            havePermission = false;
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                Toast.makeText(this, getString(R.string.storage_rationale), Toast.LENGTH_SHORT).show();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, Permission_storage_code);
+            }
+        }
+        return havePermission;
+    }
+
+    private boolean justCheckStoragePermissions() {
+
+        boolean havePermission = true;
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            havePermission = false;
+        }
+        return havePermission;
+    }
+
+    private boolean checkCameraPermissions() {
+        boolean havePermission = true;
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            havePermission = false;
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.CAMERA)) {
+                Toast.makeText(this, getString(R.string.camera_rationale), Toast.LENGTH_SHORT).show();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+            }
+        }
+        return havePermission;
+    }
+
+    private boolean justCheckCameraPermissions() {
+        boolean havePermission = true;
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            havePermission = false;
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.CAMERA)) {
+                Toast.makeText(this, getString(R.string.camera_rationale), Toast.LENGTH_SHORT).show();
+            }
+        }
+        return havePermission;
+    }
+
+    private boolean checkMutlyPermissions() {
+        List<String> permissionsNeeded = new ArrayList<String>();
+        boolean havePermission = true;
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            permissionsNeeded.add(Manifest.permission.CAMERA);
+            havePermission = false;
+        }
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissionsNeeded.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+            havePermission = false;
+        }
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.CAMERA) ||
+                ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)
+                ) {
+            Toast.makeText(this, getString(R.string.camera_rationale), Toast.LENGTH_SHORT).show();
+        } else {
+            if (permissionsNeeded.size() > 0)
+                ActivityCompat.requestPermissions(this, permissionsNeeded.toArray(new String[permissionsNeeded.size()]), multy_permission_request);
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE}, multy_permission_request);
+        }
+
+        return havePermission;
+    }
+
     void selectImage() {
-        if (AppConst.checkPermission(CreatEventActivity.this)) {
+        if (checkStoragePermissions()) {
             selectedImagePath = null;
             selectedImageSize = 0;
             // select a file
@@ -663,9 +760,14 @@ public class CreatEventActivity extends AppCompatActivity implements
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent,
                     "Select Picture"), SELECT_PICTURE);
-        } else {
-            AppConst.requestPermission(CreatEventActivity.this, PERMISSION_REQUEST_CODE);
         }
+    }
+
+    void captureImage() {
+        if (checkMutlyPermissions()) {
+            dispatchTakePictureIntent();
+        }
+
     }
 
     private void dispatchTakePictureIntent() {
@@ -675,73 +777,88 @@ public class CreatEventActivity extends AppCompatActivity implements
         }
     }
 
-    private boolean checkPermission(String permission) {//android.Manifest.permission.CAMERA
-        int result = ContextCompat.checkSelfPermission(CreatEventActivity.this, permission);
-        if (result == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private void requestPermission(String permission) {//android.Manifest.permission.CAMERA
-        if (ActivityCompat.shouldShowRequestPermissionRationale(CreatEventActivity.this, permission)) {
-            Toast.makeText(CreatEventActivity.this, "Camera permission allows us take images throught camera. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
-        } else {
-            ActivityCompat.requestPermissions(CreatEventActivity.this, new String[]{permission}, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
-        }
-    }
-
-    void captureImage() {
-        if (checkPermission(android.Manifest.permission.CAMERA)) {
-//            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//            startActivityForResult(cameraIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
-            if (AppConst.checkPermission(CreatEventActivity.this)) {
-                dispatchTakePictureIntent();
-            } else {
-                AppConst.requestPermission(CreatEventActivity.this, Permission_storage_code);
-            }
-
-        } else {
-            requestPermission(android.Manifest.permission.CAMERA);
-        }
-    }
-
     //
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == SELECT_PICTURE) {
 
-                int dataSize = 0;
-                File f = null;
-                Uri selectedImageUri = data.getData();
-                String scheme = selectedImageUri.getScheme();
-                selectedImagePath = getPathFromURI(CreatEventActivity.this, selectedImageUri);
+//                int dataSize = 0;
+//                File f = null;
+//                Uri selectedImageUri = data.getData();
+//                String scheme = selectedImageUri.getScheme();
+//                selectedImagePath = getPathFromURI(CreatEventActivity.this, selectedImageUri);
+//
+//                imageView = (ImageView) findViewById(R.id.iv_post);
+//                imageView.setImageBitmap(BitmapFactory.decodeFile(selectedImagePath));
+//                imageView.setVisibility(View.VISIBLE);
+//                if (scheme.equals(ContentResolver.SCHEME_CONTENT)) {
+//                    try {
+//                        InputStream fileInputStream = getApplicationContext()
+//                                .getContentResolver().openInputStream(selectedImageUri);
+//                        dataSize = fileInputStream.available();
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    selectedImageSize = dataSize;
+//
+//                } else if (scheme.equals(ContentResolver.SCHEME_FILE)) {
+//                    String path = selectedImagePath;
+//                    Log.e("PATH", path);
+//                    try {
+//                        f = new File(path);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    selectedImageSize = f.length();
+//                }
 
-                imageView = (ImageView) findViewById(R.id.iv_post);
-                imageView.setImageBitmap(BitmapFactory.decodeFile(selectedImagePath));
-                imageView.setVisibility(View.VISIBLE);
-                if (scheme.equals(ContentResolver.SCHEME_CONTENT)) {
-                    try {
-                        InputStream fileInputStream = getApplicationContext()
-                                .getContentResolver().openInputStream(selectedImageUri);
-                        dataSize = fileInputStream.available();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    selectedImageSize = dataSize;
-
-                } else if (scheme.equals(ContentResolver.SCHEME_FILE)) {
-                    String path = selectedImagePath;
-                    Log.e("PATH", path);
-                    try {
-                        f = new File(path);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    selectedImageSize = f.length();
+                Uri selectedPicture = data.getData();
+                if (selectedPicture == null) {
+                    Toast.makeText(this, "Sorry .. please select another image", Toast.LENGTH_SHORT).show();
+                    return;
                 }
+                selectedImagePath = getPathFromURI(CreatEventActivity.this, selectedPicture);
+                // Get and resize profile image
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                Cursor cursor = getContentResolver().query(selectedPicture, filePathColumn, null, null, null);
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//                selectedImagePath = cursor.getString(columnIndex);
+                cursor.close();
+
+                Bitmap loadedBitmap = BitmapFactory.decodeFile(selectedImagePath);
+
+                ExifInterface exif = null;
+                try {
+                    File pictureFile = new File(selectedImagePath);
+                    exif = new ExifInterface(pictureFile.getAbsolutePath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                int orientation = ExifInterface.ORIENTATION_NORMAL;
+
+                if (exif != null)
+                    orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+                switch (orientation) {
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        loadedBitmap = rotateBitmap(loadedBitmap, 90);
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        loadedBitmap = rotateBitmap(loadedBitmap, 180);
+                        break;
+
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        loadedBitmap = rotateBitmap(loadedBitmap, 270);
+                        break;
+                }
+                imageView = (ImageView) findViewById(R.id.iv_post);
+                imageView.setImageBitmap(loadedBitmap);
+                imageView.setVisibility(View.VISIBLE);
+
             } else if (requestCode == PICK_LOCATION_REQUEST) {
                 if (data.hasExtra(URLS.EXTRA_PARCELABLE)) {
                     innerModle = data.getParcelableExtra(URLS.EXTRA_PARCELABLE);
@@ -923,9 +1040,19 @@ public class CreatEventActivity extends AppCompatActivity implements
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     captureImage();
-                } else {
-                    Toast.makeText(this, "permission denied", Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case Permission_storage_code:
+                selectImage();
+                break;
+            case multy_permission_request:
+                if (justCheckCameraPermissions() && justCheckStoragePermissions())
+                    captureImage();
+                break;
+            case PICK_LOCATION_REQUEST:
+                Intent intent1 = new Intent(CreatEventActivity.this, MapDialogActivity.class);
+                startActivityForResult(intent1, PICK_LOCATION_REQUEST);
+                break;
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
@@ -945,5 +1072,12 @@ public class CreatEventActivity extends AppCompatActivity implements
             }
 
         }
+    }
+
+
+    public static Bitmap rotateBitmap(Bitmap bitmap, int degrees) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degrees);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
 }

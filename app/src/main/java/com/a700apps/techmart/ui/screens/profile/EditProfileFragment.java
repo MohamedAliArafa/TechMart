@@ -4,9 +4,12 @@ import android.app.Dialog;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,13 +17,17 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,6 +45,7 @@ import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
 import com.a700apps.techmart.ui.screens.notification.NotificationFragment;
+import com.a700apps.techmart.ui.screens.register.RegisterActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.ApiClient;
 import com.a700apps.techmart.utils.AppConst;
@@ -49,10 +57,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.linkedin.platform.LISessionManager;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.Locale;
 
 import okhttp3.MediaType;
@@ -72,14 +82,18 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
     //    public AVLoadingIndicatorView indicatorView;
     EditText mCompany, mPhone, mPosition, mLinkedin, mName;
     Button btn_edit, btn_save;
-    final int SELECT_PICTURE_CHANGE = 321, PERMISSION_REQUEST_CODE = 322;
-    private static final int SELECT_PICTURE = 1;
     String selectedImagePath;
     boolean isEnabled = false;
     Dialog dialogsLoading;
 
     String returnedImage = "/UploadedImages/";
     changeSideMenuData changeSideMenuData;
+
+
+    private static final int PERMISSION_REQUEST_CODE = 786;
+    private static final int Permission_storage_code = 787;
+    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+    private static final int SELECT_PICTURE = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -130,7 +144,7 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
             @Override
             public void onClick(View view) {
                 if (isEnabled)
-                    selectImage();
+                    openChooseMethodDialog();
             }
         });
 
@@ -183,20 +197,6 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
         dialogsLoading.dismiss();
     }
 
-
-    void selectImage() {
-        if (AppConst.checkPermission(getActivity())) {
-            selectedImagePath = null;
-            // select a file
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent,
-                    "Select Picture"), SELECT_PICTURE);
-        } else {
-            AppConst.requestPermission(getActivity(), PERMISSION_REQUEST_CODE);
-        }
-    }
 
     @Override
     public void updateUi(MyProfile MyProfile) {
@@ -267,22 +267,115 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
         return byteArray;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        super.onActivityResult(requestCode, resultCode, data);
+        LISessionManager.getInstance(getActivity()).onActivityResult(getActivity(),
+                requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
+//            if (requestCode == SELECT_PICTURE) {
+//                Uri selectedImageUri = data.getData();
+//                if (selectedImageUri == null) {
+//                    Toast.makeText(getActivity(), "Sorry .. please select another image", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                selectedImagePath = getPathFromURI(getActivity(), selectedImageUri);
+//                Glide.with(this).load(bitmapToByte(BitmapFactory.decodeFile(selectedImagePath))).
+//                      asBitmap().into(mProfileUserImageView);
+//
+//                Log.e("path", "-->" + selectedImagePath);
+//            }
+
+
             if (requestCode == SELECT_PICTURE) {
+//                Uri selectedImageUri = data.getData();
+//                if (selectedImageUri == null) {
+//                    Toast.makeText(this, "Sorry .. please select another image", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                String scheme = selectedImageUri.getScheme();
+//                selectedImagePath = getPathFromURI(getActivity(), selectedImageUri);
+//
+//                imageView = (ImageView) findViewById(R.id.iv_post);
+//                imageView.setImageBitmap(BitmapFactory.decodeFile(selectedImagePath));
+//                imageView.setVisibility(View.VISIBLE);
+//                Log.e("ImagePath", "-->" + selectedImagePath);
+
+                // Get selected gallery image
+//                Uri selectedPicture = data.getData();
+//                if (selectedPicture == null) {
+//                    Toast.makeText(getActivity(), "Sorry .. please select another image", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                selectedImagePath = getPathFromURI(getActivity(), selectedPicture);
+//                // Get and resize profile image
+//                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//                Cursor cursor = getActivity().getContentResolver().query(selectedPicture, filePathColumn, null, null, null);
+//                cursor.moveToFirst();
+//
+//                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//                selectedImagePath = cursor.getString(columnIndex);
+//                cursor.close();
+//
+//                Bitmap loadedBitmap = BitmapFactory.decodeFile(selectedImagePath);
+//
+//                ExifInterface exif = null;
+//                try {
+//                    File pictureFile = new File(selectedImagePath);
+//                    exif = new ExifInterface(pictureFile.getAbsolutePath());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                int orientation = ExifInterface.ORIENTATION_NORMAL;
+//
+//                if (exif != null)
+//                    orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+//
+//                switch (orientation) {
+//                    case ExifInterface.ORIENTATION_ROTATE_90:
+//                        loadedBitmap = rotateBitmap(loadedBitmap, 90);
+//                        break;
+//                    case ExifInterface.ORIENTATION_ROTATE_180:
+//                        loadedBitmap = rotateBitmap(loadedBitmap, 180);
+//                        break;
+//
+//                    case ExifInterface.ORIENTATION_ROTATE_270:
+//                        loadedBitmap = rotateBitmap(loadedBitmap, 270);
+//                        break;
+//                }
+////                Glide.with(this).load(bitmapToByte(BitmapFactory.decodeFile(selectedImagePath)))
+////                        .asBitmap().into(mProfileUserImageView);
+//                Glide.with(this).load(loadedBitmap)
+//                        .asBitmap().into(mProfileUserImageView);
+
                 Uri selectedImageUri = data.getData();
                 if (selectedImageUri == null) {
                     Toast.makeText(getActivity(), "Sorry .. please select another image", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 selectedImagePath = getPathFromURI(getActivity(), selectedImageUri);
-                Glide.with(this).load(bitmapToByte(BitmapFactory.decodeFile(selectedImagePath))).asBitmap().into(mProfileUserImageView);
+                Glide.with(this).load(bitmapToByte(BitmapFactory.decodeFile(selectedImagePath))).
+                      asBitmap().into(mProfileUserImageView);
 
-                Log.e("path", "-->" + selectedImagePath);
+            } else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
+
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+
+                // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+                Uri tempUri = getImageUri(getActivity(), imageBitmap);
+
+                // CALL THIS METHOD TO GET THE ACTUAL PATH
+                selectedImagePath = getRealPathFromURI(tempUri);
+                Glide.with(this).load(bitmapToByte(BitmapFactory.decodeFile(selectedImagePath)))
+                        .asBitmap().into(mProfileUserImageView);
+
             }
+
         }
     }
 
@@ -336,6 +429,166 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
     }
 
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_edit:
+                isEnabled = true;
+                mName.setEnabled(true);
+                mCompany.setEnabled(true);
+                mPhone.setEnabled(true);
+                mPosition.setEnabled(true);
+                mLinkedin.setEnabled(true);
+//                mProfileImageView.setEnabled(true);
+                mProfileUserImageView.setEnabled(true);
+
+                mName.requestFocus();
+                mName.setSelection(mName.getText().length());
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(mName, InputMethodManager.SHOW_IMPLICIT);
+                break;
+
+            case R.id.btn_save:
+                if (isEnabled) {
+                    if (AppUtils.isInternetAvailable(getActivity())) {
+
+                        if (selectedImagePath != null) {
+                            if (validate(true)) {
+                                uploadFile(selectedImagePath);
+                            }
+                        } else {
+                            if (validate(false)) {
+                                presenter.updateProfileData(getActivity(), PreferenceHelper.getUserId(getActivity()),
+                                        mName.getText().toString(), mLinkedin.getText().toString(), "", mCompany.getText().toString(),
+                                        mPosition.getText().toString(), mPhone.getText().toString());
+                            }
+                        }
+                    } else {
+                        Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "choose to update first", Toast.LENGTH_SHORT).show();
+                }
+
+//                presenter.updateProfileData(PreferenceHelper.getUserId(getActivity()),
+//                        mName.getText().toString(), mLinkedin.getText().toString(), "", mCompany.getText().toString(),
+//                        mPosition.getText().toString(), mPhone.getText().toString());
+
+                break;
+        }
+    }
+
+    private boolean validate(boolean checkImage) {
+        boolean isValid = true;
+
+        boolean emptyName = Validator.isTextEmpty(mName.getText().toString().trim());
+        if (emptyName) {
+            mName.setError(getResources().getString(R.string.name_length_not_valid));
+            isValid = false;
+        }
+
+        String mobile = mPhone.getText().toString().trim();
+//        boolean validMobileNumber = Validator.validMobileNumberNew(mobile);
+//        if (!validMobileNumber) {
+//            mPhone.setError(getResources().getString(R.string.invalid_mobile_number));
+//            isValid = false;
+//        }
+
+
+        if (mobile.startsWith("01") || mobile.startsWith("096") || mobile.startsWith("+97")) {
+            boolean validMobileNumber = Validator.validMobileNumber(mobile);
+            if (!validMobileNumber) {
+                mPhone.setError(getResources().getString(R.string.invalid_mobile_number));
+                isValid = false;
+            }
+        } else {
+            mPhone.setError(getResources().getString(R.string.invalid_mobile_number));
+            isValid = false;
+        }
+
+//        if (!validMobileNumber) {
+//            mPhone.setError(getResources().getString(R.string.invalid_mobile_number));
+//            isValid = false;
+//        } else if (!mobile.startsWith("97")) {
+//            mPhone.setError(getResources().getString(R.string.invalid_mobile_number_97));
+//            isValid = false;
+//        } else if (mobile.length() != 14) {
+//            mPhone.setError(getResources().getString(R.string.invalid_mobile_number_size));
+//            isValid = false;
+//        }
+
+        boolean validCompanyName = Validator.isTextEmpty(mCompany.getText().toString().trim());
+        if (validCompanyName) {
+            mCompany.setError(getResources().getString(R.string.company_length_not_valid));
+            isValid = false;
+        }
+
+        if (mLinkedin.getText() != null && !mLinkedin.getText().toString().trim()
+                .matches("((http(s?)://)*([a-zA-Z0-9\\-])*\\.|[linkedin])[linkedin/~\\-]+\\.[a-zA-Z0-9/~\\-_,&=\\?\\.;]+[^\\.,\\s<]")) {
+            mLinkedin.setError(getResources().getString(R.string.invalid_url));
+            isValid = false;
+        }
+
+        boolean validCompanyPosition = Validator.isTextEmpty(mPosition.getText().toString().trim());
+        if (validCompanyPosition) {
+            mPosition.setError(getResources().getString(R.string.position_length_not_valid));
+            isValid = false;
+        }
+
+        if (checkImage) {
+            if (selectedImagePath == null) {
+                Toast.makeText(getActivity(), "Choose Image please", Toast.LENGTH_SHORT).show();
+                isValid = false;
+            }
+        }
+
+        return isValid;
+    }
+
+    public interface changeSideMenuData {
+        void changeData();
+    }
+
+
+    public class LoggingListener<T, R> implements RequestListener<T, R> {
+        @Override
+        public boolean onException(Exception e, Object model, Target target, boolean isFirstResource) {
+            android.util.Log.d("GLIDE3", String.format(Locale.ROOT,
+                    "onException(%s, %s, %s, %s)", e, model, target, isFirstResource), e);
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(Object resource, Object model, Target target, boolean isFromMemoryCache,
+                                       boolean isFirstResource) {
+            android.util.Log.d("GLIDE4", String.format(Locale.ROOT,
+                    "onResourceReady(%s, %s, %s, %s, %s)", resource, model, target, isFromMemoryCache, isFirstResource));
+            return false;
+        }
+    }
+
+
+    public static Bitmap rotateBitmap(Bitmap bitmap, int degrees) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degrees);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    public String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String getPathFromURI(final Context context, final Uri uri) {
 
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
@@ -433,127 +686,78 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btn_edit:
-                isEnabled = true;
-                mName.setEnabled(true);
-                mCompany.setEnabled(true);
-                mPhone.setEnabled(true);
-                mPosition.setEnabled(true);
-                mLinkedin.setEnabled(true);
-//                mProfileImageView.setEnabled(true);
-                mProfileUserImageView.setEnabled(true);
 
-                mName.requestFocus();
-                mName.setSelection(mName.getText().length());
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(mName, InputMethodManager.SHOW_IMPLICIT);
-                break;
-
-            case R.id.btn_save:
-                if (isEnabled) {
-                    if (AppUtils.isInternetAvailable(getActivity())) {
-
-                        if (selectedImagePath != null) {
-                            if (validate(true)) {
-                                uploadFile(selectedImagePath);
-                            }
-                        } else {
-                            if (validate(false)) {
-                                presenter.updateProfileData(getActivity(), PreferenceHelper.getUserId(getActivity()),
-                                        mName.getText().toString(), mLinkedin.getText().toString(), "", mCompany.getText().toString(),
-                                        mPosition.getText().toString(), mPhone.getText().toString());
-                            }
-                        }
-                    } else {
-                        Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getActivity(), "choose to update first", Toast.LENGTH_SHORT).show();
-                }
-
-//                presenter.updateProfileData(PreferenceHelper.getUserId(getActivity()),
-//                        mName.getText().toString(), mLinkedin.getText().toString(), "", mCompany.getText().toString(),
-//                        mPosition.getText().toString(), mPhone.getText().toString());
-
-                break;
-        }
-    }
-
-    private boolean validate(boolean checkImage) {
-        boolean isValid = true;
-
-        boolean emptyName = Validator.isTextEmpty(mName.getText().toString().trim());
-        if (emptyName) {
-            mName.setError(getResources().getString(R.string.name_length_not_valid));
-            isValid = false;
-        }
-
-        String mobile = mPhone.getText().toString().trim();
-        boolean validMobileNumber = Validator.validMobileNumberNew(mobile);
-        if (!validMobileNumber) {
-            mPhone.setError(getResources().getString(R.string.invalid_mobile_number));
-            isValid = false;
-        }
-//        if (!validMobileNumber) {
-//            mPhone.setError(getResources().getString(R.string.invalid_mobile_number));
-//            isValid = false;
-//        } else if (!mobile.startsWith("97")) {
-//            mPhone.setError(getResources().getString(R.string.invalid_mobile_number_97));
-//            isValid = false;
-//        } else if (mobile.length() != 14) {
-//            mPhone.setError(getResources().getString(R.string.invalid_mobile_number_size));
-//            isValid = false;
-//        }
-
-        boolean validCompanyName = Validator.isTextEmpty(mCompany.getText().toString().trim());
-        if (validCompanyName) {
-            mCompany.setError(getResources().getString(R.string.company_length_not_valid));
-            isValid = false;
-        }
-
-        if (mLinkedin.getText() != null && !mLinkedin.getText().toString().trim()
-                .matches("((http(s?)://)*([a-zA-Z0-9\\-])*\\.|[linkedin])[linkedin/~\\-]+\\.[a-zA-Z0-9/~\\-_,&=\\?\\.;]+[^\\.,\\s<]")) {
-            mLinkedin.setError(getResources().getString(R.string.invalid_url));
-            isValid = false;
-        }
-
-        boolean validCompanyPosition = Validator.isTextEmpty(mPosition.getText().toString().trim());
-        if (validCompanyPosition) {
-            mPosition.setError(getResources().getString(R.string.position_length_not_valid));
-            isValid = false;
-        }
-
-        if (checkImage) {
-            if (selectedImagePath == null) {
-                Toast.makeText(getActivity(), "Choose Image please", Toast.LENGTH_SHORT).show();
-                isValid = false;
+    private void openChooseMethodDialog() {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_choose_media_file);
+        dialog.findViewById(R.id.tv_gallery).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectImage();
+                dialog.dismiss();
             }
-        }
-
-        return isValid;
+        });
+        dialog.findViewById(R.id.tv_camera).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                captureImage();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
-    public interface changeSideMenuData {
-        void changeData();
+    void selectImage() {
+        if (AppConst.checkPermission(getActivity())) {
+            selectedImagePath = null;
+            // select a file
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent,
+                    "Select Picture"), SELECT_PICTURE);
+        } else {
+            AppConst.requestPermission(getActivity(), PERMISSION_REQUEST_CODE);
+        }
     }
 
+    void captureImage() {
+        if (checkPermission(android.Manifest.permission.CAMERA)) {
+//            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//            startActivityForResult(cameraIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+            if (AppConst.checkPermission(getActivity())) {
+                dispatchTakePictureIntent();
+            } else {
+                AppConst.requestPermission(getActivity(), Permission_storage_code);
+            }
 
-    public class LoggingListener<T, R> implements RequestListener<T, R> {
-        @Override
-        public boolean onException(Exception e, Object model, Target target, boolean isFirstResource) {
-            android.util.Log.d("GLIDE3", String.format(Locale.ROOT,
-                    "onException(%s, %s, %s, %s)", e, model, target, isFirstResource), e);
+        } else {
+            requestPermission(android.Manifest.permission.CAMERA);
+        }
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+        }
+    }
+
+    private boolean checkPermission(String permission) {//android.Manifest.permission.CAMERA
+        int result = ContextCompat.checkSelfPermission(getActivity(), permission);
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
             return false;
         }
+    }
 
-        @Override
-        public boolean onResourceReady(Object resource, Object model, Target target, boolean isFromMemoryCache, boolean isFirstResource) {
-            android.util.Log.d("GLIDE4", String.format(Locale.ROOT,
-                    "onResourceReady(%s, %s, %s, %s, %s)", resource, model, target, isFromMemoryCache, isFirstResource));
-            return false;
+    private void requestPermission(String permission) {//android.Manifest.permission.CAMERA
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), permission)) {
+            Toast.makeText(getActivity(), "Camera permission allows us take images throught camera. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
+        } else {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
         }
     }
 }

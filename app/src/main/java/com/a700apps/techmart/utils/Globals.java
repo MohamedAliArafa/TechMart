@@ -17,6 +17,7 @@ public class Globals {
     public static boolean CAME_FROM_NOTIFICATION_TO_GROUP = false;
     public static boolean CAME_FROM_MANAGE_TO_GROUP = false;
     public static boolean CAME_FROM_LIKE_TO_GROUP = false;
+    public static boolean CAME_FROM_GROUP_MEMBER_TO_MPROFILE = false;
 
 
     public static int SELECTED_ID = -1;
@@ -27,9 +28,12 @@ public class Globals {
     public static int mIndex = -1;
 
 
-
     public static String oneToOneId = null;
     public static String onrToOneName = "";
+
+    public static int R_Index = 0;
+    public static int R_Index_group = 0;
+
 
 
 

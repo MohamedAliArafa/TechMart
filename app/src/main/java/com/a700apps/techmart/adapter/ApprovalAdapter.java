@@ -8,7 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.JoinGroupRequestsData;
@@ -19,7 +22,9 @@ import com.a700apps.techmart.data.network.NetworkResponseListener;
 import com.a700apps.techmart.ui.screens.BoardMember.DialogApproval.DialogActivity;
 import com.a700apps.techmart.ui.screens.BoardMember.JoinRequests.RequestsPresenter;
 import com.a700apps.techmart.ui.screens.BoardMember.JoinRequests.RequestsView;
+import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.utils.PreferenceHelper;
+import com.a700apps.techmart.utils.loadingDialog;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -28,17 +33,19 @@ import java.util.List;
  * Created by khaled.badawy on 10/10/2017.
  */
 
-public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHolder> implements RequestsView{
+public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHolder> implements RequestsView {
     private List<JoinGroupRequestsData.Result> mGroupUsersList;
     Context context;
-
+    Dialog dialogsLoading;
+    RecyclerView rv;
     RequestsPresenter presenter;
 
-    public ApprovalAdapter(Context context, List<JoinGroupRequestsData.Result> TimeLineList) {
+    public ApprovalAdapter(Context context, List<JoinGroupRequestsData.Result> TimeLineList , RecyclerView rv) {
         this.context = context;
         this.mGroupUsersList = TimeLineList;
         presenter = new RequestsPresenter();
         presenter.attachView(this);
+        this.rv = rv;
     }
 
     @Override
@@ -63,17 +70,18 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
           Rejected = 2,
           Defered = 3,
      */
-        if (singleItem.getRequestStatus()==0){
+        if (singleItem.getRequestStatus() == 0) {
             viewHolder.mStatus.setText("Pending");
             viewHolder.mStatus.setBackgroundColor(context.getResources().getColor(R.color.btn_approve));
-        }else if (singleItem.getRequestStatus()==1){
+        } else if (singleItem.getRequestStatus() == 1) {
             viewHolder.mStatus.setText("Accepted");
+            viewHolder.manageLayout.setVisibility(View.GONE);
             viewHolder.mStatus.setBackgroundColor(context.getResources().getColor(R.color.btn_approve));
-        }else if (singleItem.getRequestStatus()==2){
+        } else if (singleItem.getRequestStatus() == 2) {
             viewHolder.mStatus.setText("Rejected");
             viewHolder.mStatus.setBackgroundColor(context.getResources().getColor(R.color.btn_reject));
             viewHolder.manageLayout.setVisibility(View.GONE);
-        }else if (singleItem.getRequestStatus()==3){
+        } else if (singleItem.getRequestStatus() == 3) {
             viewHolder.mStatus.setText("Defered");
             viewHolder.mStatus.setBackgroundColor(context.getResources().getColor(R.color.btn_defer));
         }
@@ -82,15 +90,14 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
             @Override
             public void onClick(View view) {
 //                presenter.manageRequestItem(singleItem.getID() , singleItem.getRequestedRole() , PreferenceHelper.getUserId(context) , 1);
-                showConfirmDialog(singleItem.getID());
+                boolean isdefered = singleItem.getRequestStatus() == 3 ? true : false;
+                showConfirmDialog(singleItem.getID(), singleItem.getRequestedRole(), isdefered);
             }
         });
-
-
-
     }
 
-    private void showConfirmDialog(final int postId ) {
+    private void showConfirmDialog(final int postId, final int requestRole, boolean isDefered) {
+
 
         // Create custom dialog object
         final Dialog dialog = new Dialog(context);
@@ -106,6 +113,15 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
         TextView rejectTextView = dialog.findViewById(R.id.tv_reject);
         TextView deferTextView = dialog.findViewById(R.id.tv_defer);
 
+        LinearLayout deferLayout = dialog.findViewById(R.id.deferLayout);
+        LinearLayout acceptLayout = dialog.findViewById(R.id.acceptLayout);
+        LinearLayout rejectLayout = dialog.findViewById(R.id.rejectLayout);
+
+        if (isDefered) {
+            deferLayout.setVisibility(View.GONE);
+            acceptLayout.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.5f));
+            rejectLayout.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.5f));
+        }
 
         iconClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,7 +132,8 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
         approveImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.manageRequestItem(postId, 1,1, PreferenceHelper.getUserId(context));
+                presenter.manageRequestItem(postId, 1, requestRole, PreferenceHelper.getUserId(context));
+
                 dialog.dismiss();
             }
         });
@@ -124,7 +141,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
         approveTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.manageRequestItem(postId, 1,1, PreferenceHelper.getUserId(context));
+                presenter.manageRequestItem(postId, 1, requestRole, PreferenceHelper.getUserId(context));
                 dialog.dismiss();
             }
         });
@@ -132,7 +149,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
         rejectImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.manageRequestItem(postId, 2,1, PreferenceHelper.getUserId(context));
+                presenter.manageRequestItem(postId, 2, requestRole, PreferenceHelper.getUserId(context));
                 dialog.dismiss();
             }
         });
@@ -140,7 +157,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
         rejectTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.manageRequestItem(postId, 2,1, PreferenceHelper.getUserId(context));
+                presenter.manageRequestItem(postId, 2, requestRole, PreferenceHelper.getUserId(context));
                 dialog.dismiss();
             }
         });
@@ -148,7 +165,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
         deferImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.manageRequestItem(postId, 3,1, PreferenceHelper.getUserId(context));
+                presenter.manageRequestItem(postId, 3, requestRole, PreferenceHelper.getUserId(context));
                 dialog.dismiss();
             }
         });
@@ -156,7 +173,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
         deferTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.manageRequestItem(postId, 3,1, PreferenceHelper.getUserId(context));
+                presenter.manageRequestItem(postId, 3, requestRole, PreferenceHelper.getUserId(context));
                 dialog.dismiss();
             }
         });
@@ -167,31 +184,32 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
         return mGroupUsersList.size();
     }
 
-    @Override
     public void showLoadingProgress() {
-
+        dialogsLoading = new loadingDialog().showDialog(context);
     }
 
     @Override
     public void dismissLoadingProgress() {
-
+        dialogsLoading.dismiss();
     }
 
     @Override
     public void showToast(String message) {
-
+        Toast.makeText(context, ""+message, Toast.LENGTH_SHORT).show();
     }
+
 
     @Override
     public void updateData(List<JoinGroupRequestsData.Result> list) {
-
+        rv.setAdapter(new ApprovalAdapter(context , list , rv));
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView profile;
         TextView mName, mTime, mStatus;
         View manageLayout;
+        LinearLayout deferLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -203,11 +221,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
             manageLayout = itemView.findViewById(R.id.manageLayout);
         }
 
-        @Override
-        public void onClick(View v) {
-//            int position = getAdapterPosition();
-//            context.startActivity(new Intent(context, MemberProfile.class));
-        }
     }
+
 }
 

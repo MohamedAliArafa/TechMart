@@ -46,6 +46,8 @@ public class NewChatActivity extends AppCompatActivity implements MessageView {
     private ArrayList<String> UserIDsArrayList;
     private ImageView mBackImageView;
     private TextView mCancel;
+    TextView empty;
+
     private List<MyConnectionList.ResultEntity> suggestions = new ArrayList<>();
 
     @Override
@@ -67,6 +69,8 @@ public class NewChatActivity extends AppCompatActivity implements MessageView {
 //        autoCompleteText.setThreshold(1);
 
         mCancel = (TextView) findViewById(R.id.tv_cancel);
+        empty = (TextView) findViewById(R.id.empty);
+
         mBackImageView = (ImageView) findViewById(R.id.iv_back);
         mBackImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,6 +144,13 @@ public class NewChatActivity extends AppCompatActivity implements MessageView {
                     if (responser.get(i).getName().toLowerCase().startsWith(s.toString().toLowerCase())) {
                         suggestions.add(responser.get(i));
                     }
+                }
+
+
+                if (suggestions.size() >0){
+                    empty.setVisibility(View.GONE);
+                }else {
+                    empty.setVisibility(View.VISIBLE);
                 }
 
                 connectionList.setAdapter(new MessagesAdapter(NewChatActivity.this, suggestions));

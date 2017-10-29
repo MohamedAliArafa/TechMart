@@ -4,7 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
 
-import com.a700apps.techmart.data.model.AllGroupUsers;
+import com.a700apps.techmart.data.model.Group;
 import com.a700apps.techmart.data.model.UserData;
 import com.a700apps.techmart.data.model.UserGroupData;
 import com.a700apps.techmart.data.network.MainApi;
@@ -36,13 +36,13 @@ public class BoardMemberPresenter extends MainPresenter<BoardMemberView> {
         try {
             JSONObject registerBody = MainApiHelper.getAllGroupUsers(GroupID,PreferenceHelper.getUserId(mContext));
             Log.e("DATA", registerBody.toString());
-            MainApi.getAllGroupUsers(registerBody, new NetworkResponseListener<AllGroupUsers>() {
+            MainApi.getAllGroupUsers(registerBody, new NetworkResponseListener<Group>() {
                 @Override
-                public void networkOperationSuccess(NetworkResponse<AllGroupUsers> networkResponse) {
+                public void networkOperationSuccess(NetworkResponse<Group> networkResponse) {
                     if (isDetachView()) return;
                     dialogsLoading.dismiss();
-                    AllGroupUsers userNetworkData = networkResponse.data;
-                    int errorCode = userNetworkData.ISResultHasData;
+                    Group userNetworkData = networkResponse.data;
+                    int errorCode = userNetworkData.getISResultHasData();
                     if (errorCode == 1) {
                         view.updateUi(userNetworkData);
                     }

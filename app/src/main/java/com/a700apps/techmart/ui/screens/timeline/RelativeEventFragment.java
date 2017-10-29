@@ -35,7 +35,7 @@ public class RelativeEventFragment extends Fragment implements TimeLineView {
 
     View view;
     EmptyRecyclerView rv;
-
+    String relativeId ;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -47,8 +47,7 @@ public class RelativeEventFragment extends Fragment implements TimeLineView {
         rv = (EmptyRecyclerView) view.findViewById(R.id.recyclerView);
         indicatorView = view.findViewById(R.id.avi);
 
-        String relativeId = getArguments().getString("RelativId");
-        presenter.GetRelativeEventByUserID(relativeId, PreferenceHelper.getUserId(getActivity()) , getActivity());
+        relativeId = getArguments().getString("RelativId");
 
         view.findViewById(R.id.imageView4).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +65,15 @@ public class RelativeEventFragment extends Fragment implements TimeLineView {
         });
 
         return view;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        presenter.GetRelativeEventByUserID(relativeId, PreferenceHelper.getUserId(getActivity()) , getActivity());
+
     }
 
     @Override

@@ -224,6 +224,7 @@ public class GroupActivity extends AppCompatActivity implements GroupMemberView 
                     Log.e("relative",timeLineItem.getUserID());
                     Log.e("userIds",PreferenceHelper.getUserId(context));
                     if (timeLineItem.getUserID().equals(PreferenceHelper.getUserId(context))) {
+                        Globals.CAME_FROM_GROUP_MEMBER_TO_MPROFILE = true;
                         ((HomeActivity) context). openFragment(EditProfileFragment.class, null);
                     } else {
                         Bundle bundle = new Bundle();
@@ -231,7 +232,6 @@ public class GroupActivity extends AppCompatActivity implements GroupMemberView 
                         bundle.putInt("GroupId", GroupId);
                         Globals.userId = timeLineItem.getUserID();
                         ((HomeActivity) context).openFragment(MemberProfileFragment.class, bundle);
-
                     }
                 }
             });

@@ -1,5 +1,6 @@
 package com.a700apps.techmart.ui.screens.setting;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -58,6 +59,8 @@ import com.suke.widget.SwitchButton;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindViews;
 import butterknife.ButterKnife;
@@ -79,6 +82,7 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
     ImageView mBackImageView, mProfileImageView;
     SwitchButton changeRecieveNotification;
     SettingPresenter presenter;
+    changeHomeImage changeHomeImage;
 
     String selectedImagePath;
     //    private final int SELECT_PICTURE_CHANGE = 19;
@@ -87,7 +91,7 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
     Button save, bt_cancel;
     TextView tv_change;
     Dialog dialogsLoading;
-
+    private static final int multy_permission_request = 101;
 
     private static final int PERMISSION_REQUEST_CODE = 786;
     private static final int Permission_storage_code = 787;
@@ -114,6 +118,9 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
         mBackImageView = (ImageView) view.findViewById(R.id.iv_back);
         mProfileImageView = view.findViewById(R.id.iv_user_nav_image);
         tv_change = view.findViewById(R.id.tv_change);
+
+
+        changeHomeImage  = (SettingFragment.changeHomeImage) getActivity();
 
         changeRecieveNotification = (SwitchButton) view.findViewById(R.id.switch_button);
         oldPasswordEditText = view.findViewById(R.id.edt_change_pass);
@@ -222,6 +229,9 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
         User user = PreferenceHelper.getSavedUser(getActivity());
         user.Photo = name;
         PreferenceHelper.saveUser(getActivity(), user);
+
+        changeHomeImage.changeImage(name);
+
     }
 
     @Override
@@ -522,8 +532,99 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
         dialog.show();
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private boolean checkStoragePermissions() {
+
+        boolean havePermission = true;
+
+        if (getActivity().checkSelfPermission(
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            havePermission = false;
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                Toast.makeText(getActivity(), getString(R.string.storage_rationale), Toast.LENGTH_SHORT).show();
+            } else {
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, Permission_storage_code);
+            }
+        }
+        return havePermission;
+    }
+
+    private boolean justCheckStoragePermissions() {
+
+        boolean havePermission = true;
+
+        if (getActivity().checkSelfPermission(
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            havePermission = false;
+        }
+        return havePermission;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private boolean checkCameraPermissions() {
+        boolean havePermission = true;
+        if (getActivity().checkSelfPermission(
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            havePermission = false;
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.CAMERA)) {
+                Toast.makeText(getActivity(), getString(R.string.camera_rationale), Toast.LENGTH_SHORT).show();
+            } else {
+                requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+            }
+        }
+        return havePermission;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private boolean justCheckCameraPermissions() {
+        boolean havePermission = true;
+        if (getActivity().checkSelfPermission(
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            havePermission = false;
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.CAMERA)) {
+                Toast.makeText(getActivity(), getString(R.string.camera_rationale), Toast.LENGTH_SHORT).show();
+            }
+        }
+        return havePermission;
+    }
+
+    private boolean checkMutlyPermissions() {
+        List<String> permissionsNeeded = new ArrayList<String>();
+        boolean havePermission = true;
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            permissionsNeeded.add(Manifest.permission.CAMERA);
+            havePermission = false;
+        }
+
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissionsNeeded.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+            havePermission = false;
+        }
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                Manifest.permission.CAMERA) ||
+                ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                        Manifest.permission.READ_EXTERNAL_STORAGE)
+                ) {
+            Toast.makeText(getActivity(), getString(R.string.camera_rationale), Toast.LENGTH_SHORT).show();
+        } else {
+            if (permissionsNeeded.size() > 0)
+                requestPermissions(permissionsNeeded.toArray(new String[permissionsNeeded.size()]), multy_permission_request);
+        }
+
+        return havePermission;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
     void selectImage() {
-        if (AppConst.checkPermission(getActivity())) {
+        if (checkStoragePermissions()) {
             selectedImagePath = null;
             // select a file
             Intent intent = new Intent();
@@ -531,24 +632,14 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent,
                     "Select Picture"), SELECT_PICTURE);
-        } else {
-            AppConst.requestPermission(getActivity(), PERMISSION_REQUEST_CODE);
         }
     }
 
     void captureImage() {
-        if (checkPermission(android.Manifest.permission.CAMERA)) {
-//            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//            startActivityForResult(cameraIntent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
-            if (AppConst.checkPermission(getActivity())) {
-                dispatchTakePictureIntent();
-            } else {
-                AppConst.requestPermission(getActivity(), Permission_storage_code);
-            }
-
-        } else {
-            requestPermission(android.Manifest.permission.CAMERA);
+        if (checkMutlyPermissions()) {
+            dispatchTakePictureIntent();
         }
+
     }
 
     private void dispatchTakePictureIntent() {
@@ -558,33 +649,30 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
         }
     }
 
-    private boolean checkPermission(String permission) {//android.Manifest.permission.CAMERA
-        int result = ContextCompat.checkSelfPermission(getActivity(), permission);
-        if (result == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
-    private void requestPermission(String permission) {//android.Manifest.permission.CAMERA
-        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), permission)) {
-            Toast.makeText(getActivity(), "Camera permission allows us take images throught camera. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
-        } else {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
-        }
-    }
 
-    @Override
+    //    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
         switch (requestCode) {
             case CAMERA_CAPTURE_IMAGE_REQUEST_CODE:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     captureImage();
-                } else {
-                    Toast.makeText(getActivity(), "permission denied", Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case Permission_storage_code:
+                selectImage();
+                break;
+            case multy_permission_request:
+                if (justCheckCameraPermissions() && justCheckStoragePermissions())
+                    captureImage();
+                break;
         }
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    public interface changeHomeImage{
+        void changeImage(String path);
     }
 }

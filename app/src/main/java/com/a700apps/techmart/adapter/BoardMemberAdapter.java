@@ -10,7 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.GroupTimeLineData;
@@ -20,6 +23,7 @@ import com.a700apps.techmart.ui.screens.BoardMember.DialogApproval.approvalView;
 import com.a700apps.techmart.ui.screens.BoardMember.EditTimeLine.EditTimeLineActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.PreferenceHelper;
+import com.a700apps.techmart.utils.loadingDialog;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -32,11 +36,15 @@ public class BoardMemberAdapter extends RecyclerView.Adapter<BoardMemberAdapter.
     private List<GroupTimeLineData.ResultEntity> mTimeLineList;
     Context context;
     private static final int NOTIF_TYPE_EVENT = 2;
+    RecyclerView rv;
 
 
-    public BoardMemberAdapter(Context context, List<GroupTimeLineData.ResultEntity> TimeLineList) {
+    Dialog dialogsLoading;
+
+    public BoardMemberAdapter(Context context, List<GroupTimeLineData.ResultEntity> TimeLineList,RecyclerView rv) {
         this.context = context;
         this.mTimeLineList = TimeLineList;
+        this.rv = rv;
     }
 
 
@@ -49,36 +57,37 @@ public class BoardMemberAdapter extends RecyclerView.Adapter<BoardMemberAdapter.
 //        switch (itemType) {
 //
 //            case NOTIF_TYPE_EVENT:
-                BoardMemberAdapter.ViewHolder viewHolderEvent = (BoardMemberAdapter.ViewHolder) viewHolder;
-                viewHolderEvent.mDescribtionTextView.setText(timeLineItem.getDescr());
-                viewHolderEvent.mTitleTextView.setText(timeLineItem.getTitle());
-                viewHolderEvent.mGroupNameTextView.setText(timeLineItem.getGroupName());
+        BoardMemberAdapter.ViewHolder viewHolderEvent = (BoardMemberAdapter.ViewHolder) viewHolder;
+        viewHolderEvent.mDescribtionTextView.setText(timeLineItem.getDescr());
+        viewHolderEvent.mTitleTextView.setText(timeLineItem.getTitle());
+        viewHolderEvent.mGroupNameTextView.setText(timeLineItem.getGroupName());
 
 
-                if (timeLineItem.getStatus() == 0) {
-                    viewHolderEvent.mApproveImageView.setImageResource(R.drawable.ic_edit);
-                    viewHolderEvent.tv_approve.setTextColor(context.getResources().getColor(R.color.red_join_dialog));
-                    viewHolderEvent.tv_approve.setText("Pending");
-                } else if (timeLineItem.getStatus() == 1) {
-                    viewHolderEvent.tv_approve.setText("Approved");
-                } else if (timeLineItem.getStatus() == 2) {
-                    viewHolderEvent.tv_approve.setTextColor(context.getResources().getColor(R.color.red_join_dialog));
-                    viewHolderEvent.tv_approve.setText("Rejected");
-                } else if (timeLineItem.getStatus() == 3) {
-                    viewHolderEvent.tv_approve.setTextColor(context.getResources().getColor(R.color.red_join_dialog));
-                    viewHolderEvent.tv_approve.setText("Deferred");
-                }
+        if (timeLineItem.getStatus() == 0) {
+            viewHolderEvent.mApproveImageView.setImageResource(R.drawable.ic_edit);
+            viewHolderEvent.tv_approve.setTextColor(context.getResources().getColor(R.color.red_join_dialog));
+            viewHolderEvent.tv_approve.setText("Pending");
+        } else if (timeLineItem.getStatus() == 1) {
+            viewHolderEvent.tv_approve.setText("Approved");
+            viewHolderEvent.tv_manage.setText("Delete");
+        } else if (timeLineItem.getStatus() == 2) {
+            viewHolderEvent.tv_approve.setTextColor(context.getResources().getColor(R.color.red_join_dialog));
+            viewHolderEvent.tv_approve.setText("Rejected");
+        } else if (timeLineItem.getStatus() == 3) {
+            viewHolderEvent.tv_approve.setTextColor(context.getResources().getColor(R.color.red_join_dialog));
+            viewHolderEvent.tv_approve.setText("Deferred");
+        }
 
-                Glide.with(context)
-                        .load(MainApi.IMAGE_IP + timeLineItem.getImage()).placeholder(R.drawable.placeholder)
-                        .into(viewHolderEvent.mPostImageView);
+        Glide.with(context)
+                .load(MainApi.IMAGE_IP + timeLineItem.getImage()).placeholder(R.drawable.placeholder)
+                .into(viewHolderEvent.mPostImageView);
 
-                viewHolderEvent.contain.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+        viewHolderEvent.contain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 //                        openDetails(context, "Event", mTimeLineList, position);
-                    }
-                });
+            }
+        });
 //                break;
 //        }
     }
@@ -121,7 +130,7 @@ public class BoardMemberAdapter extends RecyclerView.Adapter<BoardMemberAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, approvalView {
 
         ImageView mPostImageView, mApproveImageView, mManageImageView, mEditImageView;
-        TextView mTitleTextView, mDescribtionTextView, mPostedByTextView, mGroupNameTextView, tv_approve;
+        TextView mTitleTextView, mDescribtionTextView, mPostedByTextView, mGroupNameTextView, tv_approve, tv_manage;
         ConstraintLayout contain;
         ApprovalPresenter presenter;
 
@@ -139,6 +148,7 @@ public class BoardMemberAdapter extends RecyclerView.Adapter<BoardMemberAdapter.
             mGroupNameTextView = (TextView) itemView.findViewById(R.id.tv_group_name);
             mTitleTextView = (TextView) itemView.findViewById(R.id.tv_title);
             mDescribtionTextView = (TextView) itemView.findViewById(R.id.tv_desc);
+            tv_manage = (TextView) itemView.findViewById(R.id.tv_manage);
 
             presenter = new ApprovalPresenter();
             presenter.attachView(this);
@@ -146,12 +156,13 @@ public class BoardMemberAdapter extends RecyclerView.Adapter<BoardMemberAdapter.
             itemView.findViewById(R.id.tv_edit).setOnClickListener(this);
 
             mManageImageView.setOnClickListener(this);
-            itemView.findViewById(R.id.tv_manage).setOnClickListener(this);
+            tv_manage.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
+            boolean isdefered = mTimeLineList.get(getAdapterPosition()).getStatus() == 3 ? true : false;
             int viewId = v.getId();
             switch (viewId) {
 
@@ -169,16 +180,29 @@ public class BoardMemberAdapter extends RecyclerView.Adapter<BoardMemberAdapter.
                     ActivityUtils.openActivity(context, EditTimeLineActivity.class, bundle2, false);
                     break;
                 case R.id.tv_manage:
-                    showConfirmDialog(mTimeLineList.get(getAdapterPosition()).getID(), mTimeLineList.get(getAdapterPosition()).getType());
+
+                    if (mTimeLineList.get(getAdapterPosition()).getStatus() == 1) {
+                        presenter.manageTimeLineItem(mTimeLineList.get(getAdapterPosition()).getID(),
+                                mTimeLineList.get(getAdapterPosition()).getType(), PreferenceHelper.getUserId(context), 4);
+                    } else {
+                        showConfirmDialog(mTimeLineList.get(getAdapterPosition()).getID(), mTimeLineList.get(getAdapterPosition()).getType(),isdefered);
+                    }
                     break;
                 case R.id.iv_manage:
-                    showConfirmDialog(mTimeLineList.get(getAdapterPosition()).getID(), mTimeLineList.get(getAdapterPosition()).getType());
+
+                    if (mTimeLineList.get(getAdapterPosition()).getStatus() == 1) {
+                        presenter.manageTimeLineItem(mTimeLineList.get(getAdapterPosition()).getID(),
+                                mTimeLineList.get(getAdapterPosition()).getType(), PreferenceHelper.getUserId(context), 4);
+                    } else {
+                        showConfirmDialog(mTimeLineList.get(getAdapterPosition()).getID(),
+                                mTimeLineList.get(getAdapterPosition()).getType(),isdefered);
+                    }
                     break;
 
             }
         }
 
-        private void showConfirmDialog(final int postId, final int type) {
+        private void showConfirmDialog(final int postId, final int type ,boolean defered) {
 
             // Create custom dialog object
             final Dialog dialog = new Dialog(context);
@@ -194,6 +218,15 @@ public class BoardMemberAdapter extends RecyclerView.Adapter<BoardMemberAdapter.
             TextView rejectTextView = dialog.findViewById(R.id.tv_reject);
             TextView deferTextView = dialog.findViewById(R.id.tv_defer);
 
+            LinearLayout deferLayout = dialog.findViewById(R.id.deferLayout);
+            LinearLayout acceptLayout = dialog.findViewById(R.id.acceptLayout);
+            LinearLayout rejectLayout = dialog.findViewById(R.id.rejectLayout);
+
+            if (defered) {
+                deferLayout.setVisibility(View.GONE);
+                acceptLayout.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.5f));
+                rejectLayout.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.5f));
+            }
 
             iconClose.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -252,17 +285,22 @@ public class BoardMemberAdapter extends RecyclerView.Adapter<BoardMemberAdapter.
 
         @Override
         public void showLoadingProgress() {
-
+        dialogsLoading = new loadingDialog().showDialog(context);
         }
 
         @Override
         public void dismissLoadingProgress() {
-
+        dialogsLoading.dismiss();
         }
 
         @Override
         public void showToast(String message) {
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        }
 
+        @Override
+        public void updateUi(List<GroupTimeLineData.ResultEntity> TimelineList) {
+            rv.setAdapter(new BoardMemberAdapter(context , TimelineList , rv));
         }
     }
 

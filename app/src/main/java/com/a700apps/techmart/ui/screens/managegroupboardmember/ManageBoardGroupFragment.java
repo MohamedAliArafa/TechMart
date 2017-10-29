@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.AutoCompleteGroupAdapter;
@@ -28,6 +29,7 @@ import com.a700apps.techmart.ui.screens.mygroup.MyGroupPresenter;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
 import com.a700apps.techmart.ui.screens.notification.NotificationFragment;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
+import com.a700apps.techmart.ui.screens.profile.EditProfileFragment;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
 import com.a700apps.techmart.utils.Globals;
@@ -50,6 +52,8 @@ ManageBoardGroupFragment extends Fragment implements manageGroupView {
     private List<UserGroup> suggestions = new ArrayList<>();
     UserGroupData data;
 
+    TextView empty;
+
     public ManageBoardGroupFragment() {
         // Required empty public constructor
     }
@@ -68,7 +72,7 @@ ManageBoardGroupFragment extends Fragment implements manageGroupView {
         mSideMenuImageView = (ImageView) view.findViewById(R.id.imageView4);
         searchCompleteTextView = view.findViewById(R.id.edt_search);
 //        searchCompleteTextView.setThreshold(1);
-
+        empty = (TextView) view.findViewById(R.id.empty);
         mSideMenuImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,7 +86,8 @@ ManageBoardGroupFragment extends Fragment implements manageGroupView {
         mProfileImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtils.openActivity(getActivity(), EditProfileActivity.class, false);
+//                ActivityUtils.openActivity(getActivity(), EditProfileActivity.class, false);
+                ((HomeActivity) getActivity()).openFragment(EditProfileFragment.class , null);
             }
         });
 
@@ -143,7 +148,11 @@ ManageBoardGroupFragment extends Fragment implements manageGroupView {
                         suggestions.add(data.userGroup.get(i));
                     }
                 }
-//                if (suggestions.size() > 0)
+                if (suggestions.size() > 0){
+                    empty.setVisibility(View.GONE);
+                }else {
+                    empty.setVisibility(View.VISIBLE);
+                }
                 rv.setAdapter(new GroupsAdapter(getActivity(), suggestions));
             }
         });

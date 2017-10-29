@@ -1,6 +1,7 @@
 package com.a700apps.techmart.ui.screens.meeting;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,10 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.a700apps.techmart.R;
+import com.a700apps.techmart.ui.screens.home.HomeActivity;
+import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
+import com.a700apps.techmart.utils.Globals;
+import com.a700apps.techmart.utils.PreferenceHelper;
 
 import java.util.List;
 
@@ -121,6 +126,24 @@ public class MeetingActivity extends AppCompatActivity {
             }
         });
 
+
+        findViewById(R.id.new_message).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MeetingActivity.this , HomeActivity.class);
+                Globals.CAME_FROM_NOTIFICATION_TO_GROUP = true;
+                intent.putExtra("profileHolder" , PreferenceHelper.getUserId(MeetingActivity.this));
+                startActivity(intent);
+            }
+        });
+
+        findViewById(R.id.new_profile).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MeetingActivity.this , NotificationActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 

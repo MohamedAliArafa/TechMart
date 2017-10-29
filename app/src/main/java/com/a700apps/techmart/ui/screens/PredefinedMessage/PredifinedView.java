@@ -16,4 +16,5 @@ public interface PredifinedView {
     void showToast(String msg);
 
     void updateUi(List<PredifinedData.Result> list);
+    void back();
 }

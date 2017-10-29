@@ -44,7 +44,6 @@ public class BoardPostFragment extends Fragment implements BoardTimlineView {
         Bundle arguments = getArguments();
         mGroupId = arguments.getInt("string_key");
         rv = (EmptyRecyclerView) view.findViewById(R.id.recyclerView);
-//        presenter.getTimeline(mGroupId, PreferenceHelper.getUserId(getActivity()),2);
         return view;
     }
 
@@ -72,7 +71,7 @@ public class BoardPostFragment extends Fragment implements BoardTimlineView {
         if (TimelineList.size() == 0) {
             rv.setEmptyView(view.findViewById(R.id.tv_nodata));
         }
-        rv.setAdapter(new BoardMemberAdapter(getActivity(),TimelineList));
+        rv.setAdapter(new BoardMemberAdapter(getActivity(),TimelineList,rv));
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
     }

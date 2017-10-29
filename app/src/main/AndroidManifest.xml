@@ -20,18 +20,23 @@
         android:name="com.google.android.gms.version"
         android:value="@integer/google_play_services_version" />
 
+
+    <!--<meta-data android:name="com.a700apps.techmart.utils.GlideConfiguration"-->
+    <!--android:value="GlideModule"/>-->
+
     <!--<meta-data-->
-        <!--tools:replace="android:value" />-->
+    <!--tools:replace="android:value" />-->
 
     <!--android:icon="@drawable/icon_app_1024"-->
     <application
-        tools:replace="android:icon"
         android:name=".TechMartApp"
         android:allowBackup="true"
         android:icon="@drawable/icon_app_1024"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:icon">
         <activity android:name=".ui.screens.category.CategoryActivity" />
         <activity
             android:name=".ui.screens.splash.SplashActivity"
@@ -54,8 +59,8 @@
         <activity
             android:name=".ui.screens.home.HomeActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.screens.listgroup.GroubListActivity"
             android:windowSoftInputMode="stateHidden" />
@@ -73,15 +78,17 @@
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".ui.screens.userlikes.UserLikesActivity" />
         <activity android:name=".ui.screens.creatEvent.CreatEventActivity" />
-        <activity android:name=".ui.screens.creatpost.PostActivity" />
+        <activity android:name=".ui.screens.creatpost.PostActivity" android:windowSoftInputMode="adjustNothing"/>
         <activity android:name=".ui.screens.grouptimeline.GroupTimeLineActivity" />
         <activity android:name=".ui.screens.grouptimeline.GroupsTimLineActivity" />
         <activity
             android:name=".ui.screens.mygroup.MyGroubListActivity"
             android:windowSoftInputMode="stateHidden" />
+
         <activity
             android:name=".ui.screens.profile.EditProfileActivity"
             android:windowSoftInputMode="stateHidden" />
+
         <activity android:name=".ui.screens.notification.NotificationActivity" />
         <activity android:name=".ui.screens.message.MessagesActivity" />
         <activity android:name=".ui.screens.meeting.MeetingActivity" />
@@ -130,12 +137,6 @@
             android:label="@string/title_activity_maps" />
         <activity android:name=".ui.screens.BoardMember.EditTimeLine.EditTimeLineActivity" />
         <activity android:name=".ui.screens.BoardMember.DialogApproval.DialogActivity" />
-
-
-
-
-
-
 
 
         <service android:name=".ui.screens.home.NotificationIntentService" />

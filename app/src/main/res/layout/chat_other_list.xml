@@ -32,7 +32,9 @@
 
         <TextView
             android:id="@+id/tv_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:textAlignment="viewStart"
+            android:text=""
             android:layout_height="wrap_content"
             android:textColor="@android:color/white" />
 
