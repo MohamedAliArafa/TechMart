@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="0dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="80dp"
             android:paddingBottom="@dimen/events_text_container_bottom_padding"
             android:paddingLeft="@dimen/events_text_container_padding"
             android:paddingRight="@dimen/events_text_container_padding"
@@ -84,7 +84,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_events_title_container"
                 android:gravity="center_vertical"
+
                 android:orientation="horizontal"
+
                 android:weightSum="100">
 
                 <ImageView
@@ -100,13 +102,12 @@
                     android:id="@+id/tv_time"
                     style="@style/ParallaxTextStyle"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/events_title_margin"
+                    android:layout_height="30dp"
                     android:layout_weight="50"
+                    android:gravity="center"
                     android:ellipsize="end"
                     android:textColor="@color/main_light_text"
                     android:maxLines="@integer/events_max_lines"
-                    android:text="june 12 2017|Time:10:00 am on wards"
                     android:textSize="10sp"
                     android:visibility="invisible"
 
@@ -120,7 +121,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_events_time_container"
-                android:layout_marginTop="@dimen/general_margin"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:weightSum="100">
@@ -164,7 +164,7 @@
                     android:gravity="center"
                     android:textColor="@color/button_light_text"
                     android:textSize="@dimen/time_text"
-                    android:visibility="gone"
+                    android:visibility="invisible"
                     app:srcCompat="@drawable/ratring_pic" />
             </LinearLayout>
 

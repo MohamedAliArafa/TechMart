@@ -182,7 +182,44 @@
 
         </LinearLayout>
 
-        <TextView
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="@dimen/margin_image"
+
+                android:background="@drawable/transperant_bg"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_linked"
+
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/ic_inlinked"
+                    android:visibility="visible" />
+
+                <com.a700apps.techmart.utils.CustomButton
+                    android:id="@+id/btn_linked"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
+
+                    android:background="@drawable/transperant_bg"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/general_margin"
+                    android:text="Sign in with linkedin"
+                    android:textColor="@color/light_color_text"
+                    android:textSize="@dimen/button_light_text" />
+            </LinearLayout>
+
+
+            <TextView
             android:id="@+id/tv_forget_pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

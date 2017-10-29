@@ -12,6 +12,7 @@
         android:layout_height="50dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
+        android:scaleType="fitXY"
         android:layout_marginTop="8dp"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@+id/view4"

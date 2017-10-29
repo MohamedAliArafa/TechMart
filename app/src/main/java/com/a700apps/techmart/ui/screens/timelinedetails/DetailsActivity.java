@@ -5,22 +5,18 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Scroller;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.a700apps.techmart.R;
-import com.a700apps.techmart.adapter.TimelineAdapter;
 import com.a700apps.techmart.data.model.LikeData;
 import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.data.network.MainApi;
@@ -29,8 +25,8 @@ import com.a700apps.techmart.data.network.NetworkResponse;
 import com.a700apps.techmart.data.network.NetworkResponseListener;
 import com.a700apps.techmart.ui.screens.comment.CommentActivity;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
-import com.a700apps.techmart.ui.screens.mygroup.MyGroubListActivity;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
+import com.a700apps.techmart.ui.screens.profile.EditProfileFragment;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
 import com.a700apps.techmart.ui.screens.userlikes.UserLikesActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
@@ -41,12 +37,10 @@ import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.a700apps.techmart.utils.loadingDialog;
 import com.bumptech.glide.Glide;
-import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -76,11 +70,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     TextView mLikeCount, mCommentCount, mShareCount;
 
     LinearLayout ll_events_time_container;
-    TextView tvTmieSlider;
-
-//    TextView sliderNumGoing;
-//    LinearLayout linearCount;
-//    Button going , notGoing;
+    TextView tvTmieSlider, mShareTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,28 +84,23 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         mList = getIntent().getParcelableArrayListExtra("Timeline");
 
 
-//        going = findViewById(R.id.btn_go);
-//        notGoing = findViewById(R.id.btn_not_go);
-//        sliderNumGoing = findViewById(R.id.slider_num_attend);
-//        linearCount = findViewById(R.id.linearCount);
-
         tvTmieSlider = findViewById(R.id.tv_time);
         ll_events_time_container = findViewById(R.id.ll_events_time_container);
 
 //        indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
         mGoing = (TextView) findViewById(R.id.textView53);
         iv_invite = (ImageView) findViewById(R.id.iv_invite);
-        mProfileImageView = (ImageView) findViewById(R.id.new_message);
+        mProfileImageView = (ImageView) findViewById(R.id.new_profile);
         iv_slider = (ImageView) findViewById(R.id.iv_slider);
-        mNotificationImageView = (ImageView) findViewById(R.id.new_profile);
+        mNotificationImageView = (ImageView) findViewById(R.id.new_message);
         mEventTitle = (CustomLightTextView) findViewById(R.id.tv_event_title);
         mLikeCount = (CustomLightTextView) findViewById(R.id.tv_like_count);
         mCommentCount = (CustomLightTextView) findViewById(R.id.tv_comment_count);
         mShareCount = (CustomLightTextView) findViewById(R.id.tv_share_count);
         mEventTitle = (CustomLightTextView) findViewById(R.id.tv_event_title);
-        mLikeCount = (TextView) findViewById(R.id.tv_like_count);
-        mCommentCount = (TextView) findViewById(R.id.tv_comment_count);
-        mShareCount = (TextView) findViewById(R.id.tv_share_count);
+        mLikeCount = (CustomLightTextView) findViewById(R.id.tv_like_count);
+        mCommentCount = (CustomLightTextView) findViewById(R.id.tv_comment_count);
+        mShareCount = (CustomLightTextView) findViewById(R.id.tv_share_count);
         tv_tie = (TextView) findViewById(R.id.tv_tie);
         tv_tie.setSelected(true);
         tvTime = (TextView) findViewById(R.id.tv_3);
@@ -127,6 +112,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         tv_like = (CustomLightTextView) findViewById(R.id.tv_like);
         tv_going = (TextView) findViewById(R.id.textView53);
         tv_calender = (TextView) findViewById(R.id.tv_calender);
+        mShareTextView = (TextView) findViewById(R.id.tv_share_event);
 
         imageView4 = (ImageView) findViewById(R.id.imageView4);
         iv_comment = (ImageView) findViewById(R.id.iv_comment);
@@ -186,6 +172,9 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         iv_share_event.setOnClickListener(this);
         iv_invite.setOnClickListener(this);
         mLikeCount.setOnClickListener(this);
+        tv_calender.setOnClickListener(this);
+        mShareTextView.setOnClickListener(this);
+
 
         tv_like.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -263,7 +252,6 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         imageView4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                ActivityUtils.openActivity(DetailsActivity.this, HomeActivity.class, true);
                 onBackPressed();
             }
         });
@@ -272,7 +260,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         mProfileImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                ActivityUtils.openActivity(DetailsActivity.this, EditProfileActivity.class, false);
+                ((HomeActivity) getBaseContext()).openFragment(EditProfileFragment.class, null);
             }
         });
 
@@ -283,12 +271,11 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
-//        sliderNumGoing.setText(""+mList.get(index).getAttendantCount());
         fillData();
 
     }
 
-    private void fillData(){
+    private void fillData() {
         if (mList.get(index).getType() == 1) {
             Type = "Event";
         } else {
@@ -333,27 +320,19 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         if (Type.equals("post")) {
             mLikeLinearContainer.setVisibility(View.VISIBLE);
             mEventLinearContainer.setVisibility(View.GONE);
-//            going.setVisibility(View.GONE);
-//            notGoing .setVisibility(View.GONE);
-//            sliderNumGoing .setVisibility(View.GONE);
-//            linearCount.setVisibility(View.GONE);
+//
             mSlidertype.setText("Post");
         } else {
             mLikeLinearContainer.setVisibility(View.GONE);
             mEventLinearContainer.setVisibility(View.VISIBLE);
             ll_events_time_container.setVisibility(View.VISIBLE);
-//            going.setVisibility(View.VISIBLE);
-//            notGoing .setVisibility(View.VISIBLE);
-//            sliderNumGoing .setVisibility(View.VISIBLE);
-//            linearCount.setVisibility(View.VISIBLE);
+
             mSlidertype.setText("Event");
             if (mList.get(index).getIsGoing()) {
                 tv_going.setText("Joined");
-//                going.setBackground(getResources().getDrawable(R.drawable.bg_blueish));
-//                notGoing.setBackground(getResources().getDrawable(R.drawable.bg_transparent_rounded_small));
+
             } else {
-//                notGoing.setBackground(getResources().getDrawable(R.drawable.bg_blueish));
-//                going.setBackground(getResources().getDrawable(R.drawable.bg_transparent_rounded_small));
+
             }
         }
     }
@@ -420,6 +399,14 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+
+            case R.id.tv_share_event:
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
+                shareIntent.setType("text/plain");
+                startActivity(Intent.createChooser(shareIntent, "Select"));
+                break;
             case R.id.tv_comment:
                 if (AppUtils.isInternetAvailable(DetailsActivity.this)) {
                     Intent intent2 = new Intent(DetailsActivity.this, CommentActivity.class);
@@ -442,6 +429,12 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
                 }
                 break;
             case R.id.tv_share:
+                Intent shareLikeIntent = new Intent();
+                shareLikeIntent.setAction(Intent.ACTION_SEND);
+                shareLikeIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
+                shareLikeIntent.setType("text/plain");
+                startActivity(Intent.createChooser(shareLikeIntent, "Select"));
+                break;
             case R.id.iv_share:
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
@@ -458,16 +451,29 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(Intent.createChooser(seIntent, "Select"));
                 break;
             case R.id.tv_calender:
+
+                Calendar tv_cal = Calendar.getInstance();
+                Intent tv_addcalender = new Intent(Intent.ACTION_EDIT);
+                tv_addcalender.setType("vnd.android.cursor.item/event");
+                tv_addcalender.putExtra(CalendarContract.Events.TITLE, mList.get(index).getTitle());
+                tv_addcalender.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                        mList.get(index).getStartDate());
+                tv_addcalender.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
+                        mList.get(index).getEndDate());
+                tv_addcalender.putExtra(CalendarContract.Events.ALL_DAY, false);// periodicity
+                tv_addcalender.putExtra(CalendarContract.Events.DESCRIPTION, "Tech Mart Event");
+                startActivity(tv_addcalender);
+                break;
             case R.id.iv_calender:
 
                 Calendar cal = Calendar.getInstance();
                 Intent addcalender = new Intent(Intent.ACTION_EDIT);
                 addcalender.setType("vnd.android.cursor.item/event");
-                addcalender.putExtra(CalendarContract.Events.TITLE, "Event");
+                addcalender.putExtra(CalendarContract.Events.TITLE, mList.get(index).getTitle());
                 addcalender.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                        cal.getTime().getTime());
+                        mList.get(index).getStartDate());
                 addcalender.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
-                        cal.getTime().getTime());
+                        mList.get(index).getEndDate());
                 addcalender.putExtra(CalendarContract.Events.ALL_DAY, false);// periodicity
                 addcalender.putExtra(CalendarContract.Events.DESCRIPTION, "Tech Mart Event");
                 startActivity(addcalender);

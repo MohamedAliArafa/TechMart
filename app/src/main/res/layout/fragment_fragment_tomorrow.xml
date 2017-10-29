@@ -19,7 +19,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:visibility="gone"
-        android:text="no Event In Tomorrow"
+        android:text="There are no events"
         android:textAlignment="center"
         android:textColor="@android:color/white" />
     <com.wang.avi.AVLoadingIndicatorView

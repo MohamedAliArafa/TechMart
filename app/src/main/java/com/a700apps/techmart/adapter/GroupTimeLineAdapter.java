@@ -107,11 +107,21 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
                 viewHolderEvent.shareBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent sendIntent = new Intent();
-                        sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
-                        sendIntent.setType("text/plain");
-                        context.startActivity(sendIntent);
+                        Intent shareIntent = new Intent();
+                        shareIntent.setAction(Intent.ACTION_SEND);
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
+                        shareIntent.setType("text/plain");
+                        context. startActivity(Intent.createChooser(shareIntent, "Select"));
+                    }
+                });
+                viewHolderEvent.tv_share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent shareIntent = new Intent();
+                        shareIntent.setAction(Intent.ACTION_SEND);
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
+                        shareIntent.setType("text/plain");
+                        context. startActivity(Intent.createChooser(shareIntent, "Select"));
                     }
                 });
 
@@ -387,6 +397,8 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
             tv_username = (TextView) itemView.findViewById(R.id.tv_username);
 
             shareBtn = (ImageView) itemView.findViewById(R.id.iv_share);
+            tv_share = (TextView) itemView.findViewById(R.id.tv_share);
+
             addCalenderBtn = (ImageView) itemView.findViewById(R.id.iv_add_calender);
             itemView.setOnClickListener(this);
             shareBtn.setOnClickListener(this);

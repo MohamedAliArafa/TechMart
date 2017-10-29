@@ -101,13 +101,12 @@ public class MyGroupsListFragment extends Fragment implements GroupView {
 
     @Override
     public void showProgress() {
-//        indicatorView.setVisibility(View.VISIBLE);
-//        indicatorView.show();
+
     }
 
     @Override
     public void dismissProgress() {
-//        indicatorView.hide();
+//
     }
 
     @Override
@@ -149,24 +148,7 @@ public class MyGroupsListFragment extends Fragment implements GroupView {
                 rv.setAdapter(new GroupsAdapter(getActivity(), suggestions));
             }
         });
-//        searchCompleteTextView.setAdapter(new AutoCompleteGroupAdapter(getActivity() ,R.layout.custom_text_view, data.userGroup ,rv));
-//        searchCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                UserGroup group = (UserGroup) adapterView.getItemAtPosition(i);
-//                Log.e("CLICK" , group.Name);
-//                Bundle bundle = new Bundle();
-//                bundle.putInt("selectedCategory" ,group.ID );
-//                Globals.GROUP_ID = group.ID;
-//                ((HomeActivity )getActivity()).openFragment(GroupsTimeLineFragment.class , bundle);
-//            }
-//        });
-        /*
-        Bundle bundle = new Bundle();
-            bundle.putInt("selectedCategory" ,mUserGroupList.get(position).ID );
-            Globals.GROUP_ID = mUserGroupList.get(position).ID;
-            ((HomeActivity )context).openFragment(GroupsTimeLineFragment.class , bundle);
-         */
+
     }
 
     @Override

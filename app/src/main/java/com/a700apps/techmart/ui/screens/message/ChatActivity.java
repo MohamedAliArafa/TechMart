@@ -29,9 +29,11 @@ import com.a700apps.techmart.data.model.MyConnectionList;
 import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.utils.AppUtils;
+import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.ImageDetailsActivity;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.List;
 
@@ -40,12 +42,13 @@ public class ChatActivity extends AppCompatActivity implements MessageView {
     private MessagePresenter presenter;
     private RecyclerView messageList;
     private ImageView backImageView, chatImageView;
-    Button sendImageView;
+    ImageView sendImageView;
     private TextView chatNameTextView;
     public EditText editComment;
     private String ReciverName, ReciverPhoto, RelativeID;
     boolean mIsConnected;
-
+    public AVLoadingIndicatorView indicatorView;
+    List<FriendMessage.ResultEntity> mChatList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,13 +65,18 @@ public class ChatActivity extends AppCompatActivity implements MessageView {
         editComment = (EditText) findViewById(R.id.message_edit_text);
         messageList = (RecyclerView) findViewById(R.id.recyclerView);
         backImageView = (ImageView) findViewById(R.id.back_Image_view);
-        sendImageView = (Button) findViewById(R.id.send_Image_view);
+        sendImageView = (ImageView) findViewById(R.id.send_Image_view);
         chatImageView = (ImageView) findViewById(R.id.image_chat);
         chatNameTextView = (TextView) findViewById(R.id.chat_name_text_view);
-        messageList.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        linearLayoutManager.setStackFromEnd(false);
+        messageList.setLayoutManager(linearLayoutManager);
+        indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
 
         final int tintColor = ContextCompat.getColor(ChatActivity.this, android.R.color.darker_gray);
         final int wightColor = ContextCompat.getColor(ChatActivity.this, android.R.color.white);
+
 
         editComment.addTextChangedListener(new TextWatcher() {
 
@@ -77,22 +85,13 @@ public class ChatActivity extends AppCompatActivity implements MessageView {
 
                 if (s.toString().trim().length() == 0) {
                     sendImageView.setEnabled(false);
-                    Drawable drawable = ContextCompat.getDrawable(ChatActivity.this, R.drawable.ic_send_image);
-                    drawable = DrawableCompat.wrap(drawable);
-                    DrawableCompat.setTint(drawable.mutate(), tintColor);
 
-                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-
-                    sendImageView.setCompoundDrawables(drawable, null, null, null);
+                    sendImageView.setBackground(getResources().getDrawable(R.drawable.ic_send_image_demed));
 
                 } else {
-                    Drawable drawable = ContextCompat.getDrawable(ChatActivity.this, R.drawable.ic_send_image);
-                    drawable = DrawableCompat.wrap(drawable);
-                    DrawableCompat.setTint(drawable.mutate(), wightColor);
 
-                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
 
-                    sendImageView.setCompoundDrawables(drawable, null, null, null);
+                    sendImageView.setBackground(getResources().getDrawable(R.drawable.ic_send_image));
                     sendImageView.setEnabled(true);
                 }
 
@@ -164,6 +163,8 @@ public class ChatActivity extends AppCompatActivity implements MessageView {
 
             });
         }
+
+//
         chatImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -180,6 +181,8 @@ public class ChatActivity extends AppCompatActivity implements MessageView {
             public void onClick(View view) {
 
                 Intent intent = new Intent(ChatActivity.this, HomeActivity.class);
+                Globals.CAME_FROM_NOTIFICATION_TO_GROUP = true;
+
                 intent.putExtra("profilefragment", getIntent().getStringExtra("RelativeID"));
                 startActivity(intent);
 
@@ -190,12 +193,13 @@ public class ChatActivity extends AppCompatActivity implements MessageView {
 
     @Override
     public void showProgress() {
-
+        indicatorView.setVisibility(View.VISIBLE);
+        indicatorView.show();
     }
 
     @Override
     public void dismissProgress() {
-
+        indicatorView.hide();
     }
 
     @Override
@@ -209,7 +213,12 @@ public class ChatActivity extends AppCompatActivity implements MessageView {
         editComment.setText("");
         presenter.getFriendMessage(ChatActivity.this, PreferenceHelper.getUserId(ChatActivity.this), RelativeID);
 
-
+        editComment.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                messageList.getLayoutManager().smoothScrollToPosition(messageList,null,mChatList.size()-1);
+            }
+        });
     }
 
     @Override
@@ -224,6 +233,7 @@ public class ChatActivity extends AppCompatActivity implements MessageView {
 
     @Override
     public void fillFriendChatList(List<FriendMessage.ResultEntity> responser) {
+        mChatList= responser;
         if (responser.size() == 0) {
             sendImageView.setVisibility(View.VISIBLE);
             mIsConnected =true;
@@ -297,7 +307,7 @@ public class ChatActivity extends AppCompatActivity implements MessageView {
                     ViewHolderOther viewHolderOther = (ViewHolderOther) holder;
                     viewHolderOther.tvDate.setText(responser.get(position).getReadingDateTimeST());
                     viewHolderOther.tvText.setText(responser.get(position).getMessage());
-                    Glide.with(context).load(MainApi.IMAGE_IP + responser.get(position).getReciverPhoto()).placeholder(R.drawable.placeholder)
+                    Glide.with(context).load(MainApi.IMAGE_IP + responser.get(position).getSenderPhoto()).placeholder(R.drawable.placeholder)
                             .into(viewHolderOther.otherImage);
                     break;
             }

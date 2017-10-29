@@ -109,6 +109,16 @@ public class MessageFragment extends Fragment implements MessageView {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (AppUtils.isInternetAvailable(getActivity())){
+            presenter.userInbox(getActivity(), PreferenceHelper.getUserId(getActivity()));
+        }else {
+            Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
     public void fillMessagesList(List<AllMessageList.ResultEntity> responser) {
         MessagesAdapter messagesAdapter = new MessagesAdapter(getActivity(), responser);
         messageList.setAdapter(messagesAdapter);
@@ -153,7 +163,17 @@ public class MessageFragment extends Fragment implements MessageView {
 
         @Override
         public void onBindViewHolder(MessagesAdapter.ViewHolder viewHolder, final int position) {
-            viewHolder.nameTextView.setText(responser.get(position).getReciverName());
+            if (responser.get(position).getSenderUserID().equals(PreferenceHelper.getUserId(context))){
+                viewHolder.nameTextView.setText(responser.get(position).getReciverName());
+                Glide.with(context).load(MainApi.IMAGE_IP + responser.get(position).getReciverPhoto()).placeholder(R.drawable.placeholder)
+                        .into(viewHolder.userImageView);
+            }else if (responser.get(position).getReciverUserID().equals(PreferenceHelper.getUserId(context))){
+                viewHolder.nameTextView.setText(responser.get(position).getSenderName());
+                Glide.with(context).load(MainApi.IMAGE_IP + responser.get(position).getSenderPhoto()).placeholder(R.drawable.placeholder)
+                        .into(viewHolder.userImageView);
+
+            }
+
             viewHolder.chatTextTextView.setText(responser.get(position).getMessage());
             if (responser.get(position).getIsRead()){
                 viewHolder.seenImage.setVisibility(View.VISIBLE);
@@ -161,17 +181,25 @@ public class MessageFragment extends Fragment implements MessageView {
             String DateWithoutTime = String.valueOf(AppUtils.getDate(responser.get(position).getReadingDateTimeST())).substring(0, 10);
 
             viewHolder.lastSeenTextView.setText(DateWithoutTime);
-            Glide.with(context).load(MainApi.IMAGE_IP + responser.get(position).getReciverPhoto()).placeholder(R.drawable.placeholder)
-                    .into(viewHolder.userImageView);
+
             viewHolder.messageItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (AppUtils.isInternetAvailable(getActivity())){
-                        Intent intent = new Intent(context, ChatActivity.class);
-                        intent.putExtra("RelativeID", responser.get(position).getReciverUserID());
-                        intent.putExtra("ReciverName", responser.get(position).getReciverName());
-                        intent.putExtra("ReciverPhoto", responser.get(position).getReciverPhoto());
-                        context.startActivity(intent);
+                        if (responser.get(position).getSenderUserID().equals(PreferenceHelper.getUserId(context))){
+                            Intent intent = new Intent(context, ChatActivity.class);
+                            intent.putExtra("RelativeID", responser.get(position).getReciverUserID());
+                            intent.putExtra("ReciverName", responser.get(position).getReciverName());
+                            intent.putExtra("ReciverPhoto", responser.get(position).getReciverPhoto());
+                            context.startActivity(intent);
+                        }else if (responser.get(position).getReciverUserID().equals(PreferenceHelper.getUserId(context))){
+                            Intent intent = new Intent(context, ChatActivity.class);
+                            intent.putExtra("RelativeID", responser.get(position).getSenderUserID());
+                            intent.putExtra("ReciverName", responser.get(position).getSenderName());
+                            intent.putExtra("ReciverPhoto", responser.get(position).getSenderPhoto());
+                            context.startActivity(intent);
+                        }
+
                     }else {
                         Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                     }

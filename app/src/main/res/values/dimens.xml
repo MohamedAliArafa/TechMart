@@ -232,7 +232,7 @@
 
 
     <!--Activity Feeds - Events-->
-    <integer name="events_max_lines">2</integer>
+    <integer name="events_max_lines">3</integer>
     <dimen name="events_no_products_text_margin">8dp</dimen>
     <dimen name="events_list_margin">8dp</dimen>
     <dimen name="events_card_margin">8dp</dimen>

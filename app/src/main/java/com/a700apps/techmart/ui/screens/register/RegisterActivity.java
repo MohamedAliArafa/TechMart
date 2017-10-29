@@ -85,7 +85,7 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
     //    private String selectedImagePath;
     private RegisterPresenter presenter;
     public AVLoadingIndicatorView indicatorView;
-    Button mLinkedInButton;
+    Button mLinkedInButton,mSelectNormalButton;
     private String selectedImagePath, mImagePath;
     ProgressDialog progressDialog;
     String fullName, password, email, mobile, company, position;
@@ -106,11 +106,6 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
         presenter = new RegisterPresenter();
         presenter.attachView(this);
 
-
-//        progressDialog = new ProgressDialog(this);
-//        progressDialog.setMessage("Please Wait Uploading Image...");
-//        progressDialog.setCancelable(false);
-//        progressDialog.setCanceledOnTouchOutside(false);
     }
 
     private void findViews() {
@@ -123,12 +118,14 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
         mCompanyEditText = ActivityUtils.findView(this, R.id.et_company_name, EditText.class);
         mPositionEditText = ActivityUtils.findView(this, R.id.et_company_position, EditText.class);
         mLinkedInButton = ActivityUtils.findView(this, R.id.btn_register, Button.class);
+        mSelectNormalButton = ActivityUtils.findView(this, R.id.btn_sign_in, Button.class);
         indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
         mLikedinImageView = (ImageView) findViewById(R.id.iv_linkedin);
         mSignInImageView = (ImageView) findViewById(R.id.iv_signin);
         SignButton.setOnClickListener(this);
         attachButton.setOnClickListener(this);
         mLinkedInButton.setOnClickListener(this);
+        mSelectNormalButton.setOnClickListener(this);
         ActivityUtils.applyLightFont(mFullNameEditText);
         ActivityUtils.applyLightFont(mPhoneNumberEditText);
         ActivityUtils.applyLightFont(mEmailEditText);
@@ -491,6 +488,16 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
     public void onClick(View v) {
         int viewId = v.getId();
         switch (viewId) {
+            case R.id.btn_sign_in:
+                mLikedinImageView.setVisibility(View.GONE);
+                mSignInImageView.setVisibility(View.VISIBLE);
+                mFullNameEditText.setText("");
+                mPasswordEditText.setText("");
+                mEmailEditText.setText("");
+                mPhoneNumberEditText.setText("");
+                mCompanyEditText.setText("");
+                mPositionEditText.setText("");
+                break;
 
             case R.id.btn_register:
                 mLikedinImageView.setVisibility(View.VISIBLE);
@@ -498,27 +505,13 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                 loginWithLinkedin();
                 break;
             case R.id.bt_upload:
-//                if (Build.VERSION.SDK_INT >= 21) {
-//                    if (checkPermission()) {
+
 
                 openChooseMethodDialog();
 
-//                        selectedImagePath = null;
-//                        selectedImageSize = 0;
-//                        // select a file
-//                        Intent intent = new Intent();
-//                        intent.setType("image/*");
-//                        intent.setAction(Intent.ACTION_GET_CONTENT);
-//                        startActivityForResult(Intent.createChooser(intent,
-//                                "Select Picture"), SELECT_PICTURE);
-
-//                    } else {
-//                        requestPermission();
-//                    }
-
-
                 break;
             case R.id.bt_register:
+
                 fullName = ActivityUtils.getViewTextValue(mFullNameEditText);
                 password = ActivityUtils.getViewTextValue(mPasswordEditText);
                 email = ActivityUtils.getViewTextValue(mEmailEditText);
@@ -534,18 +527,6 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                     isValid = false;
                 }
 
-//                boolean validMobileNumber = Validator.validMobileNumber(mobile.replaceFirst("\\+", ""));
-//                if (!validMobileNumber) {
-//                    mPhoneNumberEditText.setError(getResources().getString(R.string.invalid_mobile_number));
-//                    isValid = false;
-//                } else if (!mobile.startsWith("97")) {
-//                    mPhoneNumberEditText.setError(getResources().getString(R.string.invalid_mobile_number_97));
-//                    isValid = false;
-//                }else if (mobile.length()!=14){
-//                    mPhoneNumberEditText.setError(getResources().getString(R.string.invalid_mobile_number_size));
-//                    isValid = false;
-//                }
-//
 
                 if (mobile.startsWith("01") || mobile.startsWith("096") || mobile.startsWith("+97")) {
                     boolean validMobileNumber = Validator.validMobileNumber(mobile);
@@ -597,6 +578,7 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                 } else {
                     if (isValid) {
                         if (mIsLinkedIn) {
+                            mIsLinkedIn=false;
                             presenter.register(fullName, password, email, mobile, selectedImagePath, company, position, RegisterActivity.this);
 
                         } else {

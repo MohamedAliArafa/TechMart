@@ -49,6 +49,16 @@ public class GroupUsersData {
         private String Icon;
         private String CreationDate;
         private int MemberCount;
+        private  String Description;
+
+        public String getDescription() {
+            return Description;
+        }
+
+        public void setDescription(String description) {
+            Description = description;
+        }
+
         private List<BoardMemebesEntity> BoardMemebes;
         private List<OtheMemebesEntity> OtheMemebes;
 
