@@ -41,13 +41,25 @@ public class ApprovalPresenter extends MainPresenter<approvalView> {
                     if (errorCode == 1) {
                         switch (status) {
                             case 1:
-                                view.showToast("Item Approved");
+                                if (type ==1){
+                                    view.showToast("Event Approved successfully");
+                                }else {
+                                    view.showToast("Post Approved successfully");
+                                }
                                 break;
                             case 2:
-                                view.showToast("Item Rejected");
+                                if (type ==1){
+                                    view.showToast("Event Rejected successfully");
+                                }else {
+                                    view.showToast("Post Rejected successfully");
+                                }
                                 break;
                             case 3:
-                                view.showToast("Item Defered");
+                                if (type ==1){
+                                    view.showToast("Event Deferred successfully");
+                                }else {
+                                    view.showToast("Post deferred successfully");
+                                }
                                 break;
                         }
 

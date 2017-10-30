@@ -72,6 +72,7 @@ public class BoardMemberFragment extends Fragment implements BoardMemberView {
     public void updateUi(Group data) {
         if (data.getResult().size() == 0) {
             rv.setEmptyView(view.findViewById(R.id.tv_nodata));
+            view.findViewById(R.id.tv_nodata).setVisibility(View.VISIBLE);
         }
         rv.setAdapter(new BoardGroupUsersAdapter(getActivity(), data.getResult(), mGroupId));
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));

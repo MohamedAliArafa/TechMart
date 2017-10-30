@@ -42,9 +42,15 @@ public class PostsFragment extends Fragment implements TimeLineView {
         presenter.attachView(this);
 
         rv = (EmptyRecyclerView) view.findViewById(R.id.recyclerView);
-        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()),"2",getActivity());
+
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()),"2",getActivity());
     }
 
     @Override

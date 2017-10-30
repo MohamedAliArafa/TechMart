@@ -9,7 +9,7 @@
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="260dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true">
@@ -17,23 +17,24 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="220dp"
+            android:layout_height="260dp"
             android:layout_gravity="center"
             android:background="@drawable/board_bg"
             android:orientation="vertical">
 
-            <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+            <com.a700apps.techmart.utils.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="60dp"
                 android:text="Board Member Dashboard"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textStyle="bold"
+                android:textSize="14sp" />
 
             <TextView
-                android:layout_width="180dp"
-                android:layout_height="2dp"
+                android:layout_width="165dp"
+                android:layout_height="1dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:background="@color/white" />
@@ -50,7 +51,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:layout_marginStart="40dp"
+                    android:layout_marginStart="80dp"
                     android:layout_weight=".8"
                     android:text="Events overview"
                     android:textColor="@color/white" />
@@ -106,7 +107,7 @@
                         <ImageView
                             android:id="@+id/iv_week"
                             android:layout_width="22dp"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -148,7 +149,7 @@
                         <ImageView
                             android:id="@+id/iv_year"
                             android:layout_width="18dp"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -156,10 +157,10 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -171,8 +172,6 @@
                         android:id="@+id/postCircleProgressBar"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
-
-
                         app:background_color="@color/transparent"
                         app:draw_progress_text="true"
                         app:line_count="30"
@@ -190,27 +189,37 @@
                         app:progress_text_size="12sp"
                         app:style="solid_line" />
 
-                    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
-                        android:id="@+id/lbl_name1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="25dp"
-                        android:text="no.of posts"
-                        android:textColor="@color/white"
-                        android:textSize="9sp" />
+                    <!--<com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView-->
+                    <!--android:id="@+id/lbl_name1"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="no.of posts"-->
+                    <!--android:textColor="@color/white"-->
+                    <!--android:textSize="9sp"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:layout_centerHorizontal="true" />-->
 
                     <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
                         android:id="@+id/post_lbl"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/lbl_name1"
-                        android:layout_centerHorizontal="true"
+                        android:layout_centerInParent="true"
                         android:layout_marginTop="5dp"
                         android:text=""
                         android:textColor="@color/white"
                         android:textSize="13sp"
                         android:textStyle="bold" />
+
+                    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/postCircleProgressBar"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/general_margin"
+                        android:gravity="center"
+                        android:text="Posts\nApproved"
+                        android:textColor="@color/white"
+                        android:textSize="9sp" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -241,27 +250,37 @@
                         app:progress_text_size="12sp"
                         app:style="solid_line" />
 
-                    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
-                        android:id="@+id/lbl_name2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="25dp"
-                        android:text="no.of events"
-                        android:textColor="@color/white"
-                        android:textSize="9sp" />
+                    <!--<com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView-->
+                    <!--android:id="@+id/lbl_name2"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_centerHorizontal="true"-->
+                    <!--android:layout_marginTop="25dp"-->
+                    <!--android:text="no.of events"-->
+                    <!--android:textColor="@color/white"-->
+                    <!--android:textSize="9sp" />-->
 
                     <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
-                        android:layout_width="wrap_content"
                         android:id="@+id/events_lbl"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/lbl_name2"
-                        android:layout_centerHorizontal="true"
+                        android:layout_centerInParent="true"
                         android:layout_marginTop="5dp"
                         android:text=""
                         android:textColor="@color/white"
                         android:textSize="13sp"
                         android:textStyle="bold" />
+
+                    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/eventCircleProgressBar"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/general_margin"
+                        android:gravity="center"
+                        android:text="Events\nApproved"
+                        android:textColor="@color/white"
+                        android:textSize="9sp" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -292,28 +311,40 @@
                         app:progress_text_size="12sp"
                         app:style="solid_line" />
 
-                    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
-                        android:id="@+id/lbl_name3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="25dp"
-                        android:text="no.of posts"
-                        android:textColor="@color/white"
-                        android:textSize="9sp" />
+                    <!--<com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView-->
+                    <!--android:id="@+id/lbl_name3"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_centerHorizontal="true"-->
+                    <!--android:layout_marginTop="25dp"-->
+                    <!--android:text="no.of posts"-->
+                    <!--android:textColor="@color/white"-->
+                    <!--android:textSize="9sp" />-->
 
                     <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
                         android:id="@+id/member_lbl"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/lbl_name3"
-                        android:layout_centerHorizontal="true"
+                        android:layout_centerInParent="true"
                         android:layout_marginTop="5dp"
                         android:text=""
                         android:textColor="@color/white"
                         android:textSize="13sp"
                         android:textStyle="bold" />
+
+                    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/memberCircleProgressBar"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/general_margin"
+                        android:gravity="center"
+                        android:text="members\nApproved"
+                        android:textColor="@color/white"
+                        android:textSize="9sp" />
+
                 </RelativeLayout>
+
             </LinearLayout>
 
 
@@ -324,16 +355,15 @@
             android:id="@+id/linearLayout6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/general_margin"
-            android:layout_marginRight="@dimen/general_margin"
-            android:layout_marginTop="@dimen/general_margin"
-            android:orientation="horizontal">
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:padding="3dp">
 
             <ImageView
                 android:id="@+id/imageView4"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
-                app:srcCompat="@drawable/ic_side_menu_logo" />
+                app:srcCompat="@drawable/ic_side_menu" />
 
             <EditText
                 android:id="@+id/textView41"
@@ -344,20 +374,19 @@
                 android:gravity="left"
                 android:text="@string/search_name"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/time_text"
-                android:visibility="invisible" />
+                android:textSize="@dimen/time_text" />
 
             <ImageView
                 android:id="@+id/new_message"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_stat_ic_user" />
+                app:srcCompat="@drawable/ic_user" />
 
             <ImageView
                 android:id="@+id/new_profile"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_stat_ic_notification" />
+                app:srcCompat="@drawable/ic_notification" />
         </LinearLayout>
 
         <!--<com.viewpagerindicator.CirclePageIndicator-->
@@ -417,23 +446,22 @@
                 android:id="@+id/tv_timeline"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight=".7"
                 android:gravity="center"
                 android:text="Timeline"
                 android:textColor="@color/button_light_text"
-
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <!--<View-->
             <!--android:layout_width="1dp"-->
-            <!--android:layout_height="15dp"-->
+            <!--android:layout_height="10dp"-->
             <!--android:background="@color/card_color" />-->
 
             <com.a700apps.techmart.utils.CustomTextView
                 android:id="@+id/tv_posts"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight=".7"
                 android:gravity="center"
                 android:text="@string/posts"
                 android:textColor="@color/button_light_text"
@@ -449,7 +477,7 @@
                 android:id="@+id/tv_event"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight=".7"
                 android:gravity="center"
                 android:text="@string/event"
                 android:textColor="@color/button_light_text"
@@ -465,7 +493,7 @@
                 android:id="@+id/tv_member"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight=".7"
                 android:gravity="center"
                 android:text="@string/timeline_member"
                 android:textColor="@color/button_light_text"
@@ -481,7 +509,7 @@
                 android:id="@+id/tv_member_approve"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:gravity="center"
                 android:text="@string/timeline_member_approve"
                 android:textColor="@color/button_light_text"

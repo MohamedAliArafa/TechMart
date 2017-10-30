@@ -38,22 +38,24 @@ import java.util.List;
 public class TimeLineMainFragment extends Fragment implements TimeLineView {
     public AVLoadingIndicatorView indicatorView;
     private TimeLinePresenter presenter;
+
     public TimeLineMainFragment() {
         // Required empty public constructor
     }
+
     View view;
     EmptyRecyclerView rv;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-         view = inflater.inflate(R.layout.fragment_time_line_main, container, false);
+        view = inflater.inflate(R.layout.fragment_time_line_main, container, false);
         presenter = new TimeLinePresenter();
         presenter.attachView(this);
         indicatorView = (AVLoadingIndicatorView) view.findViewById(R.id.avi);
 
-         rv = (EmptyRecyclerView) view.findViewById(R.id.recyclerView);
-
+        rv = (EmptyRecyclerView) view.findViewById(R.id.recyclerView);
 
 
         return view;
@@ -62,8 +64,9 @@ public class TimeLineMainFragment extends Fragment implements TimeLineView {
     @Override
     public void onResume() {
         super.onResume();
-        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()),"0",getActivity());
+        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), "0", getActivity());
     }
+
     @Override
     public void showLoadingProgress() {
 //        indicatorView.setVisibility(View.VISIBLE);
@@ -80,7 +83,7 @@ public class TimeLineMainFragment extends Fragment implements TimeLineView {
         if (TimelineList.size() == 0) {
             rv.setEmptyView(view.findViewById(R.id.tv_nodata));
         }
-        rv.setAdapter(new TimelineAdapter(getActivity(),TimelineList));
+        rv.setAdapter(new TimelineAdapter(getActivity(), TimelineList));
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
 //        linearLayoutManager.setReverseLayout(true);

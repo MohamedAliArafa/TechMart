@@ -3,6 +3,8 @@ package com.a700apps.techmart.data.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by khaled.badawy on 9/29/2017.
  */
@@ -32,7 +34,7 @@ public class NotificationDataLike {
         this.iSResultHasData = iSResultHasData;
     }
 
-    public class Result {
+    public class Result implements Serializable {
 
         @SerializedName("ID")
         @Expose

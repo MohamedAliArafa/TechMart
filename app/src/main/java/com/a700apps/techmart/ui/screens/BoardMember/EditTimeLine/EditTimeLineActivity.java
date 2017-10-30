@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.a700apps.techmart.R;
+import com.a700apps.techmart.data.model.GroupTimeLineData;
 import com.a700apps.techmart.data.model.NoficationData;
 import com.a700apps.techmart.data.model.NotificationDataLike;
 import com.a700apps.techmart.data.model.PostData;
@@ -40,6 +41,7 @@ import com.a700apps.techmart.ui.screens.register.RegisterActivity;
 import com.a700apps.techmart.utils.ApiClient;
 import com.a700apps.techmart.utils.AppConst;
 import com.a700apps.techmart.utils.PreferenceHelper;
+import com.a700apps.techmart.utils.URLS;
 import com.a700apps.techmart.utils.loadingDialog;
 import com.bumptech.glide.Glide;
 import com.linkedin.platform.LISessionManager;
@@ -65,7 +67,7 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
     EditText descriptionEditText;
     LinearLayout saveLinearLayout;
     LinearLayout uploadLinearLayout;
-    LinearLayout removeLinearLayout;
+//    LinearLayout removeLinearLayout;
     ImageView selectedImageView;
 
     Dialog dialogsLoading;
@@ -77,6 +79,8 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
     int postId , type ;
     String imageName ;
     NotificationDataLike.Result result;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,12 +91,12 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
 
         saveLinearLayout = findViewById(R.id.save_layout);
         uploadLinearLayout = findViewById(R.id.upload_media);
-        removeLinearLayout = findViewById(R.id.remove_media);
+//        removeLinearLayout = findViewById(R.id.remove_media);
         selectedImageView = findViewById(R.id.iv_selectedImageForEdit);
 
         saveLinearLayout.setOnClickListener(this);
         uploadLinearLayout.setOnClickListener(this);
-        removeLinearLayout .setOnClickListener(this);
+//        removeLinearLayout .setOnClickListener(this);
         selectedImageView.setOnClickListener(this);
         presenter = new EdittPresenter();
         presenter.attachView(this);
@@ -105,6 +109,19 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
         presenter.getTimelineItem(postId , type, PreferenceHelper.getUserId(this));
 
 
+        findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        findViewById(R.id.close1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override
@@ -138,6 +155,14 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
     @Override
     public void showToast(String message) {
         Toast.makeText(this, message , Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void finishActivity() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("data", postId);
+        setResult(RESULT_OK, returnIntent);
+        finish();
     }
 
     private void openChooseMethodDialog() {
@@ -467,10 +492,10 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
             case R.id.iv_selectedImageForEdit:
                 openChooseMethodDialog();
                 break;
-            case R.id.remove_media:
-                selectedImagePath = null;
-                selectedImageView.setImageBitmap(null);
-                break;
+//            case R.id.remove_media:
+//                selectedImagePath = null;
+//                selectedImageView.setImageBitmap(null);
+//                break;
             case R.id.save_layout:
                 if (validate()){
                     if (selectedImagePath==null){
@@ -482,9 +507,9 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
                         uploadFile();
                     }
                 }
-
-
                 break;
         }
     }
+
+
 }

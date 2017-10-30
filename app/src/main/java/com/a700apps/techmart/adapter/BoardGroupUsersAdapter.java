@@ -1,5 +1,6 @@
 package com.a700apps.techmart.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +27,7 @@ import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.profile.MemberProfileFragment;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.AppUtils;
+import com.a700apps.techmart.utils.CustomButton;
 import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.bumptech.glide.Glide;
@@ -103,6 +105,44 @@ public class BoardGroupUsersAdapter extends RecyclerView.Adapter<BoardGroupUsers
         notifyDataSetChanged();
     }
 
+
+    private void showConfirmDialog(final int position) {
+
+        // Create custom dialog object
+        final Dialog dialog = new Dialog(context);
+
+        dialog.setContentView(R.layout.logout_confirm_dialog);
+
+        // set values for custom dialog components - text, image and button
+        Button logout = (CustomButton) dialog.findViewById(R.id.logout);
+        Button cancel = (CustomButton) dialog.findViewById(R.id.cancel);
+        ((TextView) dialog.findViewById(R.id.logout_title)).setText("Delete user");
+        ((TextView) dialog.findViewById(R.id.logout_desc)).setText("Are you sure you want to delete this user ?");
+        logout.setText("Delete");
+        dialog.show();
+
+        Button declineButton = (CustomButton) dialog.findViewById(R.id.cancel);
+        // if decline button is clicked, close the custom dialog
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                dialog.dismiss();
+            }
+        });
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.removeMember(
+                        "" + Id,
+                        mUserGroupList.get(position).getUserID(), context);
+                dialog.dismiss();
+            }
+        });
+    }
+
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView mGroupImageView;
         TextView mNameTextView, mCreateDate, mPosition;
@@ -135,13 +175,7 @@ public class BoardGroupUsersAdapter extends RecyclerView.Adapter<BoardGroupUsers
                     ((HomeActivity) context).openFragment(MemberProfileFragment.class, bundle);
                     break;
                 case R.id.view_remove_btn:
-
-                    Log.e("AmbId" , ""+Id);
-
-                    mPresenter.removeMember(
-                            "" + Id,
-                            mUserGroupList.get(position).getUserID(), context);
-//                    mPresenter.removeMember(String.valueOf(Id), mUserGroupList.get(position).UserID,context);
+                    showConfirmDialog(position);
                     break;
             }
 

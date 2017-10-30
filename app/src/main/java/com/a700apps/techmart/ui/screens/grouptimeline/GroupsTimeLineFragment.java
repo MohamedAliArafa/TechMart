@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.GroupViewPagerAdapter;
+import com.a700apps.techmart.adapter.ViewPagerAdapter;
 import com.a700apps.techmart.data.model.GroupTimeLineData;
 import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.ui.screens.groupmemberdetails.GroupFragment;
@@ -282,8 +283,8 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
 
     @Override
     public void updateUi(final List<TimeLineData.ResultEntity> TimelineList) {
-        mPager.setAdapter(new GroupViewPagerAdapter(getActivity(), TimelineList));
-
+//        mPager.setAdapter(new GroupViewPagerAdapter(getActivity(), TimelineList));
+        mPager.setAdapter(new ViewPagerAdapter(getActivity(), TimelineList));
 
 
 

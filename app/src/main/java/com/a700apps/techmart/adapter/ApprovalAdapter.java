@@ -3,6 +3,7 @@ package com.a700apps.techmart.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.a700apps.techmart.ui.screens.BoardMember.DialogApproval.DialogActivit
 import com.a700apps.techmart.ui.screens.BoardMember.JoinRequests.RequestsPresenter;
 import com.a700apps.techmart.ui.screens.BoardMember.JoinRequests.RequestsView;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
+import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.a700apps.techmart.utils.loadingDialog;
 import com.bumptech.glide.Glide;
@@ -40,7 +42,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
     RecyclerView rv;
     RequestsPresenter presenter;
 
-    public ApprovalAdapter(Context context, List<JoinGroupRequestsData.Result> TimeLineList , RecyclerView rv) {
+    public ApprovalAdapter(Context context, List<JoinGroupRequestsData.Result> TimeLineList, RecyclerView rv) {
         this.context = context;
         this.mGroupUsersList = TimeLineList;
         presenter = new RequestsPresenter();
@@ -92,6 +94,16 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
 //                presenter.manageRequestItem(singleItem.getID() , singleItem.getRequestedRole() , PreferenceHelper.getUserId(context) , 1);
                 boolean isdefered = singleItem.getRequestStatus() == 3 ? true : false;
                 showConfirmDialog(singleItem.getID(), singleItem.getRequestedRole(), isdefered);
+            }
+        });
+
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Globals.CAME_FROM_NOTIFICATION_TO_GROUP = true;
+                Intent intent = new Intent(context  , HomeActivity.class);
+                intent.putExtra("profileHolder",singleItem.getUserID());
+                context.startActivity(intent);
             }
         });
     }
@@ -195,13 +207,13 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
 
     @Override
     public void showToast(String message) {
-        Toast.makeText(context, ""+message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "" + message, Toast.LENGTH_SHORT).show();
     }
 
 
     @Override
     public void updateData(List<JoinGroupRequestsData.Result> list) {
-        rv.setAdapter(new ApprovalAdapter(context , list , rv));
+        rv.setAdapter(new ApprovalAdapter(context, list, rv));
     }
 
 

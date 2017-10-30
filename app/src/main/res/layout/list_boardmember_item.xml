@@ -36,7 +36,7 @@
             android:layout_marginStart="5dp"
             android:text="Edit"
             android:textColor="@color/blackGreenColor"
-            android:textSize="@dimen/time_text" />
+            android:textSize="12sp" />
     </LinearLayout>
 
     <ImageView
@@ -58,7 +58,6 @@
         android:id="@+id/tv_group_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_marginLeft="11dp"
         android:layout_marginTop="0dp"
         android:background="@color/blackGreenColor"
@@ -70,20 +69,20 @@
         app:layout_constraintLeft_toRightOf="@+id/iv_post"
         app:layout_constraintTop_toTopOf="@+id/iv_post" />
 
-    <!--<TextView-->
-    <!--android:id="@+id/tv_postedby"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginLeft="4dp"-->
-    <!--android:layout_marginStart="4dp"-->
-    <!--android:background="@color/blackGreenColor"-->
-    <!--android:paddingBottom="2dp"-->
-    <!--android:paddingLeft="4dp"-->
-    <!--android:paddingRight="4dp"-->
-    <!--android:textColor="@color/Parallax_text"-->
-    <!--android:textSize="@dimen/time_text"-->
-    <!--app:layout_constraintLeft_toRightOf="@+id/tv_group_name"-->
-    <!--app:layout_constraintTop_toTopOf="@+id/tv_group_name" />-->
+    <TextView
+    android:id="@+id/tv_postedby"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="4dp"
+    android:layout_marginStart="4dp"
+    android:background="@color/blackGreenColor"
+    android:paddingBottom="2dp"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp"
+    android:textColor="@color/Parallax_text"
+    android:textSize="@dimen/time_text"
+    app:layout_constraintLeft_toRightOf="@+id/tv_group_name"
+    app:layout_constraintTop_toTopOf="@+id/tv_group_name" />
 
     <TextView
         android:id="@+id/tv_poste"
@@ -94,11 +93,10 @@
         android:background="@color/red_join_dialog"
         android:padding="2dp"
         android:paddingBottom="2dp"
-        android:text="TextView"
         android:textColor="@color/Parallax_text"
         android:textSize="12sp"
-        app:layout_constraintLeft_toRightOf="@+id/tv_group_name"
-        app:layout_constraintTop_toTopOf="@+id/tv_group_name" />
+        app:layout_constraintLeft_toRightOf="@+id/tv_postedby"
+        app:layout_constraintTop_toTopOf="@+id/tv_postedby" />
 
     <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
         android:id="@+id/tv_title"
@@ -162,19 +160,19 @@
             android:layout_width="14dp"
             android:layout_height="14dp"
             android:layout_gravity="center"
-            android:tint="@color/blackGreenColor"
+            android:scaleType="center"
             app:srcCompat="@drawable/ic_approvid" />
 
         <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
             android:id="@+id/tv_approve"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
             android:text="Approved"
             android:textColor="@color/blackGreenColor"
-            android:textSize="@dimen/time_text" />
+            android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -192,7 +190,7 @@
             android:layout_width="14dp"
             android:layout_height="14dp"
             android:layout_gravity="center"
-            android:tint="@color/blackGreenColor"
+            android:scaleType="center"
             app:srcCompat="@drawable/ic_mange" />
 
         <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
@@ -204,7 +202,7 @@
             android:layout_marginStart="5dp"
             android:text="Manage"
             android:textColor="@color/blackGreenColor"
-            android:textSize="@dimen/time_text" />
+            android:textSize="12sp" />
     </LinearLayout>
 
     <ImageView

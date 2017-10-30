@@ -5,12 +5,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/ic_bg_list">
+    <LinearLayout
+        android:id="@+id/linearLayout6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="3dp">
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            app:srcCompat="@drawable/ic_side_menu" />
+
+        <EditText
+            android:id="@+id/textView41"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="@string/search_name"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/time_text" />
+
+        <ImageView
+            android:id="@+id/new_message"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/ic_user" />
+
+        <ImageView
+            android:id="@+id/new_profile"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/ic_notification" />
+    </LinearLayout>
 
 
     <ImageView
         android:id="@+id/iv_back"
         android:layout_margin="12dp"
         android:padding="8dp"
+        android:layout_below="@id/linearLayout6"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/ic_back"/>
@@ -20,17 +58,33 @@
         android:layout_height="wrap_content"
         android:text="Membership Approval"
         android:textSize="14sp"
+        android:layout_below="@id/linearLayout6"
         android:id="@+id/text"
         android:textColor="@color/white"
         android:layout_centerHorizontal="true"
         android:padding="28dp"
         />
 
-    <android.support.v7.widget.RecyclerView
+    <com.a700apps.techmart.utils.EmptyRecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/recyclerView"
         android:background="@color/transparent"
         android:layout_below="@id/text"
-        ></android.support.v7.widget.RecyclerView>
+        ></com.a700apps.techmart.utils.EmptyRecyclerView>
+
+
+    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+        android:id="@+id/tv_nodata"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginRight="8dp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:text="There is no data"
+        android:visibility="gone"
+        android:textSize="15dp"
+        tools:layout_editor_absoluteY="8dp" />
+
 </RelativeLayout>

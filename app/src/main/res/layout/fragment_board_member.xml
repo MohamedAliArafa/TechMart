@@ -20,6 +20,8 @@
         android:layout_centerInParent="true"
         android:gravity="center"
         android:text="There is no data"
+        android:textColor="@color/white"
+        android:textSize="18sp"
         android:visibility="gone"
         tools:layout_editor_absoluteY="8dp" />
 </RelativeLayout>

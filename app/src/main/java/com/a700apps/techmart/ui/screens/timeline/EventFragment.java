@@ -43,9 +43,15 @@ public class EventFragment extends Fragment implements TimeLineView {
 
         rv = (RecyclerView) view.findViewById(R.id.recyclerView);
         indicatorView = view.findViewById(R.id.avi);
-        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), "1", getActivity());
+
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), "1", getActivity());
     }
 
     @Override

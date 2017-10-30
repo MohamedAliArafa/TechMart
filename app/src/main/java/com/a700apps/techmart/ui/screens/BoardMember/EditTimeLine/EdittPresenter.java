@@ -58,7 +58,7 @@ public class EdittPresenter extends MainPresenter<EditView> {
 
 
     void editTimeLineItem(String groupId, int itemId , boolean ispublic  , String title , String description ,
-                          String image , String mediaFile,  String userId , int type ) {
+                          String image , String mediaFile, String userId , final int type ) {
 
         view.showLoadingProgress();
 
@@ -78,7 +78,12 @@ public class EdittPresenter extends MainPresenter<EditView> {
 
                     if (errorCode == 1) {
                         view.dismissLoadingProgress();
-                        view.showToast(" Item updated successfully ");
+                        if (type ==1){
+                            view.showToast(" Event updated successfully ");
+                        }else {
+                            view.showToast(" Post updated successfully ");
+                        }
+                        view.finishActivity();
                     }
                 }
 

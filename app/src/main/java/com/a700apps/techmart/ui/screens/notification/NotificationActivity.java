@@ -140,10 +140,8 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
     private static class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         Context context;
-        private static final int NOTIF_TYPE_ALARM = 0;
+        private static final int NOTIF_TYPE_GENERAL = 0;
         private static final int NOTIF_TYPE_VIDEO = 4;
-
-
         private static final int NOTIF_TYPE_CONNECT = 9;
         private static final int NOTIF_TYPE_ONE_TO_ONE = 3;
         private static final int NOTIF_TYPE_APPROVE_MEMBER_EVENT = 5;
@@ -173,8 +171,8 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
             LayoutInflater inflater = LayoutInflater.from(context);
             View noteView;
             switch (viewType) {
-                case NOTIF_TYPE_ALARM:
-                    noteView = inflater.inflate(R.layout.notif_item_alarm, parent, false);
+                case NOTIF_TYPE_GENERAL:
+                    noteView = inflater.inflate(R.layout.notif_type_general, parent, false);
                     return new DefaultHolder(noteView);
                 case NOTIF_TYPE_CONNECT:
                     noteView = inflater.inflate(R.layout.notif_item_connect, parent, false);
@@ -212,12 +210,14 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
             NoficationData.Result result = list.get(position);
             switch (itemType) {
 
-                case NOTIF_TYPE_ALARM:
+                case NOTIF_TYPE_GENERAL:
+                    DefaultHolder defaultHolder = (DefaultHolder) viewHolder;
+                    defaultHolder.message.setText(result.getMessage());
                     break;
                 case NOTIF_TYPE_CONNECT:
 
                     ConnectViewHolder holder = (ConnectViewHolder) viewHolder;
-                    holder.name.setText(result.getRelativeUserName());//
+                    holder.name.setText(result.getRelativeUserName());
                     holder.message.setText(result.getMessage());//
                     Glide.with(context).load(MainApi.IMAGE_IP + result.getIcon()).placeholder(R.drawable.ic_profile).into(holder.profile);
 
@@ -275,8 +275,6 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                     ChatViewHolder chatViewHolder = (ChatViewHolder) viewHolder;
                     chatViewHolder.messageTv.setText(result.getItemName());
                     chatViewHolder.descriptionTv.setText(result.getRelativeUserName());
-                    break;
-                case NOTIF_TYPE_VIDEO:
                     break;
             }
         }
@@ -341,15 +339,11 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                     return NOTIF_TYPE_MESSAGE;
                 /////////////////////////////////////////////////
 
-                case 102:
-                    return NOTIF_TYPE_ALARM;
+                case NOTIF_TYPE_GENERAL:
+                    return NOTIF_TYPE_GENERAL;
 
-                case 100:
-                    return NOTIF_TYPE_VIDEO;
             }
-            return super.getItemViewType(position);
-//            }
-//            return 0;
+            return 0;
         }
 
         @Override
@@ -921,9 +915,13 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
 
         public class DefaultHolder extends RecyclerView.ViewHolder {
 
+                TextView message;
 
             public DefaultHolder(View itemView) {
                 super(itemView);
+
+                message = itemView.findViewById(R.id.textView34);
+
             }
         }
     }

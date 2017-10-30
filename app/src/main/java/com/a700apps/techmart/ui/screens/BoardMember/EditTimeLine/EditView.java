@@ -22,4 +22,5 @@ public interface EditView {
     void onImageSelected();
 
     void  showToast(String message);
+    void  finishActivity();
 }

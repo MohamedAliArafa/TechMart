@@ -86,19 +86,19 @@ public class ViewPagerAdapter extends PagerAdapter  {
 
         mDesc.setText(timelineItem.getTitle());
         if (timelineItem.getType() == 1) {
-            mTitle.setText("Event");
+//            mTitle.setText("Event");
             mTime.setText(timelineItem.getStartDate()+"|Time"+timelineItem.getStartTime()+"on wards");
             mTime.setVisibility(View.VISIBLE);
             mCalenderImageView.setVisibility(View.VISIBLE);
             if (String.valueOf(timelineItem.getAttendantCount())!=null){
                 mAttendees.setVisibility(View.VISIBLE);
 
-                mAttendees.setText(String.valueOf(timelineItem.getAttendantCount()+"\n"+"Joined"));
+                mAttendees.setText(String.valueOf(timelineItem.getAttendantCount()));//+"\n"+"Joined"
             }else {
                 mAttendees.setVisibility(View.GONE);
             }
         } else if (timelineItem.getType() == 2) {
-            mTitle.setText("Post");
+//            mTitle.setText("Post");
 
             mTime.setVisibility(View.GONE);
             mCalenderImageView.setVisibility(View.GONE);

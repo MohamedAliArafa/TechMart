@@ -50,7 +50,7 @@
                 android:layout_weight="60"
                 android:ellipsize="end"
                 android:maxLines="@integer/events_max_lines"
-                android:text="Event"
+                android:text=""
                 android:textSize="@dimen/main_dark_text" />
 
             <LinearLayout
@@ -119,7 +119,7 @@
             <LinearLayout
                 android:id="@+id/lin_button"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_below="@+id/ll_events_time_container"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -159,13 +159,13 @@
                 <TextView
                     android:id="@+id/tv_attendee"
                     android:layout_width="50dp"
-                    android:layout_height="30dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/transperant_bg"
                     android:gravity="center"
-                    android:textColor="@color/button_light_text"
-                    android:textSize="@dimen/time_text"
                     android:visibility="invisible"
-                    app:srcCompat="@drawable/ratring_pic" />
+                    android:textColor="@color/button_light_text"
+                    android:textSize="@dimen/time_text" />
             </LinearLayout>
 
 

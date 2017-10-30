@@ -18,11 +18,13 @@
         android:padding="@dimen/activity_vertical_margin">
 
         <ImageView
+            android:id="@+id/close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_back" />
 
         <ImageView
+            android:id="@+id/close1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -135,28 +137,28 @@
                     android:textSize="9sp" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/remove_media"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:padding="10dp">
+            <!--<LinearLayout-->
+                <!--android:id="@+id/remove_media"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:padding="10dp">-->
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin5"
-                    android:src="@drawable/ic_remove" />
+                <!--<ImageView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginEnd="@dimen/margin5"-->
+                    <!--android:src="@drawable/ic_remove" />-->
 
-                <com.a700apps.techmart.utils.CustomTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/remove_multimedia"
-                    android:textColor="@color/red_join_dialog"
-                    android:textSize="9sp" />
-            </LinearLayout>
+                <!--<com.a700apps.techmart.utils.CustomTextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:text="@string/remove_multimedia"-->
+                    <!--android:textColor="@color/red_join_dialog"-->
+                    <!--android:textSize="9sp" />-->
+            <!--</LinearLayout>-->
 
         </LinearLayout>
 

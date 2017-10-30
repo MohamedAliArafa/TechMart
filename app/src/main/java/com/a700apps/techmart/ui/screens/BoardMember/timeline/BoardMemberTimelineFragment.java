@@ -289,15 +289,31 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
         switch (viewId) {
             case R.id.tv_timeline:
                 mViewPager.setCurrentItem(0);
+//                mTabContainer.getChildAt(1).setVisibility(View.GONE);
+//                mTabContainer.getChildAt(3).setVisibility(View.VISIBLE);
+//                mTabContainer.getChildAt(5).setVisibility(View.VISIBLE);
+//                mTabContainer.getChildAt(7).setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_posts:
                 mViewPager.setCurrentItem(1);
+//                mTabContainer.getChildAt(1).setVisibility(View.GONE);
+//                mTabContainer.getChildAt(3).setVisibility(View.GONE);
+//                mTabContainer.getChildAt(5).setVisibility(View.VISIBLE);
+//                mTabContainer.getChildAt(7).setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_event:
                 mViewPager.setCurrentItem(2);
+//                mTabContainer.getChildAt(1).setVisibility(View.VISIBLE);
+//                mTabContainer.getChildAt(3).setVisibility(View.GONE);
+//                mTabContainer.getChildAt(5).setVisibility(View.GONE);
+//                mTabContainer.getChildAt(7).setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_member:
                 mViewPager.setCurrentItem(3);
+//                mTabContainer.getChildAt(1).setVisibility(View.VISIBLE);
+//                mTabContainer.getChildAt(3).setVisibility(View.VISIBLE);
+//                mTabContainer.getChildAt(5).setVisibility(View.GONE);
+//                mTabContainer.getChildAt(7).setVisibility(View.GONE);
                 break;
             case R.id.tv_member_approve:
                 mViewPager.setCurrentItem(4);

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.ApprovalAdapter;
 import com.a700apps.techmart.data.model.JoinGroupRequestsData;
+import com.a700apps.techmart.utils.EmptyRecyclerView;
 import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.a700apps.techmart.utils.loadingDialog;
@@ -27,19 +28,19 @@ import java.util.List;
 public class JoinRequestsFragment extends Fragment implements RequestsView {
 
 
-    RecyclerView rv;
+    EmptyRecyclerView rv;
     RequestsPresenter presenter;
     Dialog dialogsLoading;
     public JoinRequestsFragment() {
         // Required empty public constructor
     }
 
-
+    View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_join_requests, container, false);
+        view=inflater.inflate(R.layout.fragment_join_requests, container, false);
         presenter = new RequestsPresenter();
         presenter.attachView(this);
 
@@ -78,6 +79,10 @@ public class JoinRequestsFragment extends Fragment implements RequestsView {
 
     @Override
     public void updateData(List<JoinGroupRequestsData.Result> list) {
+            if (list.size() == 0) {
+                rv.setEmptyView(view.findViewById(R.id.tv_nodata));
+                view.findViewById(R.id.tv_nodata).setVisibility(View.VISIBLE);
+            }
         rv.setAdapter(new ApprovalAdapter(getActivity() , list , rv));
     }
 
