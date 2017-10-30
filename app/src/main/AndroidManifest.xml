@@ -71,32 +71,69 @@
         <activity
             android:name=".utils.ImageDetailsActivity"
             android:theme="@style/Theme.AppCompat.Translucent" />
-        <activity android:name=".ui.screens.timelinedetails.DetailsGroupActivity" />
-        <activity android:name=".ui.screens.meetingone.MeetingonetooneActivity" />
+        <activity android:name=".ui.screens.timelinedetails.DetailsGroupActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.screens.meetingone.MeetingonetooneActivity"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".ui.screens.profile.MemberProfile"
-            android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".ui.screens.userlikes.UserLikesActivity" />
-        <activity android:name=".ui.screens.creatEvent.CreatEventActivity" />
-        <activity android:name=".ui.screens.creatpost.PostActivity" android:windowSoftInputMode="adjustNothing"/>
-        <activity android:name=".ui.screens.grouptimeline.GroupTimeLineActivity" />
-        <activity android:name=".ui.screens.grouptimeline.GroupsTimLineActivity" />
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.screens.userlikes.UserLikesActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.screens.creatEvent.CreatEventActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.screens.creatpost.PostActivity"
+            android:screenOrientation="portrait"
+
+            android:windowSoftInputMode="adjustNothing"/>
+        <activity android:name=".ui.screens.grouptimeline.GroupTimeLineActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.screens.grouptimeline.GroupsTimLineActivity"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".ui.screens.mygroup.MyGroubListActivity"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"
+            />
 
         <activity
             android:name=".ui.screens.profile.EditProfileActivity"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"
+            />
 
-        <activity android:name=".ui.screens.notification.NotificationActivity" />
-        <activity android:name=".ui.screens.message.MessagesActivity" />
-        <activity android:name=".ui.screens.meeting.MeetingActivity" />
-        <activity android:name=".ui.screens.groupmemberdetails.GroupActivity" />
-        <activity android:name=".ui.screens.timelinedetails.DetailsActivity" />
-        <activity android:name=".ui.screens.newchat.NewChatActivity" />
-        <activity android:name=".ui.screens.PredefinedMessage.PredifinedMessageActivity" />
-        <activity android:name=".ui.screens.notification.Ui.Activity.NotificationHolderActivity" />
+        <activity android:name=".ui.screens.notification.NotificationActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.screens.message.MessagesActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.screens.meeting.MeetingActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.screens.groupmemberdetails.GroupActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.screens.timelinedetails.DetailsActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.screens.newchat.NewChatActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.screens.PredefinedMessage.PredifinedMessageActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.screens.notification.Ui.Activity.NotificationHolderActivity"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".ui.screens.message.ChatActivity"
             android:windowSoftInputMode="stateHidden" />

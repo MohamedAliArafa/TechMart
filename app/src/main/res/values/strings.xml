@@ -135,9 +135,12 @@
     <string name="add_event">Event under progress.</string>
 
 
+
     <string name="edit_hint_header">Write heading for this timeLine.</string>
     <string name="search_hint">Enter Search</string>
     <string name="storage_rationale">We need storage permission to access your media to be able to add post s, events to the app</string>
     <string name="camera_rationale">We need Camera permission to access your media to be able to add post s, events to the app</string>
+
+
 
 </resources>
