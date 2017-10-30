@@ -210,13 +210,13 @@
                 android:visibility="invisible" />
 
             <ImageView
-                android:id="@+id/new_message"
+                android:id="@+id/new_profile"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 app:srcCompat="@drawable/ic_stat_ic_user" />
 
             <ImageView
-                android:id="@+id/new_profile"
+                android:id="@+id/new_message"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 app:srcCompat="@drawable/ic_stat_ic_notification" />

@@ -27,7 +27,15 @@ public class CategoryGroups {
     @Expose
     public int MemberCount;
 
+    @SerializedName("IsJoinRequestPending")
+    @Expose
+    public boolean IsJoinRequestPending;
 
+    public boolean isJoinRequestPending() {
+        return IsJoinRequestPending;
+    }
 
-
+    public void setJoinRequestPending(boolean joinRequestPending) {
+        IsJoinRequestPending = joinRequestPending;
+    }
 }

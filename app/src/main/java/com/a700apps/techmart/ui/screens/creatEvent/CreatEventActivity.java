@@ -30,12 +30,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Scroller;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -122,10 +124,7 @@ public class CreatEventActivity extends AppCompatActivity implements
         presenter = new EventPresenter();
         presenter.attachView(this);
         indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
-//        progressDialog = new ProgressDialog(this);
-//        progressDialog.setMessage("Please Wait Uploading Image...");
-//        progressDialog.setCancelable(false);
-//        progressDialog.setCanceledOnTouchOutside(false);
+
         innerModle = new InnerModle();
         desired_string = getIntent().getIntExtra("string_key", 0);
         findView();
@@ -147,6 +146,10 @@ public class CreatEventActivity extends AppCompatActivity implements
 
         editTextTitle = (EditText) findViewById(R.id.editText2);
         editTextDesc = (EditText) findViewById(R.id.editText4);
+        editTextDesc.setScroller(new Scroller(this));
+        editTextDesc.setMaxLines(5);
+        editTextDesc.setVerticalScrollBarEnabled(true);
+        editTextDesc.setMovementMethod(new ScrollingMovementMethod());
         linearLayout_select = (LinearLayout) findViewById(R.id.ll_container);
         mSelectMeeting = (TextView) findViewById(R.id.tv_select_meeting);
         presenter.getOneToOne(PreferenceHelper.getUserId(this), desired_string, this);
@@ -994,25 +997,7 @@ public class CreatEventActivity extends AppCompatActivity implements
                                 mStartDate, mEndDate,
                                 Globals.oneToOneId, true, mImagePath, "", String.valueOf(currentTime), false, CreatEventActivity.this);
 
-//                        model = new OneToOneModel();
-//                        model.setLongtud(innerModle.getLongitude());
-//                        model.setLatitude(innerModle.getLatitude());
-//                        model.setGroupId(desired_string);
-//                        model.setCreatedby(PreferenceHelper.getUserId(CreatEventActivity.this));
-//                        model.setTitle(title.getText().toString());
-//                        model.setDescr(Desc.getText().toString());
-//                        model.setStartDate(mStartDate);
-//                        model.setEndDate(mEndDate);
-//                        model.setImage(mImagePath);
-//                        model.setCreationDate(String.valueOf(currentTime));
-//                        model.setStartTime(mStartTime);
-//                        model.setEndTime(mEndTime);
 //
-//                        Intent intentonetoone = new Intent(CreatEventActivity.this, MeetingonetooneActivity.class);
-//                        intentonetoone.putExtra("string_key", desired_string);
-//                        intentonetoone.putExtra("MyClass", model);
-//                        startActivity(intentonetoone);
-
                     }
 
                 } else {

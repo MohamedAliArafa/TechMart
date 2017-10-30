@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.a700apps.techmart.R;
-import com.a700apps.techmart.data.model.GroupTimeLineData;
 import com.a700apps.techmart.data.model.LikeData;
 import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.data.network.MainApi;
@@ -25,10 +24,8 @@ import com.a700apps.techmart.data.network.NetworkResponseListener;
 import com.a700apps.techmart.ui.screens.comment.CommentActivity;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.mygroup.MyGroubListActivity;
-import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
 import com.a700apps.techmart.ui.screens.profile.EditProfileFragment;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
-import com.a700apps.techmart.ui.screens.timelinedetails.DetailsGroupActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.Globals;
@@ -100,18 +97,28 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
                 viewHolderEvent.contain.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Globals.R_Index_group=position;
+                        Globals.R_Index_group = position;
                         openDetails(context, "Event", mTimeLineList, position);
                     }
                 });
                 viewHolderEvent.shareBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent sendIntent = new Intent();
-                        sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
-                        sendIntent.setType("text/plain");
-                        context.startActivity(sendIntent);
+                        Intent shareIntent = new Intent();
+                        shareIntent.setAction(Intent.ACTION_SEND);
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
+                        shareIntent.setType("text/plain");
+                        context.startActivity(Intent.createChooser(shareIntent, "Select"));
+                    }
+                });
+                viewHolderEvent.tv_share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent shareIntent = new Intent();
+                        shareIntent.setAction(Intent.ACTION_SEND);
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
+                        shareIntent.setType("text/plain");
+                        context.startActivity(Intent.createChooser(shareIntent, "Select"));
                     }
                 });
 
@@ -159,27 +166,27 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
                 viewHolderPost.mTitleTextView.setText(timeLineItem.getTitle());
                 viewHolderPost.mGroupNameTextView.setText(timeLineItem.getGroupName());
 
-                if (timeLineItem.getLikeCount()==0){
+                if (timeLineItem.getLikeCount() == 0) {
                     viewHolderPost.tv_like.setText("Like");
-                }else if (timeLineItem.getLikeCount()==1){
+                } else if (timeLineItem.getLikeCount() == 1) {
                     viewHolderPost.tv_like.setText("1 Like");
-                }else {
+                } else {
                     viewHolderPost.tv_like.setText(timeLineItem.getLikeCount() + " Likes");
                 }
 
 
-                if (timeLineItem.getCommentCount()==0){
+                if (timeLineItem.getCommentCount() == 0) {
                     viewHolderPost.tv_comment.setText("Comment");
-                }else if (timeLineItem.getCommentCount()==1){
+                } else if (timeLineItem.getCommentCount() == 1) {
                     viewHolderPost.tv_comment.setText("1 Comment");
-                }else {
+                } else {
                     viewHolderPost.tv_comment.setText(timeLineItem.getCommentCount() + " Comments");
                 }
 
                 viewHolderPost.moreImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Globals.R_Index_group=position;
+                        Globals.R_Index_group = position;
                         openDetails(context, "post", mTimeLineList, position);
                     }
                 });
@@ -187,7 +194,7 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
                 viewHolderPost.contain.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Globals.R_Index_group=position;
+                        Globals.R_Index_group = position;
                         openDetails(context, "post", mTimeLineList, position);
                     }
                 });
@@ -195,7 +202,7 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
                     @Override
                     public void onClick(View v) {
 //                        ActivityUtils.openActivity(context, EditProfileActivity.class, false);
-                        ((HomeActivity) context).openFragment(EditProfileFragment.class , null);
+                        ((HomeActivity) context).openFragment(EditProfileFragment.class, null);
                     }
                 });
 
@@ -346,7 +353,7 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
     public class ViewHolderPost extends RecyclerView.ViewHolder {
         ImageView mPostImageView, addCalenderBtn, mLikeImageView, mComment, shareBtn, moreImageView;
         ;
-        TextView mTitleTextView, mDescribtionTextView, mPostedByTextView, mGroupNameTextView, tv_comment, tv_like , tv_share;
+        TextView mTitleTextView, mDescribtionTextView, mPostedByTextView, mGroupNameTextView, tv_comment, tv_like, tv_share;
         ConstraintLayout contain;
 
         public ViewHolderPost(View itemView) {
@@ -372,7 +379,7 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView mEventImageView, shareBtn, addCalenderBtn;
-        TextView mTitleTextView, mDescribtionTextView, mDateTextView, mGroupNameTextView, tv_add_calender, tv_username;
+        TextView mTitleTextView, mDescribtionTextView, mDateTextView, mGroupNameTextView, tv_add_calender, tv_share, tv_username;
         RelativeLayout contain;
 
         public ViewHolder(View itemView) {
@@ -387,6 +394,8 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
             tv_username = (TextView) itemView.findViewById(R.id.tv_username);
 
             shareBtn = (ImageView) itemView.findViewById(R.id.iv_share);
+            tv_share = (TextView) itemView.findViewById(R.id.tv_share);
+
             addCalenderBtn = (ImageView) itemView.findViewById(R.id.iv_add_calender);
             itemView.setOnClickListener(this);
             shareBtn.setOnClickListener(this);

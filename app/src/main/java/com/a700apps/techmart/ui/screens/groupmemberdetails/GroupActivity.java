@@ -22,6 +22,7 @@ import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.profile.EditProfileFragment;
 import com.a700apps.techmart.ui.screens.profile.MemberProfileFragment;
 import com.a700apps.techmart.utils.CustomButton;
+import com.a700apps.techmart.utils.CustomTextView;
 import com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
 import com.a700apps.techmart.utils.Globals;
@@ -37,7 +38,7 @@ public class GroupActivity extends AppCompatActivity implements GroupMemberView 
     EmptyRecyclerView rv, rv2;
     ImageView Icon;
     int mId;
-    TextView mNoData, tv_admin, tv_member;
+    TextView mNoData, tv_admin, tv_member,mDescTextView,mNameGroupTextView;
     public AVLoadingIndicatorView indicatorView;
 
 
@@ -60,6 +61,8 @@ public class GroupActivity extends AppCompatActivity implements GroupMemberView 
         mNoData = (CustomLightTextView) findViewById(R.id.tv_nodata);
         tv_admin = (TextView) findViewById(R.id.tv_admin);
         tv_member = (TextView) findViewById(R.id.tv_member);
+        mDescTextView = (CustomLightTextView) findViewById(R.id.textView55);
+        mNameGroupTextView = (CustomTextView) findViewById(R.id.textView52);
         mNoData = (CustomLightTextView) findViewById(R.id.tv_nodata);
         button7 = (CustomButton) findViewById(R.id.button7);
         button7.setOnClickListener(new View.OnClickListener() {
@@ -83,33 +86,21 @@ public class GroupActivity extends AppCompatActivity implements GroupMemberView 
         indicatorView.hide();
     }
 
-//    @Override
-//    public void onBackPressed() {
-//
-//        super.onBackPressed();
-//
-////        ActivityUtils.openActivity(GroupActivity.this, GroupsTimLineActivity.class, true);
-//
-//        Intent myIntent = new Intent(GroupActivity.this, GroupsTimLineActivity.class);
-//        myIntent.putExtra("selectedCategory", mId);
-//        startActivity(myIntent);
-//
-//    }
+
 
     @Override
     public void updateUi(GroupUsersData.ResultEntity groupusers) {
-
-
+        mNameGroupTextView.setText(groupusers.getName());
+        mDescTextView.setText(groupusers.getDescription());
         Glide.with(this)
                 .load(MainApi.IMAGE_IP + groupusers.getIcon())
                 .into(Icon);
 
         if (groupusers.getBoardMemebes().size() == 0) {
-//            mNoData.setVisibility(View.VISIBLE);
             rv.setEmptyView(findViewById(R.id.tv_nodata));
         }
-        tv_member.setText(String.valueOf(groupusers.getBoardMemebes().size()));
-        tv_admin.setText(String.valueOf(groupusers.getOtheMemebes().size()));
+        tv_member.setText(String.valueOf(groupusers.getOtheMemebes().size()));
+        tv_admin.setText(String.valueOf( groupusers.getBoardMemebes().size()));
         rv.setAdapter(new AdminAdapter(this, groupusers.getBoardMemebes(), mId));
         rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         if (groupusers.getOtheMemebes().size() == 0) {

@@ -220,7 +220,7 @@ public class JoinGroupFragment extends Fragment implements CategoryView, View.On
                     snackbar1.show();
                 } else {
                     Log.e("intSelectedId", Globals.SELECTED_ID + "");
-                    Intent myIntent = new Intent(getActivity(), GroubListActivity.class);
+                    Intent myIntent = new Intent(getActivity(), JoinGroupListActivity.class);
                     myIntent.putExtra("selectedCategory", Globals.SELECTED_ID);
                     startActivity(myIntent);
                     Globals.SELECTED_ID=-1;

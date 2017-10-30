@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Add Comment Here"
+        android:text="Add comment here"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,7 +62,7 @@
         android:id="@+id/imageView3"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -87,7 +87,7 @@
         android:id="@+id/imageView4"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -95,7 +95,7 @@
         app:srcCompat="@drawable/ic_next_arrow_white"
         android:layout_marginEnd="8dp" />
 
-    <android.support.v7.widget.RecyclerView
+    <com.a700apps.techmart.utils.EmptyRecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -106,6 +106,19 @@
         android:layout_marginRight="0dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
+
+    <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+        android:id="@+id/tv_nodata"
+        android:layout_width="0dp"
+        android:layout_height="551dp"
+        android:text="there isn't comment on post"
+        android:gravity="center"
+        tools:layout_editor_absoluteY="8dp"
+        android:visibility="gone"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/recyclerView" />
 
     <View
         android:id="@+id/view3"
@@ -126,7 +139,7 @@
         android:layout_marginLeft="8dp"
         android:background="@color/transparent"
         android:ems="10"
-        android:hint="Write Comment"
+        android:hint="Write a comment..."
         android:inputType="textPersonName"
         android:padding="5dp"
         android:textColor="@android:color/white"

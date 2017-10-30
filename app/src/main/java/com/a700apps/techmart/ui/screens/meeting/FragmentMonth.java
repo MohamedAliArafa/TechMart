@@ -36,7 +36,7 @@ import java.util.Locale;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentMonth extends Fragment implements MettingView {
+public class FragmentMonth extends Fragment implements MettingView, UpdateFirstItem {
 
     private MettingPressenter presenter;
     private RecyclerView schedualMonthList;
@@ -45,7 +45,7 @@ public class FragmentMonth extends Fragment implements MettingView {
     private TextView descTextView;
     private TextView dateTextView;
     private TextView noEvent;
-    private ImageView favoritImageView;
+    private TextView favoritTextView;
     private ImageView deleteImageView;
     private Button showMapImageView;
     private ConstraintLayout constraintLayout;
@@ -109,7 +109,7 @@ public class FragmentMonth extends Fragment implements MettingView {
         titleTextView = (TextView) view.findViewById(R.id.title_text_view);
         descTextView = (TextView) view.findViewById(R.id.desc_text_view);
         dateTextView = (TextView) view.findViewById(R.id.date_text_view);
-        favoritImageView = (ImageView) view.findViewById(R.id.favorit_image_view);
+        favoritTextView = (TextView) view.findViewById(R.id.favorit_image_view);
         deleteImageView = (ImageView) view.findViewById(R.id.delete_image_view);
         showMapImageView = (Button) view.findViewById(R.id.show_map_image_view);
 
@@ -119,9 +119,9 @@ public class FragmentMonth extends Fragment implements MettingView {
     @Override
     public void drawUiData(List<AllSchedualList.ResultEntity> schedualList) {
         constraintLayout.setVisibility(View.VISIBLE);
-        setFirstItem(schedualList);
+        setFirstItem(schedualList.get(0).getImage(), schedualList.get(0).getTitle(), schedualList.get(0).getDescr(), schedualList.get(0).getAttendantCount(), schedualList.get(0).getLatitude(), schedualList.get(0).getLongtude());
 
-        MettingDaysAdapter mettingDaysAdapter = new MettingDaysAdapter(getActivity(), schedualList);
+        MettingDaysAdapter mettingDaysAdapter = new MettingDaysAdapter(getActivity(), schedualList, this);
         schedualMonthList.setAdapter(mettingDaysAdapter);
     }
 
@@ -143,18 +143,19 @@ public class FragmentMonth extends Fragment implements MettingView {
         noEvent.setVisibility(View.VISIBLE);
     }
 
-    private void setFirstItem(final List<AllSchedualList.ResultEntity> schedualList) {
-        Glide.with(getActivity()).load(MainApi.IMAGE_IP + schedualList.get(0).getImage())
+    private void setFirstItem(String image, String title, String desc, int attendeeCount, final double lat, final double longitud) {
+        Glide.with(getActivity()).load(MainApi.IMAGE_IP + image)
                 .into(eventImage);
-        titleTextView.setText(schedualList.get(0).getTitle());
-        descTextView.setText(schedualList.get(0).getDescr());
+        titleTextView.setText(title);
+        descTextView.setText(desc);
+        favoritTextView.setText(String.valueOf(attendeeCount));
         showMapImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //show external map
 
-                if (schedualList.get(0).getLatitude() > 0 && schedualList.get(0).getLongtude() > 0) {
-                    String uri = String.format(Locale.ENGLISH, "geo:%f,%f", schedualList.get(0).getLatitude(), schedualList.get(0).getLongtude());
+                if (lat > 0 && longitud > 0) {
+                    String uri = String.format(Locale.ENGLISH, "geo:%f,%f", lat, longitud);
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                     getActivity().startActivity(intent);
                 }
@@ -163,19 +164,27 @@ public class FragmentMonth extends Fragment implements MettingView {
 
     }
 
+    @Override
+    public void onClick(String Image, String Title, String Descr, int AttendantCount, double Latitude, double Longtude) {
+        Log.e("onClick", "on Click ");
+        setFirstItem(Image, Title, Descr, AttendantCount, Latitude, Longtude);
+    }
+
 
     private static class MettingDaysAdapter extends RecyclerView.Adapter<MettingDaysAdapter.ViewHolder> {
 
         private Context context;
         private List<AllSchedualList.ResultEntity> schedualList;
+        private UpdateFirstItem updateFirstItem;
 
         public MettingDaysAdapter(Context context) {
             this.context = context;
         }
 
-        public MettingDaysAdapter(Context context, List<AllSchedualList.ResultEntity> schedualList) {
+        public MettingDaysAdapter(Context context, List<AllSchedualList.ResultEntity> schedualList, UpdateFirstItem updatefirstItem) {
             this.context = context;
             this.schedualList = schedualList;
+            this.updateFirstItem = updatefirstItem;
         }
 
         @Override
@@ -187,32 +196,39 @@ public class FragmentMonth extends Fragment implements MettingView {
         }
 
         @Override
-        public void onBindViewHolder(MettingDaysAdapter.ViewHolder viewHolder, int position) {
+        public void onBindViewHolder(MettingDaysAdapter.ViewHolder viewHolder, final int position) {
             viewHolder.titleTextView.setText(schedualList.get(position).getTitle());
             viewHolder.descrTextView.setText(schedualList.get(position).getDescr());
             String string = schedualList.get(position).getStartDate();
+            viewHolder.container.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    updateFirstItem.onClick(schedualList.get(position).getImage(), schedualList.get(position).getTitle(), schedualList.get(position).getDescr(), schedualList.get(position).getAttendantCount(), schedualList.get(position).getLatitude(), schedualList.get(position).getLongtude());
+                }
+            });
             Calendar calender = Calendar.getInstance();
-            int day = 0,Month=0;
-            String monthString ="";
+            int day = 0, Month = 0;
+            String monthString = "";
             try {
                 calender.setTime(new SimpleDateFormat("yyyy-MM-d").parse(string));
 //                calender.add(Calendar.MONTH,1);
                 day = calender.get(Calendar.DAY_OF_MONTH);
-                Month=  calender.get(Calendar.MONTH);
-                 monthString = new DateFormatSymbols().getMonths()[Month];
+                Month = calender.get(Calendar.MONTH);
+                monthString = new DateFormatSymbols().getMonths()[Month];
                 Log.e("monthString", monthString);
 
             } catch (ParseException e) {
                 e.printStackTrace();
             }
 
-            viewHolder.textView56.setText(String.valueOf(day)+"\n"+monthString.substring(0,4));
+            viewHolder.textView56.setText(String.valueOf(day) + "\n" + monthString.substring(0, 4));
 
 
         }
 
         @Override
         public int getItemCount() {
+            Log.e("schedualList", schedualList.size() + "");
             return schedualList.size();
         }
 
@@ -222,10 +238,12 @@ public class FragmentMonth extends Fragment implements MettingView {
             private TextView textView59;
             private TextView titleTextView;
             private TextView descrTextView;
+            private ConstraintLayout container;
 
             public ViewHolder(View view) {
                 super(view);
                 linearLayout9 = (LinearLayout) view.findViewById(R.id.linearLayout9);
+                container = (ConstraintLayout) view.findViewById(R.id.container);
                 textView56 = (TextView) view.findViewById(R.id.textView56);
                 textView59 = (TextView) view.findViewById(R.id.textView59);
                 titleTextView = (TextView) view.findViewById(R.id.title_text_view);

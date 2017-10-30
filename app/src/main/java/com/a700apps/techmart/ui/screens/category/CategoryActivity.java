@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,40 +58,9 @@ public class CategoryActivity extends AppCompatActivity implements CategoryView,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
 
-//        CustomButton nextBtn = (CustomButton) findViewById(R.id.nextBtn);
-//        countryBtn = (ImageView) findViewById(R.id.iv_country_council);
-//        businessBtn = (ImageView) findViewById(R.id.iv_business_associates);
-//        groupBtn = (ImageView) findViewById(R.id.iv_groups);
-//        mFirstTextView=(CustomTextView)findViewById(R.id.textView);
-//        mSecondTextView=(CustomTextView)findViewById(R.id.textView2);
-//        mThirdTextView=(CustomTextView)findViewById(R.id.textView3);
-//        indicatorView= (AVLoadingIndicatorView) findViewById(R.id.avi);
+//
         findView();
-//        presenter = new CategoryPresenter();
-//        presenter.attachView(this);
-//
-//        presenter.getCategory();
-//
-//        nextBtn.setOnClickListener(this);
-//        countryBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                updateIcons(STATE_IS_COUNTRY);
-//            }
-//        });
-//        businessBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                updateIcons(STATE_IS_BUSINESS);
-//            }
-//        });
-//
-//        groupBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                updateIcons(STATE_IS_GROUP);
-//            }
-//        });
+
     }
 
     void findView() {
@@ -99,8 +69,8 @@ public class CategoryActivity extends AppCompatActivity implements CategoryView,
 
 
         rv = (EmptyRecyclerView) findViewById(R.id.recyclerView);
-        int numberOfColumns = 3;
-        rv.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
+//        int numberOfColumns = 3;
+//        rv.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
 
         presenter = new CategoryPresenter();
         presenter.attachView(this);
@@ -170,18 +140,8 @@ public class CategoryActivity extends AppCompatActivity implements CategoryView,
             rv.setEmptyView(view.findViewById(R.id.tv_nodata));
         }
         rv.setAdapter(memberAdapter);
+        rv.setLayoutManager(new LinearLayoutManager(CategoryActivity.this, LinearLayoutManager.HORIZONTAL, false));
 
-
-//        for (int i=0;i<data.category.size();i++){{
-//
-//            mFirstTextView.setText(data.category.get(0).Name);
-//            countryBtn.setId(data.category.get(0).ID);
-//            mSecondTextView.setText(data.category.get(1).Name);
-//            businessBtn.setId(data.category.get(1).ID);
-//            mThirdTextView.setText(data.category.get(2).Name);
-//            groupBtn.setId(data.category.get(2).ID);
-//
-//        }}
 
 
     }

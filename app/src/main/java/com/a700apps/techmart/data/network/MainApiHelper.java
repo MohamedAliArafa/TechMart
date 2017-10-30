@@ -54,6 +54,12 @@ public class MainApiHelper {
         return jsonObject;
     }
 
+    public static JSONObject createLoginLinkedBody(String Id) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("LinkedInID", Id);
+        jsonObject.put("DeviceType", "android");
+        return jsonObject;
+    }
 
     public static JSONObject createForgetPasswordBody(String userMail, String appId) throws JSONException {
         JSONObject jsonObject = new JSONObject();

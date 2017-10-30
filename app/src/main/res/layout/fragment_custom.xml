@@ -20,7 +20,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:text="no Event "
+        android:text="There are no events"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:visibility="gone" />

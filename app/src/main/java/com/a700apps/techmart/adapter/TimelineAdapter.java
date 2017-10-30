@@ -2,6 +2,7 @@ package com.a700apps.techmart.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.CalendarContract;
 import android.support.constraint.ConstraintLayout;
@@ -24,7 +25,7 @@ import com.a700apps.techmart.data.network.NetworkResponseListener;
 import com.a700apps.techmart.ui.screens.comment.CommentActivity;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.mygroup.MyGroupsListFragment;
-import com.a700apps.techmart.ui.screens.profile.MemberProfile;
+import com.a700apps.techmart.ui.screens.profile.MemberProfileFragment;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.Globals;
@@ -103,12 +104,11 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 viewHolderEvent.shareBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent sendIntent = new Intent();
-                        sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
-
-                        sendIntent.setType("text/plain");
-                        context.startActivity(sendIntent);
+                        Intent shareIntent = new Intent();
+                        shareIntent.setAction(Intent.ACTION_SEND);
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
+                        shareIntent.setType("text/plain");
+                        context. startActivity(Intent.createChooser(shareIntent, "Select"));
                     }
                 });
                 viewHolderEvent.tv_share.setOnClickListener(new View.OnClickListener() {
@@ -202,10 +202,16 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     @Override
                     public void onClick(View v) {
 //                        ActivityUtils.openActivity(context, EditProfileActivity.class, false);
-                        Intent intent = new Intent(context, MemberProfile.class);
-                        intent.putExtra("RelativId", String.valueOf(timeLineItem.getCreatedBY()));
-                        intent.putExtra("GroupId", timeLineItem.getGroupID());
-                        context.startActivity(intent);
+//                        Intent intent = new Intent(context, MemberProfile.class);
+//                        intent.putExtra("RelativId", String.valueOf(timeLineItem.getCreatedBY()));
+//                        intent.putExtra("GroupId", timeLineItem.getGroupID());
+//                        context.startActivity(intent);
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("RelativId", String.valueOf(timeLineItem.getCreatedBY()));
+                        bundle.putInt("GroupId", timeLineItem.getGroupID());
+                        Globals.CAME_FROM_LIKE_TO_GROUP = true;
+                        ((HomeActivity) context).openFragment(MemberProfileFragment.class, bundle);
                     }
                 });
 
@@ -214,6 +220,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     public void onClick(View view) {
 //                        ActivityUtils.openActivity(context, MyGroubListActivity.class, false);
                         ((HomeActivity) context).addFragmentToBackStack(((HomeActivity) context).getSupportFragmentManager(), R.id.fragment_container, new MyGroupsListFragment(), false, false);
+
 
                     }
                 });
@@ -398,7 +405,6 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             shareBtn = (ImageView) itemView.findViewById(R.id.iv_share);
             addCalenderBtn = (ImageView) itemView.findViewById(R.id.iv_add_calender);
             itemView.setOnClickListener(this);
-            shareBtn.setOnClickListener(this);
             addCalenderBtn.setOnClickListener(this);
         }
 

@@ -53,9 +53,9 @@ import rx.schedulers.Schedulers;
 public class MainApi {
 
 //    public static final String API_LINK = "http://108.179.204.213:8073/api/";
-    public static final String API_LINK = "http://23.236.154.106:8084/api/"; // for development
+    public static final String API_LINK = "http://23.236.154.106:8085/api/"; // for development
     public static final String JSON_TYPE = "application/json";
-    public static final String IMAGE_IP = "http://23.236.154.106:8084";
+    public static final String IMAGE_IP = "http://23.236.154.106:8085";
 //    public static final String IMAGE_IP = "http://108.179.204.213:8073";
     public static final String TAG_DATE_PICKER = "datepicker";
 
@@ -108,7 +108,7 @@ public class MainApi {
 
     public static void registerLinkedUser(JSONObject jsonBody, final NetworkResponseListener<UserData> responseListener) {
         RequestBody requestBody = getRequestBody(jsonBody);
-        getApi().registerLinkedUser(requestBody).subscribeOn(Schedulers.io())
+        getApi().linkedRegisterUser(requestBody).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<UserData>() {
 
@@ -134,6 +134,28 @@ public class MainApi {
 
     public static void loginUser(JSONObject body, final NetworkResponseListener<UserData> responseListener) {
         getApi().loginUser(getRequestBody(body)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<UserData>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                responseListener.networkOperationFail(e);
+            }
+
+            @Override
+            public void onNext(UserData userNetworkData) {
+                NetworkResponse<UserData> networkResponse = new NetworkResponse<>();
+                networkResponse.data = userNetworkData;
+                responseListener.networkOperationSuccess(networkResponse);
+            }
+        });
+    }
+
+    public static void loginLinkedUser(JSONObject body, final NetworkResponseListener<UserData> responseListener) {
+        getApi().loginLinkedUser(getRequestBody(body)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<UserData>() {
             @Override
             public void onCompleted() {

@@ -102,9 +102,9 @@ public class DetailsGroupActivity extends AppCompatActivity implements View.OnCl
         tv_share = (CustomLightTextView) findViewById(R.id.tv_share);
         tv_like = (CustomLightTextView) findViewById(R.id.tv_like);
         tv_going = (TextView) findViewById(R.id.textView53);
-        mLikeCount = (TextView) findViewById(R.id.tv_like_count);
-        mCommentCount = (TextView) findViewById(R.id.tv_comment_count);
-        mShareCount = (TextView) findViewById(R.id.tv_share_count);
+        mLikeCount = (CustomLightTextView) findViewById(R.id.tv_like_count);
+        mCommentCount = (CustomLightTextView) findViewById(R.id.tv_comment_count);
+        mShareCount = (CustomLightTextView) findViewById(R.id.tv_share_count);
 
         imageView4 = (ImageView) findViewById(R.id.imageView4);
         iv_comment = (ImageView) findViewById(R.id.iv_comment);

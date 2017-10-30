@@ -19,12 +19,13 @@ public class Globals {
     public static boolean CAME_FROM_LIKE_TO_GROUP = false;
     public static boolean CAME_FROM_GROUP_MEMBER_TO_MPROFILE = false;
 
+    public static boolean IS_JOIN = false;
 
     public static int SELECTED_ID = -1;
 
     // from member profile to shared events and group use these params
     public static String relativeId = null;
-    public static int groupId ;
+    public static int groupId;
     public static int mIndex = -1;
 
 
@@ -33,7 +34,6 @@ public class Globals {
 
     public static int R_Index = 0;
     public static int R_Index_group = 0;
-
 
 
 

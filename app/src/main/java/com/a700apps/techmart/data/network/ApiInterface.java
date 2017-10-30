@@ -50,9 +50,15 @@ public interface ApiInterface {
     @POST("user/LinkedINLogin")
     Observable<UserData> registerLinkedUser(@Body RequestBody body);
 
-
     @POST("User/login")
     Observable<UserData> loginUser(@Body RequestBody body);
+
+    @POST("User/IOSLinkedINLogin")
+    Observable<UserData> loginLinkedUser(@Body RequestBody body);
+
+    @POST("User/IOSLinkedINRegister")
+    Observable<UserData> linkedRegisterUser(@Body RequestBody body);
+
 
     @POST("User/LinkedINLogin")
     Observable<UserData> linkedLoginUser(@Body RequestBody body);

@@ -87,6 +87,7 @@ public class ViewPagerAdapter extends PagerAdapter  {
         mDesc.setText(timelineItem.getTitle());
         if (timelineItem.getType() == 1) {
             mTitle.setText("Event");
+            mTime.setText(timelineItem.getStartDate()+"|Time"+timelineItem.getStartTime()+"on wards");
             mTime.setVisibility(View.VISIBLE);
             mCalenderImageView.setVisibility(View.VISIBLE);
             if (String.valueOf(timelineItem.getAttendantCount())!=null){

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,10 +27,12 @@ import com.a700apps.techmart.data.network.NetworkResponse;
 import com.a700apps.techmart.data.network.NetworkResponseListener;
 import com.a700apps.techmart.ui.screens.groupmemberdetails.GroupActivity;
 import com.a700apps.techmart.ui.screens.groupmemberdetails.GroupMemberPresenter;
+import com.a700apps.techmart.ui.screens.message.ChatActivity;
 import com.a700apps.techmart.ui.screens.profile.MemberProfile;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.ui.screens.userlikes.UserLikesActivity;
 import com.a700apps.techmart.utils.AppUtils;
+import com.a700apps.techmart.utils.EmptyRecyclerView;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.a700apps.techmart.utils.loadingDialog;
 import com.bumptech.glide.Glide;
@@ -48,7 +51,7 @@ import java.util.List;
 public class CommentActivity extends AppCompatActivity implements commentView {
     private CommentPresenter presenter;
     EditText editText;
-    RecyclerView rv;
+    EmptyRecyclerView rv;
     ImageView mSend, mLikeImageView;
     TextView mLikes;
     Dialog dialogsLoading;
@@ -66,7 +69,7 @@ public class CommentActivity extends AppCompatActivity implements commentView {
         mId = getIntent().getIntExtra("string_key", 0);
         mNumberLikes = getIntent().getIntExtra("likes_number", 0);
         presenter.comment(mId, this);
-        rv = (RecyclerView) findViewById(R.id.recyclerView);
+        rv = (EmptyRecyclerView) findViewById(R.id.recyclerView);
         editText = (EditText) findViewById(R.id.editText);
         mSend = (ImageView) findViewById(R.id.imageView5);
         mLikes = (TextView) findViewById(R.id.textView2);
@@ -121,19 +124,22 @@ public class CommentActivity extends AppCompatActivity implements commentView {
 
             }
         });
-//        mLikeImageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(CommentActivity.this, UserLikesActivity.class);
-//                intent.putExtra("string_key", mId);
-//                startActivity(intent);
-//            }
-//        });
+
         mSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (AppUtils.isInternetAvailable(CommentActivity.this)){
-                    presenter.postComment(PreferenceHelper.getUserId(CommentActivity.this), mId, editText.getText().toString());
+                    if (!editText.getText().toString().isEmpty()){
+                        if (editText.getText().toString().trim().matches("")) {
+                            Snackbar snackbar1 = Snackbar.make(view, "please insert text", Snackbar.LENGTH_SHORT);
+                            snackbar1.show();
+                        }else {
+                            presenter.postComment(PreferenceHelper.getUserId(CommentActivity.this), mId, editText.getText().toString());
+                        }
+
+                    } else {
+                        Toast.makeText(CommentActivity.this, "please insert text", Toast.LENGTH_SHORT).show();
+                    }
                 }else {
                     Toast.makeText(CommentActivity.this, getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                 }
@@ -153,8 +159,12 @@ public class CommentActivity extends AppCompatActivity implements commentView {
 
     @Override
     public void UpdateUi(List<Comment> TimelineList) {
+        if (TimelineList.size() == 0) {
+            rv.setEmptyView(findViewById(R.id.tv_nodata));
+        }
         rv.setAdapter(new AdminAdapter(this, TimelineList));
         rv.setLayoutManager(new LinearLayoutManager(this));
+        rv.scrollToPosition(TimelineList.size() - 1); // to scroll to last item
     }
 
     @Override
