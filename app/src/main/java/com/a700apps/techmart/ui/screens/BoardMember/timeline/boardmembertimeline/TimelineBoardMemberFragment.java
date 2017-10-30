@@ -64,7 +64,6 @@ public class TimelineBoardMemberFragment extends Fragment implements BoardTimlin
     public void onResume() {
         super.onResume();
 //        presenter.getTimeline(mGroupId,PreferenceHelper.getUserId(getActivity()),0);
-
     }
 
     @Override
@@ -73,7 +72,10 @@ public class TimelineBoardMemberFragment extends Fragment implements BoardTimlin
             rv.setEmptyView(view.findViewById(R.id.tv_nodata));
         }
         rv.setAdapter(new BoardMemberAdapter(getActivity(),TimelineList , rv));
-        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        rv.setLayoutManager(linearLayoutManager);
 
     }
 }

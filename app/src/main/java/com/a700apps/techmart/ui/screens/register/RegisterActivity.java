@@ -215,10 +215,7 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
 
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
-//                Bitmap photo = (Bitmap) data.getExtras().get("data");
                 ImageView imageView = (ImageView) findViewById(R.id.iv_post);
-//                selectedImagePath = getPathFromURI(RegisterActivity.this,data.getData());
-
 
                 // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
                 Uri tempUri = getImageUri(getApplicationContext(), imageBitmap);
@@ -226,7 +223,36 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                 // CALL THIS METHOD TO GET THE ACTUAL PATH
                 selectedImagePath = getRealPathFromURI(tempUri);
 
-                imageView.setImageBitmap(imageBitmap);
+                ExifInterface ei = null;
+                try {
+                    ei = new ExifInterface(selectedImagePath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_UNDEFINED);
+
+                Bitmap rotatedBitmap = null;
+                switch(orientation) {
+
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        rotatedBitmap = rotateBitmap(imageBitmap, 90);
+                        break;
+
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        rotatedBitmap = rotateBitmap(imageBitmap, 180);
+                        break;
+
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        rotatedBitmap = rotateBitmap(imageBitmap, 270);
+                        break;
+
+                    case ExifInterface.ORIENTATION_NORMAL:
+                    default:
+                        rotatedBitmap = imageBitmap;
+                }
+
+                imageView.setImageBitmap(rotatedBitmap);
                 imageView.setVisibility(View.VISIBLE);
             }
         }

@@ -52,13 +52,14 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.screens.register.RegisterActivity"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.screens.home.HomeActivity"
             android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan" />
         <activity
