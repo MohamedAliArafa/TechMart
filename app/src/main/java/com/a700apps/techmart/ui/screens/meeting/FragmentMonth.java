@@ -148,7 +148,7 @@ public class FragmentMonth extends Fragment implements MettingView, UpdateFirstI
                 .into(eventImage);
         titleTextView.setText(title);
         descTextView.setText(desc);
-        favoritTextView.setText(String.valueOf(attendeeCount));
+        favoritTextView.setText("Joined"+"\n"+String.valueOf(attendeeCount));
         showMapImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

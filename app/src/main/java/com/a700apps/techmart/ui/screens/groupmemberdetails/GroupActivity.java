@@ -90,6 +90,7 @@ public class GroupActivity extends AppCompatActivity implements GroupMemberView 
 
     @Override
     public void updateUi(GroupUsersData.ResultEntity groupusers) {
+        Log.e("name",groupusers.getName());
         mNameGroupTextView.setText(groupusers.getName());
         mDescTextView.setText(groupusers.getDescription());
         Glide.with(this)

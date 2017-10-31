@@ -388,7 +388,7 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
                 break;
-            case R.drawable.ic_3:
+            case R.drawable.ic_manage_my_group:
                 openFragment(ManageBoardGroupFragment.class, null);
                 break;
 

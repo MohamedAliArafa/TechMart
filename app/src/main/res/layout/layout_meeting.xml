@@ -4,7 +4,7 @@
     android:id="@+id/custom_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:visibility="gone">
+    android:visibility="visible">
 
     <LinearLayout
         android:id="@+id/linearLayout8"
@@ -90,6 +90,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_transparent"
+
                 android:orientation="horizontal">
 
                 <TextView
@@ -97,7 +99,8 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_weight="1"
-                    android:textColor="@color/card_color"
+                    android:text="2"
+                    android:textColor="@color/black"
                     android:visibility="visible"
                      />
 

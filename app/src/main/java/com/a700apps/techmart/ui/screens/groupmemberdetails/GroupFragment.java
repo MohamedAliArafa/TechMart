@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.profile.EditProfileFragment;
 import com.a700apps.techmart.ui.screens.profile.MemberProfileFragment;
 import com.a700apps.techmart.utils.CustomButton;
+import com.a700apps.techmart.utils.CustomTextView;
 import com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
 import com.a700apps.techmart.utils.Globals;
@@ -42,7 +44,7 @@ public class GroupFragment extends Fragment implements GroupMemberView {
     EmptyRecyclerView rv, rv2;
     ImageView Icon;
     int mId;
-    TextView mNoData, tv_admin, tv_member;
+    TextView mNoData, tv_admin, tv_member,mDescTextView,mNameGroupTextView;
     public AVLoadingIndicatorView indicatorView;
     View view;
 
@@ -66,13 +68,15 @@ public class GroupFragment extends Fragment implements GroupMemberView {
         presenter.GroupUsers(mId, PreferenceHelper.getUserId(getActivity()), getActivity());
         rv = (EmptyRecyclerView) view.findViewById(R.id.recyclerView);
         Icon = (ImageView) view.findViewById(R.id.imageView26);
-
+        mDescTextView = (CustomLightTextView)view. findViewById(R.id.textView55);
+        mNameGroupTextView = (CustomTextView)view. findViewById(R.id.textView52);
         rv2 = (EmptyRecyclerView) view.findViewById(R.id.recyclerView2);
         mNoData = (CustomLightTextView) view.findViewById(R.id.tv_nodata);
         tv_admin = (TextView) view.findViewById(R.id.tv_admin);
         tv_member = (TextView) view.findViewById(R.id.tv_member);
         mNoData = (CustomLightTextView) view.findViewById(R.id.tv_nodata);
         button7 = (CustomButton) view.findViewById(R.id.button7);
+
         button7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,7 +104,9 @@ public class GroupFragment extends Fragment implements GroupMemberView {
     @Override
     public void updateUi(GroupUsersData.ResultEntity groupusers) {
 
-
+        Log.e("name",groupusers.getName());
+        mNameGroupTextView.setText(groupusers.getName());
+        mDescTextView.setText(groupusers.getDescription());
         Glide.with(this)
                 .load(MainApi.IMAGE_IP + groupusers.getIcon())
                 .into(Icon);

@@ -42,7 +42,7 @@
 
     <string-array name="nav_drawer_titles">
         <item>Timeline</item>
-        <item>Manage Group</item>
+        <item>Manage My Groups</item>
         <item>My Groups</item>
         <item>Join New Group</item>
         <item>Messages</item>
