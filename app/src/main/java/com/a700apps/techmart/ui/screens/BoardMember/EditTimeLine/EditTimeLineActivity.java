@@ -159,9 +159,9 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
                 } else {
                     // Write you code here if permission already given.
                     Intent intent1 = new Intent(EditTimeLineActivity.this, MapDialogActivity.class);
-                    intent1.putExtra("lat" , result.getLatitude());
-                    intent1.putExtra("lng" , result.getLongtude());
-                    intent1.putExtra("place" , result.getLocationName().toString());
+                    intent1.putExtra("lat" , result.getLatitude() == null ? 0:result.getLatitude());
+                    intent1.putExtra("lng" , result.getLongtude() == null ? 0:result.getLongtude());
+                    intent1.putExtra("place" , result.getLocationName() == null ? " ":result.getLocationName().toString());
                     startActivityForResult(intent1, PICK_LOCATION_REQUEST);
                 }
 
