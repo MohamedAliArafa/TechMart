@@ -61,7 +61,7 @@ public class Validator {
 
     public static boolean validPassword(String password) {
         // prevent password from accept spaces.
-        if (!(password.length() < 8) && password.contains(" ")) {
+        if (!(password.length() < 8|| password.length() > 50) && password.contains(" ")) {
             return false;
         }
         // validate password should contain numbers and letters.

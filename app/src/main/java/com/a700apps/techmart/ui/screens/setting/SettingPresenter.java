@@ -95,7 +95,7 @@ public class SettingPresenter extends MainPresenter<SettingView> implements Netw
                         networkOperationFail(new Throwable(networkResponse.data.getResult().getMessage()));
                         view.showErrorDialog(R.string.error_happened); //networkResponse.data.getResult().getMessage()
                     }else {
-                        view.showToast("Image changes successfully");
+                        view.showToast("Image changed successfully");
                         view.saveNewPic("/UploadedImages/"+pathServer);
                     }
                 }

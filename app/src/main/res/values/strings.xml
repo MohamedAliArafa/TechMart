@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">TechMart</string>
 
-    <string name="invalid_password">The password length should exceed 8 characters.</string>
+    <string name="invalid_password">Your password must be at least 8 characters long, letters and numbers.</string>
     <string name="invalid_email"> Email field is empty</string>
     <string name="invalid_url">  this url is not valid</string>
     <string name="invalid_email_format"> Enter valid email</string>

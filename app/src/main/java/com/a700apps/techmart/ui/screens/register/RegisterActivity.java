@@ -576,7 +576,7 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                 }
                 if (!mIsLinkedIn) {
 
-                    boolean validPassword = Validator.validPasswordLength(password);
+                    boolean validPassword = Validator.validPassword(password);
                     if (!validPassword) {
                         mPasswordEditText.setError(getResources().getString(R.string.invalid_password));
                         isValid = false;
