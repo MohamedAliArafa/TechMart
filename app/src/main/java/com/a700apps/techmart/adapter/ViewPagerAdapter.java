@@ -57,7 +57,7 @@ public class ViewPagerAdapter extends PagerAdapter  {
 
     @Override
     public int getCount() {
-        if (imageModelArrayList.size()>5){
+        if (imageModelArrayList!=null && imageModelArrayList.size()>5){
             return 5;
         }else {
             return imageModelArrayList.size();

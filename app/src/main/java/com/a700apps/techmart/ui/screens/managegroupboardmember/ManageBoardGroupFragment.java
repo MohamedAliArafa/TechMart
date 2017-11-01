@@ -153,7 +153,7 @@ ManageBoardGroupFragment extends Fragment implements manageGroupView {
                 }else {
                     empty.setVisibility(View.VISIBLE);
                 }
-                rv.setAdapter(new GroupsAdapter(getActivity(), suggestions));
+                rv.setAdapter(new ManageGroupAdapter(getActivity(), suggestions));
             }
         });
 //        searchCompleteTextView.setAdapter(new AutoCompleteGroupAdapter(getActivity() ,R.layout.custom_text_view, data.userGroup ,rv));

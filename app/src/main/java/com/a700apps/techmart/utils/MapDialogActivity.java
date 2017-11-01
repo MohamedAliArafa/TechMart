@@ -104,12 +104,39 @@ public class MapDialogActivity extends FragmentActivity implements OnMapReadyCal
             }
         });
 
+        if (getIntent().getExtras().getString("place")!=null){
+            double lat = getIntent().getExtras().getDouble("lat");
+            double lng = getIntent().getExtras().getDouble("lng");
+            String place = getIntent().getExtras().getString("place");
+
+            MarkerOptions optionFirstLocation = new MarkerOptions();
+            optionFirstLocation.position(new LatLng(lat, lng));
+            optionFirstLocation.icon(BitmapDescriptorFactory.defaultMarker());
+            sourceMarker = mMap.addMarker(optionFirstLocation);
+            addressTextView.setText(place);
+
+        }
+
     }
 
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
+        if (getIntent().getExtras().getString("place")!=null){
+            double lat = getIntent().getExtras().getDouble("lat");
+            double lng = getIntent().getExtras().getDouble("lng");
+            String place = getIntent().getExtras().getString("place");
+
+            MarkerOptions optionFirstLocation = new MarkerOptions();
+            optionFirstLocation.position(new LatLng(lat, lng));
+            optionFirstLocation.icon(BitmapDescriptorFactory.defaultMarker());
+            sourceMarker = mMap.addMarker(optionFirstLocation);
+            addressTextView.setText(place);
+
+        }
+
         if (isLocationEnabled(MapDialogActivity.this)) {
             buildGoogleApiClient();
         } else {

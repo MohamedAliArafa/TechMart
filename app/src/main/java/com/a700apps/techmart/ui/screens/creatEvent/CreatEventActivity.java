@@ -87,7 +87,8 @@ import retrofit2.Response;
  */
 
 public class CreatEventActivity extends AppCompatActivity implements
-        EventView, View.OnClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, OneToneAdapter.onUserSelected {
+        EventView, View.OnClickListener, DatePickerDialog.OnDateSetListener,
+        TimePickerDialog.OnTimeSetListener, OneToneAdapter.onUserSelected {
     private static final int SELECT_PICTURE = 1;
     private static final int PICK_LOCATION_REQUEST = 2;
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;

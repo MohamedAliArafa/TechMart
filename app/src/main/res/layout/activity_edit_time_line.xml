@@ -106,6 +106,7 @@
 
         <LinearLayout
             android:id="@+id/bottomBar"
+            android:visibility="invisible"
             android:layout_toStartOf="@id/save_layout"
             android:layout_alignParentStart="true"
             android:layout_width="wrap_content"
@@ -161,7 +162,66 @@
             <!--</LinearLayout>-->
 
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_container"
+            android:layout_toStartOf="@id/save_layout"
+            android:layout_alignParentStart="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:weightSum="2">
 
+            <ImageView
+                android:id="@+id/iv_upload_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/general_margin"
+                android:src="@drawable/ic_upload_image" />
+
+            <TextView
+                android:id="@+id/tv_upload_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="Multimedia"
+                android:textColor="@color/blackGreenColor"
+                android:textSize="@dimen/greeting_card_text" />
+
+            <ImageView
+                android:id="@+id/iv_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/general_margin"
+                android:src="@drawable/ic_location" />
+
+            <TextView
+                android:id="@+id/tv_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="Location"
+                android:textColor="@color/blackGreenColor"
+                android:textSize="@dimen/greeting_card_text" />
+
+
+            <ImageView
+                android:id="@+id/iv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/general_margin"
+                android:src="@drawable/ic_select_date" />
+
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:text="select date"
+                android:textColor="@color/blackGreenColor"
+                android:textSize="@dimen/sign_up_text_size" />
+
+
+        </LinearLayout>
 
 
     </RelativeLayout>
