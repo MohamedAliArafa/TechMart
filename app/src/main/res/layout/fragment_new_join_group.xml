@@ -65,12 +65,14 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:layout_marginBottom="8dp"
+        android:layout_marginTop="50dp"
+        android:layout_below="@+id/textView7"
         android:layout_marginEnd="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginStart="10dp"
+
         />
 
     <com.a700apps.techmart.utils.CustomButton

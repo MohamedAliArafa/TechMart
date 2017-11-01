@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -84,7 +85,7 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
             viewHolder.mStatus.setBackgroundColor(context.getResources().getColor(R.color.btn_reject));
             viewHolder.manageLayout.setVisibility(View.GONE);
         } else if (singleItem.getRequestStatus() == 3) {
-            viewHolder.mStatus.setText("Defered");
+            viewHolder.mStatus.setText("Deferred");
             viewHolder.mStatus.setBackgroundColor(context.getResources().getColor(R.color.btn_defer));
         }
 
@@ -113,9 +114,9 @@ public class ApprovalAdapter extends RecyclerView.Adapter<ApprovalAdapter.ViewHo
 
         // Create custom dialog object
         final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); //before
         dialog.setContentView(R.layout.dialog_approval);
         dialog.show();
-
         ImageView approveImageView = dialog.findViewById(R.id.iv_approve);
         ImageView rejectImageView = dialog.findViewById(R.id.iv_reject);
         ImageView deferImageView = dialog.findViewById(R.id.iv_defer);

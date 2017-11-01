@@ -12,7 +12,7 @@ public class NavDrawerItem {
 
     public static final int[] NAV_DRAWER_ICONS = {
             R.drawable.ic_timeline,
-            R.drawable.ic_3,
+            R.drawable.ic_manage_my_group,
             R.drawable.ic_my_group,
             R.drawable.ic_group,
             R.drawable.ic_message,

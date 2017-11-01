@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +24,7 @@ import android.widget.Toast;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.GroupTimeLineData;
+import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.ui.screens.BoardMember.DialogApproval.ApprovalPresenter;
 import com.a700apps.techmart.ui.screens.BoardMember.DialogApproval.approvalView;
@@ -29,14 +32,17 @@ import com.a700apps.techmart.ui.screens.BoardMember.EditTimeLine.EditTimeLineAct
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.login.LoginActivity;
 import com.a700apps.techmart.ui.screens.profile.MemberProfileFragment;
+import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.utils.ATCPrefManager;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.CustomButton;
+import com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView;
 import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.a700apps.techmart.utils.loadingDialog;
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,15 +50,15 @@ import java.util.List;
  */
 
 public class BoardMemberAdapter extends RecyclerView.Adapter<BoardMemberAdapter.ViewHolder> {
-    private List<GroupTimeLineData.ResultEntity> mTimeLineList;
+    private List<TimeLineData.ResultEntity> mTimeLineList;
     Activity context;
     private static final int NOTIF_TYPE_EVENT = 2;
     RecyclerView rv;
 
-
+String mType;
     Dialog dialogsLoading;
 
-    public BoardMemberAdapter(Activity context, List<GroupTimeLineData.ResultEntity> TimeLineList,RecyclerView rv) {
+    public BoardMemberAdapter(Activity context, List<TimeLineData.ResultEntity> TimeLineList,RecyclerView rv) {
         this.context = context;
         this.mTimeLineList = TimeLineList;
         this.rv = rv;
@@ -61,7 +67,7 @@ public class BoardMemberAdapter extends RecyclerView.Adapter<BoardMemberAdapter.
 
     @Override
     public void onBindViewHolder(BoardMemberAdapter.ViewHolder viewHolder, final int position) {
-        final GroupTimeLineData.ResultEntity timeLineItem = mTimeLineList.get(position);
+        final TimeLineData.ResultEntity timeLineItem = mTimeLineList.get(position);
 //        final int itemType = getItemViewType(position);
 //        Log.e("timeLineItem.getType()", timeLineItem.getType() + "");
 
@@ -92,6 +98,19 @@ public class BoardMemberAdapter extends RecyclerView.Adapter<BoardMemberAdapter.
             viewHolderEvent.tv_approve.setTextColor(context.getResources().getColor(R.color.red_join_dialog));
             viewHolderEvent.tv_approve.setText("Deferred");
         }
+
+        viewHolderEvent.contain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Globals.R_Index_group = position;
+                if (mTimeLineList.get(position).getType()==1){
+                    mType="post";
+                }else if (mTimeLineList.get(position).getType()==2){
+                    mType="Event";
+                }
+                openDetails(context, mType, mTimeLineList, position);
+            }
+        });
 
         Glide.with(context)
                 .load(MainApi.IMAGE_IP + timeLineItem.getImage()).placeholder(R.drawable.placeholder)
@@ -232,8 +251,8 @@ public class BoardMemberAdapter extends RecyclerView.Adapter<BoardMemberAdapter.
             // set values for custom dialog components - text, image and button
             Button logout = (CustomButton) dialog.findViewById(R.id.logout);
             Button cancel = (CustomButton) dialog.findViewById(R.id.cancel);
-            ((TextView) dialog.findViewById(R.id.logout_title)).setText("Delete");
-            ((TextView) dialog.findViewById(R.id.logout_desc)).setText("Are you sure you want to delete this entry ?");
+            ((CustomLightTextView) dialog.findViewById(R.id.logout_title)).setText("Delete");
+            ((CustomLightTextView) dialog.findViewById(R.id.logout_desc)).setText("Are you sure you want to delete this entry ?");
             logout.setText("Delete");
             dialog.show();
 
@@ -374,20 +393,20 @@ public class BoardMemberAdapter extends RecyclerView.Adapter<BoardMemberAdapter.
         }
 
         @Override
-        public void updateUi(List<GroupTimeLineData.ResultEntity> TimelineList) {
+        public void updateUi(List<TimeLineData.ResultEntity> TimelineList) {
             rv.setAdapter(new BoardMemberAdapter(context , TimelineList , rv));
         }
     }
 
-//    static void openDetails(Context context, String type, List<TimeLineData.ResultEntity> mTimeLineList, int index) {
-//
-//        Intent intent = new Intent(context, DetailsActivity.class);
-//        intent.putExtra("Type", type);
-//        intent.putExtra("Index", index);
-//        intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mTimeLineList);
-//        context.startActivity(intent);
-//
-//    }
+    static void openDetails(Context context, String type, List<TimeLineData.ResultEntity> mTimeLineList, int index) {
+
+        Intent intent = new Intent(context, DetailsActivity.class);
+        intent.putExtra("Type", type);
+        intent.putExtra("Index", index);
+        intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mTimeLineList);
+        context.startActivity(intent);
+
+    }
 }
 
 

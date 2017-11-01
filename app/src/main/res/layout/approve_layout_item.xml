@@ -11,7 +11,8 @@
         android:layout_marginBottom="2dp"
         android:layout_marginLeft="@dimen/margin5"
         android:layout_marginTop="2dp"
-        android:src="@drawable/profile_pic" />
+        android:scaleType="fitXY"
+        />
 
     <com.a700apps.techmart.utils.CustomTextView
         android:id="@+id/tv_name"
@@ -86,7 +87,7 @@
             android:id="@+id/iv_manage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="40dp"
+            android:layout_marginRight="40dp"
             android:layout_centerHorizontal="true"
 
             android:layout_toStartOf="@id/tv_approve_time_header"
@@ -94,7 +95,7 @@
 
         <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
             android:id="@+id/tv_manage"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="20dp"
             android:layout_below="@+id/iv_manage"
             android:layout_marginRight="11dp"

@@ -10,11 +10,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.ApprovalAdapter;
 import com.a700apps.techmart.data.model.JoinGroupRequestsData;
+import com.a700apps.techmart.ui.screens.home.HomeActivity;
+import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
+import com.a700apps.techmart.ui.screens.profile.EditProfileFragment;
+import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
 import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
@@ -27,6 +32,7 @@ import java.util.List;
  */
 public class JoinRequestsFragment extends Fragment implements RequestsView {
 
+    ImageView mProfileImageView, mNotificationImageView, mBackImageView;
 
     EmptyRecyclerView rv;
     RequestsPresenter presenter;
@@ -44,6 +50,9 @@ public class JoinRequestsFragment extends Fragment implements RequestsView {
         presenter = new RequestsPresenter();
         presenter.attachView(this);
 
+        mProfileImageView = (ImageView) view.findViewById(R.id.new_message);
+        mNotificationImageView = (ImageView) view.findViewById(R.id.new_profile);
+        mBackImageView = (ImageView) view.findViewById(R.id.imageView4);
 
         rv = view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -51,6 +60,28 @@ public class JoinRequestsFragment extends Fragment implements RequestsView {
             @Override
             public void onClick(View view) {
                 getActivity().onBackPressed();
+            }
+        });
+
+        mBackImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((HomeActivity) getActivity()).openDrawer();
+            }
+        });
+
+        mProfileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((HomeActivity) getActivity()).openFragment(EditProfileFragment.class , null);
+            }
+        });
+
+
+        mNotificationImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
             }
         });
         presenter.getGroupRequests(""+Globals.GROUP_ID, PreferenceHelper.getUserId(getActivity()));

@@ -63,7 +63,7 @@ ManageBoardGroupFragment extends Fragment implements manageGroupView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_my_groups_list, container, false);
+        view = inflater.inflate(R.layout.fragment_manage_group, container, false);
         indicatorView = (AVLoadingIndicatorView) view.findViewById(R.id.avi);
         mPresenter = new ManageGroupPresenter();
         mPresenter.attachView(this);
@@ -156,25 +156,7 @@ ManageBoardGroupFragment extends Fragment implements manageGroupView {
                 rv.setAdapter(new ManageGroupAdapter(getActivity(), suggestions));
             }
         });
-//        searchCompleteTextView.setAdapter(new AutoCompleteGroupAdapter(getActivity() ,R.layout.custom_text_view, data.userGroup ,rv));
 
-//        searchCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                UserGroup group = (UserGroup) adapterView.getItemAtPosition(i);
-//                Log.e("CLICK" , group.Name);
-//                Bundle bundle = new Bundle();
-//                bundle.putInt("selectedCategory" ,group.ID );
-//                Globals.GROUP_ID = group.ID;
-//                ((HomeActivity )getActivity()).openFragment(GroupsTimeLineFragment.class , bundle);
-//            }
-//        });
-        /*
-        Bundle bundle = new Bundle();
-            bundle.putInt("selectedCategory" ,mUserGroupList.get(position).ID );
-            Globals.GROUP_ID = mUserGroupList.get(position).ID;
-            ((HomeActivity )context).openFragment(GroupsTimeLineFragment.class , bundle);
-         */
     }
 
 

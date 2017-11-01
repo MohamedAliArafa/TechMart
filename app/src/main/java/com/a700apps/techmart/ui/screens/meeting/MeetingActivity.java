@@ -125,7 +125,12 @@ public class MeetingActivity extends AppCompatActivity {
                 openFragment(FragmentCustom.class, null);
             }
         });
-
+        findViewById(R.id.imageView4).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         findViewById(R.id.new_message).setOnClickListener(new View.OnClickListener() {
             @Override

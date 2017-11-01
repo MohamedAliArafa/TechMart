@@ -177,7 +177,8 @@ public class CreatEventActivity extends AppCompatActivity implements
                     return;
                 } else {
                     // Write you code here if permission already given.
-                    Intent intent1 = new Intent(CreatEventActivity.this, MapDialogActivity.class);
+                    Intent intent1 = new Intent(CreatEventActivity.this, EventMapDialogActivity.class);
+
                     startActivityForResult(intent1, PICK_LOCATION_REQUEST);
                 }
 

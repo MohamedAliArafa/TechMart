@@ -1,6 +1,7 @@
 package com.a700apps.techmart.ui.screens.BoardMember.timeline.boardmembertimeline;
 
 import com.a700apps.techmart.data.model.GroupTimeLineData;
+import com.a700apps.techmart.data.model.TimeLineData;
 
 import java.util.List;
 
@@ -14,6 +15,6 @@ public interface BoardTimlineView {
 
     void dismissLoadingProgress();
 
-    void updateUi(List<GroupTimeLineData.ResultEntity> TimelineList);
+    void updateUi(List<TimeLineData.ResultEntity> TimelineList);
 
 }

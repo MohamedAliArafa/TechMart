@@ -68,6 +68,11 @@
         <activity
             android:name=".utils.MapDialogActivity"
             android:theme="@android:style/Theme.Dialog" />
+
+        <activity
+            android:name=".ui.screens.creatEvent.EventMapDialogActivity"
+            android:theme="@android:style/Theme.Dialog" />
+
         <activity android:name=".ui.screens.comment.CommentActivity" />
         <activity
             android:name=".utils.ImageDetailsActivity"
@@ -135,9 +140,15 @@
         <activity android:name=".ui.screens.notification.Ui.Activity.NotificationHolderActivity"
             android:screenOrientation="portrait"
             />
+
+        <activity android:name=".ui.screens.joingroup.JoinGroupListActivity"
+            android:screenOrientation="portrait"
+            />
+
         <activity
             android:name=".ui.screens.message.ChatActivity"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="io.fabric.ApiKey"

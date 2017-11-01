@@ -202,10 +202,9 @@
                     <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
                         android:id="@+id/post_lbl"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:layout_centerInParent="true"
-                        android:layout_marginTop="5dp"
-                        android:text=""
+
                         android:textColor="@color/white"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -263,7 +262,7 @@
                     <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
                         android:id="@+id/events_lbl"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:layout_centerInParent="true"
                         android:layout_marginTop="5dp"
                         android:text=""
@@ -324,7 +323,7 @@
                     <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
                         android:id="@+id/member_lbl"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:layout_centerInParent="true"
                         android:layout_marginTop="5dp"
                         android:text=""

@@ -125,12 +125,6 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
 //        mProfileImageView = (ImageView) view.findViewById(R.id.new_message);
         mNotificationImageView = (ImageView) view.findViewById(R.id.new_profile);
 
-//        mProfileImageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ActivityUtils.openActivity(getActivity(), EditProfileActivity.class, false);
-//            }
-//        });
 
         mNotificationImageView.setOnClickListener(new View.OnClickListener() {
             @Override

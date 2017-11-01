@@ -1014,9 +1014,9 @@ public class MainApi {
     }
     // Member
 
-    public static void getMemberTimeLine(JSONObject body, final NetworkResponseListener<GroupTimeLineData> responseListener) {
+    public static void getMemberTimeLine(JSONObject body, final NetworkResponseListener<TimeLineData> responseListener) {
         getApi().getTimelineMember(getRequestBody(body)).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<GroupTimeLineData>() {
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<TimeLineData>() {
             @Override
             public void onCompleted() {
 
@@ -1028,8 +1028,8 @@ public class MainApi {
             }
 
             @Override
-            public void onNext(GroupTimeLineData userNetworkData) {
-                NetworkResponse<GroupTimeLineData> networkResponse = new NetworkResponse<>();
+            public void onNext(TimeLineData userNetworkData) {
+                NetworkResponse<TimeLineData> networkResponse = new NetworkResponse<>();
                 networkResponse.data = userNetworkData;
                 responseListener.networkOperationSuccess(networkResponse);
             }

@@ -45,7 +45,7 @@ public class TimeLinePresenter extends MainPresenter<TimeLineView>  {
                 @Override
                 public void networkOperationFail(Throwable throwable) {
                     dialogsLoading.dismiss();
-                    view.showErrorDialog(R.string.check_internet);
+//                    view.showErrorDialog(R.string.check_internet);
                 }
             });
         } catch (JSONException e) {

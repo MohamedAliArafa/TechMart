@@ -184,7 +184,7 @@ public interface ApiInterface {
 
 
     @POST("TimeLine/GetBoardMemeberGroupTimeLine")
-    Observable<GroupTimeLineData> getTimelineMember(@Body RequestBody body);
+    Observable<TimeLineData> getTimelineMember(@Body RequestBody body);
 
 
     @POST("TimeLine/GetTimeLineItemByID")
