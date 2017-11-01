@@ -92,9 +92,9 @@
     <string name="invalid_mobile_number">Please enter valid mobile number</string>
     <string name="invalid_mobile_number_97">mobile number should start with 97</string>
     <string name="invalid_mobile_number_size">mobile number should be 14 numbers</string>
-    <string name="manage_settings">Manage settings</string>
-    <string name="approved">Approved</string>
-    <string name="rejected">Rejected</string>
+    <string name="manage_settings">Manage</string>
+    <string name="approved">Approve</string>
+    <string name="rejected">Reject</string>
     <string name="defer">Defer</string>
 
     <!-- TODO: Remove or change this placeholder text -->

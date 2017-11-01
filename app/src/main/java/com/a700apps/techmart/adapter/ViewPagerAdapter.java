@@ -93,7 +93,7 @@ public class ViewPagerAdapter extends PagerAdapter  {
             if (String.valueOf(timelineItem.getAttendantCount())!=null){
                 mAttendees.setVisibility(View.VISIBLE);
 
-                mAttendees.setText(String.valueOf(timelineItem.getAttendantCount()));//+"\n"+"Joined"
+                mAttendees.setText(String.valueOf(timelineItem.getAttendantCount())+"\n"+"Joined");//+"\n"+"Joined"
             }else {
                 mAttendees.setVisibility(View.GONE);
             }

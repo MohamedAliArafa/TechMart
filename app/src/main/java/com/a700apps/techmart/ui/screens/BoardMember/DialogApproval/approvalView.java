@@ -2,6 +2,7 @@ package com.a700apps.techmart.ui.screens.BoardMember.DialogApproval;
 
 import com.a700apps.techmart.data.model.GroupTimeLineData;
 import com.a700apps.techmart.data.model.NotificationDataLike;
+import com.a700apps.techmart.data.model.TimeLineData;
 
 import java.util.List;
 
@@ -17,5 +18,5 @@ public interface approvalView {
 
     void  showToast(String message);
 
-    void updateUi(List<GroupTimeLineData.ResultEntity> TimelineList);
+    void updateUi(List<TimeLineData.ResultEntity> TimelineList);
 }

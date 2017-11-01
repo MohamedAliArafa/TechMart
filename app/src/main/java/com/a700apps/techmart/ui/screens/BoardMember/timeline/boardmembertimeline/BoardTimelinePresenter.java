@@ -3,6 +3,7 @@ package com.a700apps.techmart.ui.screens.BoardMember.timeline.boardmembertimelin
 import android.util.Log;
 
 import com.a700apps.techmart.data.model.GroupTimeLineData;
+import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.data.network.MainApiHelper;
 import com.a700apps.techmart.data.network.NetworkResponse;
@@ -16,7 +17,7 @@ import org.json.JSONObject;
  * Created by samir.salah on 10/10/2017.
  */
 
-public class BoardTimelinePresenter  extends MainPresenter<BoardTimlineView> implements NetworkResponseListener<GroupTimeLineData> {
+public class BoardTimelinePresenter  extends MainPresenter<BoardTimlineView> implements NetworkResponseListener<TimeLineData> {
 
 
    public void getTimeline(int GroupID, String UserID, int Type) {
@@ -35,10 +36,10 @@ public class BoardTimelinePresenter  extends MainPresenter<BoardTimlineView> imp
 
 
     @Override
-    public void networkOperationSuccess(NetworkResponse<GroupTimeLineData> networkResponse) {
+    public void networkOperationSuccess(NetworkResponse<TimeLineData> networkResponse) {
         view.dismissLoadingProgress();
         if (isDetachView()) return;
-        GroupTimeLineData userNetworkData = (GroupTimeLineData) networkResponse.data;
+        TimeLineData userNetworkData = (TimeLineData) networkResponse.data;
         int errorCode = userNetworkData.getISResultHasData();
 //        if (!userNetworkData.getResult().isEmpty())
             view.updateUi(userNetworkData.getResult());

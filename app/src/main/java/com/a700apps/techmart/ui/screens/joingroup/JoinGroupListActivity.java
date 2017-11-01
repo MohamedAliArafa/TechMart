@@ -128,6 +128,7 @@ public class JoinGroupListActivity extends AppCompatActivity implements GroubVie
             if (categoryGroupItem.IsJoinRequestPending) {
                 mEnrollTextView.setText("Request Pending");
                 enrollBtn.setVisibility(View.GONE);
+                viewHolder.mEnrollConstrainLayout.setEnabled(false);
             }
 
 

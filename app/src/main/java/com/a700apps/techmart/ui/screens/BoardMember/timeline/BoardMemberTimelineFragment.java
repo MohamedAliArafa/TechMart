@@ -159,7 +159,7 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
         mProfileImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                ActivityUtils.openActivity(getActivity(), EditProfileActivity.class, false);
+                Globals.CAME_FROM_BOARD_MEMBER= true;
                 ((HomeActivity) getActivity()).openFragment(EditProfileFragment.class , null);
             }
         });
@@ -169,7 +169,6 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
             @Override
             public void onClick(View v) {
                 ActivityUtils.openActivity(getActivity(), NotificationActivity.class, false);
-//                ((HomeActivity) getActivity()).openFragment(NotificationFragment.class, null);
             }
         });
 

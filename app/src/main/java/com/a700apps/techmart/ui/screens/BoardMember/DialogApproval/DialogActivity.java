@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.data.model.GroupTimeLineData;
+import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.a700apps.techmart.utils.loadingDialog;
 
@@ -126,7 +127,7 @@ public class DialogActivity extends AppCompatActivity implements approvalView {
     }
 
     @Override
-    public void updateUi(List<GroupTimeLineData.ResultEntity> TimelineList) {
+    public void updateUi(List<TimeLineData.ResultEntity> TimelineList) {
         
     }
 }

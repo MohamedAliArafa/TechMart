@@ -84,10 +84,6 @@ public class ManageGroupAdapter extends RecyclerView.Adapter<ManageGroupAdapter.
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-//            Intent myIntent = new Intent(context, GroupsTimLineActivity.class);
-//            myIntent.putExtra("selectedCategory", mUserGroupList.get(position).ID);
-//            context.startActivity(myIntent);
-//            ((MyGroubListActivity) context).finish();
 
             Bundle bundle = new Bundle();
             bundle.putInt("selectedCategory", mUserGroupList.get(position).ID);

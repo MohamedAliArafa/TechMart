@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.BoardMemberAdapter;
 import com.a700apps.techmart.data.model.GroupTimeLineData;
+import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.ui.screens.BoardMember.timeline.boardmembertimeline.BoardTimelinePresenter;
 import com.a700apps.techmart.ui.screens.BoardMember.timeline.boardmembertimeline.BoardTimlineView;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
@@ -67,7 +68,7 @@ public class BoardPostFragment extends Fragment implements BoardTimlineView {
     }
 
     @Override
-    public void updateUi(List<GroupTimeLineData.ResultEntity> TimelineList) {
+    public void updateUi(List<TimeLineData.ResultEntity> TimelineList) {
         if (TimelineList.size() == 0) {
             rv.setEmptyView(view.findViewById(R.id.tv_nodata));
         }

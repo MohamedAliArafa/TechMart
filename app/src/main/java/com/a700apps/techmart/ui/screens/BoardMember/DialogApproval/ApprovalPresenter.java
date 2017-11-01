@@ -5,6 +5,7 @@ import android.util.Log;
 import com.a700apps.techmart.data.model.GroupTimeLineData;
 import com.a700apps.techmart.data.model.NotificationDataLike;
 import com.a700apps.techmart.data.model.PostData;
+import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.data.network.MainApiHelper;
 import com.a700apps.techmart.data.network.NetworkResponse;
@@ -85,12 +86,12 @@ public class ApprovalPresenter extends MainPresenter<approvalView> {
 
         try {
             JSONObject registerBody = MainApiHelper.getTimeLineMember(GroupID, UserID, Type);
-            MainApi.getMemberTimeLine(registerBody, new NetworkResponseListener<GroupTimeLineData>() {
+            MainApi.getMemberTimeLine(registerBody, new NetworkResponseListener<TimeLineData>() {
                 @Override
-                public void networkOperationSuccess(NetworkResponse<GroupTimeLineData> networkResponse) {
+                public void networkOperationSuccess(NetworkResponse<TimeLineData> networkResponse) {
                     view.dismissLoadingProgress();
                     if (isDetachView()) return;
-                    GroupTimeLineData userNetworkData = (GroupTimeLineData) networkResponse.data;
+                    TimeLineData userNetworkData = (TimeLineData) networkResponse.data;
                     int errorCode = userNetworkData.getISResultHasData();
 //        if (!userNetworkData.getResult().isEmpty())
                     view.updateUi(userNetworkData.getResult());

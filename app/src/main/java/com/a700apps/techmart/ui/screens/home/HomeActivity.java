@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -221,10 +222,7 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         mUserProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                ActivityUtils.openActivity(HomeActivity.this, EditProfileActivity.class, false);
-
-//                addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, new EditProfileFragment(), false
-//                        , false);
+//
                 openFragment(EditProfileFragment.class, null);
                 mDrawerLayout.closeDrawer(Gravity.LEFT);
             }
@@ -236,10 +234,6 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
     public void changeData() {
         mUserProfileName.setText(PreferenceHelper.getSavedUser(this).Name);
         String image = MainApi.IMAGE_IP + PreferenceHelper.getSavedUser(this).Photo;
-//
-//        Glide.with(HomeActivity.this)
-//                .load("https://camo.mybb.com/e01de90be6012adc1b1701dba899491a9348ae79/687474703a2f2f7777772e6a71756572797363726970742e6e65742f696d616765732f53696d706c6573742d526573706f6e736976652d6a51756572792d496d6167652d4c69676874626f782d506c7567696e2d73696d706c652d6c69676874626f782e6a7067").placeholder(R.drawable.ic_profile)
-//                .into(mUserProfile);
 
 
         Glide.with(HomeActivity.this)
@@ -436,6 +430,7 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // Create custom dialog object
         final Dialog dialog = new Dialog(HomeActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); //before
 
         dialog.setContentView(R.layout.logout_confirm_dialog);
 
@@ -463,20 +458,7 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
-//        new AlertDialog.Builder(this)
-//                .setIcon(android.R.drawable.ic_dialog_alert)
-//                .setTitle("Log out")
-//                .setMessage("Are you sure you want to Log out from your account?")
-//                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-//                {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        ATCPrefManager.setIsUserLoggedIn(HomeActivity.this, false);
-//                        ActivityUtils.openActivity(HomeActivity.this, LoginActivity.class, true);
-//                    }
 //
-//                })
-//                .setNegativeButton("No", null).show();
     }
 
     @Override
@@ -504,7 +486,10 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
                 Bundle bundle = new Bundle();
                 bundle.putInt("string_key", Globals.GROUP_ID);
                 openFragment(GroupFragment.class, bundle);
-            }else {
+            }else if (Globals.CAME_FROM_BOARD_MEMBER){
+                getSupportFragmentManager().popBackStack();
+            }
+            else {
                 openTimeLine();
             }
         }else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof GroupsTimeLineFragment) {

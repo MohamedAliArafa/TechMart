@@ -18,6 +18,7 @@ public class Globals {
     public static boolean CAME_FROM_MANAGE_TO_GROUP = false;
     public static boolean CAME_FROM_LIKE_TO_GROUP = false;
     public static boolean CAME_FROM_GROUP_MEMBER_TO_MPROFILE = false;
+    public static boolean CAME_FROM_BOARD_MEMBER = false;
 
     public static boolean IS_JOIN = false;
 
