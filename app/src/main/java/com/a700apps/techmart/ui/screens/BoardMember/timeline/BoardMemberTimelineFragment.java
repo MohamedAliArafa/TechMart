@@ -468,7 +468,7 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
                 case 3:
                     return "Members";
                 case 4:
-                    return "Membership Approvals";
+                    return "Membership Approval";
             }
             return null;
         }

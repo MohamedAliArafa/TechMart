@@ -24,7 +24,8 @@ import java.util.List;
  */
 
 public class PostsFragment extends Fragment implements TimeLineView {
-
+    private int startIndex;
+    private final int LIMIT_REQUESTS = 20;
     private TimeLinePresenter presenter;
     public PostsFragment() {
         // Required empty public
@@ -50,7 +51,8 @@ public class PostsFragment extends Fragment implements TimeLineView {
     @Override
     public void onResume() {
         super.onResume();
-        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()),"2",getActivity());
+        startIndex = 0;
+        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()),"2",startIndex,LIMIT_REQUESTS,getActivity());
     }
 
     @Override
@@ -79,6 +81,26 @@ public class PostsFragment extends Fragment implements TimeLineView {
     @Override
     public void showErrorDialog(int error) {
         DialogCreator.showOneButtonDialog(getActivity(), R.string.check_internet, "Error", null);
+
+    }
+
+    @Override
+    public void showLoadMoreProgress() {
+
+    }
+
+    @Override
+    public void hideLoadMoreProgress() {
+
+    }
+
+    @Override
+    public void removeLoadMoreListener() {
+
+    }
+
+    @Override
+    public void changeLoadMoreRequestsStatus(boolean isLoading) {
 
     }
 

@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import android.provider.CalendarContract;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,6 +95,13 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
                 viewHolderEvent.mDescribtionTextView.setText(timeLineItem.getDescr());
                 viewHolderEvent.mTitleTextView.setText(timeLineItem.getTitle());
 
+                if (AppUtils.isEventInCal(context,timeLineItem.getTitle())){
+                    Log.e("added to calender",AppUtils.isEventInCal(context,timeLineItem.getTitle())+"");
+                    viewHolderEvent.tv_add_calender.setText("Added to calendar");
+                    viewHolderEvent.tv_add_calender.setEnabled(false);
+                    viewHolderEvent.tv_add_calender.setTextColor(context.getResources().getColor(R.color.light_color_text));
+                }
+
                 viewHolderEvent.contain.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -128,13 +136,13 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
                         Calendar cal = Calendar.getInstance();
                         Intent intent = new Intent(Intent.ACTION_EDIT);
                         intent.setType("vnd.android.cursor.item/event");
-                        intent.putExtra(CalendarContract.Events.TITLE, "Event");
+                        intent.putExtra(CalendarContract.Events.TITLE,  timeLineItem.getTitle());
                         intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                                cal.getTime().getTime());
+                                timeLineItem.getStartDate());
                         intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
-                                cal.getTime().getTime());
+                                timeLineItem.getEndDate());
                         intent.putExtra(CalendarContract.Events.ALL_DAY, false);// periodicity
-                        intent.putExtra(CalendarContract.Events.DESCRIPTION, "Tech Mart Event");
+                        intent.putExtra(CalendarContract.Events.DESCRIPTION, timeLineItem.getDescr());
                         context.startActivity(intent);
                     }
                 });

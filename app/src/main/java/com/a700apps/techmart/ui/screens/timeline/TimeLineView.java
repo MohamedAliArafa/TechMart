@@ -19,4 +19,12 @@ public interface TimeLineView {
     void updateUi(List<TimeLineData.ResultEntity> TimelineList);
 
     void showErrorDialog(int error);
+
+    void showLoadMoreProgress();
+
+    void hideLoadMoreProgress();
+
+    void removeLoadMoreListener();
+
+    void changeLoadMoreRequestsStatus(boolean isLoading);
 }

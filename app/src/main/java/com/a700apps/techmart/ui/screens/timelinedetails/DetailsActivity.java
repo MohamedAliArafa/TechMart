@@ -176,6 +176,13 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         mShareTextView.setOnClickListener(this);
 
 
+        if (AppUtils.isEventInCal(DetailsActivity.this,mList.get(index).getTitle())){
+            tv_calender.setText("Added to calendar");
+            tv_calender.setEnabled(false);
+            tv_calender.setTextColor(getResources().getColor(R.color.light_color_text));
+        }
+
+
         tv_like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

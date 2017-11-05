@@ -124,7 +124,7 @@
                 android:layout_height="wrap_content"
                 android:text="Add to calender"
                 android:textColor="@color/blackGreenColor"
-                android:textSize="@dimen/greeting_card_text"
+                android:textSize="@dimen/time_text"
                 tools:layout_editor_absoluteX="144dp"
                 tools:layout_editor_absoluteY="112dp" />
 

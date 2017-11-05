@@ -83,10 +83,12 @@ public class MainApiHelper {
         return jsonObject;
     }
 
-    public static JSONObject getTimeLine(String UserID, String Type) throws JSONException {
+    public static JSONObject getTimeLine(String UserID, String Type,int PageNumber,int PageSize) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("UserID", UserID);
         jsonObject.put("Type", Type);
+        jsonObject.put("PageNumber", PageNumber);
+        jsonObject.put("PageSize", PageSize);
         return jsonObject;
     }
 

@@ -26,7 +26,8 @@ public class EventFragment extends Fragment implements TimeLineView {
 
     private TimeLinePresenter presenter;
     AVLoadingIndicatorView indicatorView;
-
+    private int startIndex;
+    private final int LIMIT_REQUESTS = 20;
     public EventFragment() {
         // Required empty public constructor
     }
@@ -51,7 +52,8 @@ public class EventFragment extends Fragment implements TimeLineView {
     @Override
     public void onResume() {
         super.onResume();
-        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), "1", getActivity());
+        startIndex = 0;
+        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), "1",startIndex,LIMIT_REQUESTS, getActivity());
     }
 
     @Override
@@ -78,6 +80,26 @@ public class EventFragment extends Fragment implements TimeLineView {
     @Override
     public void showErrorDialog(int error) {
         DialogCreator.showOneButtonDialog(getActivity(), R.string.check_internet, "Error", null);
+
+    }
+
+    @Override
+    public void showLoadMoreProgress() {
+
+    }
+
+    @Override
+    public void hideLoadMoreProgress() {
+
+    }
+
+    @Override
+    public void removeLoadMoreListener() {
+
+    }
+
+    @Override
+    public void changeLoadMoreRequestsStatus(boolean isLoading) {
 
     }
 

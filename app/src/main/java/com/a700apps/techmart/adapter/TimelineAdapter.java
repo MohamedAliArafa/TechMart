@@ -1,12 +1,16 @@
 package com.a700apps.techmart.adapter;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.CalendarContract;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +42,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by samir salah on 9/11/2017.
@@ -89,10 +94,18 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         switch (itemType) {
             case NOTIF_TYPE_EVENT:
-                ViewHolder viewHolderEvent = (ViewHolder) viewHolder;
+                final ViewHolder viewHolderEvent = (ViewHolder) viewHolder;
                 viewHolderEvent.mDateTextView.setText(timeLineItem.getPostedByName());
                 viewHolderEvent.mDescribtionTextView.setText(timeLineItem.getDescr());
                 viewHolderEvent.mTitleTextView.setText(timeLineItem.getTitle());
+                Log.e("added to calender",AppUtils.isEventInCal(context,timeLineItem.getTitle())+"");
+
+                if (AppUtils.isEventInCal(context,timeLineItem.getTitle())){
+                    Log.e("added to calender",AppUtils.isEventInCal(context,timeLineItem.getTitle())+"");
+                    viewHolderEvent.tv_add_calender.setText("Added to calendar");
+                    viewHolderEvent.tv_add_calender.setEnabled(false);
+                    viewHolderEvent.tv_add_calender.setTextColor(context.getResources().getColor(R.color.light_color_text));
+                }
 
                 viewHolderEvent.contain.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -108,7 +121,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         shareIntent.setAction(Intent.ACTION_SEND);
                         shareIntent.putExtra(Intent.EXTRA_TEXT, Globals.ShareLink);
                         shareIntent.setType("text/plain");
-                        context. startActivity(Intent.createChooser(shareIntent, "Select"));
+                        context.startActivity(Intent.createChooser(shareIntent, "Select"));
                     }
                 });
                 viewHolderEvent.tv_share.setOnClickListener(new View.OnClickListener() {
@@ -136,6 +149,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         intent.putExtra(CalendarContract.Events.ALL_DAY, false);// periodicity
                         intent.putExtra(CalendarContract.Events.DESCRIPTION, timeLineItem.getDescr());
                         context.startActivity(intent);
+//
+
                     }
                 });
 
@@ -153,6 +168,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         intent.putExtra(CalendarContract.Events.ALL_DAY, false);// periodicity
                         intent.putExtra(CalendarContract.Events.DESCRIPTION, timeLineItem.getDescr());
                         context.startActivity(intent);
+
                     }
                 });
                 Glide.with(context)
@@ -166,20 +182,20 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 viewHolderPost.mTitleTextView.setText(timeLineItem.getTitle());
                 viewHolderPost.mGroupNameTextView.setText(timeLineItem.getGroupName());
 
-                if (timeLineItem.getLikeCount()==0){
+                if (timeLineItem.getLikeCount() == 0) {
                     viewHolderPost.tv_like.setText("Like");
-                }else if (timeLineItem.getLikeCount()==1){
+                } else if (timeLineItem.getLikeCount() == 1) {
                     viewHolderPost.tv_like.setText("1 Like");
-                }else {
+                } else {
                     viewHolderPost.tv_like.setText(timeLineItem.getLikeCount() + " Likes");
                 }
 
 
-                if (timeLineItem.getCommentCount()==0){
+                if (timeLineItem.getCommentCount() == 0) {
                     viewHolderPost.tv_comment.setText("Comment");
-                }else if (timeLineItem.getCommentCount()==1){
+                } else if (timeLineItem.getCommentCount() == 1) {
                     viewHolderPost.tv_comment.setText("1 Comment");
-                }else {
+                } else {
                     viewHolderPost.tv_comment.setText(timeLineItem.getCommentCount() + " Comments");
                 }
 

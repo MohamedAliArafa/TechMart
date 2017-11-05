@@ -98,5 +98,25 @@ public class RelativeEventFragment extends Fragment implements TimeLineView {
 
     }
 
+    @Override
+    public void showLoadMoreProgress() {
+
+    }
+
+    @Override
+    public void hideLoadMoreProgress() {
+
+    }
+
+    @Override
+    public void removeLoadMoreListener() {
+
+    }
+
+    @Override
+    public void changeLoadMoreRequestsStatus(boolean isLoading) {
+
+    }
+
 
 }

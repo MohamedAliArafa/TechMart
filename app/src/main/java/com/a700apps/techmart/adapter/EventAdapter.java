@@ -18,6 +18,7 @@ import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.Globals;
 import com.bumptech.glide.Glide;
 
@@ -54,6 +55,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                 viewHolderEvent.mDateTextView.setText(timeLineItem.getStartDate());
                 viewHolderEvent.mDescribtionTextView.setText(timeLineItem.getDescr());
                 viewHolderEvent.mTitleTextView.setText(timeLineItem.getTitle());
+
+                if (AppUtils.isEventInCal(context,timeLineItem.getTitle())){
+                    Log.e("added to calender",AppUtils.isEventInCal(context,timeLineItem.getTitle())+"");
+                    viewHolderEvent.tv_add_calender.setText("Added to calendar");
+                    viewHolderEvent.tv_add_calender.setEnabled(false);
+                    viewHolderEvent.tv_add_calender.setTextColor(context.getResources().getColor(R.color.light_color_text));
+                }
 
                 Glide.with(context)
                         .load(MainApi.IMAGE_IP + timeLineItem.getImage()).placeholder(R.drawable.placeholder)
