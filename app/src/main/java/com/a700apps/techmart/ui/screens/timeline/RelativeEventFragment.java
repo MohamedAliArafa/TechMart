@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.EventAdapter;
+import com.a700apps.techmart.adapter.RelativeEventsAdapter;
 import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.notification.NotificationActivity;
@@ -88,15 +89,12 @@ public class RelativeEventFragment extends Fragment implements TimeLineView {
         if (TimelineList.size() == 0) {
             rv.setEmptyView(view.findViewById(R.id.tv_nodata));
         }
-        rv.setAdapter(new EventAdapter(getActivity(), TimelineList));
+        rv.setAdapter(new RelativeEventsAdapter(getActivity(), TimelineList));
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     @Override
     public void showErrorDialog(int error) {
         DialogCreator.showOneButtonDialog(getActivity() , error, "Error", null);
-
     }
-
-
 }

@@ -48,4 +48,7 @@ public class Globals {
     public static boolean PUSH = false;
 
 
+
+    public static int PAGE_SIZE  = 10;
+
 }

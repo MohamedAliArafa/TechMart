@@ -2,6 +2,8 @@ package com.a700apps.techmart.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Parcelable;
 import android.provider.CalendarContract;
 import android.support.constraint.ConstraintLayout;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,19 +51,18 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
     Context context;
     private static final int NOTIF_TYPE_EVENT = 1;
     private static final int NOTIF_TYPE_POST = 2;
+    private static final int NOTIF_TYPE_LOAD = 3;
     private int mType;
 
+    boolean isLoadingAdded = false;
+    
     String isLike;
     View noteView;
-
     int positionItem;
-
-
     public GroupTimeLineAdapter(Context context, List<TimeLineData.ResultEntity> TimeLineList) {
         this.context = context;
         this.mTimeLineList = TimeLineList;
     }
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
@@ -75,12 +77,12 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
                 noteView = inflater.inflate(R.layout.timeline_item_post, parent, false);
                 return new GroupTimeLineAdapter.ViewHolderPost(noteView);
 
-
+            case NOTIF_TYPE_LOAD:
+                noteView = inflater.inflate(R.layout.item_progress, parent, false);
+                return new LoadingVH(noteView);
         }
         return null;
     }
-
-
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
         final TimeLineData.ResultEntity timeLineItem = mTimeLineList.get(position);
@@ -305,27 +307,32 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
                     }
                 });
                 break;
-
+            case NOTIF_TYPE_LOAD:
+                final GroupTimeLineAdapter.LoadingVH loadHolder = (GroupTimeLineAdapter.LoadingVH) viewHolder;
+                loadHolder.progressBar.getIndeterminateDrawable().setColorFilter(Color.GREEN, PorterDuff.Mode.MULTIPLY);
+                break;
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        int type = position;
-        switch (mTimeLineList.get(position).getType()) {
-            case 1:
-                return NOTIF_TYPE_EVENT;
-            case 2:
-                return NOTIF_TYPE_POST;
+        if (mTimeLineList.get(position) == null){
+            return 3;
+        }else {
+            switch (mTimeLineList.get(position).getType()) {
+                case 1:
+                    return NOTIF_TYPE_EVENT;
+                case 2:
+                    return NOTIF_TYPE_POST;
+            }
         }
-        return 0;
-    }
 
+        return 3;
+    }
     @Override
     public int getItemCount() {
-        return mTimeLineList.size();
+        return mTimeLineList==null? 0 : mTimeLineList.size();
     }
-
     @Override
     public void networkOperationSuccess(NetworkResponse<LikeData> networkResponse) {
         LikeData userNetworkData = (LikeData) networkResponse.data;
@@ -337,19 +344,14 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
             changeLike();
         }
     }
-
-
     @Override
     public void networkOperationFail(Throwable throwable) {
         Toast.makeText(context, "" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
     }
-
     void changeLike() {
         setValues();
 
     }
-
-
     public class ViewHolderPost extends RecyclerView.ViewHolder {
         ImageView mPostImageView, addCalenderBtn, mLikeImageView, mComment, shareBtn, moreImageView;
         ;
@@ -374,8 +376,6 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         }
     }
-
-
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView mEventImageView, shareBtn, addCalenderBtn;
@@ -410,7 +410,15 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         }
     }
+    public class LoadingVH extends RecyclerView.ViewHolder {
 
+        ProgressBar progressBar;
+
+        public LoadingVH(View itemView) {
+            super(itemView);
+            progressBar = itemView.findViewById(R.id.loadmore_progress);
+        }
+    }
     static void openDetails(Context context, String type, List<TimeLineData.ResultEntity> mTimeLineList, int index) {
 //        ActivityUtils.openActivity(context, DetailsActivity.class, false);
 
@@ -420,8 +428,6 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
         intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mTimeLineList);
         context.startActivity(intent);
     }
-
-
     void setValues() {
         int count = mTimeLineList.get(positionItem).getLikeCount();
 
@@ -435,8 +441,6 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
             notifyDataSetChanged();
         }
     }
-
-
     void getLike(TimeLineData.ResultEntity timeLine) {
         if (timeLine.getIsLike()) {
             isLike = "false";
@@ -450,6 +454,60 @@ public class GroupTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.View
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public void add(TimeLineData.ResultEntity mc) {
+        mTimeLineList.add(mc);
+        notifyItemInserted(mTimeLineList.size() - 1);
+    }
+
+    public void addAll(List<TimeLineData.ResultEntity> mcList) {
+        for (TimeLineData.ResultEntity mc : mcList) {
+            add(mc);
+        }
+    }
+
+    public void remove(TimeLineData.ResultEntity city) {
+        int position = mTimeLineList.indexOf(city);
+        if (position > -1) {
+            mTimeLineList.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
+    public void clear() {
+        isLoadingAdded = false;
+        while (getItemCount() > 0) {
+            remove(getItem(0));
+        }
+    }
+
+    public boolean isEmpty() {
+        return getItemCount() == 0;
+    }
+
+    public void addLoadingFooter() {
+        isLoadingAdded = true;
+        TimeLineData.ResultEntity load = new TimeLineData.ResultEntity();
+        load.setType(3);
+        add(load);
+    }
+
+    public void removeLoadingFooter() {
+        isLoadingAdded = false;
+
+        int position = mTimeLineList.size() - 1;
+        TimeLineData.ResultEntity item = getItem(position);
+
+        if (item != null) {
+            mTimeLineList.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
+    public TimeLineData.ResultEntity getItem(int position) {
+        return mTimeLineList.get(position);
     }
 }
 

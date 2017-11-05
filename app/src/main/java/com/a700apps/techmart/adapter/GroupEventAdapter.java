@@ -2,14 +2,18 @@ package com.a700apps.techmart.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Parcelable;
 import android.provider.CalendarContract;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -32,10 +36,12 @@ import java.util.List;
  * Created by samir salah on 9/13/2017.
  */
 
-public class GroupEventAdapter extends RecyclerView.Adapter<GroupEventAdapter.ViewHolder> {
+public class GroupEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<TimeLineData.ResultEntity> mTimeLineList;
     Context context;
     private static final int NOTIF_TYPE_EVENT= 1;
+    private static final int NOTIF_TYPE_LOAD= 3;
+    boolean isLoadingAdded = false;
 
 
     public GroupEventAdapter(Context context,List<TimeLineData.ResultEntity> TimeLineList) {
@@ -46,14 +52,16 @@ public class GroupEventAdapter extends RecyclerView.Adapter<GroupEventAdapter.Vi
 
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHoldermain, final int position) {
+
+//        ViewHolder viewHolder = (ViewHolder) viewHoldermain;
         TimeLineData.ResultEntity timeLineItem = mTimeLineList.get(position);
         final int itemType = getItemViewType(position);
         Log.e("timeLineItem.getType()",timeLineItem.getType()+"");
 
         switch (itemType) {
             case NOTIF_TYPE_EVENT:
-                ViewHolder viewHolderEvent = (ViewHolder)viewHolder;
+                ViewHolderEvent viewHolderEvent = (ViewHolderEvent)viewHoldermain;
                 viewHolderEvent.mDateTextView.setText(timeLineItem.getGroupName());
                 viewHolderEvent.mDescribtionTextView.setText(timeLineItem.getDescr());
                 viewHolderEvent.mTitleTextView.setText(timeLineItem.getTitle());
@@ -103,7 +111,7 @@ public class GroupEventAdapter extends RecyclerView.Adapter<GroupEventAdapter.Vi
                     }
                 });
 
-                viewHolder.shareBtn.setOnClickListener(new View.OnClickListener() {
+                viewHolderEvent.shareBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent sendIntent = new Intent();
@@ -113,7 +121,7 @@ public class GroupEventAdapter extends RecyclerView.Adapter<GroupEventAdapter.Vi
                         context.startActivity(Intent.createChooser(sendIntent, "Select"));
                     }
                 });
-                viewHolder.tv_share.setOnClickListener(new View.OnClickListener() {
+                viewHolderEvent.tv_share.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent sendIntent = new Intent();
@@ -125,23 +133,30 @@ public class GroupEventAdapter extends RecyclerView.Adapter<GroupEventAdapter.Vi
                 });
 
                 break;
+            case NOTIF_TYPE_LOAD:
+                final GroupEventAdapter.LoadingVH loadHolder = (GroupEventAdapter.LoadingVH) viewHoldermain;
+                loadHolder.progressBar.getIndeterminateDrawable().setColorFilter(Color.GREEN, PorterDuff.Mode.MULTIPLY);
+                break;
 
         }
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View noteView;
-//        switch (viewType) {
-//            case NOTIF_TYPE_EVENT:
-        noteView = inflater.inflate(R.layout.timeline_first_item, parent, false);
-        return new ViewHolder(noteView);
 
+        if (viewType == NOTIF_TYPE_EVENT) {
+            noteView = inflater.inflate(R.layout.timeline_first_item, parent, false);
+//        setValues(new ViewHolderPost(noteView),noteView);
+            return new ViewHolderEvent(noteView);
+        } else {
+            noteView = inflater.inflate(R.layout.item_progress, parent, false);
+//        setValues(new ViewHolderPost(noteView),noteView);
+            return new LoadingVH(noteView);
+        }
 
-//        }
-//        return null;
 //
     }
 
@@ -149,29 +164,42 @@ public class GroupEventAdapter extends RecyclerView.Adapter<GroupEventAdapter.Vi
 
     @Override
     public int getItemViewType(int position) {
-        int type = position;
-        Log.e("type",mTimeLineList.get(position).getType()+"");
-        switch (mTimeLineList.get(position).getType()) {
-            case 1:
-                return NOTIF_TYPE_EVENT;
+        if (mTimeLineList.get(position) == null) {
+            return NOTIF_TYPE_LOAD;
+        } else {
+            switch (mTimeLineList.get(position).getType()) {
+                case NOTIF_TYPE_EVENT:
+                    return NOTIF_TYPE_EVENT;
+                case NOTIF_TYPE_LOAD:
+                    return NOTIF_TYPE_LOAD;
+            }
         }
-        return 0;
+        return NOTIF_TYPE_LOAD;
     }
 
     @Override
     public int getItemCount() {
         Log.e("test",mTimeLineList.size()+"");
-        return mTimeLineList.size();
+        return mTimeLineList == null ? 0 : mTimeLineList.size();
     }
 
 
+    public class LoadingVH extends RecyclerView.ViewHolder {
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        ProgressBar progressBar;
+
+        public LoadingVH(View itemView) {
+            super(itemView);
+            progressBar = itemView.findViewById(R.id.loadmore_progress);
+        }
+    }
+
+    public class ViewHolderEvent extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView mEventImageView ,shareBtn, addCalenderBtn;
         TextView mTitleTextView,mDescribtionTextView,mDateTextView,mGroupNameTextView,tv_add_calender,tv_username,tv_share;
         RelativeLayout contain;
-        public ViewHolder(View itemView) {
+        public ViewHolderEvent(View itemView) {
             super(itemView);
             tv_add_calender = (TextView) itemView.findViewById(R.id.tv_add_calender);
 
@@ -228,6 +256,61 @@ public class GroupEventAdapter extends RecyclerView.Adapter<GroupEventAdapter.Vi
         intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mTimeLineList);
         context.startActivity(intent);
     }
+
+
+    public void add(TimeLineData.ResultEntity mc) {
+        mTimeLineList.add(mc);
+        notifyItemInserted(mTimeLineList.size() - 1);
+    }
+
+    public void addAll(List<TimeLineData.ResultEntity> mcList) {
+        for (TimeLineData.ResultEntity mc : mcList) {
+            add(mc);
+        }
+    }
+
+    public void remove(TimeLineData.ResultEntity city) {
+        int position = mTimeLineList.indexOf(city);
+        if (position > -1) {
+            mTimeLineList.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
+    public void clear() {
+        isLoadingAdded = false;
+        while (getItemCount() > 0) {
+            remove(getItem(0));
+        }
+    }
+
+    public boolean isEmpty() {
+        return getItemCount() == 0;
+    }
+
+    public void addLoadingFooter() {
+        isLoadingAdded = true;
+        TimeLineData.ResultEntity load = new TimeLineData.ResultEntity();
+        load.setType(3);
+        add(load);
+    }
+
+    public void removeLoadingFooter() {
+        isLoadingAdded = false;
+
+        int position = mTimeLineList.size() - 1;
+        TimeLineData.ResultEntity item = getItem(position);
+
+        if (item != null) {
+            mTimeLineList.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
+    public TimeLineData.ResultEntity getItem(int position) {
+        return mTimeLineList.get(position);
+    }
+
 }
 
 

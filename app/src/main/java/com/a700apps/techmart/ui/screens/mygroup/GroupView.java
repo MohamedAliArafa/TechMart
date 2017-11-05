@@ -15,5 +15,6 @@ public interface GroupView {
     void dismissProgress();
 
     void updateUi(UserGroupData data);
+    void updateUiMore(UserGroupData data);
     void updateRelativeUi(UserGroupData data);
 }

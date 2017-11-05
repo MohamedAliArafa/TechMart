@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_height"
     android:id="@+id/contain"
-    android:layout_marginEnd="10dp"
+    android:background="@color/blue_join_dialog"
     android:layout_marginStart="10dp"
     android:gravity="center"
     android:orientation="vertical">
@@ -112,7 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/general_margin"
-                app:srcCompat="@drawable/ic_add_clander"
+                android:background="@drawable/ic_add_calender_white"
                 tools:layout_editor_absoluteX="106dp"
                 tools:layout_editor_absoluteY="106dp" />
 
@@ -133,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/general_margin"
                 android:layout_marginRight="@dimen/general_margin"
-                app:srcCompat="@drawable/ic_share"
+                app:srcCompat="@drawable/ic_share_white"
                 tools:layout_editor_absoluteX="303dp"
                 tools:layout_editor_absoluteY="106dp" />
 
@@ -156,7 +156,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="40dp"
-                app:srcCompat="@drawable/ic_more"
+                app:srcCompat="@drawable/ic_more_white"
                 tools:layout_editor_absoluteX="362dp"
                 tools:layout_editor_absoluteY="73dp" />
         </LinearLayout>

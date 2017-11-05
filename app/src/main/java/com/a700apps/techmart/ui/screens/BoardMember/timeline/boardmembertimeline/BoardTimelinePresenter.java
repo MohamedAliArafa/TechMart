@@ -20,18 +20,42 @@ import org.json.JSONObject;
 public class BoardTimelinePresenter  extends MainPresenter<BoardTimlineView> implements NetworkResponseListener<TimeLineData> {
 
 
-   public void getTimeline(int GroupID, String UserID, int Type) {
+    public void getTimeline(int GroupID, String UserID, int Type,int pagenumber, int pagesize) {
 
         view.showLoadingProgress();
 
         try {
-            JSONObject registerBody = MainApiHelper.getTimeLineMember( GroupID,  UserID,  Type);
+            JSONObject registerBody = MainApiHelper.getTimeLineMember( GroupID,  UserID,  Type , pagenumber,pagesize);
             MainApi.getMemberTimeLine(registerBody, this);
         } catch (JSONException e) {
             e.printStackTrace();
             view.dismissLoadingProgress();
         }
 
+    }
+
+
+    public void getTimelineMore(int GroupID, String UserID, int Type,int pagenumber, int pagesize) {
+
+        try {
+            JSONObject registerBody = MainApiHelper.getTimeLineMember( GroupID,  UserID,  Type , pagenumber,pagesize);
+            MainApi.getMemberTimeLine(registerBody, new NetworkResponseListener<TimeLineData>() {
+                @Override
+                public void networkOperationSuccess(NetworkResponse<TimeLineData> networkResponse) {
+                    TimeLineData userNetworkData = (TimeLineData) networkResponse.data;
+                    int errorCode = userNetworkData.getISResultHasData();
+//        if (!userNetworkData.getResult().isEmpty())
+                    view.updateUiMore(userNetworkData.getResult());
+                }
+
+                @Override
+                public void networkOperationFail(Throwable throwable) {
+
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 

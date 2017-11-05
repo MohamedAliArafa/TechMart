@@ -28,7 +28,6 @@ import com.a700apps.techmart.ui.screens.grouptimeline.GroupsTimLineActivity;
 import com.a700apps.techmart.ui.screens.grouptimeline.GroupsTimeLineFragment;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;
 import com.a700apps.techmart.ui.screens.mygroup.MyGroubListActivity;
-import com.a700apps.techmart.ui.screens.mygroup.MyGroupFragment;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.AppConst;

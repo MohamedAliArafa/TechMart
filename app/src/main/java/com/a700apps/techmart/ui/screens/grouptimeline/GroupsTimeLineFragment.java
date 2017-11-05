@@ -67,6 +67,9 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
     int intValue;
     Dialog dialogsLoading;
 
+    int pageNumber = 1;
+
+
     void init(View view) {
         mPager = (ClickableViewPager) view.findViewById(R.id.pager);
         indicator = (CirclePageIndicator) view.findViewById(R.id.indicator);
@@ -78,7 +81,7 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
         Log.e("KhaledInt", "" + intValue);
 //        String.valueOf(intValue)
 //        presenter.getGroupCategory(String.valueOf(intValue), "1f443dc9-43f7-4f92-9e3f-76805cd0823c");
-        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), intValue, "0");
+        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), intValue, "0" , pageNumber , Globals.PAGE_SIZE);
 
     }
 
@@ -349,6 +352,11 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
 
             }
         });
+    }
+
+    @Override
+    public void updateUiMore(List<TimeLineData.ResultEntity> TimelineList) {
+
     }
 
     @Override

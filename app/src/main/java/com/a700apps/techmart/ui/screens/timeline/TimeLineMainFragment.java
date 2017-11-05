@@ -64,7 +64,7 @@ public class TimeLineMainFragment extends Fragment implements TimeLineView {
     @Override
     public void onResume() {
         super.onResume();
-        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), "0", getActivity());
+        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), "0", getActivity(),1,1);
     }
 
     @Override

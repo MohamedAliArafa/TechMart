@@ -83,23 +83,31 @@ public class MainApiHelper {
         return jsonObject;
     }
 
-    public static JSONObject getTimeLine(String UserID, String Type) throws JSONException {
+    public static JSONObject getTimeLine(String UserID, String Type, int PageNumber, int PageSize) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("UserID", UserID);
         jsonObject.put("Type", Type);
+        jsonObject.put("PageNumber", PageNumber);
+        jsonObject.put("PageSize", PageSize);
         return jsonObject;
     }
 
-    public static JSONObject getGroupTimeLine(String UserID, int GroupID, String Type) throws JSONException {
+    public static JSONObject getGroupTimeLine(String UserID, int GroupID, String Type, int PageNumber, int PageSize) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("UserID", UserID);
         jsonObject.put("GroupID", GroupID);
         jsonObject.put("Type", Type);
+        jsonObject.put("PageNumber", PageNumber);
+        jsonObject.put("PageSize", PageSize);
+
+
         return jsonObject;
     }
 
-    public static JSONObject getUserGroup(String UserID) throws JSONException {
+    public static JSONObject getUserGroup(String UserID , int PageNumber , int PageSize) throws JSONException {
         JSONObject jsonObject = new JSONObject();
+        jsonObject.put("PageNumber", PageNumber);
+        jsonObject.put("PageSize", PageSize);
         jsonObject.put("UserID", UserID);
         return jsonObject;
     }
@@ -332,11 +340,13 @@ public class MainApiHelper {
     }
 
     //Member
-    public static JSONObject getTimeLineMember(int GroupID, String UserID, int Type) throws JSONException {
+    public static JSONObject getTimeLineMember(int GroupID, String UserID, int Type , int PageNumber,int PageSize) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("GroupID", GroupID);
         jsonObject.put("UserID", UserID);
         jsonObject.put("Type", Type);
+        jsonObject.put("PageNumber", PageNumber);
+        jsonObject.put("PageSize", PageSize);
 
         return jsonObject;
     }
@@ -398,9 +408,9 @@ public class MainApiHelper {
 
 
     public static JSONObject editTimelineItemEvent(String GroupID, int ID, boolean IsPublic, String Title, String Descr, String Image, String MediaFile, String CreatedBy,
-                                                   int Type ,
-                                                   double lat , double lng , String startDate , String endDate , String startTime ,
-                                                   String endTime,String locationName) throws JSONException {
+                                                   int Type,
+                                                   double lat, double lng, String startDate, String endDate, String startTime,
+                                                   String endTime, String locationName) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("GroupID", GroupID);
         jsonObject.put("ID", ID);
@@ -428,10 +438,10 @@ public class MainApiHelper {
         return jsonObject;
     }
 
-    public static JSONObject changeRequestStatus(int id , int requestStatus , int requestRole ,String UserID) throws JSONException {
+    public static JSONObject changeRequestStatus(int id, int requestStatus, int requestRole, String UserID) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("ID", id);
-        jsonObject.put("RequestStatus", requestStatus );
+        jsonObject.put("RequestStatus", requestStatus);
         jsonObject.put("RequestedRole", requestRole);
         jsonObject.put("UserID", UserID);
         return jsonObject;
@@ -443,14 +453,14 @@ public class MainApiHelper {
         return jsonObject;
     }
 
-    public static JSONObject approveFriendRequest(String userId , int requestId) throws JSONException {
+    public static JSONObject approveFriendRequest(String userId, int requestId) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("UserID", userId);
         jsonObject.put("RequestID", requestId);
         return jsonObject;
     }
 
-    public static JSONObject getStatistics(String userId , int groupId , int days) throws JSONException {
+    public static JSONObject getStatistics(String userId, int groupId, int days) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("GroupID", groupId);
         jsonObject.put("BoardMemberID", userId);
@@ -458,7 +468,7 @@ public class MainApiHelper {
         return jsonObject;
     }
 
-    public static JSONObject respondFriendRequest(String userId , String relativeId , String connect) throws JSONException {
+    public static JSONObject respondFriendRequest(String userId, String relativeId, String connect) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("RelativeID", relativeId);
         jsonObject.put("UserID", userId);

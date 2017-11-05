@@ -22,18 +22,83 @@ import org.json.JSONObject;
 public class GroupTimeLinePresenter extends MainPresenter<GroupTimlineView> implements NetworkResponseListener<TimeLineData> {
 
 
-    void getTimeline(String userId, int GroupId,String type) {
+    void getTimeline(String userId, int GroupId,String type , int PageNumber, int PageSize) {
 
         view.showLoadingProgress();
 
         try {
-            JSONObject registerBody = MainApiHelper.getGroupTimeLine(userId, GroupId,type);
+            JSONObject registerBody = MainApiHelper.getGroupTimeLine(userId, GroupId,type ,PageNumber,PageSize);
             MainApi.getGroupTimeLine(registerBody, this);
         } catch (JSONException e) {
             e.printStackTrace();
             view.dismissLoadingProgress();
         }
 
+//        try {
+//            JSONObject registerBody = MainApiHelper.getTimeLine(userId, type , PageNumber,PageSize);
+//            MainApi.getTimeLine(registerBody, new NetworkResponseListener<TimeLineData>() {
+//                @Override
+//                public void networkOperationSuccess(NetworkResponse<TimeLineData> networkResponse) {
+//                    if (isDetachView()) return;
+//                    TimeLineData userNetworkData = (TimeLineData) networkResponse.data;
+//                    int errorCode = userNetworkData.getISResultHasData();
+//                    view.updateUi(userNetworkData.getResult());
+//                    view.dismissLoadingProgress();
+//                }
+//
+//                @Override
+//                public void networkOperationFail(Throwable throwable) {
+////                    view.showErrorDialog(R.string.check_internet);
+//                }
+//            });
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//            view.dismissLoadingProgress();
+//        }
+    }
+
+    void getMoreTimeline(String userId, int GroupId,String type , int PageNumber, int PageSize) {
+
+//        try {
+//            JSONObject registerBody = MainApiHelper.getTimeLine(userId, type,PageNumber,PageSize);
+//            MainApi.getTimeLine(registerBody, new NetworkResponseListener<TimeLineData>() {
+//                @Override
+//                public void networkOperationSuccess(NetworkResponse<TimeLineData> networkResponse) {
+//                    if (isDetachView()) return;
+//                    TimeLineData userNetworkData = (TimeLineData) networkResponse.data;
+//                    int errorCode = userNetworkData.getISResultHasData();
+//                    view.updateUiMore(userNetworkData.getResult());
+//                }
+//
+//                @Override
+//                public void networkOperationFail(Throwable throwable) {
+////                    view.showErrorDialog(R.string.check_internet);
+//                }
+//            });
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//            view.dismissLoadingProgress();
+//        }
+        try {
+            JSONObject registerBody = MainApiHelper.getGroupTimeLine(userId, GroupId,type ,PageNumber,PageSize);
+            MainApi.getGroupTimeLine(registerBody, new NetworkResponseListener<TimeLineData>() {
+                @Override
+                public void networkOperationSuccess(NetworkResponse<TimeLineData> networkResponse) {
+                    if (isDetachView()) return;
+                    TimeLineData userNetworkData = (TimeLineData) networkResponse.data;
+                    int errorCode = userNetworkData.getISResultHasData();
+//        if (!userNetworkData.getResult().isEmpty())
+                    view.updateUiMore(userNetworkData.getResult());
+                }
+
+                @Override
+                public void networkOperationFail(Throwable throwable) {
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+//            view.dismissLoadingProgress();
+        }
     }
 
     @Override
@@ -43,12 +108,16 @@ public class GroupTimeLinePresenter extends MainPresenter<GroupTimlineView> impl
         TimeLineData userNetworkData = (TimeLineData) networkResponse.data;
         int errorCode = userNetworkData.getISResultHasData();
 //        if (!userNetworkData.getResult().isEmpty())
-        view.updateUi(userNetworkData.getResult());
+        if (errorCode ==1){
+            view.updateUi(userNetworkData.getResult());
+        }else {
+            networkOperationFail(new Throwable());
+        }
     }
 
     @Override
     public void networkOperationFail(Throwable throwable) {
-
+        view.dismissLoadingProgress();
     }
 
 

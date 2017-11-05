@@ -21,6 +21,8 @@ import com.a700apps.techmart.data.model.NotificationDataLike;
 import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.ui.screens.timeline.TimeLinePresenter;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
+import com.a700apps.techmart.utils.Globals;
+import com.a700apps.techmart.utils.PaginationScrollListener;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.a700apps.techmart.utils.URLS;
 import com.a700apps.techmart.utils.loadingDialog;
@@ -38,6 +40,13 @@ public class TimelineBoardMemberFragment extends Fragment implements BoardTimlin
     Dialog dialogsLoading;
     int mGroupId;
     NotificationDataLike.Result result;
+    BoardMemberAdapter adapter;
+
+    // Index from which pagination should start (0 is 1st page in our case)
+    int PageNumber = 1;
+    private boolean isLoading = false;
+    // If current page is the last page (Pagination will stop after this page load)
+    private boolean isLastPage = false;
 
     public TimelineBoardMemberFragment() {
         // Required empty public constructor
@@ -73,7 +82,7 @@ public class TimelineBoardMemberFragment extends Fragment implements BoardTimlin
     @Override
     public void onResume() {
         super.onResume();
-        presenter.getTimeline(mGroupId, PreferenceHelper.getUserId(getActivity()), 0);
+        presenter.getTimeline(mGroupId, PreferenceHelper.getUserId(getActivity()), 0, 1, Globals.PAGE_SIZE);
     }
 
 
@@ -94,12 +103,55 @@ public class TimelineBoardMemberFragment extends Fragment implements BoardTimlin
     public void updateUi(List<TimeLineData.ResultEntity> TimelineList) {
         if (TimelineList.size() == 0) {
             rv.setEmptyView(view.findViewById(R.id.tv_nodata));
+            isLastPage = true;
+        } else {
+            isLastPage = false;
         }
-        rv.setAdapter(new BoardMemberAdapter(getActivity(), TimelineList, rv));
+        adapter = new BoardMemberAdapter(getActivity(), TimelineList, rv);
+        rv.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
         rv.setLayoutManager(linearLayoutManager);
 
+        rv.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                if (!isLastPage) {
+                    isLoading = true;
+                    PageNumber += 1; //Increment page index to load the next one
+                    adapter.addLoadingFooter();
+                    loadNextPage();
+                }
+
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return isLastPage;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
+
+    }
+
+    @Override
+    public void updateUiMore(List<TimeLineData.ResultEntity> TimelineList) {
+        adapter.removeLoadingFooter();
+        isLoading = false;
+
+        if (TimelineList.size() == 0) {
+            isLastPage = true;
+        }
+        adapter.addAll(TimelineList);
+        adapter.notifyDataSetChanged();
+    }
+
+    private void loadNextPage() {
+        presenter.getTimelineMore(mGroupId, PreferenceHelper.getUserId(getActivity()), 0, PageNumber, Globals.PAGE_SIZE);
     }
 }

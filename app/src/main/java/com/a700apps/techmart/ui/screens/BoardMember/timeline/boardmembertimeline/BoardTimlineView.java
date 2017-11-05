@@ -16,5 +16,6 @@ public interface BoardTimlineView {
     void dismissLoadingProgress();
 
     void updateUi(List<TimeLineData.ResultEntity> TimelineList);
+    void updateUiMore(List<TimeLineData.ResultEntity> TimelineList);
 
 }

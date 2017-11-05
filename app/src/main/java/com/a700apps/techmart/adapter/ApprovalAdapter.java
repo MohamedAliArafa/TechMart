@@ -21,7 +21,6 @@ import com.a700apps.techmart.data.model.PostData;
 import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.data.network.NetworkResponse;
 import com.a700apps.techmart.data.network.NetworkResponseListener;
-import com.a700apps.techmart.ui.screens.BoardMember.DialogApproval.DialogActivity;
 import com.a700apps.techmart.ui.screens.BoardMember.JoinRequests.RequestsPresenter;
 import com.a700apps.techmart.ui.screens.BoardMember.JoinRequests.RequestsView;
 import com.a700apps.techmart.ui.screens.home.HomeActivity;

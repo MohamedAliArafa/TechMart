@@ -3,6 +3,7 @@ package com.a700apps.techmart.ui.screens.grouptimeline;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import com.a700apps.techmart.ui.screens.timeline.TimeLineView;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
 import com.a700apps.techmart.utils.Globals;
+import com.a700apps.techmart.utils.PaginationScrollListener;
 import com.a700apps.techmart.utils.PreferenceHelper;
 
 import java.util.List;
@@ -35,6 +37,12 @@ public class GroupTimelineFragment extends Fragment implements GroupTimlineView 
     LinearLayout linContain;
     private GroupTimeLinePresenter presenter;
 
+    // Index from which pagination should start (0 is 1st page in our case)
+    int PageNumber = 1;
+    private boolean isLoading = false;
+    // If current page is the last page (Pagination will stop after this page load)
+    private boolean isLastPage = false;
+
     public GroupTimelineFragment() {
         // Required empty public constructor
     }
@@ -42,6 +50,7 @@ public class GroupTimelineFragment extends Fragment implements GroupTimlineView 
     View view;
     EmptyRecyclerView rv;
     int desired_string;
+    GroupTimeLineAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,21 +91,65 @@ public class GroupTimelineFragment extends Fragment implements GroupTimlineView 
     @Override
     public void onResume() {
         super.onResume();
-        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), desired_string, "0");
-
+        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), desired_string, "0" , 1,Globals.PAGE_SIZE);
     }
 
     @Override
     public void updateUi(List<TimeLineData.ResultEntity> TimelineList) {
         if (TimelineList.size() == 0) {
             rv.setEmptyView(view.findViewById(R.id.tv_nodata));
+            isLastPage=true;
+        }else {
+            isLastPage = false;
         }
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
 //        linearLayoutManager.setReverseLayout(true);
 //        linearLayoutManager.setStackFromEnd(true);
+        adapter = new GroupTimeLineAdapter(getActivity(), TimelineList);
         rv.setLayoutManager(linearLayoutManager);
-        rv.setAdapter(new GroupTimeLineAdapter(getActivity(), TimelineList));
+        rv.setItemAnimator(new DefaultItemAnimator());
+        rv.setAdapter(adapter);
+
+        rv.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                if (!isLastPage){
+                    isLoading = true;
+                    PageNumber += 1; //Increment page index to load the next one
+                    adapter.addLoadingFooter();
+                    loadNextPage();
+                }
+
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return isLastPage;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
         rv.scrollToPosition(Globals.R_Index_group);
+    }
+
+    @Override
+    public void updateUiMore(List<TimeLineData.ResultEntity> TimelineList) {
+        adapter.removeLoadingFooter();
+        isLoading = false;
+
+        if (TimelineList.size()==0){
+            isLastPage=true;
+        }
+        adapter.addAll(TimelineList);
+        adapter.notifyDataSetChanged();
+    }
+
+
+    private void loadNextPage(){
+        presenter.getMoreTimeline(PreferenceHelper.getUserId(getActivity()), desired_string, "0" , PageNumber,Globals.PAGE_SIZE);
     }
 }

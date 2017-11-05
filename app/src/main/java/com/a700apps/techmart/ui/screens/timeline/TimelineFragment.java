@@ -122,7 +122,7 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
         if (!AppUtils.isInternetAvailable(getActivity())) {
             Toast.makeText(getActivity(), getString(R.string.check_internet), Toast.LENGTH_LONG).show();
         } else {
-            presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), "0", getActivity());
+            presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), "0", getActivity(),1,1);
         }
         setViewPager(view);
 

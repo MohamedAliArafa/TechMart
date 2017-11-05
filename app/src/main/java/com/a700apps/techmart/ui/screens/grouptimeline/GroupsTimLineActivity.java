@@ -75,7 +75,7 @@ public class GroupsTimLineActivity  extends AppCompatActivity implements View.On
     void getExtra() {
         Intent mIntent = getIntent();
          intValue = mIntent.getIntExtra("selectedCategory",0);
-        presenter.getTimeline(PreferenceHelper.getUserId(this),intValue, "0");
+        presenter.getTimeline(PreferenceHelper.getUserId(this),intValue, "0",1,1);
 
     }
 
@@ -247,6 +247,11 @@ public class GroupsTimLineActivity  extends AppCompatActivity implements View.On
 
             }
         });
+    }
+
+    @Override
+    public void updateUiMore(List<TimeLineData.ResultEntity> TimelineList) {
+
     }
 
     /**

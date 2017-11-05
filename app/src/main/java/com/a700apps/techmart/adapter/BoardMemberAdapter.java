@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -18,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,16 +52,19 @@ import java.util.List;
  * Created by samir.salah on 10/10/2017.
  */
 
-public class BoardMemberAdapter extends RecyclerView.Adapter<BoardMemberAdapter.ViewHolder> {
+public class BoardMemberAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<TimeLineData.ResultEntity> mTimeLineList;
     Activity context;
+    private static final int NOTIF_TYPE_Post = 1;
     private static final int NOTIF_TYPE_EVENT = 2;
+    private static final int NOTIF_TYPE_LOAD = 3;
     RecyclerView rv;
 
-String mType;
+    String mType;
+    boolean isLoadingAdded = false;
     Dialog dialogsLoading;
 
-    public BoardMemberAdapter(Activity context, List<TimeLineData.ResultEntity> TimeLineList,RecyclerView rv) {
+    public BoardMemberAdapter(Activity context, List<TimeLineData.ResultEntity> TimeLineList, RecyclerView rv) {
         this.context = context;
         this.mTimeLineList = TimeLineList;
         this.rv = rv;
@@ -66,94 +72,105 @@ String mType;
 
 
     @Override
-    public void onBindViewHolder(BoardMemberAdapter.ViewHolder viewHolder, final int position) {
-        final TimeLineData.ResultEntity timeLineItem = mTimeLineList.get(position);
-//        final int itemType = getItemViewType(position);
-//        Log.e("timeLineItem.getType()", timeLineItem.getType() + "");
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
 
-//        switch (itemType) {
-//
-//            case NOTIF_TYPE_EVENT:
-        BoardMemberAdapter.ViewHolder viewHolderEvent = (BoardMemberAdapter.ViewHolder) viewHolder;
-        viewHolderEvent.mDescribtionTextView.setText(timeLineItem.getDescr());
-        viewHolderEvent.mTitleTextView.setText(timeLineItem.getTitle());
-        viewHolderEvent.mGroupNameTextView.setText(timeLineItem.getGroupName());
-        viewHolderEvent.tv_postedby.setText(timeLineItem.getPostedByName());
+        final int itemType = getItemViewType(position);
+        switch (itemType) {
+
+            case NOTIF_TYPE_EVENT:
+                final TimeLineData.ResultEntity timeLineItem = mTimeLineList.get(position);
+                BoardMemberAdapter.ViewHolder viewHolderEvent = (BoardMemberAdapter.ViewHolder) viewHolder;
+                viewHolderEvent.mDescribtionTextView.setText(timeLineItem.getDescr());
+                viewHolderEvent.mTitleTextView.setText(timeLineItem.getTitle());
+                viewHolderEvent.mGroupNameTextView.setText(timeLineItem.getGroupName());
+                viewHolderEvent.tv_postedby.setText(timeLineItem.getPostedByName());
 
 
-        if (timeLineItem.getStatus() == 0) {
-            viewHolderEvent.mApproveImageView.setImageResource(R.drawable.ic_pending);
-            viewHolderEvent.tv_approve.setTextColor(context.getResources().getColor(R.color.red_join_dialog));
-            viewHolderEvent.tv_approve.setText("Pending");
-        } else if (timeLineItem.getStatus() == 1) {
-            viewHolderEvent.tv_approve.setText("Approved");
-            viewHolderEvent.tv_manage.setText("Delete");
-            viewHolderEvent.mManageImageView.setImageResource(R.drawable.ic_delet);
+                if (timeLineItem.getStatus() == 0) {
+                    viewHolderEvent.mApproveImageView.setImageResource(R.drawable.ic_pending);
+                    viewHolderEvent.tv_approve.setTextColor(context.getResources().getColor(R.color.red_join_dialog));
+                    viewHolderEvent.tv_approve.setText("Pending");
+                } else if (timeLineItem.getStatus() == 1) {
+                    viewHolderEvent.tv_approve.setText("Approved");
+                    viewHolderEvent.tv_manage.setText("Delete");
+                    viewHolderEvent.mManageImageView.setImageResource(R.drawable.ic_delet);
 
-        } else if (timeLineItem.getStatus() == 2) {
-            viewHolderEvent.tv_approve.setTextColor(context.getResources().getColor(R.color.red_join_dialog));
-            viewHolderEvent.tv_approve.setText("Rejected");
-        } else if (timeLineItem.getStatus() == 3) {
-            viewHolderEvent.mApproveImageView.setImageResource(R.drawable.ic_defer);
-            viewHolderEvent.tv_approve.setTextColor(context.getResources().getColor(R.color.red_join_dialog));
-            viewHolderEvent.tv_approve.setText("Deferred");
+                } else if (timeLineItem.getStatus() == 2) {
+                    viewHolderEvent.tv_approve.setTextColor(context.getResources().getColor(R.color.red_join_dialog));
+                    viewHolderEvent.tv_approve.setText("Rejected");
+                } else if (timeLineItem.getStatus() == 3) {
+                    viewHolderEvent.mApproveImageView.setImageResource(R.drawable.ic_defer);
+                    viewHolderEvent.tv_approve.setTextColor(context.getResources().getColor(R.color.red_join_dialog));
+                    viewHolderEvent.tv_approve.setText("Deferred");
+                }
+
+                viewHolderEvent.contain.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Globals.R_Index_group = position;
+                        if (mTimeLineList.get(position).getType() == 1) {
+                            mType = "post";
+                        } else if (mTimeLineList.get(position).getType() == 2) {
+                            mType = "Event";
+                        }
+                        openDetails(context, mType, mTimeLineList, position);
+                    }
+                });
+
+                Glide.with(context)
+                        .load(MainApi.IMAGE_IP + timeLineItem.getImage()).placeholder(R.drawable.placeholder)
+                        .into(viewHolderEvent.mPostImageView);
+
+                viewHolderEvent.tv_postedby.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("RelativId", String.valueOf(timeLineItem.getCreatedBY()));
+                        bundle.putInt("GroupId", timeLineItem.getGroupID());
+                        ((HomeActivity) context).openFragment(MemberProfileFragment.class, bundle);
+                    }
+                });
+                break;
+            case NOTIF_TYPE_LOAD:
+                final BoardMemberAdapter.LoadingVH loadHolder = (BoardMemberAdapter.LoadingVH) viewHolder;
+                loadHolder.progressBar.getIndeterminateDrawable().setColorFilter(Color.GREEN, PorterDuff.Mode.MULTIPLY);
+
+                break;
         }
 
-        viewHolderEvent.contain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Globals.R_Index_group = position;
-                if (mTimeLineList.get(position).getType()==1){
-                    mType="post";
-                }else if (mTimeLineList.get(position).getType()==2){
-                    mType="Event";
-                }
-                openDetails(context, mType, mTimeLineList, position);
-            }
-        });
-
-        Glide.with(context)
-                .load(MainApi.IMAGE_IP + timeLineItem.getImage()).placeholder(R.drawable.placeholder)
-                .into(viewHolderEvent.mPostImageView);
-
-        viewHolderEvent.tv_postedby.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putString("RelativId", String.valueOf(timeLineItem.getCreatedBY()));
-                bundle.putInt("GroupId", timeLineItem.getGroupID());
-                ((HomeActivity) context).openFragment(MemberProfileFragment.class, bundle);
-            }
-        });
     }
 
     @Override
-    public BoardMemberAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View noteView;
-//        switch (viewType) {
-//            case NOTIF_TYPE_EVENT:
-        noteView = inflater.inflate(R.layout.list_boardmember_item, parent, false);
-        return new BoardMemberAdapter.ViewHolder(noteView);
-
-
-//        }
-//        return null;
+        switch (viewType) {
+            case NOTIF_TYPE_EVENT:
+                noteView = inflater.inflate(R.layout.list_boardmember_item, parent, false);
+                return new BoardMemberAdapter.ViewHolder(noteView);
+            case NOTIF_TYPE_LOAD:
+                noteView = inflater.inflate(R.layout.item_progress, parent, false);
+                return new BoardMemberAdapter.LoadingVH(noteView);
+        }
+        return null;
 //
     }
 
 
-//    @Override
-//    public int getItemViewType(int position) {
-//        int type = position;
-//        Log.e("type", mTimeLineList.get(position).getType() + "");
-//        switch (mTimeLineList.get(position).getType()) {
-//            case 2:
-//                return NOTIF_TYPE_EVENT;
-//        }
-//        return 0;
-//    }
+    @Override
+    public int getItemViewType(int position) {
+        switch (mTimeLineList.get(position).getType()) {
+            case 1:
+                return NOTIF_TYPE_EVENT;
+            case 2:
+                return NOTIF_TYPE_EVENT;
+            case 3:
+                return NOTIF_TYPE_LOAD;
+
+        }
+        return NOTIF_TYPE_LOAD;
+    }
 
     @Override
     public int getItemCount() {
@@ -165,7 +182,7 @@ String mType;
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, approvalView {
 
         ImageView mPostImageView, mApproveImageView, mManageImageView, mEditImageView;
-        TextView mTitleTextView, mDescribtionTextView, mPostedByTextView, mGroupNameTextView, tv_approve, tv_manage,tv_postedby;
+        TextView mTitleTextView, mDescribtionTextView, mPostedByTextView, mGroupNameTextView, tv_approve, tv_manage, tv_postedby;
         ConstraintLayout contain;
         ApprovalPresenter presenter;
 
@@ -219,21 +236,23 @@ String mType;
                 case R.id.tv_manage:
 
                     if (mTimeLineList.get(getAdapterPosition()).getStatus() == 1) {
-                        showConfirmDialog(mTimeLineList.get(getAdapterPosition()).getID() , mTimeLineList.get(getAdapterPosition()).getType(),PreferenceHelper.getUserId(context));
+                        showConfirmDialog(mTimeLineList.get(getAdapterPosition()).getID(), mTimeLineList.get(getAdapterPosition()).getType(),
+                                PreferenceHelper.getUserId(context));
                     } else {
-                        showConfirmDialog(mTimeLineList.get(getAdapterPosition()).getID(), mTimeLineList.get(getAdapterPosition()).getType(),isdefered);
+                        showConfirmDialog(mTimeLineList.get(getAdapterPosition()).getID(), mTimeLineList.get(getAdapterPosition()).getType(), isdefered);
                     }
 
                     break;
                 case R.id.iv_manage:
 
                     if (mTimeLineList.get(getAdapterPosition()).getStatus() == 1) {
-                        showConfirmDialog(mTimeLineList.get(getAdapterPosition()).getID() , mTimeLineList.get(getAdapterPosition()).getType(),PreferenceHelper.getUserId(context));
+                        showConfirmDialog(mTimeLineList.get(getAdapterPosition()).getID(), mTimeLineList.get(getAdapterPosition()).getType(),
+                                PreferenceHelper.getUserId(context));
 //                        presenter.manageTimeLineItem(mTimeLineList.get(getAdapterPosition()).getID(),
 //                                mTimeLineList.get(getAdapterPosition()).getType(), PreferenceHelper.getUserId(context), 4);
                     } else {
                         showConfirmDialog(mTimeLineList.get(getAdapterPosition()).getID(),
-                                mTimeLineList.get(getAdapterPosition()).getType(),isdefered);
+                                mTimeLineList.get(getAdapterPosition()).getType(), isdefered);
                     }
 
                     break;
@@ -241,7 +260,7 @@ String mType;
             }
         }
 
-        private void showConfirmDialog(final int itemid , final int groupid , final String userid) {
+        private void showConfirmDialog(final int itemid, final int groupid, final String userid) {
 
             // Create custom dialog object
             final Dialog dialog = new Dialog(context);
@@ -269,12 +288,13 @@ String mType;
             logout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    presenter.manageTimeLineItem(itemid , groupid,userid, 4);
+//                    presenter.manageTimeLineItem(itemid, groupid, userid, 4);
                     dialog.dismiss();
                 }
             });
         }
-//        private void showAlertDialog(final int itemid , final int groupid , final String userid){
+
+        //        private void showAlertDialog(final int itemid , final int groupid , final String userid){
 //            final AlertDialog.Builder builder;
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
@@ -296,7 +316,7 @@ String mType;
 //                    .setIcon(android.R.drawable.ic_dialog_alert)
 //                    .show();
 //        }
-        private void showConfirmDialog(final int postId, final int type ,boolean defered) {
+        private void showConfirmDialog(final int postId, final int type, boolean defered) {
 
             // Create custom dialog object
             final Dialog dialog = new Dialog(context);
@@ -328,63 +348,65 @@ String mType;
                     dialog.dismiss();
                 }
             });
-            approveImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    presenter.manageTimeLineItem(postId, type, PreferenceHelper.getUserId(context), 1);
-                    dialog.dismiss();
-                }
-            });
 
-            approveTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    presenter.manageTimeLineItem(postId, type, PreferenceHelper.getUserId(context), 1);
-                    dialog.dismiss();
-                }
-            });
 
-            rejectImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    presenter.manageTimeLineItem(postId, type, PreferenceHelper.getUserId(context), 2);
-                    dialog.dismiss();
-                }
-            });
-
-            rejectTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    presenter.manageTimeLineItem(postId, type, PreferenceHelper.getUserId(context), 2);
-                    dialog.dismiss();
-                }
-            });
-
-            deferImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    presenter.manageTimeLineItem(postId, type, PreferenceHelper.getUserId(context), 3);
-                    dialog.dismiss();
-                }
-            });
-
-            deferTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    presenter.manageTimeLineItem(postId, type, PreferenceHelper.getUserId(context), 3);
-                    dialog.dismiss();
-                }
-            });
+//            approveImageView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    presenter.manageTimeLineItem(postId, type, PreferenceHelper.getUserId(context), 1);
+//                    dialog.dismiss();
+//                }
+//            });
+//
+//            approveTextView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    presenter.manageTimeLineItem(postId, type, PreferenceHelper.getUserId(context), 1);
+//                    dialog.dismiss();
+//                }
+//            });
+//
+//            rejectImageView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    presenter.manageTimeLineItem(postId, type, PreferenceHelper.getUserId(context), 2);
+//                    dialog.dismiss();
+//                }
+//            });
+//
+//            rejectTextView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    presenter.manageTimeLineItem(postId, type, PreferenceHelper.getUserId(context), 2);
+//                    dialog.dismiss();
+//                }
+//            });
+//
+//            deferImageView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    presenter.manageTimeLineItem(postId, type, PreferenceHelper.getUserId(context), 3);
+//                    dialog.dismiss();
+//                }
+//            });
+//
+//            deferTextView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    presenter.manageTimeLineItem(postId, type, PreferenceHelper.getUserId(context), 3);
+//                    dialog.dismiss();
+//                }
+//            });
         }
 
         @Override
         public void showLoadingProgress() {
-        dialogsLoading = new loadingDialog().showDialog(context);
+            dialogsLoading = new loadingDialog().showDialog(context);
         }
 
         @Override
         public void dismissLoadingProgress() {
-        dialogsLoading.dismiss();
+            dialogsLoading.dismiss();
         }
 
         @Override
@@ -394,7 +416,18 @@ String mType;
 
         @Override
         public void updateUi(List<TimeLineData.ResultEntity> TimelineList) {
-            rv.setAdapter(new BoardMemberAdapter(context , TimelineList , rv));
+            rv.setAdapter(new BoardMemberAdapter(context, TimelineList, rv));
+        }
+    }
+
+
+    public class LoadingVH extends RecyclerView.ViewHolder {
+
+        ProgressBar progressBar;
+
+        public LoadingVH(View itemView) {
+            super(itemView);
+            progressBar = itemView.findViewById(R.id.loadmore_progress);
         }
     }
 
@@ -406,6 +439,59 @@ String mType;
         intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mTimeLineList);
         context.startActivity(intent);
 
+    }
+
+    public void add(TimeLineData.ResultEntity mc) {
+        mTimeLineList.add(mc);
+        notifyItemInserted(mTimeLineList.size() - 1);
+    }
+
+    public void addAll(List<TimeLineData.ResultEntity> mcList) {
+        for (TimeLineData.ResultEntity mc : mcList) {
+            add(mc);
+        }
+    }
+
+    public void remove(TimeLineData.ResultEntity city) {
+        int position = mTimeLineList.indexOf(city);
+        if (position > -1) {
+            mTimeLineList.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
+    public void clear() {
+        isLoadingAdded = false;
+        while (getItemCount() > 0) {
+            remove(getItem(0));
+        }
+    }
+
+    public boolean isEmpty() {
+        return getItemCount() == 0;
+    }
+
+    public void addLoadingFooter() {
+        isLoadingAdded = true;
+        TimeLineData.ResultEntity load = new TimeLineData.ResultEntity();
+        load.setType(3);
+        add(load);
+    }
+
+    public void removeLoadingFooter() {
+        isLoadingAdded = false;
+
+        int position = mTimeLineList.size() - 1;
+        TimeLineData.ResultEntity item = getItem(position);
+
+        if (item != null) {
+            mTimeLineList.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
+    public TimeLineData.ResultEntity getItem(int position) {
+        return mTimeLineList.get(position);
     }
 }
 

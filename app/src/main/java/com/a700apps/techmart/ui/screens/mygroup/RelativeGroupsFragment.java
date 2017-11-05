@@ -184,6 +184,11 @@ public class RelativeGroupsFragment extends Fragment implements GroupView {
     }
 
     @Override
+    public void updateUiMore(UserGroupData data) {
+
+    }
+
+    @Override
     public void updateRelativeUi(final UserGroupData data) {
         rv.setAdapter(new RelativeGroupAadpter(getActivity(), data.userGroup));
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));

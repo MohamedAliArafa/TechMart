@@ -23,7 +23,8 @@ import org.json.JSONObject;
 public class ApprovalPresenter extends MainPresenter<approvalView> {
 
 
-    public void manageTimeLineItem(int itemId, final int type, final String userId, final int status) {
+    public void manageTimeLineItem(int itemId, final int type, final String userId, final int status ,
+                                   final int pagenumber , final int pagesize) {
 
         view.showLoadingProgress();
 
@@ -64,7 +65,7 @@ public class ApprovalPresenter extends MainPresenter<approvalView> {
                                 break;
                         }
 
-                        getTimeline(Globals.GROUP_ID , userId , type);
+                        getTimeline(Globals.GROUP_ID , userId , type , pagenumber,pagesize);
                     }
                 }
 
@@ -80,12 +81,12 @@ public class ApprovalPresenter extends MainPresenter<approvalView> {
 
     }
 
-    public void getTimeline(int GroupID, String UserID, int Type) {
+    public void getTimeline(int GroupID, String UserID, int Type,int pagenumber , int pagesize) {
 
         view.showLoadingProgress();
 
         try {
-            JSONObject registerBody = MainApiHelper.getTimeLineMember(GroupID, UserID, Type);
+            JSONObject registerBody = MainApiHelper.getTimeLineMember(GroupID, UserID, Type,pagenumber,pagesize);
             MainApi.getMemberTimeLine(registerBody, new NetworkResponseListener<TimeLineData>() {
                 @Override
                 public void networkOperationSuccess(NetworkResponse<TimeLineData> networkResponse) {

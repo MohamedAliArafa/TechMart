@@ -2,6 +2,8 @@ package com.a700apps.techmart.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Parcelable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,12 +44,16 @@ import java.util.List;
  * Created by samir salah on 9/13/2017.
  */
 
-public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.ViewHolderPost> implements NetworkResponseListener<LikeData> {
+
+public class GroupPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements NetworkResponseListener<LikeData> {
     private List<TimeLineData.ResultEntity> mTimeLineList;
     Context context;
     String isLike;
     View noteView;
     int positionItem;
+    private static final int NOTIF_TYPE_LOAD = 3;
+    private static final int NOTIF_TYPE_POST = 2;
+    boolean isLoadingAdded = false;
 
     public GroupPostAdapter(Context context, List<TimeLineData.ResultEntity> TimeLineList) {
         this.context = context;
@@ -55,18 +62,24 @@ public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.View
 
 
     @Override
-    public GroupPostAdapter.ViewHolderPost onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-
-        noteView = inflater.inflate(R.layout.timeline_item_post, parent, false);
+        if (viewType == NOTIF_TYPE_POST) {
+            noteView = inflater.inflate(R.layout.timeline_item_post, parent, false);
 //        setValues(new ViewHolderPost(noteView),noteView);
-        return new GroupPostAdapter.ViewHolderPost(noteView);
+            return new GroupPostAdapter.ViewHolderPost(noteView);
+        } else {
+            noteView = inflater.inflate(R.layout.item_progress, parent, false);
+//        setValues(new ViewHolderPost(noteView),noteView);
+            return new GroupPostAdapter.LoadingVH(noteView);
+        }
+
     }
 
     @Override
-    public void onBindViewHolder(final GroupPostAdapter.ViewHolderPost viewHolder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder viewHoldermain, final int position) {
         positionItem = position;
         final TimeLineData.ResultEntity timeLineItem = mTimeLineList.get(positionItem);
         final int itemType = getItemViewType(positionItem);
@@ -74,27 +87,28 @@ public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.View
 
         switch (itemType) {
 //
-            case 2:
+            case NOTIF_TYPE_POST:
+                GroupPostAdapter.ViewHolderPost viewHolder = (GroupPostAdapter.ViewHolderPost) viewHoldermain;
                 viewHolder.mDescribtionTextView.setText(timeLineItem.getDescr());
                 viewHolder.mPostedByTextView.setText(timeLineItem.getPostedByName());
                 viewHolder.mTitleTextView.setText(timeLineItem.getTitle());
                 viewHolder.mGroupNameTextView.setText(timeLineItem.getGroupName());
 
 
-                if (timeLineItem.getLikeCount()==0){
+                if (timeLineItem.getLikeCount() == 0) {
                     viewHolder.tv_like.setText("Like");
-                }else if (timeLineItem.getLikeCount()==1){
+                } else if (timeLineItem.getLikeCount() == 1) {
                     viewHolder.tv_like.setText("1 Like");
-                }else {
+                } else {
                     viewHolder.tv_like.setText(timeLineItem.getLikeCount() + " Likes");
                 }
 
 
-                if (timeLineItem.getCommentCount()==0){
+                if (timeLineItem.getCommentCount() == 0) {
                     viewHolder.tv_comment.setText("Comment");
-                }else if (timeLineItem.getCommentCount()==1){
+                } else if (timeLineItem.getCommentCount() == 1) {
                     viewHolder.tv_comment.setText("1 Comment");
-                }else {
+                } else {
                     viewHolder.tv_comment.setText(timeLineItem.getCommentCount() + " Comments");
                 }
                 Glide.with(context)
@@ -130,7 +144,7 @@ public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.View
                 viewHolder.contain.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Globals.R_Index_group=position;
+                        Globals.R_Index_group = position;
                         openDetails(context, "post", mTimeLineList, position);
                     }
                 });
@@ -194,26 +208,33 @@ public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.View
                 });
 
                 break;
+            case NOTIF_TYPE_LOAD:
+                final GroupPostAdapter.LoadingVH loadHolder = (GroupPostAdapter.LoadingVH) viewHoldermain;
+                loadHolder.progressBar.getIndeterminateDrawable().setColorFilter(Color.GREEN, PorterDuff.Mode.MULTIPLY);
+                break;
 
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        int type = position;
-        Log.e("type", mTimeLineList.get(position).getType() + "");
-        switch (mTimeLineList.get(position).getType()) {
-//
-            case 2:
-                return 2;
+        if (mTimeLineList.get(position) == null) {
+            return 3;
+        } else {
+            switch (mTimeLineList.get(position).getType()) {
+                case 2:
+                    return NOTIF_TYPE_POST;
+                case 3:
+                    return NOTIF_TYPE_LOAD;
+            }
         }
-        return 0;
+        return 3;
     }
 
     @Override
     public int getItemCount() {
         Log.e("test", mTimeLineList.size() + "");
-        return mTimeLineList.size();
+        return mTimeLineList == null ? 0 : mTimeLineList.size();
     }
 
     @Override
@@ -236,8 +257,8 @@ public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.View
 
 
     public class ViewHolderPost extends RecyclerView.ViewHolder {
-        ImageView mPostImageView, addCalenderBtn, mLikeImageView,mComment,shareBtn;
-        TextView mTitleTextView, mDescribtionTextView, mPostedByTextView, mGroupNameTextView,tv_comment,tv_like,tv_share;
+        ImageView mPostImageView, addCalenderBtn, mLikeImageView, mComment, shareBtn;
+        TextView mTitleTextView, mDescribtionTextView, mPostedByTextView, mGroupNameTextView, tv_comment, tv_like, tv_share;
         ConstraintLayout contain;
 
         public ViewHolderPost(View itemView) {
@@ -258,12 +279,22 @@ public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.View
         }
     }
 
-    static void openDetails(Context context,String type,List<TimeLineData.ResultEntity> mTimeLineList,int index) {
+    public class LoadingVH extends RecyclerView.ViewHolder {
+
+        ProgressBar progressBar;
+
+        public LoadingVH(View itemView) {
+            super(itemView);
+            progressBar = itemView.findViewById(R.id.loadmore_progress);
+        }
+    }
+
+    static void openDetails(Context context, String type, List<TimeLineData.ResultEntity> mTimeLineList, int index) {
         Intent intent = new Intent(context, DetailsActivity.class);
         intent.putExtra("Type", type);
         intent.putExtra("Index", index);
         intent.putParcelableArrayListExtra("Timeline", (ArrayList<? extends Parcelable>) mTimeLineList);
-        context. startActivity(intent);
+        context.startActivity(intent);
     }
 
     void changeLike() {
@@ -299,6 +330,61 @@ public class GroupPostAdapter extends RecyclerView.Adapter<GroupPostAdapter.View
             e.printStackTrace();
         }
     }
+
+
+    public void add(TimeLineData.ResultEntity mc) {
+        mTimeLineList.add(mc);
+        notifyItemInserted(mTimeLineList.size() - 1);
+    }
+
+    public void addAll(List<TimeLineData.ResultEntity> mcList) {
+        for (TimeLineData.ResultEntity mc : mcList) {
+            add(mc);
+        }
+    }
+
+    public void remove(TimeLineData.ResultEntity city) {
+        int position = mTimeLineList.indexOf(city);
+        if (position > -1) {
+            mTimeLineList.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
+    public void clear() {
+        isLoadingAdded = false;
+        while (getItemCount() > 0) {
+            remove(getItem(0));
+        }
+    }
+
+    public boolean isEmpty() {
+        return getItemCount() == 0;
+    }
+
+    public void addLoadingFooter() {
+        isLoadingAdded = true;
+        TimeLineData.ResultEntity load = new TimeLineData.ResultEntity();
+        load.setType(3);
+        add(load);
+    }
+
+    public void removeLoadingFooter() {
+        isLoadingAdded = false;
+
+        int position = mTimeLineList.size() - 1;
+        TimeLineData.ResultEntity item = getItem(position);
+
+        if (item != null) {
+            mTimeLineList.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
+    public TimeLineData.ResultEntity getItem(int position) {
+        return mTimeLineList.get(position);
+    }
+
 }
 
 

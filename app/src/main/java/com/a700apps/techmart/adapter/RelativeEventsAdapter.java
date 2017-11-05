@@ -1,3 +1,6 @@
+
+
+
 package com.a700apps.techmart.adapter;
 
 import android.content.Context;
@@ -26,16 +29,16 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
- * Created by samir salah on 9/11/2017.
+ * Created by khaled.badawy on 11/5/2017.
  */
 
-public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
+public class RelativeEventsAdapter extends RecyclerView.Adapter<RelativeEventsAdapter.ViewHolder> {
     private List<TimeLineData.ResultEntity> mTimeLineList;
     Context context;
     private static final int NOTIF_TYPE_EVENT = 1;
 
 
-    public EventAdapter(Context context, List<TimeLineData.ResultEntity> TimeLineList) {
+    public RelativeEventsAdapter(Context context, List<TimeLineData.ResultEntity> TimeLineList) {
         this.context = context;
         this.mTimeLineList = TimeLineList;
 
@@ -80,7 +83,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         View noteView;
 //        switch (viewType) {
 //            case NOTIF_TYPE_EVENT:
-        noteView = inflater.inflate(R.layout.timeline_first_item, parent, false);
+        noteView = inflater.inflate(R.layout.relative_events_item, parent, false);
         return new ViewHolder(noteView);
 
 
@@ -111,7 +114,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView mEventImageView, shareBtn, addCalenderBtn;
-        TextView mTitleTextView, mDescribtionTextView, mDateTextView, mGroupNameTextView, tv_add_calender,tv_share,tv_username;
+        TextView mTitleTextView, mDescribtionTextView, mDateTextView, mGroupNameTextView, tv_add_calender, tv_share, tv_username;
         RelativeLayout contain;
 
         public ViewHolder(View itemView) {
@@ -179,6 +182,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 //        ActivityUtils.openActivity(context, DetailsActivity.class, false);
     }
 }
+
 
 
 

@@ -64,7 +64,7 @@ public class MyGroubListActivity extends AppCompatActivity implements GroupView 
         });
 
 
-        mPresenter.getMyGroup(this);
+//        mPresenter.getMyGroup(this);
         rv = (RecyclerView) findViewById(R.id.recyclerView);
 
     }
@@ -92,6 +92,11 @@ public class MyGroubListActivity extends AppCompatActivity implements GroupView 
     public void updateUi(UserGroupData data) {
         rv.setAdapter(new GroupsAdapter(this, data.userGroup));
         rv.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    @Override
+    public void updateUiMore(UserGroupData data) {
+
     }
 
     @Override

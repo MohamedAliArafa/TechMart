@@ -125,7 +125,7 @@ public class TimeLineData implements Parcelable {
         private String StartTime;
         private String EndTime;
 
-        protected ResultEntity(Parcel in) {
+        public ResultEntity(Parcel in) {
             ID = in.readInt();
             GroupID = in.readInt();
             CreatedBY = in.readString();
@@ -155,7 +155,9 @@ public class TimeLineData implements Parcelable {
             StartTime = in.readString();
             EndTime = in.readString();
         }
+        public ResultEntity() {
 
+        }
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeInt(ID);

@@ -24,13 +24,13 @@ public class MyGroupPresenter extends MainPresenter<GroupView> {
     Context mContext;
     Dialog dialogsLoading;
 
-    void getMyGroup(Context context) {
+    void getMyGroup(Context context , int pagenumber , int pagesize) {
         mContext = context;
         dialogsLoading = new loadingDialog().showDialog(context);
 //        view.showProgress();
 
         try {
-            JSONObject registerBody = MainApiHelper.getUserGroup(PreferenceHelper.getUserId(mContext));
+            JSONObject registerBody = MainApiHelper.getUserGroup(PreferenceHelper.getUserId(mContext) , pagenumber , pagesize);
             Log.e("DATA", registerBody.toString());
             MainApi.getUserGroup(registerBody, new NetworkResponseListener<UserGroupData>() {
                 @Override
@@ -54,6 +54,34 @@ public class MyGroupPresenter extends MainPresenter<GroupView> {
             e.printStackTrace();
 //            view.dismissProgress();
             dialogsLoading.dismiss();
+        }
+
+    }
+
+    void getMyGroupMore(int pagenumber , int pagesize) {
+
+        try {
+            JSONObject registerBody = MainApiHelper.getUserGroup(PreferenceHelper.getUserId(mContext) , pagenumber , pagesize);
+            Log.e("DATA", registerBody.toString());
+            MainApi.getUserGroup(registerBody, new NetworkResponseListener<UserGroupData>() {
+                @Override
+                public void networkOperationSuccess(NetworkResponse<UserGroupData> networkResponse) {
+                    if (isDetachView()) return;
+                    dialogsLoading.dismiss();
+                    UserGroupData userNetworkData = networkResponse.data;
+                    int errorCode = userNetworkData.ISResultHasData;
+                    if (errorCode == 1) {
+                        view.updateUiMore(userNetworkData);
+                    }
+                }
+
+                @Override
+                public void networkOperationFail(Throwable throwable) {
+                    Log.e("error", throwable.toString());
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
     }
