@@ -11,6 +11,8 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
@@ -45,9 +47,11 @@ import com.a700apps.techmart.ui.screens.creatEvent.CreatEventActivity;
 import com.a700apps.techmart.ui.screens.register.RegisterActivity;
 import com.a700apps.techmart.utils.ApiClient;
 import com.a700apps.techmart.utils.AppConst;
+import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.MapDialogActivity;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.a700apps.techmart.utils.URLS;
+import com.a700apps.techmart.utils.Validator;
 import com.a700apps.techmart.utils.loadingDialog;
 import com.borax12.materialdaterangepicker.date.DatePickerDialog;
 import com.borax12.materialdaterangepicker.time.RadialPickerLayout;
@@ -62,6 +66,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,9 +78,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EditTimeLineActivity extends AppCompatActivity implements EditView , View.OnClickListener
-,DatePickerDialog.OnDateSetListener,
-        TimePickerDialog.OnTimeSetListener{
+public class EditTimeLineActivity extends AppCompatActivity implements EditView, View.OnClickListener
+        , DatePickerDialog.OnDateSetListener,
+        TimePickerDialog.OnTimeSetListener {
 
     EdittPresenter presenter;
     String mStartDate, mEndDate, mStartTime, mEndTime;
@@ -84,7 +90,7 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
     LinearLayout uploadLinearLayout;
 //    LinearLayout removeLinearLayout;
 
-    LinearLayout postLayout , eventLayout ;
+    LinearLayout postLayout, eventLayout;
 
     ImageView selectedImageView;
 
@@ -96,12 +102,13 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
     private static final int SELECT_PICTURE = 10;
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     private String selectedImagePath;
-    int postId , type ;
-    String imageName ;
+    int postId, type;
+    String imageName;
     NotificationDataLike.Result result;
-    ImageView  mLocationImageView, mDateImageView;
+    ImageView mLocationImageView, mDateImageView;
     TextView tv_location, tv_date;
     private static final int PICK_LOCATION_REQUEST = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,17 +140,17 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
 
 //        postId= 108;
 //        type= 2;
-        postId= getIntent().getIntExtra("postId" , 0);
-        type= getIntent().getIntExtra("type" , 0);
+        postId = getIntent().getIntExtra("postId", 0);
+        type = getIntent().getIntExtra("type", 0);
 
-        if (type ==1){
+        if (type == 1) {
             eventLayout.setVisibility(View.VISIBLE);
             postLayout.setVisibility(View.INVISIBLE);
-        }else {
+        } else {
             eventLayout.setVisibility(View.INVISIBLE);
             postLayout.setVisibility(View.VISIBLE);
         }
-        presenter.getTimelineItem(postId , type, PreferenceHelper.getUserId(this));
+        presenter.getTimelineItem(postId, type, PreferenceHelper.getUserId(this));
 
         tv_date.setOnClickListener(this);
         mLocationImageView.setOnClickListener(this);
@@ -151,7 +158,7 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
         tv_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tv_location.setEnabled(false);
+//                tv_location.setEnabled(false);
                 if (ActivityCompat.checkSelfPermission(EditTimeLineActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                         ActivityCompat.checkSelfPermission(EditTimeLineActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(EditTimeLineActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PICK_LOCATION_REQUEST);
@@ -159,13 +166,15 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
                 } else {
                     // Write you code here if permission already given.
                     Intent intent1 = new Intent(EditTimeLineActivity.this, MapDialogActivity.class);
-                    intent1.putExtra("lat" , result.getLatitude() == null ? 0:result.getLatitude());
-                    intent1.putExtra("lng" , result.getLongtude() == null ? 0:result.getLongtude());
-                    intent1.putExtra("place" , result.getLocationName() == null ? " ":result.getLocationName().toString());
+                    Globals.CAMETOEDIT = true;
+                    Globals.lat = result.getLatitude() == null ? 0 : result.getLatitude();
+                    Globals.lng = result.getLongtude() == null ? 0 : result.getLongtude();
+                    Globals.placename = result.getLocationName() == null ? " " : result.getLocationName().toString();
+//                    intent1.putExtra("lat" , result.getLatitude() == null ? 0:result.getLatitude());
+//                    intent1.putExtra("lng" , result.getLongtude() == null ? 0:result.getLongtude());
+//                    intent1.putExtra("place" , result.getLocationName() == null ? " ":result.getLocationName().toString());
                     startActivityForResult(intent1, PICK_LOCATION_REQUEST);
                 }
-
-
             }
         });
         findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
@@ -200,8 +209,8 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
         headerEditText.setText(result.getTitle());
         descriptionEditText.setText(result.getDescr());
         selectedImageView.setVisibility(View.VISIBLE);
-        imageName = result.getImage().replace("/UploadedImages/" , "");
-        Glide.with(this).load(MainApi.IMAGE_IP+result.getImage()).into(selectedImageView);//.placeholder(R.drawable.ratring_pic)
+        imageName = result.getImage().replace("/UploadedImages/", "");
+        Glide.with(this).load(MainApi.IMAGE_IP + result.getImage()).into(selectedImageView);//.placeholder(R.drawable.ratring_pic)
 
         dismissLoadingProgress();
     }
@@ -213,7 +222,7 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
 
     @Override
     public void showToast(String message) {
-        Toast.makeText(this, message , Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -313,7 +322,7 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
         return cursor.getString(idx);
     }
 
-    private byte[] bitmapToByte(Bitmap bitmap){
+    private byte[] bitmapToByte(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] byteArray = stream.toByteArray();
@@ -346,7 +355,6 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
                 Log.e("ImagePath111", "-->" + selectedImagePath);
 
 
-
             } else if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
 
                 Bundle extras = data.getExtras();
@@ -364,7 +372,7 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
                 selectedImageView.setImageBitmap(imageBitmap);
 
 
-            }else if (requestCode == PICK_LOCATION_REQUEST) {
+            } else if (requestCode == PICK_LOCATION_REQUEST) {
                 if (data.hasExtra(URLS.EXTRA_PARCELABLE)) {
                     innerModle = data.getParcelableExtra(URLS.EXTRA_PARCELABLE);
 //                    userAddressEditText.setText(getCompleteAddressString(innerModle.getLongitude(), innerModle.getLatitude()));
@@ -504,18 +512,41 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
                         String mImagePath = serverResponse.postData.message;
 
                         dialogsLoading.dismiss();
-                        presenter.editTimeLineItem(""+result.getGroupID() , postId ,result.getIsPublic() ,
-                                headerEditText.getText().toString() ,
-                                descriptionEditText.getText().toString() , mImagePath ,"",
-                                PreferenceHelper.getUserId(EditTimeLineActivity.this) , result.getType());
 
+                        if (result.getType() == 1) {
+
+                            double lat, lng;
+                            String placeName;
+                            if (innerModle == null) {
+                                lat = result.getLatitude();
+                                lng = result.getLongtude();
+                                placeName = result.getLocationName().toString();
+                            } else {
+                                lat = innerModle.getLatitude();
+                                lng = innerModle.getLongitude();
+                                placeName = getCompleteAddressString(lat, lng);
+                            }
+
+                            String localStartTime = mStartTime.equals("")||mStartTime==null ? result.getStartTime() : mStartTime ;
+                            String localEndTime = mEndTime.equals("")||mEndTime==null ? result.getEndTime() : mEndTime ;
+                            String localStartDate = mStartDate.equals("")||mStartDate==null ? result.getStartDate() : mStartDate ;
+                            String localEndDate = mEndDate.equals("")||mEndDate==null ? result.getEndDate() : mEndDate ;
+
+                            presenter.editTimeLineItemEvent("" + result.getGroupID(), result.getID(), result.getIsPublic(),
+                                    headerEditText.getText().toString().trim(), descriptionEditText.getText().toString().trim(),
+                                    mImagePath, "", PreferenceHelper.getUserId(EditTimeLineActivity.this), result.getType(), lat, lng, localStartDate, localEndDate, localStartTime, localEndTime,
+                                    placeName);
+                        } else {
+                            presenter.editTimeLineItem("" + result.getGroupID(), postId, result.getIsPublic(),
+                                    headerEditText.getText().toString(),
+                                    descriptionEditText.getText().toString(), mImagePath, "",
+                                    PreferenceHelper.getUserId(EditTimeLineActivity.this), result.getType());
+                        }
                     }
-
                 } else {
                     assert serverResponse != null;
                     Log.v("Response", serverResponse.toString());
                 }
-//                progressDialog.dismiss();
                 dialogsLoading.dismiss();
             }
 
@@ -529,31 +560,30 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
     }
 
 
-    private boolean validate(){
+    private boolean validate() {
 
-        if (headerEditText.getText().toString()==null){
+        boolean isValid = true;
+        if (Validator.isEditTextEmpty(headerEditText)) {
             headerEditText.setError("title can not be empty");
-            return false;
+            isValid = false;
         }
 
 
-
-        if (descriptionEditText.getText().toString()==null){
+        if (Validator.isEditTextEmpty(descriptionEditText)) {
             descriptionEditText.setError("description can not be empty");
-            return false;
+            isValid = false;
         }
 
-
-
-        return true;
+        return isValid;
 
     }
+
     @Override
     public void onClick(View view) {
-        int id= view.getId();
+        int id = view.getId();
 
 
-        switch (id){
+        switch (id) {
             case R.id.upload_media:
                 openChooseMethodDialog();
                 break;
@@ -562,41 +592,45 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
                 break;
 
             case R.id.iv_location:
-                if (ActivityCompat.checkSelfPermission(EditTimeLineActivity.this,
-                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(EditTimeLineActivity.this,
-                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(EditTimeLineActivity.this,
-                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                if (ActivityCompat.checkSelfPermission(EditTimeLineActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(EditTimeLineActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(EditTimeLineActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PICK_LOCATION_REQUEST);
                     return;
                 } else {
                     // Write you code here if permission already given.
                     Intent intent1 = new Intent(EditTimeLineActivity.this, MapDialogActivity.class);
+                    Globals.CAMETOEDIT = true;
+                    Globals.lat = result.getLatitude() == null ? 0 : result.getLatitude();
+                    Globals.lng = result.getLongtude() == null ? 0 : result.getLongtude();
+                    Globals.placename = result.getLocationName() == null ? " " : result.getLocationName().toString();
+//                    intent1.putExtra("lat" , result.getLatitude() == null ? 0:result.getLatitude());
+//                    intent1.putExtra("lng" , result.getLongtude() == null ? 0:result.getLongtude());
+//                    intent1.putExtra("place" , result.getLocationName() == null ? " ":result.getLocationName().toString());
                     startActivityForResult(intent1, PICK_LOCATION_REQUEST);
                 }
                 break;
             case R.id.tv_date:
-                mStartDate = result.getStartDate().substring(0,result.getStartDate().indexOf("T"));
-                mStartTime = result.getStartDate().substring(result.getStartDate().indexOf("T")+1,result.getStartDate().length());
+                mStartDate = result.getStartDate().substring(0, result.getStartDate().indexOf("T"));
+                mStartTime = result.getStartDate().substring(result.getStartDate().indexOf("T") + 1, result.getStartDate().length());
 
-                mEndDate = result.getEndDate().substring(0,result.getEndDate().indexOf("T"));
-                mEndTime = result.getEndDate().substring(result.getEndDate().indexOf("T")+1,result.getEndDate().length());
+                mEndDate = result.getEndDate().substring(0, result.getEndDate().indexOf("T"));
+                mEndTime = result.getEndDate().substring(result.getEndDate().indexOf("T") + 1, result.getEndDate().length());
 
-                Log.e("start date",mStartDate);
-                Log.e("start date",mStartTime);
+                Log.e("start date", mStartDate);
+                Log.e("start date", mStartTime);
 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                Date date = null , dateEnd = null;
+                Date date = null, dateEnd = null;
                 try {
-                    date = sdf. parse(mStartDate);
-                    dateEnd = sdf. parse(mEndDate);
+                    date = sdf.parse(mStartDate);
+                    dateEnd = sdf.parse(mEndDate);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                Calendar cal = Calendar. getInstance();
-                Calendar calEnd = Calendar. getInstance();
-                cal. setTime(date);
-                calEnd. setTime(dateEnd);
+                Calendar cal = Calendar.getInstance();
+                Calendar calEnd = Calendar.getInstance();
+                cal.setTime(date);
+                calEnd.setTime(dateEnd);
 
                 DatePickerDialog dpd2 = com.borax12.materialdaterangepicker.date.DatePickerDialog.newInstance(
                         EditTimeLineActivity.this,
@@ -606,31 +640,31 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
                         calEnd.get(Calendar.YEAR),
                         calEnd.get(Calendar.MONTH),
                         calEnd.get(Calendar.DAY_OF_MONTH)
-                );                break;
+                );
+                break;
             case R.id.iv_date:
 
-                mStartDate = result.getStartDate().substring(0,result.getStartDate().indexOf("T"));
-                mStartTime = result.getStartDate().substring(result.getStartDate().indexOf("T")+1,result.getStartDate().length());
+                mStartDate = result.getStartDate().substring(0, result.getStartDate().indexOf("T"));
+                mStartTime = result.getStartTime();
 
-                mEndDate = result.getEndDate().substring(0,result.getEndDate().indexOf("T"));
-                mEndTime = result.getEndDate().substring(result.getEndDate().indexOf("T")+1,result.getEndDate().length());
+                mEndDate = result.getEndDate().substring(0, result.getEndDate().indexOf("T"));
+                mEndTime = result.getEndTime();
 
-                Log.e("start date",mStartDate);
-                Log.e("start date",mStartTime);
+                Log.e("start date", mStartDate);
+                Log.e("start date", mStartTime);
 
                 SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
-                Date date1 = null , dateEnd1 = null;
+                Date date1 = null, dateEnd1 = null;
                 try {
-                    date = sdf1. parse(mStartDate);
-                    dateEnd = sdf1. parse(mEndDate);
+                    date1 = sdf1.parse(mStartDate);
+                    dateEnd1 = sdf1.parse(mEndDate);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                Calendar cal1 = Calendar. getInstance();
-                Calendar calEnd1 = Calendar. getInstance();
-                cal1. setTime(date1);
-                calEnd1. setTime(dateEnd1);
-
+                Calendar cal1 = Calendar.getInstance();
+                Calendar calEnd1 = Calendar.getInstance();
+                cal1.setTime(date1);
+                calEnd1.setTime(dateEnd1);
                 DatePickerDialog dpd21 = com.borax12.materialdaterangepicker.date.DatePickerDialog.newInstance(
                         EditTimeLineActivity.this,
                         cal1.get(Calendar.YEAR),
@@ -652,19 +686,77 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
 //                selectedImageView.setImageBitmap(null);
 //                break;
             case R.id.save_layout:
-                if (validate()){
-                    if (selectedImagePath==null){
-                        presenter.editTimeLineItem(""+result.getGroupID() , postId ,result.getIsPublic() ,
-                                headerEditText.getText().toString() ,
-                                descriptionEditText.getText().toString() , imageName ,"",
-                                PreferenceHelper.getUserId(this) , result.getType());
-                    }else {
+                Log.e("boolean", validate() + "");
+
+
+                if (validate()) {
+                    if (selectedImagePath == null) {
+                        if (type == 2) {
+                            presenter.editTimeLineItem("" + result.getGroupID(), postId, result.getIsPublic(),
+                                    headerEditText.getText().toString().trim(),
+                                    descriptionEditText.getText().toString().trim(), imageName, "",
+                                    PreferenceHelper.getUserId(this), result.getType());
+                        } else if (type == 1) {
+
+                            String image = result.getImage().replace("/UploadedImages/", "");
+                            double lat, lng;
+                            String placeName ;
+                            if (innerModle.getLongitude() == null) {
+                                lat = result.getLatitude();
+                                lng = result.getLongtude();
+                                placeName = result.getLocationName().toString();
+                            } else {
+                                lat = innerModle.getLatitude();
+                                lng = innerModle.getLongitude();
+                                placeName = getCompleteAddressString(lat, lng);
+                            }
+
+                            String localStartTime = mStartTime.equals("")||mStartTime==null ? result.getStartTime() : mStartTime ;
+                            String localEndTime = mEndTime.equals("")||mEndTime==null ? result.getEndTime() : mEndTime ;
+                            String localStartDate = mStartDate.equals("")||mStartDate==null ? result.getStartDate() : mStartDate ;
+                            String localEndDate = mEndDate.equals("")||mEndDate==null ? result.getEndDate() : mEndDate ;
+
+
+
+
+                            presenter.editTimeLineItemEvent("" + result.getGroupID(), result.getID(), result.getIsPublic(),
+                                    headerEditText.getText().toString().trim(), descriptionEditText.getText().toString().trim(),
+                                    image, "", PreferenceHelper.getUserId(this), result.getType(), lat, lng, localStartDate, localEndDate, localStartTime, localEndTime,
+                                    placeName);
+                        }
+                    } else {
                         uploadFile();
                     }
                 }
                 break;
         }
     }
+
+    private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
+        String strAdd = "";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("");
+
+                if (returnedAddress.getAddressLine(0) != null && !returnedAddress.getAddressLine(0).isEmpty()) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(0)).append(",");
+                }
+                strAdd = strReturnedAddress.toString();
+                Log.w("Current loction address", "" + strReturnedAddress.toString());
+            } else {
+                Log.w("Current loction address", "No Address returned!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.w("Current loction address", "Canont get Address!");
+        }
+        return strAdd;
+    }
+
+
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
 
@@ -701,8 +793,8 @@ public class EditTimeLineActivity extends AppCompatActivity implements EditView 
 //        mStartTime = hourString + "h" + minuteString;
 //        mEndTime = hourStringEnd + "h" + minuteStringEnd;
 
-        mStartTime = hourString + ":" + minuteString+":00";
-        mEndTime = hourStringEnd + ":" + minuteStringEnd+":00";
+        mStartTime = hourString + ":" + minuteString + ":00";
+        mEndTime = hourStringEnd + ":" + minuteStringEnd + ":00";
     }
 
 

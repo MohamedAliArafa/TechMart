@@ -99,4 +99,50 @@ public class EdittPresenter extends MainPresenter<EditView> {
 
     }
 
+
+
+    void editTimeLineItemEvent(String groupId, int itemId , boolean ispublic  , String title , String description ,
+                               String image , String mediaFile, String userId , final int type ,
+                               double lat , double lng , String startDate , String endDate , String startTime ,
+                               String endTime,String locationName) {
+
+        view.showLoadingProgress();
+
+        try {
+            JSONObject jsonObject = MainApiHelper.editTimelineItemEvent(groupId , itemId,ispublic ,title , description,
+                    image,mediaFile, userId, type , lat,lng,startDate,endDate,startTime,endTime , locationName);
+
+            MainApi.editTimeLineItem(jsonObject, new NetworkResponseListener<PostData>() {
+
+                @Override
+                public void networkOperationSuccess(NetworkResponse<PostData> networkResponse) {
+                    if (isDetachView()) return;
+
+                    view.dismissLoadingProgress();
+                    PostData userNetworkData = (PostData) networkResponse.data;
+                    int errorCode = userNetworkData.ISResultHasData;
+
+                    if (errorCode == 1) {
+                        view.dismissLoadingProgress();
+                        if (type ==1){
+                            view.showToast(" Event updated successfully ");
+                        }else {
+                            view.showToast(" Post updated successfully ");
+                        }
+                        view.finishActivity();
+                    }
+                }
+
+                @Override
+                public void networkOperationFail(Throwable throwable) {
+                    view.dismissLoadingProgress();
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+            view.dismissLoadingProgress();
+        }
+
+    }
+
 }

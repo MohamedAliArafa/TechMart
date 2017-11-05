@@ -489,7 +489,7 @@ public class EditProfileFragment extends Fragment implements ProfileView, View.O
 //        }
 
 
-        if (mobile.startsWith("01") || mobile.startsWith("096") || mobile.startsWith("+97")) {
+        if (mobile.startsWith("01") || mobile.startsWith("096") || mobile.startsWith("0097")) {
             boolean validMobileNumber = Validator.validMobileNumber(mobile);
             if (!validMobileNumber) {
                 mPhone.setError(getResources().getString(R.string.invalid_mobile_number));

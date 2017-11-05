@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:background="@drawable/bg"
     android:layout_height="match_parent">
 
     <!--<ImageView-->
@@ -24,7 +25,7 @@
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
         android:layout_marginTop="4dp"
-        android:background="@color/blue_join_dialog"
+        android:background="@color/white"
         app:layout_constraintLeft_toLeftOf="@+id/textView6"
         app:layout_constraintRight_toRightOf="@+id/textView6"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
@@ -41,7 +42,7 @@
         android:gravity="center"
         android:text="Relative Events"
         android:textAllCaps="true"
-        android:textColor="@color/blue_join_dialog"
+        android:textColor="@color/white"
         android:textSize="14sp"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -65,7 +66,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
-        android:background="@color/grey"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="6dp"
@@ -104,8 +104,8 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_alignParentEnd="true"
+            app:srcCompat="@drawable/ic_notif_white" />
 
-            app:srcCompat="@drawable/ic_notification" />
     </RelativeLayout>
 
     <com.wang.avi.AVLoadingIndicatorView

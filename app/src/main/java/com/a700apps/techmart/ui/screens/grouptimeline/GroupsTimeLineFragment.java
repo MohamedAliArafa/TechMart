@@ -34,6 +34,7 @@ import com.a700apps.techmart.ui.screens.timeline.GroupTimeLineFragment;
 import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
 import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.ClickableViewPager;
+import com.a700apps.techmart.utils.DisbledViewPagerScrolling;
 import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.a700apps.techmart.utils.loadingDialog;
@@ -59,7 +60,7 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
+    private DisbledViewPagerScrolling mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private LinearLayout mTabContainer;
     private GroupTimeLinePresenter presenter;
@@ -69,7 +70,6 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
     void init(View view) {
         mPager = (ClickableViewPager) view.findViewById(R.id.pager);
         indicator = (CirclePageIndicator) view.findViewById(R.id.indicator);
-
     }
 
     void getExtra() {
@@ -105,7 +105,7 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
         getExtra();
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) view.findViewById(R.id.vp_timeline);
+        mViewPager = (DisbledViewPagerScrolling) view.findViewById(R.id.vp_timeline);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(4);
@@ -120,15 +120,15 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                mTabContainer.getChildAt(position * 2).setBackground(getResources().getDrawable(R.drawable.bt_1));
-                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
-                    if (i != position * 2 && i % 2 == 0)
-                        mTabContainer.getChildAt(i).setBackground(null);
+//                mTabContainer.getChildAt(position * 2).setBackground(getResources().getDrawable(R.drawable.bt_1));
+//                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
+//                    if (i != position * 2 && i % 2 == 0)
+//                        mTabContainer.getChildAt(i).setBackground(null);
 
 //                    mTabContainer.getChildAt(1).setVisibility(View.VISIBLE);
 //                    mTabContainer.getChildAt(3).setVisibility(View.INVISIBLE);
 //                    mTabContainer.getChildAt(5).setVisibility(View.INVISIBLE);
-                }
+//                }
 
 //                if (position == 1) {
 //                    mTabContainer.getChildAt(1).setVisibility(View.INVISIBLE);
@@ -156,7 +156,6 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
                     Bundle bundle = new Bundle();
                     bundle.putInt("string_key", intValue);
                     ((HomeActivity) getActivity()).openFragment(GroupFragment.class, bundle);
-//                    ActivityUtils.openActivity(getActivity(), GroupActivity.class, false);
                 }
             }
 
@@ -202,56 +201,59 @@ public class GroupsTimeLineFragment extends Fragment implements View.OnClickList
 
 
     @Override
-    public void onClick(View view) {
-        int viewId = view.getId();
+    public void onClick(View v) {
+        int viewId = v.getId();
         switch (viewId) {
             case R.id.tv_timeline:
                 mViewPager.setCurrentItem(0);
-                int position = 0;
+                mTabContainer.getChildAt(2).setBackground(null);
+                mTabContainer.getChildAt(4).setBackground(null);
                 mTabContainer.getChildAt(1).setVisibility(View.INVISIBLE);
                 mTabContainer.getChildAt(3).setVisibility(View.VISIBLE);
                 mTabContainer.getChildAt(5).setVisibility(View.VISIBLE);
-                mTabContainer.getChildAt(position * 2).setBackground(getResources().getDrawable(R.drawable.bt_1));
-                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
-                    if (i != position * 2 && i % 2 == 0)
-                        mTabContainer.getChildAt(i).setBackground(null);
-                }
+
+                mTabContainer.getChildAt(0).setBackground(getResources().getDrawable(R.drawable.bt_1));
+//                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
+//                    if (i != position)
+//                        mTabContainer.getChildAt(i).setBackground(null);
+//                }
                 break;
             case R.id.tv_posts:
-                int position1 = 1;
+                mViewPager.setCurrentItem(1);
+
+                mTabContainer.getChildAt(0).setBackground(null);
+                mTabContainer.getChildAt(4).setBackground(null);
+                mTabContainer.getChildAt(2).setBackground(getResources().getDrawable(R.drawable.bt_1));
+
                 mTabContainer.getChildAt(1).setVisibility(View.INVISIBLE);
                 mTabContainer.getChildAt(3).setVisibility(View.INVISIBLE);
                 mTabContainer.getChildAt(5).setVisibility(View.VISIBLE);
-                mViewPager.setCurrentItem(1);
-                mTabContainer.getChildAt(position1 * 2).setBackground(getResources().getDrawable(R.drawable.bt_1));
-                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
-                    if (i != position1 * 2 && i % 2 == 0)
-                        mTabContainer.getChildAt(i).setBackground(null);
-                }
+
                 break;
             case R.id.tv_event:
                 mViewPager.setCurrentItem(2);
-                int position2 = 2;
+                mTabContainer.getChildAt(0).setBackground(null);
+                mTabContainer.getChildAt(2).setBackground(null);
+                mTabContainer.getChildAt(4).setBackground(getResources().getDrawable(R.drawable.bt_1));
+//                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
+//                    if (i != pos3)
+//                        mTabContainer.getChildAt(i).setBackground(null);
+//                }
                 mTabContainer.getChildAt(1).setVisibility(View.VISIBLE);
                 mTabContainer.getChildAt(3).setVisibility(View.INVISIBLE);
                 mTabContainer.getChildAt(5).setVisibility(View.INVISIBLE);
 
-
-                mTabContainer.getChildAt(position2 * 2).setBackground(getResources().getDrawable(R.drawable.bt_1));
-                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
-                    if (i != position2 * 2 && i % 2 == 0)
-                        mTabContainer.getChildAt(i).setBackground(null);
-                }
                 break;
             case R.id.tv_group:
                 mViewPager.setCurrentItem(3);
-                int position3 = 3;
-                mViewPager.setCurrentItem(1);
-                mTabContainer.getChildAt(position3 * 2).setBackground(getResources().getDrawable(R.drawable.bt_1));
-                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
-                    if (i != position3 * 2 && i % 2 == 0)
-                        mTabContainer.getChildAt(i).setBackground(null);
-                }
+//                mTabContainer.getChildAt(1).setBackground(null);
+//                mTabContainer.getChildAt(2).setBackground(null);
+//                mTabContainer.getChildAt(0).setBackground(null);
+//                mTabContainer.getChildAt(pos4).setBackground(getResources().getDrawable(R.drawable.bt_1));
+//                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
+//                    if (i != pos4)
+//                        mTabContainer.getChildAt(i).setBackground(null);
+//                }
                 break;
         }
     }

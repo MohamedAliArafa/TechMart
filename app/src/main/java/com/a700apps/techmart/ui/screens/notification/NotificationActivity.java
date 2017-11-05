@@ -42,7 +42,6 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
     int currentPage = 1;
     int itemsPerPage = 10;
 
-
     Dialog dialogsLoading;
 
     @Override
@@ -60,11 +59,13 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
         presenter = new NotificationPresenter();
         presenter.attachView(this);
 
+
         if (AppUtils.isInternetAvailable(this)) {
             presenter.loadData(PreferenceHelper.getUserId(this), currentPage, itemsPerPage);
         } else {
             showToast(getString(R.string.check_internet));
         }
+
 
         if (currentPage == 1) {
             previosTextView.setVisibility(View.GONE);
@@ -390,7 +391,7 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                         if (AppUtils.isInternetAvailable(context)) {
                             position = getAdapterPosition();
 //                            presenter.sendConnect(list.get(getAdapterPosition()).getRelativeUserID(), PreferenceHelper.getUserId(context), "true");
-                            presenter.respondRequest( PreferenceHelper.getUserId(context),list.get(getAdapterPosition()).getRelativeUserID(), "true");
+                            presenter.respondRequest(PreferenceHelper.getUserId(context), list.get(getAdapterPosition()).getRelativeUserID(), "true");
                         } else {
                             Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                         }
@@ -398,7 +399,7 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                     case R.id.ignoreBtn:
                         if (AppUtils.isInternetAvailable(context)) {
 //                        position = getAdapterPosition();
-                            presenter.respondRequest( PreferenceHelper.getUserId(context),list.get(getAdapterPosition()).getRelativeUserID(), "false");
+                            presenter.respondRequest(PreferenceHelper.getUserId(context), list.get(getAdapterPosition()).getRelativeUserID(), "false");
 //                            presenter.sendConnect(list.get(getAdapterPosition()).getRelativeUserID(), PreferenceHelper.getUserId(context), "false");
                             presenter.deleteNotification(list.get(getAdapterPosition()).getID());
 //                        list.remove(position);
@@ -485,7 +486,10 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                             NoficationData.Result data = list.get(getAdapterPosition());
                             Intent intent = new Intent(context, NotificationHolderActivity.class);
                             intent.putExtra("holder", "like");
-                            intent.putExtra("data", data);
+                            intent.putExtra("itemid", data.getItemID());
+                            intent.putExtra("userid", data.getUserID());
+                            intent.putExtra("icon", data.getIcon().toString());
+
                             intent.putExtra("type", 2);
                             context.startActivity(intent);
 
@@ -498,7 +502,9 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                             NoficationData.Result data2 = list.get(getAdapterPosition());
                             Intent intent2 = new Intent(context, NotificationHolderActivity.class);
                             intent2.putExtra("holder", "like");
-                            intent2.putExtra("data", data2);
+                            intent2.putExtra("itemid", data2.getItemID());
+                            intent2.putExtra("userid", data2.getUserID());
+                            intent2.putExtra("icon", data2.getIcon().toString());
                             intent2.putExtra("type", 2);
                             context.startActivity(intent2);
                         } else {
@@ -553,7 +559,7 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
 
         }
 
-        public class EventAddedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,NotificationView {
+        public class EventAddedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, NotificationView {
 
 //            Button connectButton, ignoreButton;
 //            TextView name, message;
@@ -588,11 +594,13 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                             NoficationData.Result data = list.get(getAdapterPosition());
                             Intent intent = new Intent(context, NotificationHolderActivity.class);
                             intent.putExtra("holder", "like");
-                            intent.putExtra("data", data);
-                            if (list.get(getAdapterPosition()).getTypeID()==3 ||
-                                    list.get(getAdapterPosition()).getTypeID()==1){//one to one meeting
+                            intent.putExtra("itemid", data.getItemID());
+                            intent.putExtra("userid", data.getUserID());
+                            intent.putExtra("icon", data.getIcon().toString());
+                            if (list.get(getAdapterPosition()).getTypeID() == 3 ||
+                                    list.get(getAdapterPosition()).getTypeID() == 1) {//one to one meeting
                                 intent.putExtra("type", 1);
-                            }else {
+                            } else {
                                 intent.putExtra("type", 2);
                             }
                             context.startActivity(intent);
@@ -600,18 +608,6 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                         } else {
                             Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                         }
-//                        Calendar cal = Calendar.getInstance();
-//
-//                        Intent intent = new Intent(Intent.ACTION_EDIT);
-//                        intent.setType("vnd.android.cursor.item/event");
-//                        intent.putExtra(CalendarContract.Events.TITLE, list.get(getAdapterPosition()).getItemName());
-//                        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-//                                cal.getTime().getTime());
-//                        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
-//                                cal.getTime().getTime());
-//                        intent.putExtra(CalendarContract.Events.ALL_DAY, false);// periodicity
-//                        intent.putExtra(CalendarContract.Events.DESCRIPTION, "Tech Mart Event");
-//                        context.startActivity(intent);
                         break;
                     case R.id.imageView16:
                         if (AppUtils.isInternetAvailable(context)) {
@@ -625,6 +621,7 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
 
                 }
             }
+
             @Override
             public void loadData(List<NoficationData.Result> list) {
 
@@ -701,8 +698,8 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
                         if (AppUtils.isInternetAvailable(context)) {
                             //profileHolder
                             NoficationData.Result data = list.get(getAdapterPosition());
-                            Intent intent = new Intent(context , HomeActivity.class);
-                            intent.putExtra("profileHolder"  , data.getRelativeUserID());
+                            Intent intent = new Intent(context, HomeActivity.class);
+                            intent.putExtra("profileHolder", data.getRelativeUserID());
                             Globals.CAME_FROM_NOTIFICATION_TO_GROUP = true;
 
                             context.startActivity(intent);
@@ -915,7 +912,7 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
 
         public class DefaultHolder extends RecyclerView.ViewHolder {
 
-                TextView message;
+            TextView message;
 
             public DefaultHolder(View itemView) {
                 super(itemView);

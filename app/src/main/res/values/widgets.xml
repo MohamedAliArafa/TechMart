@@ -209,7 +209,7 @@
     <style name="menuItemSepatator">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/change_password_seperator_height</item>
-        <item name="android:background">@android:color/white</item>
+        <item name="android:background">#a2a2a2</item>
         <item name="android:layout_marginRight">5dp</item>
         <item name="android:layout_marginLeft">3dp</item>
     </style>

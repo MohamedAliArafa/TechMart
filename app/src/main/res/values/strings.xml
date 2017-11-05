@@ -54,7 +54,7 @@
     <string name="drawer_closed_desc">Drawer is Closed</string>
     <string name="preference_setting">Preference Settings</string>
     <string name="change">Change</string>
-    <string name="notification">Notification</string>
+    <string name="notification">Notifications</string>
     <string name="change_pass">Change Password</string>
     <string name="new_pass">New Password</string>
     <string name="repeat_pass">Repeat New Password</string>

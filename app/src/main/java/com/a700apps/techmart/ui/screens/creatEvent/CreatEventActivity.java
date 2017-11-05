@@ -294,7 +294,6 @@ public class CreatEventActivity extends AppCompatActivity implements
                     Snackbar snackbar1 = Snackbar.make(view, R.string.no_internet_connection, Snackbar.LENGTH_SHORT);
                     snackbar1.show();
                 } else {
-
                     uploadFileOnetoOne(editTextTitle, editTextDesc);
 
                 }
@@ -385,8 +384,6 @@ public class CreatEventActivity extends AppCompatActivity implements
                 dpd2.show(getFragmentManager(), "Datepickerdialog");
                 break;
         }
-
-
     }
 
     @Override
@@ -939,8 +936,11 @@ public class CreatEventActivity extends AppCompatActivity implements
                         Log.e("date", "start" + mStartDate + "enddate" + mEndDate);
                         if (check) {
 
-                            presenter.sendEvent(mStartTime, mEndTime, innerModle.getLongitude(), innerModle.getLatitude(), getCompleteAddressString(innerModle.getLongitude(), innerModle.getLatitude()), desired_string, PreferenceHelper.getUserId(CreatEventActivity.this),
-                                    title.getText().toString(), Desc.getText().toString(), mStartDate, mEndDate, "", false, mImagePath, "", String.valueOf(currentTime), true, CreatEventActivity.this);
+                            presenter.sendEvent(mStartTime, mEndTime, innerModle.getLongitude(),
+                                    innerModle.getLatitude(), getCompleteAddressString(innerModle.getLongitude(),
+                                            innerModle.getLatitude()), desired_string, PreferenceHelper.getUserId(CreatEventActivity.this),
+                                    title.getText().toString(), Desc.getText().toString(), mStartDate, mEndDate,
+                                    "", false, mImagePath, "", String.valueOf(currentTime), true, CreatEventActivity.this);
                             dialog.dismiss();
                         } else {
 

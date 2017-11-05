@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/item_height"
+    android:id="@+id/contain"
+    android:layout_marginEnd="10dp"
+    android:layout_marginStart="10dp"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/iv_event"
+        android:layout_width="@dimen/item_post_image_width"
+        android:layout_height="@dimen/item_post_image_height"
+
+        android:layout_alignParentLeft="true"
+        android:layout_centerInParent="true"
+        app:srcCompat="@drawable/img1"
+        android:scaleType="fitXY"/>
+
+    <LinearLayout
+        android:id="@+id/lin_contain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="left|center"
+        android:layout_marginLeft="@dimen/general_margin"
+        android:layout_toRightOf="@+id/iv_event"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/lin_category"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/fragment_container"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+
+            <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+                android:gravity="center"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"
+                android:textSize="12sp"
+                android:text=""
+                android:textColor="@color/button_light_text" />
+
+            <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+                android:id="@+id/tv_username"
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+                android:layout_marginStart="4dp"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:text=""
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"
+                android:textColor="@color/button_light_text" />
+
+            <TextView
+                android:id="@+id/tv_"
+                android:layout_width="2dp"
+                android:layout_height="15dp"
+                android:background="@color/red_join_dialog"
+                android:gravity="center"
+                android:textColor="@color/button_light_text" />
+
+        </LinearLayout>
+
+        <!--<TextView-->
+        <!--android:id="@+id/tv_date"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@color/blackGreenColor"-->
+        <!--android:textColor="@color/button_light_text"-->
+        <!--android:textSize="@dimen/greeting_card_text" />-->
+
+        <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/toolbar_hint_text"
+            tools:layout_editor_absoluteX="96dp"
+            tools:layout_editor_absoluteY="35dp"
+            android:textSize="@dimen/post_card_text"/>
+
+        <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+            android:id="@+id/tv_description"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:textColor="@color/about_row_grey"
+            android:textSize="@dimen/greeting_card_text"
+            android:maxLines="1" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_add_calender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/general_margin"
+                app:srcCompat="@drawable/ic_add_clander"
+                tools:layout_editor_absoluteX="106dp"
+                tools:layout_editor_absoluteY="106dp" />
+
+            <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+                android:id="@+id/tv_add_calender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add to calender"
+                android:textColor="@color/white"
+                android:textSize="@dimen/greeting_card_text"
+                tools:layout_editor_absoluteX="144dp"
+                tools:layout_editor_absoluteY="112dp" />
+
+
+            <ImageView
+                android:id="@+id/iv_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/general_margin"
+                android:layout_marginRight="@dimen/general_margin"
+                app:srcCompat="@drawable/ic_share"
+                tools:layout_editor_absoluteX="303dp"
+                tools:layout_editor_absoluteY="106dp" />
+
+            <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
+                android:id="@+id/tv_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="share"
+                android:textColor="@color/white"
+                android:textSize="@dimen/greeting_card_text"
+
+                tools:layout_editor_absoluteX="335dp"
+                tools:layout_editor_absoluteY="112dp" />
+
+
+            <ImageView
+                android:id="@+id/iv_more"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="40dp"
+                app:srcCompat="@drawable/ic_more"
+                tools:layout_editor_absoluteX="362dp"
+                tools:layout_editor_absoluteY="73dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
+
+
+    <View
+        android:id="@+id/view11"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/light_color_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+</RelativeLayout>

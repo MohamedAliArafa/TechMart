@@ -16,7 +16,6 @@ import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.DialogCreator;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
 import com.a700apps.techmart.utils.PreferenceHelper;
-import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.List;
 
@@ -27,7 +26,6 @@ import java.util.List;
 public class RelativeEventFragment extends Fragment implements TimeLineView {
 
     private TimeLinePresenter presenter;
-    AVLoadingIndicatorView indicatorView;
 
     public RelativeEventFragment() {
         // Required empty public constructor
@@ -45,7 +43,6 @@ public class RelativeEventFragment extends Fragment implements TimeLineView {
         presenter.attachView(this);
 
         rv = (EmptyRecyclerView) view.findViewById(R.id.recyclerView);
-        indicatorView = view.findViewById(R.id.avi);
 
         relativeId = getArguments().getString("RelativId");
 

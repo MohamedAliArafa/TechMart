@@ -38,4 +38,14 @@ public class Globals {
 
 
 
+
+    public static boolean CAMETOEDIT = false;
+    public static double lat = 0;
+    public static double lng = 0;
+    public static String placename = "";
+
+
+    public static boolean PUSH = false;
+
+
 }

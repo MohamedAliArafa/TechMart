@@ -18,9 +18,10 @@ public class NotificationHolderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notification_holder);
 
         if (getIntent().getStringExtra("holder").equals("like")){
-            NoficationData.Result data = (NoficationData.Result) getIntent().getSerializableExtra("data");
             Bundle bundle = new Bundle();
-            bundle.putSerializable("data" , data);
+            bundle.putInt("itemid", getIntent().getIntExtra("itemid",0));
+            bundle.putString("userid", getIntent().getStringExtra("userid"));
+            bundle.putString("icon", getIntent().getStringExtra("icon"));
             bundle.putInt("type" , getIntent().getIntExtra("type" , 0));
             PostDetailsNotificationFragment fragment = new PostDetailsNotificationFragment();
             fragment.setArguments(bundle);

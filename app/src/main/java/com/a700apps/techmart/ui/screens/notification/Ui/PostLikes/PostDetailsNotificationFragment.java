@@ -117,9 +117,11 @@ public class PostDetailsNotificationFragment extends Fragment implements View.On
         eventResult= new NotificationDataLike();
 
 
-        final NoficationData.Result data = (NoficationData.Result) getArguments().getSerializable("data");
+//        final NoficationData.Result data = (NoficationData.Result) getArguments().getSerializable("data");
         int type = getArguments().getInt("type");
-
+        int itemid = getArguments().getInt("itemid");
+        String userid = getArguments().getString("userid");
+        String icon = getArguments().getString("icon");
 
         // if event
         if (type == 1) {
@@ -127,7 +129,7 @@ public class PostDetailsNotificationFragment extends Fragment implements View.On
         }
 
 
-        getPostData(data.getItemID(), type, data.getUserID());
+        getPostData(itemid, type,userid);
         view.findViewById(R.id.imageView4).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,7 +138,7 @@ public class PostDetailsNotificationFragment extends Fragment implements View.On
         });
 
         Glide.with(this)
-                .load(MainApi.IMAGE_IP + data.getIcon()).placeholder(R.drawable.placeholder)
+                .load(MainApi.IMAGE_IP + icon).placeholder(R.drawable.placeholder)
                 .into(iv_slider);
 
 

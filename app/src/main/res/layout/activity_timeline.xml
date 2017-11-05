@@ -82,17 +82,27 @@
             app:snap="false" />
 
     </FrameLayout>
-    <android.support.v4.view.ViewPager
+    <!--<android.support.v4.view.ViewPager-->
+        <!--android:id="@+id/vp_timeline"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+
+        <!--android:layout_below="@+id/fragment_container"-->
+        <!--android:layout_marginLeft="0dp"-->
+        <!--android:layout_marginRight="0dp"-->
+        <!--android:layout_marginTop="35dp"/>-->
+
+
+    <com.a700apps.techmart.utils.DisbledViewPagerScrolling
         android:id="@+id/vp_timeline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-
         android:layout_below="@+id/fragment_container"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
-        android:layout_marginTop="35dp"/>
-
+        android:layout_marginTop="35dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"

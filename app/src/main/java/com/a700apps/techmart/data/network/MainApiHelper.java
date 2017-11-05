@@ -396,6 +396,32 @@ public class MainApiHelper {
         return jsonObject;
     }
 
+
+    public static JSONObject editTimelineItemEvent(String GroupID, int ID, boolean IsPublic, String Title, String Descr, String Image, String MediaFile, String CreatedBy,
+                                                   int Type ,
+                                                   double lat , double lng , String startDate , String endDate , String startTime ,
+                                                   String endTime,String locationName) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("GroupID", GroupID);
+        jsonObject.put("ID", ID);
+        jsonObject.put("IsPublic", IsPublic);
+        jsonObject.put("Title", Title);
+        jsonObject.put("Descr", Descr);
+        jsonObject.put("Image", Image);
+        jsonObject.put("MediaFile", MediaFile);
+        jsonObject.put("CreatedBy", CreatedBy);
+        jsonObject.put("Type", Type);
+        jsonObject.put("Type", Type);
+        jsonObject.put("Longtude", lat);
+        jsonObject.put("Latitude", lng);
+        jsonObject.put("StartDate", startDate);
+        jsonObject.put("EndDate", endDate);
+        jsonObject.put("StartTime", startTime);
+        jsonObject.put("EndTime", endTime);
+        jsonObject.put("LocationName", locationName);
+        return jsonObject;
+    }
+
     public static JSONObject manageGroupMember(String UserID) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("UserID", UserID);

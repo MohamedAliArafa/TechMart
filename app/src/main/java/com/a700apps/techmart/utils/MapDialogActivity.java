@@ -49,6 +49,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -92,49 +93,43 @@ public class MapDialogActivity extends FragmentActivity implements OnMapReadyCal
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (innerModle.getLatitude()==null || innerModle.getLongitude() ==null){
+
+                if (innerModle.getLatitude() == null || innerModle.getLongitude() == null) {
                     Toast.makeText(MapDialogActivity.this, "Please wait till get your location", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra(URLS.EXTRA_PARCELABLE, innerModle);
                 setResult(RESULT_OK, returnIntent);
-                addressTextView.setText(getCompleteAddressString(innerModle.getLatitude(), innerModle.getLongitude()));
                 finish();
             }
         });
-
-//        if (getIntent().getExtras().getString("place")!=null){
-//            double lat = getIntent().getExtras().getDouble("lat");
-//            double lng = getIntent().getExtras().getDouble("lng");
-//            String place = getIntent().getExtras().getString("place");
-//
-//            MarkerOptions optionFirstLocation = new MarkerOptions();
-//            optionFirstLocation.position(new LatLng(lat, lng));
-//            optionFirstLocation.icon(BitmapDescriptorFactory.defaultMarker());
-//            sourceMarker = mMap.addMarker(optionFirstLocation);
-//            addressTextView.setText(place);
-//
-//        }
-
     }
 
+
+    @Override
+    protected void onStop() {
+        Globals.CAMETOEDIT = false;
+        super.onStop();
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        if (getIntent().getExtras().getString("place")!=null){
-            double lat = getIntent().getExtras().getDouble("lat");
-            double lng = getIntent().getExtras().getDouble("lng");
-            String place = getIntent().getExtras().getString("place");
+        if (Globals.CAMETOEDIT) {
+//            double lat = getIntent().getExtras().getDouble("lat");
+//            double lng = getIntent().getExtras().getDouble("lng");
+//            String place = getIntent().getExtras().getString("place");
 
+
+            Log.e("TTTTTTEdt", "lat   " + Globals.lat);
             MarkerOptions optionFirstLocation = new MarkerOptions();
-            optionFirstLocation.position(new LatLng(lat, lng));
+            optionFirstLocation.position(new LatLng(Globals.lat, Globals.lng));
             optionFirstLocation.icon(BitmapDescriptorFactory.defaultMarker());
             sourceMarker = mMap.addMarker(optionFirstLocation);
-            addressTextView.setText(place);
-
+            addressTextView.setText(Globals.placename);
+            initCamera(Globals.lat, Globals.lng);
         }
 
         if (isLocationEnabled(MapDialogActivity.this)) {
@@ -258,6 +253,7 @@ public class MapDialogActivity extends FragmentActivity implements OnMapReadyCal
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(TAG, "onConnected");
+
         createLocationRequest();
     }
 
@@ -267,14 +263,13 @@ public class MapDialogActivity extends FragmentActivity implements OnMapReadyCal
         mLocationRequest.setFastestInterval(TIME_FASTEST_INTERVAL);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         startLocationUpdates();
-
-
     }
 
     protected void startLocationUpdates() {
 
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 googleApiClient, mLocationRequest, this);
+
         if (PermissionTool.checkAllPermission(MapDialogActivity.this, new String[]{PermissionTool.PERMISSION_LOCATION, PermissionTool.PERMISSION_location_COARSE})) {
 
         } else {
@@ -314,7 +309,7 @@ public class MapDialogActivity extends FragmentActivity implements OnMapReadyCal
             Log.e("laststep", location.getLatitude() + "");
             Log.e("laststep", location.getLongitude() + "");
             Log.e("getAddress", addresses.get(0) + "");
-          //  Toast.makeText(this,getCompleteAddressString(location.getLongitude(), location.getLatitude()),Toast.LENGTH_LONG).show();
+            //  Toast.makeText(this,getCompleteAddressString(location.getLongitude(), location.getLatitude()),Toast.LENGTH_LONG).show();
 
 //            String strAdd = "";
 //            StringBuilder strReturnedAddress = new StringBuilder("");
@@ -328,23 +323,38 @@ public class MapDialogActivity extends FragmentActivity implements OnMapReadyCal
             // Catch invalid latitude or longitude values.
 //            errorMessage = "invalid lat long used";
         }
-        MarkerOptions optionFirstLocation = new MarkerOptions();
-        optionFirstLocation.position(new LatLng(location.getLatitude(), location.getLongitude()));
-        optionFirstLocation.icon(BitmapDescriptorFactory.defaultMarker());
-        sourceMarker = mMap.addMarker(optionFirstLocation);
-       // if (SharedPrefUserDataUtils.getLocationLatitude(this) != "") {
-          //  double lat = Double.parseDouble(SharedPrefUserDataUtils.getLocationLatitude(this));
-            //double longt = Double.parseDouble(SharedPrefUserDataUtils.getLocationLongtude(this));
-            //addressTextView.setText(getCompleteAddressString(lat, longt));
-
-            //initCamera(lat, longt);
+        if (Globals.CAMETOEDIT) {
+//            double lat = getIntent().getExtras().getDouble("lat");
+//            double lng = getIntent().getExtras().getDouble("lng");
+//            String place = getIntent().getExtras().getString("place");
 
 
-      //  } else {
-        addressTextView.setText(getCompleteAddressString(location.getLatitude(), location.getLongitude()));
-         //   Toast.makeText(this,getCompleteAddressString(location.getLatitude(), location.getLongitude()),Toast.LENGTH_LONG).show();
+            Log.e("TTTTTTEdt", "lat   " + Globals.lat);
+            MarkerOptions optionFirstLocation = new MarkerOptions();
+            optionFirstLocation.position(new LatLng(Globals.lat, Globals.lng));
+            optionFirstLocation.icon(BitmapDescriptorFactory.defaultMarker());
+            sourceMarker = mMap.addMarker(optionFirstLocation);
+            addressTextView.setText(Globals.placename);
+            initCamera(Globals.lat, Globals.lng);
+        } else {
+            MarkerOptions optionFirstLocation = new MarkerOptions();
+            optionFirstLocation.position(new LatLng(location.getLatitude(), location.getLongitude()));
+            optionFirstLocation.icon(BitmapDescriptorFactory.defaultMarker());
+            sourceMarker = mMap.addMarker(optionFirstLocation);
+            addressTextView.setText(getCompleteAddressString(location.getLatitude(), location.getLongitude()));
             initCamera(location.getLatitude(), location.getLongitude());
-       // }
+
+        }
+        // if (SharedPrefUserDataUtils.getLocationLatitude(this) != "") {
+        //  double lat = Double.parseDouble(SharedPrefUserDataUtils.getLocationLatitude(this));
+        //double longt = Double.parseDouble(SharedPrefUserDataUtils.getLocationLongtude(this));
+        //addressTextView.setText(getCompleteAddressString(lat, longt));
+
+        //initCamera(lat, longt);
+
+
+        //  } else {
+        // }
 
 //            moveMapTo(location.getLatitude(), location.getLongitude());
         stopLocationUpdates();
@@ -354,7 +364,6 @@ public class MapDialogActivity extends FragmentActivity implements OnMapReadyCal
         innerModle = new InnerModle(location.getLatitude(), location.getLongitude(), "");
 
     }
-
 
 
     @Override
@@ -368,9 +377,9 @@ public class MapDialogActivity extends FragmentActivity implements OnMapReadyCal
         Log.e("latitude", latLng.latitude + "");
         Log.e("longitude", latLng.longitude + "");
         innerModle = new InnerModle(latLng.latitude, latLng.longitude, "");
-      //  SharedPrefUserDataUtils.setLocationLatitude(this, latLng.latitude + "");
+        //  SharedPrefUserDataUtils.setLocationLatitude(this, latLng.latitude + "");
         //SharedPrefUserDataUtils.setLocationLongtude(this, latLng.longitude + "");
-     //   Toast.makeText(this,getCompleteAddressString(innerModle.getLongitude(), innerModle.getLatitude()),Toast.LENGTH_LONG).show();
+        //   Toast.makeText(this,getCompleteAddressString(innerModle.getLongitude(), innerModle.getLatitude()),Toast.LENGTH_LONG).show();
 
         addressTextView.setText(getCompleteAddressString(innerModle.getLatitude(), innerModle.getLongitude()));
 

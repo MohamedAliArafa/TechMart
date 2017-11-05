@@ -3,6 +3,8 @@ package com.a700apps.techmart.ui.screens.mygroup;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,11 +23,14 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.AutoCompleteGroupAdapter;
 import com.a700apps.techmart.adapter.GroupsAdapter;
+import com.a700apps.techmart.adapter.ManageGroupAdapter;
 import com.a700apps.techmart.adapter.RelativeGroupAadpter;
 import com.a700apps.techmart.data.model.ServerResponse;
 import com.a700apps.techmart.data.model.UserGroup;
@@ -41,13 +46,18 @@ import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.Globals;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RelativeGroupsFragment extends Fragment implements GroupView {
     private MyGroupPresenter mPresenter;
     RecyclerView rv;
     ImageView mProfileImageView, mNotificationImageView, mSideMenuImageView;
     public AVLoadingIndicatorView indicatorView;
-    AutoCompleteTextView searchAutoCompleteTextView;
+    EditText searchAutoCompleteTextView;
+    TextView empty;
 
+    List<UserGroup> suggestions = new ArrayList<>();
 
 
     public RelativeGroupsFragment() {
@@ -67,13 +77,15 @@ public class RelativeGroupsFragment extends Fragment implements GroupView {
         mNotificationImageView = (ImageView) view.findViewById(R.id.new_profile);
         mSideMenuImageView = (ImageView) view.findViewById(R.id.imageView4);
         searchAutoCompleteTextView = view.findViewById(R.id.edt_search);
-        searchAutoCompleteTextView.setThreshold(1);
+        empty = view.findViewById(R.id.empty);
+
+//        searchAutoCompleteTextView.setThreshold(1);
 
         mSideMenuImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                getActivity().onBackPressed();
-                ((HomeActivity)getActivity()).openDrawer();
+                getActivity().onBackPressed();
+//                ((HomeActivity)getActivity()).openDrawer();
             }
         });
 
@@ -81,7 +93,7 @@ public class RelativeGroupsFragment extends Fragment implements GroupView {
             @Override
             public void onClick(View v) {
 //                ActivityUtils.openActivity(getActivity(), EditProfileActivity.class, false);
-                ((HomeActivity) getActivity()).openFragment(EditProfileFragment.class , null);
+                ((HomeActivity) getActivity()).openFragment(EditProfileFragment.class, null);
             }
         });
 
@@ -93,21 +105,21 @@ public class RelativeGroupsFragment extends Fragment implements GroupView {
             }
         });
 
-        mPresenter.GetRelativeGroupByUserID(getActivity() , getArguments().getString("RelativId"));
+        mPresenter.GetRelativeGroupByUserID(getActivity(), getArguments().getString("RelativId"));
         rv = (RecyclerView) view.findViewById(R.id.recyclerView);
 
-        searchAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                UserGroup group = (UserGroup) adapterView.getItemAtPosition(i);
-                Log.e("CLICK" , group.Name);
-                Bundle bundle = new Bundle();
-                bundle.putInt("selectedCategory" ,group.ID );
-                Globals.GROUP_ID = group.ID;
-
-                ((HomeActivity )getActivity()).openFragment(GroupsTimeLineFragment.class , bundle);
-            }
-        });
+//        searchAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                UserGroup group = (UserGroup) adapterView.getItemAtPosition(i);
+//                Log.e("CLICK" , group.Name);
+//                Bundle bundle = new Bundle();
+//                bundle.putInt("selectedCategory" ,group.ID );
+//                Globals.GROUP_ID = group.ID;
+//
+//                ((HomeActivity )getActivity()).openFragment(GroupsTimeLineFragment.class , bundle);
+//            }
+//        });
         return view;
     }
 
@@ -131,17 +143,85 @@ public class RelativeGroupsFragment extends Fragment implements GroupView {
     }
 
     @Override
-    public void updateUi(UserGroupData data) {
+    public void updateUi(final UserGroupData data) {
         rv.setAdapter(new GroupsAdapter(getActivity(), data.userGroup));
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        searchAutoCompleteTextView.setAdapter(new AutoCompleteGroupAdapter(getActivity() , R.layout.custom_text_view , data.userGroup , rv));
+        searchAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (s.toString() == null){
+                    searchAutoCompleteTextView.setCompoundDrawables(getResources().getDrawable(R.drawable.ic_search) , null ,null, null);
+                }else {
+                    searchAutoCompleteTextView.setCompoundDrawables(null , null ,null, null);
+                }
+
+                suggestions.clear();
+                for (int i = 0; i < data.userGroup.size(); i++) {
+                    if (data.userGroup.get(i).Name.toLowerCase().startsWith(s.toString().toLowerCase())) {
+                        suggestions.add(data.userGroup.get(i));
+                    }
+                }
+                if (suggestions.size() > 0) {
+                    empty.setVisibility(View.GONE);
+                } else {
+                    empty.setVisibility(View.VISIBLE);
+                }
+                rv.setAdapter(new GroupsAdapter(getActivity(), suggestions));
+            }
+        });
+//        searchAutoCompleteTextView.setAdapter(new AutoCompleteGroupAdapter(getActivity() , R.layout.custom_text_view , data.userGroup , rv));
     }
 
     @Override
-    public void updateRelativeUi(UserGroupData data) {
+    public void updateRelativeUi(final UserGroupData data) {
         rv.setAdapter(new RelativeGroupAadpter(getActivity(), data.userGroup));
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        searchAutoCompleteTextView.setAdapter(new AutoCompleteGroupAdapter(getActivity() , R.layout.custom_text_view , data.userGroup ,rv));
+        searchAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (s.toString() == null){
+                    searchAutoCompleteTextView.setCompoundDrawables(getResources().getDrawable(R.drawable.ic_search) , null ,null, null);
+                }else {
+                    searchAutoCompleteTextView.setCompoundDrawables(null , null ,null, null);
+                }
+
+                suggestions.clear();
+                for (int i = 0; i < data.userGroup.size(); i++) {
+                    if (data.userGroup.get(i).Name.toLowerCase().startsWith(s.toString().toLowerCase())) {
+                        suggestions.add(data.userGroup.get(i));
+                    }
+                }
+                if (suggestions.size() > 0) {
+                    empty.setVisibility(View.GONE);
+                } else {
+                    empty.setVisibility(View.VISIBLE);
+                }
+                rv.setAdapter(new GroupsAdapter(getActivity(), suggestions));
+            }
+        });
+//        searchAutoCompleteTextView.setAdapter(new AutoCompleteGroupAdapter(getActivity() , R.layout.custom_text_view , data.userGroup ,rv));
     }
 }
 

@@ -171,7 +171,6 @@ public class BoardGroupUsersAdapter extends RecyclerView.Adapter<BoardGroupUsers
                     Bundle bundle = new Bundle();
                     bundle.putString("RelativId", mUserGroupList.get(position).getUserID());
                     bundle.putInt("GroupId", Id);
-
                     ((HomeActivity) context).openFragment(MemberProfileFragment.class, bundle);
                     break;
                 case R.id.view_remove_btn:

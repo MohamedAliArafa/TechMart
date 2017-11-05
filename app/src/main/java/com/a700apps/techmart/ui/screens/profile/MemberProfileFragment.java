@@ -56,7 +56,6 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
     Button btn_approve, btn_cancel;
 
 
-    Dialog dialogsLoading;
     public static int sCorner = 10;
     public static int sMargin = 2;
     public static int sBorder = 5;
@@ -304,10 +303,14 @@ public class MemberProfileFragment extends Fragment implements ProfileView, View
         mMessageButton.setVisibility(View.VISIBLE);
         mFollowButton.setText(R.string.unfollow);
         mConnectButton.setText(R.string.disconnect);
-//        mContainerLinearLayout.setVisibility(View.VISIBLE);
+        mContainerLinearLayout.setVisibility(View.VISIBLE);
 
         int count = Integer.parseInt(mFriend.getText().toString());
         mFriend.setText(String.valueOf(++count));
+
+
+        int countFollowers = Integer.parseInt(mFollowers.getText().toString());
+        mFollowers.setText(String.valueOf(++countFollowers));
 
         btn_cancel.setVisibility(View.INVISIBLE);
         btn_approve.setVisibility(View.INVISIBLE);

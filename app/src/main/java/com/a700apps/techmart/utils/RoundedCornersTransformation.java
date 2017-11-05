@@ -236,7 +236,7 @@ public class RoundedCornersTransformation implements Transformation<Bitmap> {
         if (mColor != null) {
             strokePaint.setColor(Color.parseColor(mColor));
         } else {
-            strokePaint.setColor(Color.BLACK);
+            strokePaint.setColor(Color.WHITE);
         }
         strokePaint.setStrokeWidth(mBorder);
 

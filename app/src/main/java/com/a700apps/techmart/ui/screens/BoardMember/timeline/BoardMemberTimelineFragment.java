@@ -32,6 +32,7 @@ import com.a700apps.techmart.ui.screens.notification.NotificationFragment;
 import com.a700apps.techmart.ui.screens.profile.EditProfileActivity;
 import com.a700apps.techmart.ui.screens.profile.EditProfileFragment;
 import com.a700apps.techmart.utils.ActivityUtils;
+import com.a700apps.techmart.utils.DisbledViewPagerScrolling;
 import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
 import com.a700apps.techmart.utils.loadingDialog;
@@ -47,7 +48,7 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
 
-    private ViewPager mViewPager;
+    private DisbledViewPagerScrolling mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private LinearLayout mTabContainer;
     CircleProgressBar postCircleProgressBar, eventCircleProgressBar, memberCircleProgressBar;
@@ -83,18 +84,12 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
 //        indicatorView = (AVLoadingIndicatorView) view.findViewById(R.id.avi);
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) view.findViewById(R.id.vp_timeline);
+        mViewPager = (DisbledViewPagerScrolling) view.findViewById(R.id.vp_timeline);
 
 
         postCircleProgressBar = (CircleProgressBar) view.findViewById(R.id.postCircleProgressBar);
-//        postCircleProgressBar.setProgress(40);
-
         eventCircleProgressBar = (CircleProgressBar) view.findViewById(R.id.eventCircleProgressBar);
-//        eventCircleProgressBar.setProgress(40);
-
         memberCircleProgressBar = (CircleProgressBar) view.findViewById(R.id.memberCircleProgressBar);
-//        memberCircleProgressBar.setProgress(40);
-
 
         dayTextView = view.findViewById(R.id.tv_day);
         monthTextView = view.findViewById(R.id.tv_month);
@@ -259,11 +254,11 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                mTabContainer.getChildAt(position).setBackground(getResources().getDrawable(R.drawable.bt_1));
-                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
-                    if (i != position)
-                        mTabContainer.getChildAt(i).setBackground(null);
-                }
+//                mTabContainer.getChildAt(position).setBackground(getResources().getDrawable(R.drawable.bt_1));
+//                for (int i = 0; i < mTabContainer.getChildCount(); i++) {
+//                    if (i != position)
+//                        mTabContainer.getChildAt(i).setBackground(null);
+//                }
             }
 
             @Override
@@ -288,6 +283,11 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
         switch (viewId) {
             case R.id.tv_timeline:
                 mViewPager.setCurrentItem(0);
+                mTabContainer.getChildAt(1).setBackground(null);
+                mTabContainer.getChildAt(2).setBackground(null);
+                mTabContainer.getChildAt(3).setBackground(null);
+                mTabContainer.getChildAt(0).setBackground(getResources().getDrawable(R.drawable.bt_1));
+
 //                mTabContainer.getChildAt(1).setVisibility(View.GONE);
 //                mTabContainer.getChildAt(3).setVisibility(View.VISIBLE);
 //                mTabContainer.getChildAt(5).setVisibility(View.VISIBLE);
@@ -295,6 +295,11 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
                 break;
             case R.id.tv_posts:
                 mViewPager.setCurrentItem(1);
+                mTabContainer.getChildAt(0).setBackground(null);
+                mTabContainer.getChildAt(2).setBackground(null);
+                mTabContainer.getChildAt(3).setBackground(null);
+                mTabContainer.getChildAt(1).setBackground(getResources().getDrawable(R.drawable.bt_1));
+
 //                mTabContainer.getChildAt(1).setVisibility(View.GONE);
 //                mTabContainer.getChildAt(3).setVisibility(View.GONE);
 //                mTabContainer.getChildAt(5).setVisibility(View.VISIBLE);
@@ -302,6 +307,11 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
                 break;
             case R.id.tv_event:
                 mViewPager.setCurrentItem(2);
+                mTabContainer.getChildAt(1).setBackground(null);
+                mTabContainer.getChildAt(0).setBackground(null);
+                mTabContainer.getChildAt(3).setBackground(null);
+                mTabContainer.getChildAt(2).setBackground(getResources().getDrawable(R.drawable.bt_1));
+
 //                mTabContainer.getChildAt(1).setVisibility(View.VISIBLE);
 //                mTabContainer.getChildAt(3).setVisibility(View.GONE);
 //                mTabContainer.getChildAt(5).setVisibility(View.GONE);
@@ -309,6 +319,11 @@ public class BoardMemberTimelineFragment extends Fragment implements View.OnClic
                 break;
             case R.id.tv_member:
                 mViewPager.setCurrentItem(3);
+                mTabContainer.getChildAt(1).setBackground(null);
+                mTabContainer.getChildAt(2).setBackground(null);
+                mTabContainer.getChildAt(0).setBackground(null);
+                mTabContainer.getChildAt(3).setBackground(getResources().getDrawable(R.drawable.bt_1));
+
 //                mTabContainer.getChildAt(1).setVisibility(View.VISIBLE);
 //                mTabContainer.getChildAt(3).setVisibility(View.VISIBLE);
 //                mTabContainer.getChildAt(5).setVisibility(View.GONE);

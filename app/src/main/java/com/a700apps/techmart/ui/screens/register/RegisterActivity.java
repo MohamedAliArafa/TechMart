@@ -557,7 +557,7 @@ public class RegisterActivity extends Activity implements RegisterView, View.OnC
                 }
 
 
-                if (mobile.startsWith("01") || mobile.startsWith("096") || mobile.startsWith("+97")) {
+                if (mobile.startsWith("01") || mobile.startsWith("096") || mobile.startsWith("0097")) {
                     boolean validMobileNumber = Validator.validMobileNumber(mobile);
                     if (!validMobileNumber) {
                         mPhoneNumberEditText.setError(getResources().getString(R.string.invalid_mobile_number));

@@ -30,9 +30,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RemoteViews;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.a700apps.techmart.R;
 import com.a700apps.techmart.adapter.NavDrawerAdapter;
+import com.a700apps.techmart.data.model.NoficationData;
 import com.a700apps.techmart.data.network.MainApi;
 import com.a700apps.techmart.ui.screens.BoardMember.JoinRequests.JoinRequestsFragment;
 import com.a700apps.techmart.ui.screens.BoardMember.timeline.BoardMemberTimelineFragment;
@@ -45,6 +47,7 @@ import com.a700apps.techmart.ui.screens.meeting.MeetingActivity;
 import com.a700apps.techmart.ui.screens.message.MessageFragment;
 import com.a700apps.techmart.ui.screens.mygroup.MyGroupsListFragment;
 import com.a700apps.techmart.ui.screens.mygroup.RelativeGroupsFragment;
+import com.a700apps.techmart.ui.screens.notification.Ui.PostLikes.PostDetailsNotificationFragment;
 import com.a700apps.techmart.ui.screens.profile.EditProfileFragment;
 import com.a700apps.techmart.ui.screens.profile.EditProfileFragment.changeSideMenuData;
 import com.a700apps.techmart.ui.screens.profile.MemberProfileFragment;
@@ -100,59 +103,110 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         presenter.attachView(this);
 
         presenter.getMyGroup(this);
-//        startActivity(new Intent(this , JoinRequestsActivity.class));
-        if (getIntent().getBooleanExtra("groupLayout", false)) {
-            // show group relative
-            RelativeGroupsFragment fragment = new RelativeGroupsFragment();
-            Bundle bundle = new Bundle();
 
-            bundle.putString("RelativId", getIntent().getStringExtra("RelativId"));
-//             bundle.putString("GroupId", getIntent().getStringExtra("GroupId"));
-            fragment.setArguments(bundle);
-            addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, fragment, false, true);
+        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey("fromPush")) {
+            int TypeID = getIntent().getExtras().getInt("TypeID");
+            Log.e("Type id", TypeID + "");
+            Globals.PUSH = true;
 
-            //show event relativs
-        } else if (getIntent().getStringExtra("holder") != null) {
-
-//            GroupsTimeLineFragment fragment = new GroupsTimeLineFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt("selectedCategory", getIntent().getIntExtra("selectedCategory", 0));
+            if (TypeID == 7) {
+                //NOTIF_TYPE_MESSAGE
+                openFragment(MessageFragment.class, null);
+            }else if (TypeID == 9 || TypeID == 10) {
+                //NOTIF_TYPE_CONNECT || NOTIF_TYPE_FOLLOW
+                Bundle bundle = new Bundle();
+                bundle.putString("RelativId", getIntent().getExtras().getString("RelativId"));
+                bundle.putInt("GroupId", getIntent().getExtras().getInt("GroupId"));
+                Globals.userId = getIntent().getExtras().getString("userid");
+                Globals.GROUP_ID = getIntent().getExtras().getInt("GroupId");
+                openFragment(MemberProfileFragment.class, bundle);
+            }else if (TypeID == 2 || TypeID == 4||TypeID == 8 || TypeID == 13) {
+                //NOTIF_TYPE_POST ||
+                // NOTIF_TYPE_APPROVE_ON_POST ||
+                // NOTIF_TYPE_SOME_ONE_COMMENT_POST||
+                // NOTIF_TYPE_SOME_ONE_LIKES_POST
+                Bundle bundle = new Bundle();
+                bundle.putInt("itemid", getIntent().getIntExtra("itemid",0));
+                bundle.putString("userid", getIntent().getStringExtra("userid"));
+                bundle.putString("icon", getIntent().getStringExtra("icon"));
+                bundle.putInt("type" , 2);
+                openFragment(PostDetailsNotificationFragment.class , bundle);
+            }else if (TypeID == 1 || TypeID == 3||TypeID == 5 || TypeID == 6 || TypeID == 14) {
+                //NOTIF_TYPE_Event ||
+                Bundle bundle = new Bundle();
+                bundle.putInt("itemid", getIntent().getIntExtra("itemid",0));
+                bundle.putString("userid", getIntent().getStringExtra("userid"));
+                bundle.putString("icon", getIntent().getStringExtra("icon"));
+                bundle.putInt("type" , 1);
+                openFragment(PostDetailsNotificationFragment.class , bundle);
+            }else if (TypeID == 11 || TypeID == 12||TypeID == 15) {
+                //NOTIF_TYPE_Group
+                Bundle bundle = new Bundle();
+                bundle.putInt("selectedCategory", getIntent().getIntExtra("GroupId", 0));
 //            fragment.setArguments(bundle);
 
-            openFragment(GroupsTimeLineFragment.class, bundle);
+                openFragment(GroupsTimeLineFragment.class, bundle);
+            }
+
+
+
+
+        } else {
+
+//        startActivity(new Intent(this , JoinRequestsActivity.class));
+            if (getIntent().getBooleanExtra("groupLayout", false)) {
+                // show group relative
+                RelativeGroupsFragment fragment = new RelativeGroupsFragment();
+                Bundle bundle = new Bundle();
+
+                bundle.putString("RelativId", getIntent().getStringExtra("RelativId"));
+//             bundle.putString("GroupId", getIntent().getStringExtra("GroupId"));
+                fragment.setArguments(bundle);
+                addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, fragment, false, true);
+
+                //show event relativs
+            } else if (getIntent().getStringExtra("holder") != null) {
+
+//            GroupsTimeLineFragment fragment = new GroupsTimeLineFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt("selectedCategory", getIntent().getIntExtra("selectedCategory", 0));
+//            fragment.setArguments(bundle);
+
+                openFragment(GroupsTimeLineFragment.class, bundle);
 //            addFragmentToBackStack(getSupportFragmentManager(), R.id.fragment_container, fragment, false
 //                    , true);
 
-            // came from user like activity to view users who like particular post
-        } else if (getIntent().getStringExtra("profilefragment") != null) {
-            String userId = getIntent().getStringExtra("profilefragment");
-            Bundle bundle = new Bundle();
-            bundle.putString("RelativId", userId);
-            bundle.putInt("GroupId", 0);
-//            Globals.userId = userId;
-            openFragmentNoStack(MemberProfileFragment.class, bundle);
-
-        } else if (getIntent().getStringExtra("profileHolder") != null) {
-            String userId = getIntent().getStringExtra("profileHolder");
-
-            if (userId.equals(PreferenceHelper.getUserId(this))) {
-                openFragmentNoStack(EditProfileFragment.class, null);
-            } else {
+                // came from user like activity to view users who like particular post
+            } else if (getIntent().getStringExtra("profilefragment") != null) {
+                String userId = getIntent().getStringExtra("profilefragment");
                 Bundle bundle = new Bundle();
                 bundle.putString("RelativId", userId);
-                bundle.putInt("GroupId", Globals.GROUP_ID);
-                Globals.userId = userId;
+                bundle.putInt("GroupId", 0);
+//            Globals.userId = userId;
                 openFragmentNoStack(MemberProfileFragment.class, bundle);
-            }
-        } else {
-            openTimeLine();
+
+            } else if (getIntent().getStringExtra("profileHolder") != null) {
+                String userId = getIntent().getStringExtra("profileHolder");
+
+                if (userId.equals(PreferenceHelper.getUserId(this))) {
+                    openFragmentNoStack(EditProfileFragment.class, null);
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("RelativId", userId);
+                    bundle.putInt("GroupId", Globals.GROUP_ID);
+                    Globals.userId = userId;
+                    openFragmentNoStack(MemberProfileFragment.class, bundle);
+                }
+            } else {
+                openTimeLine();
 //            openFragment(TimelineFragment.class, null);
 
+            }
         }
+
+
         Timber.d("on create");
     }
-
-
 
 
     public void setToolbar(Toolbar toolbar) {
@@ -351,13 +405,13 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void showManageLayout(boolean show) {
-        if (show){
+        if (show) {
             mDrawerListView.getChildAt(2).setLayoutParams(new AbsListView.LayoutParams
-                    (ViewGroup.LayoutParams.MATCH_PARENT,130));
+                    (ViewGroup.LayoutParams.MATCH_PARENT, 130));
             mDrawerListView.getChildAt(2).setVisibility(View.VISIBLE);
-        }else {
+        } else {
             mDrawerListView.getChildAt(2).setLayoutParams(new AbsListView.LayoutParams
-                    (ViewGroup.LayoutParams.MATCH_PARENT,1));
+                    (ViewGroup.LayoutParams.MATCH_PARENT, 1));
             mDrawerListView.getChildAt(2).setVisibility(View.GONE);
         }
     }
@@ -477,22 +531,26 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
 //            finish();
 //        }
 
+        if (Globals.PUSH) {
+            Globals.PUSH = false;
+            openTimeLine();
+            return;
+        }
 
-        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof EditProfileFragment){
-            if(Globals.CAME_FROM_NOTIFICATION_TO_GROUP) {
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof EditProfileFragment) {
+            if (Globals.CAME_FROM_NOTIFICATION_TO_GROUP) {
                 Globals.CAME_FROM_NOTIFICATION_TO_GROUP = false;
                 finish();
-            }else if (Globals.CAME_FROM_GROUP_MEMBER_TO_MPROFILE){
+            } else if (Globals.CAME_FROM_GROUP_MEMBER_TO_MPROFILE) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("string_key", Globals.GROUP_ID);
                 openFragment(GroupFragment.class, bundle);
-            }else if (Globals.CAME_FROM_BOARD_MEMBER){
+            } else if (Globals.CAME_FROM_BOARD_MEMBER) {
                 getSupportFragmentManager().popBackStack();
-            }
-            else {
+            } else {
                 openTimeLine();
             }
-        }else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof GroupsTimeLineFragment) {
+        } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof GroupsTimeLineFragment) {
             openFragment(MyGroupsListFragment.class, null);
         } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof TimelineFragment) {
             finish();
@@ -507,7 +565,7 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
             openFragment(MemberProfileFragment.class, bundle);
         } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof RelativeGroupsFragment) {
             Bundle bundle = new Bundle();
-            bundle.putString("RelativId", Globals.userId);
+            bundle.putString("RelativId", Globals.relativeId);
             Globals.RETURN_POSITION = true;
             openFragment(MemberProfileFragment.class, bundle);
         } else if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof GroupFragment) {

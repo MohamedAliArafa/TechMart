@@ -79,7 +79,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         View noteView;
 //        switch (viewType) {
 //            case NOTIF_TYPE_EVENT:
-        noteView = inflater.inflate(R.layout.timeline_first_item, parent, false);
+        noteView = inflater.inflate(R.layout.relative_events_item, parent, false);
         return new ViewHolder(noteView);
 
 

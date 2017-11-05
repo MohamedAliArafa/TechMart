@@ -87,7 +87,7 @@
 
     </FrameLayout>
 
-    <android.support.v4.view.ViewPager
+    <com.a700apps.techmart.utils.DisbledViewPagerScrolling
         android:id="@+id/vp_timeline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

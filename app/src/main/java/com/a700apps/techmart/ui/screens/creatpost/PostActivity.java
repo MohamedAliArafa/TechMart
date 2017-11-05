@@ -308,13 +308,13 @@ public class PostActivity extends AppCompatActivity implements PostView {
                 }
                 selectedImagePath = getPathFromURI(PostActivity.this, selectedPicture);
                 // Get and resize profile image
-                String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                Cursor cursor = getContentResolver().query(selectedPicture, filePathColumn, null, null, null);
-                cursor.moveToFirst();
+//                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//                Cursor cursor = getContentResolver().query(selectedPicture, filePathColumn, null, null, null);
+//                cursor.moveToFirst();
 
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
 //                selectedImagePath = cursor.getString(columnIndex);
-                cursor.close();
+//                cursor.close();
 
                 Bitmap loadedBitmap = BitmapFactory.decodeFile(selectedImagePath);
 

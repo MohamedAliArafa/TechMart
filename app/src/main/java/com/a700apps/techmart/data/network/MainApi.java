@@ -53,9 +53,9 @@ import rx.schedulers.Schedulers;
 public class MainApi {
 
 //    public static final String API_LINK = "http://108.179.204.213:8073/api/";
-    public static final String API_LINK = "http://23.236.154.106:8085/api/"; // for development
+    public static final String API_LINK = "http://23.236.154.106:8084/api/"; // for development
     public static final String JSON_TYPE = "application/json";
-    public static final String IMAGE_IP = "http://23.236.154.106:8085";
+    public static final String IMAGE_IP = "http://23.236.154.106:8084";
 //    public static final String IMAGE_IP = "http://108.179.204.213:8073";
     public static final String TAG_DATE_PICKER = "datepicker";
 

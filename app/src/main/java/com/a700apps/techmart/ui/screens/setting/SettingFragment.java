@@ -51,6 +51,7 @@ import com.a700apps.techmart.utils.AppConst;
 import com.a700apps.techmart.utils.AppUtils;
 import com.a700apps.techmart.utils.ImageDetailsActivity;
 import com.a700apps.techmart.utils.PreferenceHelper;
+import com.a700apps.techmart.utils.RoundedCornersTransformation;
 import com.a700apps.techmart.utils.Validator;
 import com.a700apps.techmart.utils.loadingDialog;
 import com.bumptech.glide.Glide;
@@ -98,6 +99,12 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     private static final int SELECT_PICTURE = 1;
 
+
+    public static int sCorner = 12;
+    public static int sMargin = 4;
+    public static int sBorder =8;
+    public static String sColor = "#ffffff";
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,6 +140,7 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
         presenter.attachView(this);
         Glide.with(getActivity())
                 .load(MainApi.IMAGE_IP + PreferenceHelper.getSavedUser(getActivity()).Photo).placeholder(R.drawable.ic_profile)
+                .bitmapTransform(new RoundedCornersTransformation(getActivity(), sCorner, sMargin, sColor, sBorder))
                 .into(mProfileImageView);
         mBackImageView.setOnClickListener(new View.OnClickListener() {
             @Override
