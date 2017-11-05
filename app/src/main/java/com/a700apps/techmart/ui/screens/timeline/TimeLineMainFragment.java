@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.a700apps.techmart.R;
+import com.a700apps.techmart.adapter.EventAdapter;
 import com.a700apps.techmart.adapter.TimelineAdapter;
 import com.a700apps.techmart.data.model.TimeLineData;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
@@ -28,8 +29,7 @@ import java.util.List;
 public class TimeLineMainFragment extends Fragment implements TimeLineView {
     public AVLoadingIndicatorView indicatorView;
     private TimeLinePresenter presenter;
-    private int startIndex;
-    private final int LIMIT_REQUESTS = 20;
+
 
     public TimeLineMainFragment() {
         // Required empty public constructor
@@ -59,8 +59,8 @@ public class TimeLineMainFragment extends Fragment implements TimeLineView {
     @Override
     public void onResume() {
         super.onResume();
-        startIndex = 0;
-        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), "0", startIndex, LIMIT_REQUESTS, getActivity());
+
+        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), "0", getActivity());
     }
 
     @Override
@@ -76,25 +76,29 @@ public class TimeLineMainFragment extends Fragment implements TimeLineView {
     @Override
     public void updateUi(List<TimeLineData.ResultEntity> TimelineList) {
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        rv.setLayoutManager(linearLayoutManager);
-        rv.scrollToPosition(Globals.R_Index);
-        rv.setAdapter(new TimelineAdapter(getActivity(), TimelineList));
-        scrollListener = new EndlessRecyclerOnScrollListener(linearLayoutManager) {
-            @Override
-            public void onLoadMore(int current_page) {
-
-            }
-        };
-        rv.addOnScrollListener(scrollListener);
-        //
-        if (TimelineList.size() == 0) {
-            rv.setEmptyView(view.findViewById(R.id.tv_nodata));
-        }
-//        rv.setAdapter(new TimelineAdapter(getActivity(), TimelineList));
 //        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
 //        rv.setLayoutManager(linearLayoutManager);
 //        rv.scrollToPosition(Globals.R_Index);
+//        rv.setAdapter(new TimelineAdapter(getActivity(), TimelineList));
+//        scrollListener = new EndlessRecyclerOnScrollListener(linearLayoutManager) {
+//            @Override
+//            public void onLoadMore(int current_page) {
+//
+//            }
+//        };
+//        rv.addOnScrollListener(scrollListener);
+//        //
+//        if (TimelineList.size() == 0) {
+//            rv.setEmptyView(view.findViewById(R.id.tv_nodata));
+//        }
+
+        rv.setAdapter(new EventAdapter(getActivity(), TimelineList));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+//        linearLayoutManager.setReverseLayout(true);
+//        linearLayoutManager.setStackFromEnd(true);
+        rv.setLayoutManager(linearLayoutManager);
+        rv.scrollToPosition(Globals.R_Index);
+
     }
 
     @Override
@@ -122,12 +126,12 @@ public class TimeLineMainFragment extends Fragment implements TimeLineView {
 
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refreshList() {
-        startIndex = 0;
-        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), "0", startIndex, LIMIT_REQUESTS, getActivity());
-
-    }
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void refreshList() {
+//        startIndex = 0;
+//        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), "0", startIndex, LIMIT_REQUESTS, getActivity());
+//
+//    }
 
 
 }

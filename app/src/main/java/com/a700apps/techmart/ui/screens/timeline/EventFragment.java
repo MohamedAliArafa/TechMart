@@ -52,8 +52,8 @@ public class EventFragment extends Fragment implements TimeLineView {
     @Override
     public void onResume() {
         super.onResume();
-        startIndex = 0;
-        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), "1",startIndex,LIMIT_REQUESTS, getActivity());
+
+        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), "1", getActivity());
     }
 
     @Override

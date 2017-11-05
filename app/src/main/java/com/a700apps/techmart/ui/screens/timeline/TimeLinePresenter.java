@@ -26,12 +26,12 @@ import org.json.JSONObject;
 public class TimeLinePresenter extends MainPresenter<TimeLineView>  {
     Dialog dialogsLoading;
     Context mContext;
-    void getTimeline(String userId, String type,int PageNumber,int PageSize, Context context) {
+    void getTimeline(String userId, String type, Context context) {
         mContext = context;
 
      dialogsLoading = new loadingDialog().showDialog(context);
         try {
-            JSONObject registerBody = MainApiHelper.getTimeLine(userId, type,PageNumber,PageSize);
+            JSONObject registerBody = MainApiHelper.getTimeLine(userId, type);
             MainApi.getTimeLine(registerBody, new NetworkResponseListener<TimeLineData>() {
                 @Override
                 public void networkOperationSuccess(NetworkResponse<TimeLineData> networkResponse) {
