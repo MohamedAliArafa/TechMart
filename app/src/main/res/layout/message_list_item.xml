@@ -37,26 +37,25 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="0dp"
         android:contentDescription="@null"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/chat_text_text_view"
         app:layout_constraintLeft_toRightOf="@+id/user_image_view"
         app:layout_constraintTop_toTopOf="@+id/chat_text_text_view"
         app:layout_constraintVertical_bias="0.666"
-        app:srcCompat="@drawable/ic_delivered"
-        android:visibility="invisible"/>
+        app:srcCompat="@drawable/ic_delivered" />
 
     <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
         android:id="@+id/chat_text_text_view"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="7dp"
-        android:maxLines="2"
         android:ellipsize="end"
+        android:maxLines="2"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toRightOf="@+id/seen_image"
         app:layout_constraintRight_toLeftOf="@+id/last_seen_text_view"
         app:layout_constraintTop_toBottomOf="@+id/name_text_view" />
@@ -68,6 +67,8 @@
         android:layout_marginBottom="8dp"
         android:layout_marginRight="7dp"
         android:layout_marginTop="8dp"
+
+
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@+id/chat_text_text_view"
         app:layout_constraintRight_toRightOf="parent"

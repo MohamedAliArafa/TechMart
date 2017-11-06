@@ -1,38 +1,34 @@
 package com.a700apps.techmart.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.content.res.Configuration;
-import android.content.res.Resources;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
+import android.provider.CalendarContract;
+import android.support.v4.app.ActivityCompat;
 import android.text.Html;
 import android.text.Spanned;
-import android.util.Base64;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
-
 
 import com.a700apps.techmart.R;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -296,7 +292,7 @@ public class AppUtils {
 
     public static String getAppLink(Context context) {
         return
-        "http://play.google.com/store/apps/details?id=" + context.getPackageName();
+                "http://play.google.com/store/apps/details?id=" + context.getPackageName();
     }
 
     public static boolean isAppInForeground(Context mContext) {
@@ -364,16 +360,16 @@ public class AppUtils {
 
     public static boolean isValidBitmapSize(Bitmap bitmap, int bitmapValidSize) {
         int byteCount = bitmap.getByteCount();
-        int bitmapMegaByteSize = (byteCount/1024)/1024;
-        return bitmapMegaByteSize<= bitmapValidSize ;
+        int bitmapMegaByteSize = (byteCount / 1024) / 1024;
+        return bitmapMegaByteSize <= bitmapValidSize;
     }
 
     public static boolean isAtLeast24Api() {
-        return Build.VERSION.SDK_INT>= Build.VERSION_CODES.N ;
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;
     }
 
     public static boolean isAtLeast17Api() {
-        return Build.VERSION.SDK_INT>= Build.VERSION_CODES.JELLY_BEAN_MR1 ;
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1;
     }
     // DownloadImage AsyncTask
 
@@ -426,7 +422,7 @@ public class AppUtils {
                 activity.getCurrentFocus().getWindowToken(), 0);
     }
 
-    public static  Date getDate(String date){
+    public static Date getDate(String date) {
 //        String dateString = "03/26/2012 11:49:00 AM";
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss aa");
         Date convertedDate = new Date();
@@ -438,7 +434,32 @@ public class AppUtils {
             e.printStackTrace();
         }
         System.out.println(convertedDate);
-        return  convertedDate;
+        return convertedDate;
     }
+
+    public static boolean isEventInCal(Context context, String meetingName) {
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            return false;
+        }
+        Cursor cursor = context.getContentResolver().query(Uri.parse("content://com.android.calendar/events"),
+                new String[]{CalendarContract.Events._ID,
+                        CalendarContract.Events.TITLE,
+                        CalendarContract.Events.EVENT_LOCATION,
+                        CalendarContract.Events.DTSTART,
+                        CalendarContract.Events.DTEND,},
+                CalendarContract.Events.TITLE + " = ? ",
+                new String[]{meetingName}, null);
+        DatabaseUtils.dumpCursor(cursor);
+
+        assert cursor != null;
+        if (cursor.moveToFirst()) {
+            cursor.close();
+            return true;
+        }
+        cursor.close();
+        return false;
+    }
+
 
 }

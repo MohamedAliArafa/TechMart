@@ -1,35 +1,26 @@
 package com.a700apps.techmart.ui.screens.timeline;
 
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.a700apps.techmart.R;
+import com.a700apps.techmart.adapter.EventAdapter;
 import com.a700apps.techmart.adapter.TimelineAdapter;
-import com.a700apps.techmart.data.model.CategoryGroups;
-import com.a700apps.techmart.data.model.TimeLine;
 import com.a700apps.techmart.data.model.TimeLineData;
-import com.a700apps.techmart.ui.screens.category.CategoryPresenter;
-import com.a700apps.techmart.ui.screens.timelinedetails.DetailsActivity;
-import com.a700apps.techmart.utils.ActivityUtils;
 import com.a700apps.techmart.utils.EmptyRecyclerView;
+import com.a700apps.techmart.utils.EndlessRecyclerOnScrollListener;
 import com.a700apps.techmart.utils.Globals;
 import com.a700apps.techmart.utils.PreferenceHelper;
-import com.bumptech.glide.Glide;
 import com.wang.avi.AVLoadingIndicatorView;
 
-import java.util.Calendar;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
 /**
@@ -38,6 +29,7 @@ import java.util.List;
 public class TimeLineMainFragment extends Fragment implements TimeLineView {
     public AVLoadingIndicatorView indicatorView;
     private TimeLinePresenter presenter;
+
 
     public TimeLineMainFragment() {
         // Required empty public constructor
@@ -64,7 +56,7 @@ public class TimeLineMainFragment extends Fragment implements TimeLineView {
     @Override
     public void onResume() {
         super.onResume();
-        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), "0", getActivity(),1,1);
+        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()), "0", getActivity());
     }
 
     @Override

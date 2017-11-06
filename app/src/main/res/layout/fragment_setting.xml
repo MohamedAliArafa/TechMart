@@ -97,7 +97,8 @@
             <ImageView
                 android:id="@+id/iv_user_nav_image"
                 android:layout_width="60dp"
-                android:layout_height="60dp"/>
+                android:layout_height="60dp"
+                android:scaleType="fitXY"/>
 
             <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
                 android:id="@+id/tv_change"

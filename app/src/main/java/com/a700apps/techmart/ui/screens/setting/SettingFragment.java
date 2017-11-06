@@ -197,7 +197,7 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
         if (newPasswordEditText.getText() == null || newPasswordEditText.getText().toString().trim().equals("")) {
             newPasswordEditText.setError("new password required");
             return;
-        } else if (!Validator.validPasswordLength(newPasswordEditText.getText().toString().trim())) {
+        } else if (!Validator.validPassword(newPasswordEditText.getText().toString().trim())) {
             newPasswordEditText.setError(getString(R.string.invalid_password));
             return;
         }
@@ -247,6 +247,11 @@ public class SettingFragment extends Fragment implements SettingView, SwitchButt
         oldPasswordEditText.setText("");
         newPasswordEditText.setText("");
         repeatPasswordEditText.setText("");
+    }
+
+    @Override
+    public void changeEditTextColor(String error) {
+        oldPasswordEditText.setError(error);
     }
 
     @Override

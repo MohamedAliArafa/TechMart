@@ -108,11 +108,6 @@ public class PostActivity extends AppCompatActivity implements PostView {
             }
         });
 
-
-//        progressDialog = new ProgressDialog(this);
-//        progressDialog.setMessage("Please Wait Uploading Image...");
-//        progressDialog.setCancelable(false);
-//        progressDialog.setCanceledOnTouchOutside(false);
 //
         linearLayout_select.setOnClickListener(new View.OnClickListener() {
             @Override

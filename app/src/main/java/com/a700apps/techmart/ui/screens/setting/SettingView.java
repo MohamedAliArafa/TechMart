@@ -18,4 +18,5 @@ public interface SettingView {
     void showToast(String msg);
     void saveNewPic(String name);
     void emptyViews();
+    void changeEditTextColor(String error);
 }

@@ -66,7 +66,12 @@ public class GroupEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 viewHolderEvent.mDescribtionTextView.setText(timeLineItem.getDescr());
                 viewHolderEvent.mTitleTextView.setText(timeLineItem.getTitle());
                 viewHolderEvent.tv_username.setText(timeLineItem.getPostedByName());
-
+                if (AppUtils.isEventInCal(context,timeLineItem.getTitle())){
+                    Log.e("added to calender",AppUtils.isEventInCal(context,timeLineItem.getTitle())+"");
+                    viewHolderEvent.tv_add_calender.setText("Added to calendar");
+                    viewHolderEvent.tv_add_calender.setEnabled(false);
+                    viewHolderEvent.tv_add_calender.setTextColor(context.getResources().getColor(R.color.light_color_text));
+                }
                 Glide.with(context)
                         .load(MainApi.IMAGE_IP+timeLineItem.getImage()).placeholder(R.drawable.placeholder)
                         .into(viewHolderEvent.mEventImageView);
@@ -84,13 +89,13 @@ public class GroupEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         Calendar cal = Calendar.getInstance();
                         Intent intent = new Intent(Intent.ACTION_EDIT);
                         intent.setType("vnd.android.cursor.item/event");
-                        intent.putExtra(CalendarContract.Events.TITLE, "Event");
+                        intent.putExtra(CalendarContract.Events.TITLE,  timeLineItem.getTitle());
                         intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                                cal.getTime().getTime());
+                                timeLineItem.getStartDate());
                         intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
-                                cal.getTime().getTime());
+                                timeLineItem.getEndDate());
                         intent.putExtra(CalendarContract.Events.ALL_DAY, false);// periodicity
-                        intent.putExtra(CalendarContract.Events.DESCRIPTION, "Tech Mart Event");
+                        intent.putExtra(CalendarContract.Events.DESCRIPTION, timeLineItem.getDescr());
                         context.startActivity(intent);
                     }
                 });
@@ -100,13 +105,13 @@ public class GroupEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         Calendar cal = Calendar.getInstance();
                         Intent intent = new Intent(Intent.ACTION_EDIT);
                         intent.setType("vnd.android.cursor.item/event");
-                        intent.putExtra(CalendarContract.Events.TITLE, "Event");
+                        intent.putExtra(CalendarContract.Events.TITLE, timeLineItem.getTitle());
                         intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                                cal.getTime().getTime());
+                                timeLineItem.getStartDate());
                         intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
-                                cal.getTime().getTime());
+                                timeLineItem.getEndDate());
                         intent.putExtra(CalendarContract.Events.ALL_DAY, false);// periodicity
-                        intent.putExtra(CalendarContract.Events.DESCRIPTION, "Tech Mart Event");
+                        intent.putExtra(CalendarContract.Events.DESCRIPTION, timeLineItem.getDescr());
                         context.startActivity(intent);
                     }
                 });
@@ -157,6 +162,9 @@ public class GroupEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return new LoadingVH(noteView);
         }
 
+
+//        }
+//        return null;
 //
     }
 

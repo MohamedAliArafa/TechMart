@@ -238,13 +238,12 @@
         <com.a700apps.techmart.utils.DateTimePicker.CustomLightTextView
             android:id="@+id/tv_event_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
             android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
+            android:layout_marginRight="2dp"
             android:background="@color/blue_join_dialog"
             android:gravity="start"
             android:maxLines="@integer/events_max_lines"
-            android:text=""
             android:textColor="@color/button_light_text" />
 
         <TextView

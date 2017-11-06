@@ -50,7 +50,7 @@ public class PostsFragment extends Fragment implements TimeLineView {
     @Override
     public void onResume() {
         super.onResume();
-        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()),"2",getActivity(),1,1);
+        presenter.getTimeline(PreferenceHelper.getUserId(getActivity()),"2",getActivity());
     }
 
     @Override

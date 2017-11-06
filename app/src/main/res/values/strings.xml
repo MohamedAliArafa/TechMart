@@ -8,7 +8,7 @@
     <string name="empty_mail_field">Empty field</string>
     <string name="enter_your_password">Please enter your password</string>
     <string name="no_internet_connection">Kindly check the internet connection.</string>
-    <string name="select_group">Pleast select group.</string>
+    <string name="select_group">Please select category first.</string>
     <string name="not_supported_image">Please select Format: jpg,tiff.</string>
     <string name="not_image">Please select image</string>
     <string name="image_size_exceed">Please select image less than 1M</string>
@@ -112,7 +112,7 @@
     <string name="group_member">Group Members</string>
     <string name="group">Groups </string>
     <string name="timeline_member">Members</string>
-    <string name="timeline_member_approve">Membership Approvals</string>
+    <string name="timeline_member_approve">Membership Approval</string>
     <string name="share_via">TechMart Link</string>
     <string name="title_activity_maps">Map</string>
     <string name="follow">Follow</string>

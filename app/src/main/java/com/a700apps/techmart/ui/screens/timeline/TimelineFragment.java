@@ -386,6 +386,26 @@ public class TimelineFragment extends Fragment implements View.OnClickListener, 
 
     }
 
+    @Override
+    public void showLoadMoreProgress() {
+
+    }
+
+    @Override
+    public void hideLoadMoreProgress() {
+
+    }
+
+    @Override
+    public void removeLoadMoreListener() {
+
+    }
+
+    @Override
+    public void changeLoadMoreRequestsStatus(boolean isLoading) {
+
+    }
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
